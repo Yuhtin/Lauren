@@ -20,13 +20,13 @@ public class Lauren {
     public static void main(String[] args) throws Exception {
         logger = new LoggerDataSource();
         Logger.log("Lauren is now registering logs").save();
-        File file = new File("token.json");
+        File file = new File("logs/token.json");
         if (!file.exists()) {
             if (!file.createNewFile()) return;
             Logger.log("Coloque um token válido no bot.").save();
             return;
         }
-        BufferedReader reader = new BufferedReader(new FileReader(file.getAbsolutePath()));
+        BufferedReader reader = new BufferedReader(new FileReader(file.getAbsolutePath()    ));
         String botToken = reader.lines().collect(Collectors.toList()).get(0);
         reader.close();
         if (botToken == null) {
