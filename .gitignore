@@ -47,8 +47,11 @@ cmake-build-*/
 
 # File-based project format
 *.iws
-token.json
+
+# Config of bot
 logs/
+config/
+
 # IntelliJ
 out/
 
