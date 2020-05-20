@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageHistory;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
-import utils.Utilities;
+import utils.helper.Utilities;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -21,9 +21,8 @@ public class ClearCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        event.getMessage().delete().queue();
 
-        if (Utilities.isPermissionCheck(event.getMember(), event.getChannel(), Permission.MESSAGE_MANAGE)) return;
+        if (!Utilities.isPermission(event.getMember(), event.getChannel(), Permission.MESSAGE_MANAGE)) return;
 
         String[] args = event.getMessage().getContentRaw().split(" ");
         if (args.length < 2) {
@@ -35,8 +34,10 @@ public class ClearCommand extends Command {
         int purge = Integer.parseInt(args[1]);
         long id = 0L;
 
-        if (args.length > 2)
+        if (args.length > 2) {
             id = event.getMessage().getMentionedMembers().get(0).getIdLong();
+            event.getMessage().delete().queue();
+        }
 
         MessageHistory messageHistory = new MessageHistory(event.getChannel());
         List<Message> messages;

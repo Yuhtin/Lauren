@@ -1,5 +1,6 @@
 package logger.data;
 
+import application.Lauren;
 import logger.Logger;
 import lombok.Getter;
 
@@ -12,28 +13,36 @@ public class LoggerDataSource {
     private final File file;
     private final BufferedWriter bufferedWriter;
 
-    public LoggerDataSource() throws IOException {
+    public LoggerDataSource(String logName) throws IOException {
         LocalDateTime now = LocalDateTime.now();
         int month = now.getMonthValue();
         int day = now.getDayOfMonth();
+
+        // create a infinite log archives
         int i = 1;
-        File file = new File("logs/log-" + day + "-" + month + "-" + i + ".log");
+        File file = new File("logs/" + logName + "-" + day + "-" + month + "-" + i + ".log");
         while (file.exists()) {
-            file = new File("logs/log-" + day + "-" + month + "-" + i + ".log");
+            file = new File("logs/" + logName + "-" + day + "-" + month + "-" + i + ".log");
             i++;
         }
         this.file = file;
+
+        // try to create log file
         try {
             if (!file.createNewFile()) Logger.log("ERROR Can't create a log file");
         } catch (Exception exception) {
-            toFile("ERROR An error ocurred on create a log file");
+            Logger.log("ERROR An error ocurred on create a log file");
         }
-        bufferedWriter = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
+
+        // starting log
         now = LocalDateTime.now();
+
+        bufferedWriter = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
         bufferedWriter.write("Starting log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s");
         bufferedWriter.newLine();
         bufferedWriter.flush();
-        System.out.println("Registering logs to " + file.getName());
+
+        Logger.log("Registering logs to " + file.getName());
     }
 
     public void toFile(String log) {

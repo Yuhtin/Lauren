@@ -12,13 +12,14 @@ import java.util.Random;
 public class MemberEvents extends ListenerAdapter {
 
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
-        EmbedBuilder embedBuilder = new EmbedBuilder();
-        embedBuilder.setAuthor("O jogador " + event.getUser().getName() + " entrou no servidor");
-        embedBuilder.setImage(event.getUser().getAvatarUrl());
-        embedBuilder.setDescription("T\nA                  b");
-        embedBuilder.setColor(Color.getHSBColor(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat()));
-        embedBuilder.setTimestamp(Instant.now());
-        embedBuilder.setFooter("Usuário registrado ao servidor", event.getUser().getAvatarUrl());
+        EmbedBuilder embedBuilder = new EmbedBuilder()
+                .setAuthor("O jogador " + event.getUser().getName() + " entrou no servidor")
+                .setImage(event.getUser().getAvatarUrl())
+                .setDescription("T\nA                  b")
+                .setColor(Color.getHSBColor(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat()))
+                .setTimestamp(Instant.now())
+                .setFooter("Usuário registrado ao servidor", event.getUser().getAvatarUrl());
+
         Logger.log("The player " + event.getUser().getName() + " joined on server").save();
         if (event.getGuild().getSystemChannel() == null) return;
         event.getGuild().getSystemChannel().sendMessage(embedBuilder.build()).queue();

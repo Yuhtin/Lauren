@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.Member;
 
 import java.time.OffsetDateTime;
 import java.time.format.TextStyle;
+import java.time.temporal.TemporalUnit;
 import java.util.Locale;
 
 public class ServerInfoCommand extends Command {
@@ -75,33 +76,23 @@ public class ServerInfoCommand extends Command {
     }
 
     private String subtractTime(OffsetDateTime actual, OffsetDateTime before) {
+        before = before.minusHours(3);
         int year = actual.getYear() - before.getYear();
-        int month = actual.getMonthValue() - before.getMonthValue();
-        if (month < 0) {
-            --year;
-            month = 12 + month;
-        }
-        int day = actual.getDayOfMonth() - before.getDayOfMonth();
-        if (day < 0) {
-            --month;
-            day = 30 + day;
-        }
+        actual = actual.minusYears(before.getYear());
+        int months = actual.getMonthValue() - before.getMonthValue();
+        actual = actual.minusMonths(before.getMonthValue());
+        int days = actual.getDayOfMonth() - before.getDayOfMonth();
+        actual = actual.minusDays(before.getDayOfMonth());
         int hours = actual.getHour() - before.getHour();
-        if (hours < 0) {
-            --day;
-            hours = 24 + hours;
-        }
-        int minutes = actual.getMinute() - before.getMinute();
-        if (minutes < 0) {
-            --hours;
-            minutes = 60 + minutes;
-        }
+        actual = actual.minusHours(before.getHour());
+        int minute = actual.getMinute() - before.getMinute();
+        actual = actual.minusMinutes(before.getMinute());
         StringBuilder builder = new StringBuilder();
-        if (year > 0) builder.append(year).append(" ").append(year > 1 ? "anos" : "ano").append(" ");
-        if (month > 0) builder.append(month).append(" ").append(month > 1 ? "meses" : "mes").append(" ");
-        if (day > 0) builder.append(day).append(" ").append(day > 1 ? "dias" : "dia").append(" ");
-        if (hours > 0) builder.append(hours).append(" ").append(hours > 1 ? "horas" : "hora").append(" ");
-        if (minutes > 0) builder.append(minutes).append(" ").append(minutes > 1 ? "minutos" : "minuto").append(" ");
+        if (year > 0) builder.append(actual.getYear()).append(" ").append(actual.getYear() > 1 ? "anos" : "ano").append(" ");
+        if (months > 0) builder.append(actual.getMonthValue()).append(" ").append(actual.getMonthValue() > 1 ? "meses" : "mes").append(" ");
+        if (days > 0) builder.append(actual.getDayOfMonth()).append(" ").append(actual.getDayOfMonth() > 1 ? "dias" : "dia").append(" ");
+        if (hours > 0) builder.append(actual.getHour()).append(" ").append(actual.getHour() > 1 ? "horas" : "hora").append(" ");
+        if (minute > 0) builder.append(actual.getMinute()).append(" ").append(actual.getMinute() > 1 ? "minutos" : "minuto").append(" ");
         return before.getDayOfMonth() + " de " + before.getMonth().getDisplayName(TextStyle.SHORT, Locale.US) + ", "
                 + before.getYear() + " às " + before.getHour() + ":" + before.getMinute() +
                 " (" + builder.toString() + ")";
