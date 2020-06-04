@@ -27,7 +27,7 @@ public class CommandStartup {
         clientBuilder.setOwnerId("702518526753243156");
         clientBuilder.setPrefix(Lauren.config.prefix);
         commands.forEach(clientBuilder::addCommand);
-        clientBuilder.setActivity(Activity.watching("você batendo pra mim"));
+        clientBuilder.setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"));
         bot.addEventListener(clientBuilder.build());
         Logger.log("All commands has been registred").save();
     }
