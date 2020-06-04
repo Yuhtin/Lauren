@@ -48,8 +48,10 @@ cmake-build-*/
 # File-based project format
 *.iws
 
-# Config of bot
+# Hide from github
 logs/
+gources/
+images/
 config/
 
 # IntelliJ

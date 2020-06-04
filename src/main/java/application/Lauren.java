@@ -37,25 +37,12 @@ public class Lauren {
             Logger.log("Lauren is now registering logs").save();
         }
 
-        bot = new JDABuilder(AccountType.BOT).setToken(config.token).setAutoReconnect(true).setActivity(Activity.watching("você batendo pra mim")).setBulkDeleteSplittingEnabled(false).setEventManager(new ThreadedEventManager()).build();
+        bot = new JDABuilder(AccountType.BOT).setToken(config.token).setAutoReconnect(true).setActivity(Activity.watching("você batendo pra mim")).build();
 
         new ListenersStartup(bot, "events", "MemberEvents", "registration.MemberReactionEvent");
         new CommandStartup(bot, "commands", "ServerInfoCommand", "ClearCommand", "AjudaCommand", "PingCommand", "RegisterCommand", "InfoCommand", "ConfigCommand");
         Logger.log("Lauren is now online").save();
         startTime = System.currentTimeMillis();
         System.gc();
-    }
-
-    private static class ThreadedEventManager extends InterfacedEventManager {
-        private final ExecutorService threadPool;
-
-        private ThreadedEventManager() {
-            this.threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() + 1);
-        }
-
-        @Override
-        public void handle(@Nonnull GenericEvent event) {
-            this.threadPool.submit(() -> super.handle(event));
-        }
     }
 }

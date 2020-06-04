@@ -7,6 +7,7 @@ import lombok.SneakyThrows;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.entities.User;
+import utils.helper.MathUtils;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -37,11 +38,11 @@ public class InfoCommand extends Command {
                 .addField("🌌 Meu ID", "`" + bot.getId() + "`", true)
                 .addField("🙍‍♂️ Dono", "`" + authorBot + "`", true)
 
-                .addField("<a:infinito:703187274912759899> Uptime", "`" + format(Lauren.startTime) + "`", true)
+                .addField("<a:infinito:703187274912759899> Uptime", "`" + MathUtils.format(Lauren.startTime) + "`", true)
                 .addField("💥 Servidores", "`" + event.getJDA().getGuilds().size() + " " + (event.getJDA().getGuilds().size() > 1 ? "servidores" : "servidor") + "`", true)
                 .addField("🏓 Ping da API", "`" + event.getJDA().getGatewayPing() + "ms`", true)
 
-                .addField("", "", true)
+                .addField("\uD83D\uDC52 Andrey é gay", "`é mesmo`", true)
                 .addField("", "", true)
                 .addField("", "", true)
 
@@ -51,47 +52,5 @@ public class InfoCommand extends Command {
                 .setTimestamp(Instant.now());
 
         event.getChannel().sendMessage(builder.build()).queue();
-    }
-
-    private String format(long time) {
-        time = System.currentTimeMillis() - time;
-        String format = "";
-        long hours = TimeUnit.MILLISECONDS.toHours(time);
-        long hoursInMillis = TimeUnit.HOURS.toMillis(hours);
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(time - hoursInMillis);
-        long minutesInMillis = TimeUnit.MINUTES.toMillis(minutes);
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(time - (hoursInMillis + minutesInMillis));
-        int days = (int) (time / (1000 * 60 * 60 * 24));
-        if (hours > 0)
-            if (days > 0) {
-                time = time - TimeUnit.DAYS.toMillis(days);
-                hours = TimeUnit.MILLISECONDS.toHours(time - minutesInMillis);
-                format = days + " dias, " + hours + (hours > 1 ? " horas" : " hora");
-                return format;
-            } else {
-                format = hours + (hours > 1 ? " horas" : " hora");
-            }
-        if (minutes > 0) {
-            if ((seconds > 0) && (hours > 0))
-                format += ", ";
-            else if (hours > 0)
-                format += " e ";
-            format += minutes + (minutes > 1 ? " minutos" : " minuto");
-        }
-        if (seconds > 0) {
-            if ((hours > 0) || (minutes > 0))
-                format += " e ";
-            format += seconds + (seconds > 1 ? " segundos" : " segundo");
-        }
-        if (format.equals("")) {
-            long rest = time / 100;
-            if (rest == 0)
-                rest = 1;
-            format = "0." + rest + " segundo";
-        }
-        if (days > 0) {
-            format = days + " dias";
-        }
-        return format;
     }
 }
