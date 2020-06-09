@@ -22,7 +22,6 @@ public class ConfigCommand extends Command {
     protected void execute(CommandEvent event) {
         if (!Utilities.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR))
             return;
-        event.getMessage().delete().queue();
         String[] arguments = event.getMessage().getContentRaw().split(" ");
         if (arguments.length < 2) {
             EmbedBuilder embed = new EmbedBuilder()
@@ -30,7 +29,8 @@ public class ConfigCommand extends Command {
                     .setThumbnail(event.getJDA().getSelfUser().getAvatarUrl())
                     .setColor(event.getMember().getColor())
                     .setTimestamp(Instant.now())
-                    .setFooter("Utilizado por " + event.getMember().getUser().getName() + "#" + event.getMember().getUser().getDiscriminator(), event.getMember().getUser().getAvatarUrl())
+                    .setFooter("Comando usado as", event.getAuthor().getAvatarUrl())
+
                     .setDescription(
                             "\n" +
                                     " **• " + Lauren.config.prefix + "config** setprefix <prefixo>\n" +

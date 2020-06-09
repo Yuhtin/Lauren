@@ -10,7 +10,6 @@ public class ListenersStartup {
             try {
                 ListenerAdapter listener = (ListenerAdapter)Class.forName(folder + "." + className).newInstance();
                 bot.addEventListener(listener);
-                Logger.log("A new Listener has been registered: " + className + ".class").save();
             } catch (ClassNotFoundException | IllegalAccessException | InstantiationException exception) {
                 Logger.log("Unable to find class " + className + ".class").save();
             }

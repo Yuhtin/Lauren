@@ -1,12 +1,13 @@
 package database;
 
-import dao.controller.PlayerDataController;
+import data.PlayerData;
 
 public interface Data {
 
     boolean openConnection();
     boolean createTable();
     boolean loadData();
-    void save(Long userID, PlayerDataController controller);
+    void save(Long userID, PlayerData controller);
+    void create(Long userID);
     void close();
 }

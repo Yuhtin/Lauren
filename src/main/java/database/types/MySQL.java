@@ -1,12 +1,14 @@
 package database.types;
 
-import dao.PlayerData;
-import dao.controller.PlayerDataController;
+import data.controller.PlayerDataController;
+import data.PlayerData;
 import database.Data;
+import lombok.AllArgsConstructor;
 import utils.serialization.DataGson;
 
 import java.sql.*;
 
+@AllArgsConstructor
 public class MySQL implements Data {
     private Connection connection;
     String host, user, password, database, table;
@@ -52,7 +54,7 @@ public class MySQL implements Data {
 
             ResultSet result = statement.executeQuery();
             while (result.next()) {
-                PlayerData.insert(DataGson.deserialize(result.getString("data")));
+                PlayerDataController.insert(DataGson.deserialize(result.getString("data")));
             }
 
             return true;
@@ -63,14 +65,32 @@ public class MySQL implements Data {
     }
 
     @Override
-    public void save(Long userID, PlayerDataController controller) {
+    public void save(Long userID, PlayerData controller) {
         PreparedStatement statement;
         try {
             String result = DataGson.serialize(controller);
-            statement = connection.prepareStatement("INSERT INTO " + table + " (id, data) VALUES(" + userID + "," + result + ") ON DUPLICATE KEY UPDATE tag=tag, id=id, data='" + result + "'");
+            statement = connection.prepareStatement("UPDATE " + table + " SET `data` = ? WHERE `id` = ?");
+            statement.setString(1, result);
+            statement.setLong(2, userID);
             statement.executeUpdate();
             statement.close();
         } catch (SQLException exception) {
+            exception.printStackTrace();
+            System.out.println("Não foi possível salvar um dado no banco de dados.");
+        }
+    }
+
+    @Override
+    public void create(Long userID) {
+        PreparedStatement statement;
+        try {
+            statement = connection.prepareStatement("INSERT INTO " + table + "(id, data) VALUES(?,?)");
+            statement.setLong(1, userID);
+            statement.setString(2, "");
+            statement.executeUpdate();
+            statement.close();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
             System.out.println("Não foi possível salvar um dado no banco de dados.");
         }
     }
@@ -79,7 +99,7 @@ public class MySQL implements Data {
     public void close() {
         if (connection != null) {
             try {
-                PlayerData.getDATA().forEach(this::save);
+                PlayerDataController.getDATA().forEach(this::save);
 
                 connection.close();
                 connection = null;

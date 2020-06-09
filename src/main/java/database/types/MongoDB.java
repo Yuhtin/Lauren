@@ -1,9 +1,16 @@
 package database.types;
 
-import dao.controller.PlayerDataController;
+import data.PlayerData;
 import database.Data;
+import lombok.AllArgsConstructor;
 
+import java.sql.Connection;
+
+@AllArgsConstructor
 public class MongoDB implements Data {
+
+    public final Connection connection;
+    public final String database, password;
 
     @Override
     public boolean openConnection() {
@@ -21,7 +28,12 @@ public class MongoDB implements Data {
     }
 
     @Override
-    public void save(Long userID, PlayerDataController controller) {
+    public void save(Long userID, PlayerData controller) {
+
+    }
+
+    @Override
+    public void create(Long userID) {
 
     }
 

@@ -42,11 +42,11 @@ public class InfoCommand extends Command {
                 .addField("💥 Servidores", "`" + event.getJDA().getGuilds().size() + " " + (event.getJDA().getGuilds().size() > 1 ? "servidores" : "servidor") + "`", true)
                 .addField("🏓 Ping da API", "`" + event.getJDA().getGatewayPing() + "ms`", true)
 
-                .addField("\uD83D\uDC52 Andrey é gay", "`é mesmo`", true)
+                .addField("", "", true)
                 .addField("", "", true)
                 .addField("", "", true)
 
-                .setFooter(authorBot, bot.getAvatarUrl())
+                .setFooter("Comando usado as", event.getAuthor().getAvatarUrl())
                 .setColor(event.getMember().getColor())
                 .setThumbnail(bot.getAvatarUrl())
                 .setTimestamp(Instant.now());

@@ -8,9 +8,9 @@ import java.io.*;
 
 @Setter
 public class Config {
-    public String prefix, token, formatNickname;
+    public String prefix, token, formatNickname, mySqlUser, mySqlPassword, mySqlDatabase, mySqlHost, mongoPassword, databaseType;
     public long resgistrationId;
-    public boolean log;
+    public boolean log = false;
 
     public static Config startup() {
         try {
@@ -23,10 +23,12 @@ public class Config {
                 config.setToken("COLOQUE O TOKEN AQUI");
                 config.setResgistrationId(704303594211639356L);
                 config.setFormatNickname("[@level] ");
+                config.setDatabaseType("SQLite");
 
                 BufferedWriter writer = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
                 writer.write(ConfigGson.serialize(config));
                 writer.newLine();
+                writer.flush();
 
                 Logger.log("Coloque um token válido no bot.").save();
                 return null;

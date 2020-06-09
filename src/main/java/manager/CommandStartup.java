@@ -17,7 +17,6 @@ public class CommandStartup {
         for (String className : classes) {
             try {
                 commands.add((Command) Class.forName(folder + "." + className).newInstance());
-                Logger.log("A new Command has been registered: " + className + ".class");
             } catch (ClassNotFoundException | IllegalAccessException | InstantiationException exception) {
                 Logger.log("Unable to find class " + className + ".class").save();
             }
@@ -26,8 +25,10 @@ public class CommandStartup {
         CommandClientBuilder clientBuilder = new CommandClientBuilder();
         clientBuilder.setOwnerId("702518526753243156");
         clientBuilder.setPrefix(Lauren.config.prefix);
+        clientBuilder.setHelpWord("riphelpmessage");
         commands.forEach(clientBuilder::addCommand);
         clientBuilder.setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"));
+
         bot.addEventListener(clientBuilder.build());
         Logger.log("All commands has been registred").save();
     }

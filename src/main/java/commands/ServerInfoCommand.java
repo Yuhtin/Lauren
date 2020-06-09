@@ -5,6 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.format.TextStyle;
 import java.time.temporal.TemporalUnit;
@@ -60,6 +61,7 @@ public class ServerInfoCommand extends Command {
         embedBuilder.setColor(event.getMember().getColor());
         embedBuilder.setAuthor(event.getGuild().getName(), "https://google.com", event.getGuild().getIconUrl());
         embedBuilder.setThumbnail(event.getGuild().getIconUrl());
+
         embedBuilder.addField("💻 ID", guildId, true);
         embedBuilder.addField("🧶 Cargos", roleSize, true);
         embedBuilder.addField("👑 Dono", "`" + ownerName + "`\n(" + ownerId + ")", true);
@@ -71,6 +73,9 @@ public class ServerInfoCommand extends Command {
                 "<:online:703089222021808170> **Online:** " + onlineMembers + " | <:ausente:703089221774344224> **Ausente:** " + awayMembers + " |\n"
                         + "<:nao_pertubar:703089222185386056> **Ocupado:** " + busyMembers + " | <:offline:703089222243975218> **Offline:** " + offlineMembers + "\n"
                         + "🙋 **Pessoas:** " + members + "\n🤖 **Bots:** " + bots, true);
+
+        embedBuilder.setFooter("Comando usado as", event.getAuthor().getAvatarUrl());
+        embedBuilder.setTimestamp(Instant.now());
 
         event.getChannel().sendMessage(embedBuilder.build()).queue();
     }
@@ -88,11 +93,16 @@ public class ServerInfoCommand extends Command {
         int minute = actual.getMinute() - before.getMinute();
         actual = actual.minusMinutes(before.getMinute());
         StringBuilder builder = new StringBuilder();
-        if (year > 0) builder.append(actual.getYear()).append(" ").append(actual.getYear() > 1 ? "anos" : "ano").append(" ");
-        if (months > 0) builder.append(actual.getMonthValue()).append(" ").append(actual.getMonthValue() > 1 ? "meses" : "mes").append(" ");
-        if (days > 0) builder.append(actual.getDayOfMonth()).append(" ").append(actual.getDayOfMonth() > 1 ? "dias" : "dia").append(" ");
-        if (hours > 0) builder.append(actual.getHour()).append(" ").append(actual.getHour() > 1 ? "horas" : "hora").append(" ");
-        if (minute > 0) builder.append(actual.getMinute()).append(" ").append(actual.getMinute() > 1 ? "minutos" : "minuto").append(" ");
+        if (year > 0)
+            builder.append(actual.getYear()).append(" ").append(actual.getYear() > 1 ? "anos" : "ano").append(" ");
+        if (months > 0)
+            builder.append(actual.getMonthValue()).append(" ").append(actual.getMonthValue() > 1 ? "meses" : "mes").append(" ");
+        if (days > 0)
+            builder.append(actual.getDayOfMonth()).append(" ").append(actual.getDayOfMonth() > 1 ? "dias" : "dia").append(" ");
+        if (hours > 0)
+            builder.append(actual.getHour()).append(" ").append(actual.getHour() > 1 ? "horas" : "hora").append(" ");
+        if (minute > 0)
+            builder.append(actual.getMinute()).append(" ").append(actual.getMinute() > 1 ? "minutos" : "minuto").append(" ");
         return before.getDayOfMonth() + " de " + before.getMonth().getDisplayName(TextStyle.SHORT, Locale.US) + ", "
                 + before.getYear() + " às " + before.getHour() + ":" + before.getMinute() +
                 " (" + builder.toString() + ")";
