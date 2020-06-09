@@ -1,21 +1,36 @@
 package dao.controller;
 
 import enums.Rank;
+import utils.helper.Utilities;
 
 public class PlayerDataController {
 
+    // Geral
     public Long userID;
+    public int level;
+    public double money = 100, experience;
 
-    public Rank rank;
-    public double money;
-    public int experience, ludoWins, poolWins, ludoMatches, poolMatches;
+    // LudoKing and 8ballpool variables
+    public Rank ludoRank,
+            poolRank = Rank.NOTHING;
+    public int ludoPoints, ludoWins, ludoMatches,
+            poolPoints, poolWins, poolMatches;
 
     public PlayerDataController(Long userID) {
         this.userID = userID;
-        this.experience = 0;
-        this.rank = Rank.NOTHING;
     }
 
-    public void updateRank() { this.rank = Rank.getByExperience(experience); }
+    public void updateLevel() {
+        level = (int) experience / 1000;
+        Utilities.setNick(userID, level);
+    }
 
+    public void updateRank() {
+        this.poolRank = Rank.getByPoints(poolPoints);
+        this.ludoRank = Rank.getByPoints(ludoPoints);
+    }
+
+    public void gainXP(double quantity) {
+        experience += (quantity * (poolRank.multiplier + ludoRank.multiplier));
+    }
 }

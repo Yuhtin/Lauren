@@ -8,8 +8,7 @@ import java.io.*;
 
 @Setter
 public class Config {
-    public String prefix;
-    public String token;
+    public String prefix, token, formatNickname;
     public long resgistrationId;
     public boolean log;
 
@@ -23,9 +22,12 @@ public class Config {
                 config.setPrefix("$");
                 config.setToken("COLOQUE O TOKEN AQUI");
                 config.setResgistrationId(704303594211639356L);
+                config.setFormatNickname("[@level] ");
+
                 BufferedWriter writer = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
                 writer.write(ConfigGson.serialize(config));
                 writer.newLine();
+
                 Logger.log("Coloque um token válido no bot.").save();
                 return null;
             }

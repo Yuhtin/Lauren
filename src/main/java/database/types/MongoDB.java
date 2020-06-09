@@ -3,9 +3,12 @@ package database.types;
 import dao.controller.PlayerDataController;
 import database.Data;
 
-import java.util.List;
-
 public class MongoDB implements Data {
+
+    @Override
+    public boolean openConnection() {
+        return false;
+    }
 
     @Override
     public boolean createTable() {
@@ -13,12 +16,12 @@ public class MongoDB implements Data {
     }
 
     @Override
-    public List<PlayerDataController> loadAll() {
-        return null;
+    public boolean loadData() {
+        return false;
     }
 
     @Override
-    public void save(PlayerDataController data) {
+    public void save(Long userID, PlayerDataController controller) {
 
     }
 

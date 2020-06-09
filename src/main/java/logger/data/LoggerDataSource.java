@@ -1,10 +1,12 @@
 package logger.data;
 
-import application.Lauren;
 import logger.Logger;
 import lombok.Getter;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Getter

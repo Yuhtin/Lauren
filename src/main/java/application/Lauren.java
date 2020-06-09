@@ -1,5 +1,7 @@
 package application;
 
+import database.Data;
+import database.types.SQLite;
 import logger.Logger;
 import logger.data.LoggerDataSource;
 import manager.CommandStartup;
@@ -16,6 +18,7 @@ public class Lauren {
     public static LoggerDataSource logger;
     public static long startTime;
     public static Config config;
+    public static Data data;
 
     public static void main(String[] args) throws Exception {
         config = Config.startup();
@@ -24,14 +27,21 @@ public class Lauren {
             return;
         }
 
-        if (!Lauren.config.log) {
+        if (!config.log) {
             logger = new LoggerDataSource("log");
             Logger.log("Lauren is now registering logs").save();
         }
 
+        data = new SQLite(null, "lauren_players");
+        if (!data.openConnection() || !data.loadData()) {
+            Logger.log("Occorreu um erro na inicialização do banco de dados").save();
+            Logger.log("Desligando o sistema");
+            return;
+        }
+
         bot = new JDABuilder(AccountType.BOT).setToken(config.token).setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren")).setAutoReconnect(true).build();
 
-        new ListenersStartup(bot, "events", "MemberEvents", "registration.MemberReactionEvent");
+        new ListenersStartup(bot, "events", "MemberEvents", "registration.MemberReactionEvent", "experience.ChatMessage");
         new CommandStartup(bot, "commands", "ServerInfoCommand", "ClearCommand", "AjudaCommand", "PingCommand", "RegisterCommand", "InfoCommand", "ConfigCommand");
         Logger.log("Lauren is now online").save();
         startTime = System.currentTimeMillis();
