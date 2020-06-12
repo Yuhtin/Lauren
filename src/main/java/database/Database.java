@@ -77,6 +77,7 @@ public class Database {
             statement = connection.prepareStatement("UPDATE " + tablePlayers + " SET `data` = ? WHERE `id` = ?");
             statement.setString(1, result);
             statement.setLong(2, userID);
+
             statement.executeUpdate();
             statement.close();
         } catch (SQLException exception) {
@@ -92,6 +93,7 @@ public class Database {
             statement = connection.prepareStatement("UPDATE " + tableMatches + " SET `data` = ? WHERE `id` = ?");
             statement.setString(1, result);
             statement.setString(2, id);
+
             statement.executeUpdate();
             statement.close();
         } catch (SQLException exception) {
@@ -106,6 +108,7 @@ public class Database {
             statement = connection.prepareStatement("INSERT INTO " + tablePlayers + "(`id`, `data`) VALUES(?,?)");
             statement.setLong(1, userID);
             statement.setString(2, "");
+
             statement.executeUpdate();
             statement.close();
         } catch (SQLException exception) {
@@ -120,6 +123,7 @@ public class Database {
             statement = connection.prepareStatement("INSERT INTO " + tableMatches + "(`id`, `data`) VALUES(?,?)");
             statement.setString(1, id);
             statement.setString(2, "");
+
             statement.executeUpdate();
             statement.close();
         } catch (SQLException exception) {
