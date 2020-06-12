@@ -8,8 +8,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
-public class AjudaCommand extends Command {
-    public AjudaCommand() {
+public class HelpCommand extends Command {
+    public HelpCommand() {
         this.name = "ajuda";
         this.aliases = new String[]{"help"};
         this.help = "Comando de ajuda do bot.";
@@ -23,9 +23,10 @@ public class AjudaCommand extends Command {
                 .setDescription(
                         "Para mais informaçõe sobre um comando, digite `" + Lauren.config.prefix + "help <comando>` que eu lhe informarei mais sobre ele <a:feliz:712669414566395944>")
                 .addField("**Ajuda** ❓ - _Este módulo tem comandos para te ajudar na utilização de bot._", "`ajuda` `info`", false)
-                .addField("**Configurações** ⚙ - _Em configurações você define preferências de como agirei em seu servidor._", "`config`", false)
-                .addField("**Mensagens Customizadas \uD83D\uDD79** - _Este módulo possui comandos para você enviar minhas mensagens customizadas._", "`createregister`", false)
-                .addField("**Utilidade \uD83D\uDEE0** - _Este módulo possui coisas úteis pro eu dia a dia._", "`ping` `clear` `serverinfo` `avatar` `playerinfo`", false)
+                .addField("**Configurações** ⚙ - _Em configurações você define preferências de como agirei em seu servidor._", "`config` `restart`", false)
+                .addField("**Mensagens Customizadas** \uD83D\uDD79 - _Este módulo possui comandos para você enviar minhas mensagens customizadas._", "`createregister`", false)
+                .addField("**Utilidade** \uD83D\uDEE0 - _Este módulo possui coisas úteis pro eu dia a dia._", "`ping` `clear` `serverinfo` `avatar`", false)
+                .addField("**Scrim** \uD83D\uDC7E - _Aqui você pode encontrar comandos relacionados ao meu sistema de partidas_", "`playerinfo` `match`", false)
                 .setFooter("Comando usado por " + event.getMember().getNickname(), event.getMember().getUser().getAvatarUrl())
                 .setColor(event.getMember().getColor())
                 .setTimestamp(Instant.now());

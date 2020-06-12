@@ -29,23 +29,19 @@ public class CommandStartup {
             return;
         }
 
-        List<String> errors = new ArrayList<>();
         cp.getTopLevelClassesRecursive("commands").forEach(classInfo -> {
             try {
                 Class command = Class.forName(classInfo.getName());
                 Object object = command.newInstance();
-                if (object instanceof Command) {
+                if (object instanceof Command)
                     clientBuilder.addCommand((Command) object);
-                } else {
-                    throw new InstantiationException();
-                }
+                else throw new InstantiationException();
+
 
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException exception) {
-                errors.add(classInfo.getName());
+                Logger.log("Não foi possível instanciar a classe " + classInfo.getName());
             }
         });
-
-        if (errors.size() > 0) Logger.log("Não foi possível instanciar as seguintes classes: " + errors.toString());
 
         bot.addEventListener(clientBuilder.build());
         Logger.log("All commands has been registred").save();

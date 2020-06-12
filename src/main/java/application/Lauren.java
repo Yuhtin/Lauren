@@ -36,12 +36,7 @@ public class Lauren {
             Logger.log("Lauren is now registering logs").save();
         }
 
-        data = new Database(selectDatabase(config.databaseType), "lauren");
-        if (data.isNull() || !data.loadData()) {
-            Logger.log("Occorreu um erro na inicialização do banco de dados").save();
-            Logger.log("Desligando o sistema");
-            return;
-        }
+        if (!startDatabase()) return;
 
         bot = new JDABuilder(AccountType.BOT).setToken(config.token).setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren")).setAutoReconnect(true).build();
 
@@ -52,6 +47,17 @@ public class Lauren {
         Logger.log("Lauren is now online").save();
         startTime = System.currentTimeMillis();
         System.gc();
+    }
+
+    public static boolean startDatabase() {
+        data = new Database(selectDatabase(config.databaseType), "lauren");
+
+        if (data.isNull() || !data.createTable() || !data.loadData()) {
+            Logger.log("Occorreu um erro na inicialização do banco de dados").save();
+            Logger.log("Desligando o sistema");
+            return false;
+        }
+        return true;
     }
 
     private static Data selectDatabase(String databaseType) {

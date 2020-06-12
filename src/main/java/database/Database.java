@@ -64,6 +64,7 @@ public class Database {
 
             return true;
         } catch (SQLException exception) {
+            exception.printStackTrace();
             System.out.println("Não foi possível salvar um dado no banco de dados.");
             return false;
         }
