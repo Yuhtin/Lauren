@@ -57,7 +57,7 @@ public class Lauren {
             return false;
         }
 
-        Logger.log("Conexão com a database bem sucedida").save();
+        Logger.log("Connection to database successful").save();
         return true;
     }
 

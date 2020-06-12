@@ -1,6 +1,5 @@
 package enums;
 
-import logger.Logger;
 import lombok.AllArgsConstructor;
 
 import java.util.Arrays;
@@ -17,10 +16,10 @@ public enum Rank {
     SILVERELITE("Prata Elite", 5, 32, 1.05),
     SILVERMASTER("Prata Elite Mestre", 6, 40, 1.1),
 
-    GOLDI("Gold I", 7, 45, 1.25),
-    GOLDII("Gold II", 8, 49, 1.30),
-    GOLDIII("Gold III", 9, 54, 1.35),
-    GOLDIV("Gold IV", 10, 59, 1.40),
+    GOLDI("Ouro I", 7, 45, 1.25),
+    GOLDII("Ouro II", 8, 49, 1.30),
+    GOLDIII("Ouro III", 9, 54, 1.35),
+    GOLDIV("Ouro IV", 10, 59, 1.40),
     AKI("AK I", 11, 70, 1.55),
     AKII("AK II", 12, 75, 1.60),
 

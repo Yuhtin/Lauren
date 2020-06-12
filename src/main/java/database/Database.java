@@ -103,7 +103,7 @@ public class Database {
     public void create(Long userID) {
         PreparedStatement statement;
         try {
-            statement = connection.prepareStatement("INSERT INTO " + tablePlayers + "(id, data) VALUES(?,?)");
+            statement = connection.prepareStatement("INSERT INTO " + tablePlayers + "(`id`, `data`) VALUES(?,?)");
             statement.setLong(1, userID);
             statement.setString(2, "");
             statement.executeUpdate();
@@ -117,7 +117,7 @@ public class Database {
     public void create(String id) {
         PreparedStatement statement;
         try {
-            statement = connection.prepareStatement("INSERT INTO " + tableMatches + "(id, data) VALUES(?,?)");
+            statement = connection.prepareStatement("INSERT INTO " + tableMatches + "(`id`, `data`) VALUES(?,?)");
             statement.setString(1, id);
             statement.setString(2, "");
             statement.executeUpdate();
