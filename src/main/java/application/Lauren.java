@@ -1,6 +1,7 @@
 package application;
 
 import database.Data;
+import database.Database;
 import database.types.MySQL;
 import database.types.SQLite;
 import logger.Logger;
@@ -21,7 +22,7 @@ public class Lauren {
     public static LoggerDataSource logger;
     public static long startTime;
     public static Config config;
-    public static Data data;
+    public static Database data;
 
     public static void main(String[] args) throws Exception {
         config = Config.startup();
@@ -35,8 +36,8 @@ public class Lauren {
             Logger.log("Lauren is now registering logs").save();
         }
 
-        data = selectDatabase(config.databaseType);
-        if (!data.openConnection() || !data.loadData()) {
+        data = new Database(selectDatabase(config.databaseType), "lauren");
+        if (data.isNull() || !data.loadData()) {
             Logger.log("Occorreu um erro na inicialização do banco de dados").save();
             Logger.log("Desligando o sistema");
             return;
@@ -46,9 +47,7 @@ public class Lauren {
 
         new ListenersStartup(bot, "events", "MemberEvents", "registration.MemberReactionEvent",
                 "experience.ChatMessage");
-        new CommandStartup(bot, "commands", "ServerInfoCommand", "ClearCommand", "AjudaCommand", "PingCommand",
-                "RegisterCommand", "InfoCommand", "player.SetPointsCommand", "ConfigCommand", "AvatarCommand",
-                "player.PlayerInfoCommand");
+        new CommandStartup(bot, "commands");
         guild = bot.getGuildById(700673055982354472L);
         Logger.log("Lauren is now online").save();
         startTime = System.currentTimeMillis();
@@ -57,7 +56,7 @@ public class Lauren {
 
     private static Data selectDatabase(String databaseType) {
         if ("MySQL".equals(databaseType))
-            return new MySQL(null, config.mySqlHost, config.mySqlUser, config.mySqlPassword, config.mySqlDatabase, "lauren_players", 3306);
-        return new SQLite("lauren");
+            return new MySQL(config.mySqlHost, config.mySqlUser, config.mySqlPassword, config.mySqlDatabase, 3306);
+        return new SQLite();
     }
 }
