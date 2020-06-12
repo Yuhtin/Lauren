@@ -30,7 +30,7 @@ public class Config {
                 writer.newLine();
                 writer.flush();
 
-                Logger.log("Coloque um token válido no bot.").save();
+                Logger.log("Put a valid token in the bot's config").save();
                 return null;
             }
             BufferedReader reader = new BufferedReader(new FileReader(file.getAbsolutePath()));

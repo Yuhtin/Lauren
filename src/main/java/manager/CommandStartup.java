@@ -9,8 +9,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CommandStartup {
     public CommandStartup(JDA bot, String folder) {
@@ -25,23 +23,24 @@ public class CommandStartup {
         try {
             cp = ClassPath.from(getClass().getClassLoader());
         } catch (IOException exception) {
-            Logger.log("Não foi possível encontrar a pasta " + folder);
+            Logger.log("ClassPath could not be instantiated");
             return;
         }
 
-        cp.getTopLevelClassesRecursive("commands").forEach(classInfo -> {
+        for (ClassPath.ClassInfo classInfo : cp.getTopLevelClassesRecursive(folder)) {
             try {
                 Class command = Class.forName(classInfo.getName());
                 Object object = command.newInstance();
+
                 if (object instanceof Command)
                     clientBuilder.addCommand((Command) object);
-                else throw new InstantiationException();
-
+                else
+                    throw new InstantiationException();
 
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException exception) {
-                Logger.log("Não foi possível instanciar a classe " + classInfo.getName());
+                Logger.log("The " + classInfo.getName() + " class could not be instantiated");
             }
-        });
+        }
 
         bot.addEventListener(clientBuilder.build());
         Logger.log("All commands has been registred").save();

@@ -48,7 +48,7 @@ public class Match {
         this.urlPrint = urlPrint;
         this.finishTime = System.currentTimeMillis();
 
-        players.forEach(id -> PlayerDataController.get(id).computMatch(this));
+        players.forEach(id -> PlayerDataController.get(id).computMatch(this).save());
 
         MatchController.finishMatch(this);
     }

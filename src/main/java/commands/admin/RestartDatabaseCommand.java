@@ -3,6 +3,7 @@ package commands.admin;
 import application.Lauren;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import logger.Logger;
 import net.dv8tion.jda.api.Permission;
 import utils.helper.Utilities;
 
@@ -19,6 +20,7 @@ public class RestartDatabaseCommand extends Command {
         if (!Utilities.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR)) return;
 
         Lauren.data.close();
+        Logger.log("The player " + event.getMember().getUser().getName() + " restarted my database").save();
         if (!Lauren.startDatabase()) {
             event.getChannel().sendMessage("Ocorreu um erro crítico na inicialização da database, desligando bot.").queue();
             System.exit(0);

@@ -5,7 +5,7 @@ import database.Database;
 import database.types.MySQL;
 import database.types.SQLite;
 import logger.Logger;
-import logger.data.LoggerDataSource;
+import logger.controller.LoggerController;
 import manager.CommandStartup;
 import manager.ListenersStartup;
 import net.dv8tion.jda.api.AccountType;
@@ -19,7 +19,7 @@ public class Lauren {
 
     public static JDA bot;
     public static Guild guild;
-    public static LoggerDataSource logger;
+    public static LoggerController logger;
     public static long startTime;
     public static Config config;
     public static Database data;
@@ -27,12 +27,12 @@ public class Lauren {
     public static void main(String[] args) throws Exception {
         config = Config.startup();
         if (config == null) {
-            Logger.log("Ocorreu um erro ao carregar a config");
+            Logger.log("There was an error loading the config");
             return;
         }
 
         if (!config.log) {
-            logger = new LoggerDataSource("log");
+            logger = new LoggerController("log");
             Logger.log("Lauren is now registering logs").save();
         }
 
@@ -40,8 +40,7 @@ public class Lauren {
 
         bot = new JDABuilder(AccountType.BOT).setToken(config.token).setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren")).setAutoReconnect(true).build();
 
-        new ListenersStartup(bot, "events", "MemberEvents", "registration.MemberReactionEvent",
-                "experience.ChatMessage");
+        new ListenersStartup(bot, "events");
         new CommandStartup(bot, "commands");
         guild = bot.getGuildById(700673055982354472L);
         Logger.log("Lauren is now online").save();
@@ -53,10 +52,12 @@ public class Lauren {
         data = new Database(selectDatabase(config.databaseType), "lauren");
 
         if (data.isNull() || !data.createTable() || !data.loadData()) {
-            Logger.log("Occorreu um erro na inicialização do banco de dados").save();
-            Logger.log("Desligando o sistema");
+            Logger.log("Database initialization error occurred").save();
+            Logger.log("Shutting down the system");
             return false;
         }
+
+        Logger.log("Conexão com a database bem sucedida").save();
         return true;
     }
 

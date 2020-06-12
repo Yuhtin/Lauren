@@ -1,4 +1,4 @@
-package logger.data;
+package logger.controller;
 
 import logger.Logger;
 import lombok.Getter;
@@ -10,12 +10,12 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Getter
-public class LoggerDataSource {
+public class LoggerController {
 
     private final File file;
     private final BufferedWriter bufferedWriter;
 
-    public LoggerDataSource(String logName) throws IOException {
+    public LoggerController(String logName) throws IOException {
         LocalDateTime now = LocalDateTime.now();
         int month = now.getMonthValue();
         int day = now.getDayOfMonth();

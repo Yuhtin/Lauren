@@ -37,7 +37,7 @@ public class Database {
             statement.close();
             return true;
         } catch (SQLException e) {
-            System.out.println("Não foi possivel criar a tabela");
+            System.out.println("The table could not be created");
             e.printStackTrace();
             return false;
         }
@@ -65,7 +65,7 @@ public class Database {
             return true;
         } catch (SQLException exception) {
             exception.printStackTrace();
-            System.out.println("Não foi possível salvar um dado no banco de dados.");
+            System.out.println("Could not save data to database");
             return false;
         }
     }
@@ -81,7 +81,7 @@ public class Database {
             statement.close();
         } catch (SQLException exception) {
             exception.printStackTrace();
-            System.out.println("Não foi possível salvar um dado no banco de dados.");
+            System.out.println("Could not save data to database");
         }
     }
 
@@ -96,7 +96,7 @@ public class Database {
             statement.close();
         } catch (SQLException exception) {
             exception.printStackTrace();
-            System.out.println("Não foi possível salvar um dado no banco de dados.");
+            System.out.println("Could not save data to database");
         }
     }
 
@@ -110,7 +110,7 @@ public class Database {
             statement.close();
         } catch (SQLException exception) {
             exception.printStackTrace();
-            System.out.println("Não foi possível salvar um dado no banco de dados.");
+            System.out.println("Could not save data to database");
         }
     }
 
@@ -124,7 +124,7 @@ public class Database {
             statement.close();
         } catch (SQLException exception) {
             exception.printStackTrace();
-            System.out.println("Não foi possível salvar um dado no banco de dados.");
+            System.out.println("Could not save data to database");
         }
     }
 
@@ -134,10 +134,10 @@ public class Database {
                 PlayerDataController.getDATA().forEach(this::save);
 
                 connection.close();
-                System.out.println("Conexão com o banco de dados foi fechada.");
+                System.out.println("Connection to the database has been closed");
             } catch (SQLException e) {
                 e.printStackTrace();
-                System.out.println("Não foi possivel fechar a conexão com o banco de dados.");
+                System.out.println("Could not close the connection to the database");
             }
         }
     }

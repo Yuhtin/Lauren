@@ -31,7 +31,7 @@ public class PlayerData {
 
     public PlayerData updateLevel() {
         level = (int) experience / 1000;
-        Utilities.setNick(userID, level, poolRank, ludoRank);
+        Utilities.setNick(userID, level);
 
         return this;
     }

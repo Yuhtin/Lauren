@@ -3,6 +3,8 @@ package commands.admin;
 import application.Lauren;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import logger.Logger;
+import lombok.SneakyThrows;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import utils.helper.Utilities;
@@ -18,6 +20,7 @@ public class ConfigCommand extends Command {
         this.help = "Configurações do bot.";
     }
 
+    @SneakyThrows
     @Override
     protected void execute(CommandEvent event) {
         if (!Utilities.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR))
@@ -49,18 +52,21 @@ public class ConfigCommand extends Command {
         String value = arguments[2];
         if (arguments[1].equalsIgnoreCase("setprefix")) {
             Lauren.config.updatePrefix(value);
-            event.getChannel().sendMessage("<a:sim:704295025374265387> O meu prefixo foi alterado para '" + value + "'. Reinicie o bot para realizar a troca.").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+            Lauren.config.updateConfig();
+            Logger.log("The player " + event.getMember().getUser().getName() + " changed the prefix to " + value).save();
 
+            event.getChannel().sendMessage("<a:sim:704295025374265387> O meu prefixo foi alterado para '" + value + "'. Reinicie o bot para realizar a troca.").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             return;
         }
         if (arguments[1].equalsIgnoreCase("setregistration")) {
             try {
                 Lauren.config.setResgistrationId(Long.parseLong(value));
-                Lauren.config.updateConfig();
+                Logger.log("The player " + event.getMember().getUser().getName() + " changed the registrationID to " + value).save();
             } catch (Exception exception) {
                 event.getChannel().sendMessage("<a:nao:704295026036834375> O valor inserido é invalido: '" + value + "' (insira um id).").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
                 return;
             }
+
             event.getChannel().sendMessage("<a:sim:704295025374265387> O id da mensagem de registro foi alterado para '" + value + "'.").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             return;
         }
@@ -68,12 +74,13 @@ public class ConfigCommand extends Command {
             try {
                 Lauren.config.setLog(Boolean.parseBoolean(value));
                 Lauren.config.updateConfig();
+                Logger.log("The player " + event.getMember().getUser().getName() + " turned logs to " + value).save();
             } catch (Exception exception) {
                 event.getChannel().sendMessage("<a:nao:704295026036834375> O valor inserido é invalido: '" + value + "' (insira true ou false).").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
                 return;
             }
+
             event.getChannel().sendMessage("<a:sim:704295025374265387> As logs foram " + (Lauren.config.log ? "ativadas" : "desativadas") + ".").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-            return;
         }
     }
 }

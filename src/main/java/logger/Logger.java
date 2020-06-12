@@ -5,13 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-@Getter
 public class Logger {
 
-    private final String message;
+    public final String message;
 
     public void save() {
-        Lauren.logger.toFile(message);
+        if (Lauren.config.log)
+            Lauren.logger.toFile(message);
     }
 
     public static Logger log(String message) {
