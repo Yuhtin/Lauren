@@ -4,7 +4,7 @@ import data.controller.PlayerDataController;
 import data.PlayerData;
 import database.Data;
 import lombok.AllArgsConstructor;
-import utils.serialization.DataGson;
+import utils.serialization.PlayerDataGson;
 
 import java.sql.*;
 
@@ -54,7 +54,7 @@ public class MySQL implements Data {
 
             ResultSet result = statement.executeQuery();
             while (result.next()) {
-                PlayerDataController.insert(DataGson.deserialize(result.getString("data")));
+                PlayerDataController.insert(PlayerDataGson.deserialize(result.getString("data")));
             }
 
             return true;
@@ -68,7 +68,7 @@ public class MySQL implements Data {
     public void save(Long userID, PlayerData controller) {
         PreparedStatement statement;
         try {
-            String result = DataGson.serialize(controller);
+            String result = PlayerDataGson.serialize(controller);
             statement = connection.prepareStatement("UPDATE " + table + " SET `data` = ? WHERE `id` = ?");
             statement.setString(1, result);
             statement.setLong(2, userID);

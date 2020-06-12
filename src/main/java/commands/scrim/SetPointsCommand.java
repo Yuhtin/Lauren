@@ -1,4 +1,4 @@
-package commands.player;
+package commands.scrim;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -18,20 +18,20 @@ public class SetPointsCommand extends Command {
     }
 
     @Override
-    protected void execute(CommandEvent commandEvent) {
-        if (!Utilities.isPermission(commandEvent.getMember(), commandEvent.getChannel(), Permission.ADMINISTRATOR))
+    protected void execute(CommandEvent event) {
+        if (!Utilities.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR))
             return;
 
-        if (commandEvent.getMessage().getMentionedMembers().size() < 1) {
-            commandEvent.getChannel().sendMessage("Ops, você precisa mencionar um jogador para receber os pontos")
+        if (event.getMessage().getMentionedMembers().size() < 1) {
+            event.getChannel().sendMessage("Ops, você precisa mencionar um jogador para receber os pontos")
                     .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             return;
         }
-        Member member = commandEvent.getMessage().getMentionedMembers().get(0);
+        Member member = event.getMessage().getMentionedMembers().get(0);
 
-        String[] arguments = commandEvent.getMessage().getContentRaw().split(" ");
+        String[] arguments = event.getMessage().getContentRaw().split(" ");
         if (arguments.length < 3) {
-            commandEvent.getChannel().sendMessage("Utilize desta forma: " + arguments[0] + " @Usuario <Ball ou Ludo> <quantidade>")
+            event.getChannel().sendMessage("Utilize desta forma: " + arguments[0] + " @Usuario <Ball ou Ludo> <quantidade>")
                     .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             return;
         }
@@ -43,14 +43,14 @@ public class SetPointsCommand extends Command {
         } else if (arguments[2].equalsIgnoreCase("Ball"))
             data.poolPoints = xp;
         else {
-            commandEvent.getChannel().sendMessage("Este jogo é invalido. Jogos válidos:")
+            event.getChannel().sendMessage("Este jogo é invalido. Jogos válidos:")
                     .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-            commandEvent.getChannel().sendMessage("Ball ou Ludo")
+            event.getChannel().sendMessage("Ball ou Ludo")
                     .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             return;
         }
 
         data.updateRank().save();
-        commandEvent.getChannel().sendMessage("Você setou **" + xp + "** pontos no jogo " + arguments[2] + " para o jogador " + member.getUser().getName()).queue();
+        event.getChannel().sendMessage("Você setou **" + xp + "** pontos no jogo " + arguments[2] + " para o jogador " + member.getUser().getName()).queue();
     }
 }

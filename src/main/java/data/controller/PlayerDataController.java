@@ -5,6 +5,7 @@ import data.PlayerData;
 import lombok.Getter;
 import net.dv8tion.jda.api.entities.Member;
 
+import javax.annotation.Nonnull;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -17,7 +18,7 @@ public class PlayerDataController {
         return get(member.getIdLong());
     }
 
-    public static PlayerData get(Long userID) {
+    public static PlayerData get(@Nonnull Long userID) {
         if (!DATA.containsKey(userID)) {
             DATA.put(userID, new PlayerData(userID));
             Lauren.data.create(userID);
@@ -28,6 +29,11 @@ public class PlayerDataController {
 
     public static void insert(PlayerData controller) {
         DATA.put(controller.userID, controller);
+    }
+
+    public static void reset(@Nonnull Long userID) {
+        DATA.replace(userID, new PlayerData(userID));
+        Lauren.data.save(userID, DATA.get(userID));
     }
 
 }

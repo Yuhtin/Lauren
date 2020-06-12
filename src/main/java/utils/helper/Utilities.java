@@ -4,7 +4,6 @@ import application.Lauren;
 import enums.Rank;
 import logger.Logger;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.Role;
@@ -14,6 +13,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class Utilities {
@@ -55,5 +55,17 @@ public class Utilities {
         }
 
         return builder.toString();
+    }
+
+    public static String randomString() {
+        StringBuilder sb = new StringBuilder();
+        String a = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        int i;
+        for (int t = 0; t < 15; t++) {
+            i = new Random().nextInt(a.length());
+            sb.append(a, i, i + 1);
+        }
+
+        return sb.toString();
     }
 }

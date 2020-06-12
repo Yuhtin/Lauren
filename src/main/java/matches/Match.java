@@ -1,22 +1,46 @@
 package matches;
 
+import application.Lauren;
 import data.controller.PlayerDataController;
 import enums.GameType;
+import matches.controller.MatchController;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.TextChannel;
+import utils.helper.Utilities;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 
 public class Match {
 
+    public String id, urlPrint;
     public GameType type;
-    public Long winPlayer;
-    public Long player1, player2, player3, player4, startTime, finishTime;
-    public String urlPrint;
+    public Long winPlayer, startTime, finishTime;
+    public TextChannel channel;
+    public List<Long> players, confirmedPlayers = new ArrayList<>();
 
-    public Match(GameType type, Long player1, Long player2, Long player3, Long player4, Long startTime) {
+    public Match(GameType type, Long startTime) {
         this.type = type;
-        this.player1 = player1;
-        this.player2 = player2;
-        this.player3 = player3;
-        this.player4 = player4;
         this.startTime = startTime;
+
+        id = Utilities.randomString();
+    }
+
+    public void createChannel() {
+        Lauren.guild.createTextChannel("match-" + id)
+                .addPermissionOverride(Lauren.guild.getPublicRole(), null, EnumSet.of(Permission.VIEW_CHANNEL))
+                .queue(text -> {
+                    channel = text;
+                });
+    }
+
+    public boolean startMatch() {
+        if (players.size() > confirmedPlayers.size())
+            return false;
+
+        MatchController.insert(this);
+        return true;
     }
 
     public void finishMatch(Long winPlayer, String urlPrint) {
@@ -24,7 +48,16 @@ public class Match {
         this.urlPrint = urlPrint;
         this.finishTime = System.currentTimeMillis();
 
-        PlayerDataController.get(player1).computMatch(this).save();
-        PlayerDataController.get(player2).computMatch(this).save();
+        players.forEach(id -> PlayerDataController.get(id).computMatch(this));
+
+        MatchController.finishMatch(this);
+    }
+
+    public boolean containsPlayer(Long userID) {
+        return players.contains(userID);
+    }
+
+    public void insertPlayer(Long userID) {
+        players.add(userID);
     }
 }

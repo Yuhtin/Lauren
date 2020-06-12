@@ -53,6 +53,7 @@ public class PlayerData {
         int points = -1;
         double experience = 350;
         double money = 0;
+        double multiplier;
         boolean win = false;
 
         if (match.winPlayer.equals(userID)) {
@@ -61,20 +62,22 @@ public class PlayerData {
             points = 3;
             experience += 200;
             money += 35;
+            winMatches.add(match);
         }
 
         if (match.type == GameType.BALL) {
-            experience *= poolRank.multiplier;
+            multiplier = poolRank.multiplier;
             ++poolMatches;
             poolPoints += points;
             if (win) ++poolWins;
         } else {
-            experience *= ludoRank.multiplier;
+            multiplier = ludoRank.multiplier;
             ++ludoMatches;
             ludoPoints += points;
             if (win) ++ludoWins;
         }
 
+        experience *= multiplier;
         this.experience += experience;
         this.money += money;
 

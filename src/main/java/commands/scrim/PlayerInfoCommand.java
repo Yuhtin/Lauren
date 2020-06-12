@@ -1,4 +1,4 @@
-package commands.player;
+package commands.scrim;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
