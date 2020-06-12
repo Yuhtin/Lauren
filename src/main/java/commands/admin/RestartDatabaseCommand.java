@@ -19,8 +19,8 @@ public class RestartDatabaseCommand extends Command {
     protected void execute(CommandEvent event) {
         if (!Utilities.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR)) return;
 
-        Lauren.data.close();
         Logger.log("The player " + event.getMember().getUser().getName() + " restarted my database").save();
+        Lauren.data.close();
         if (!Lauren.startDatabase()) {
             event.getChannel().sendMessage("Ocorreu um erro crítico na inicialização da database, desligando bot.").queue();
             System.exit(0);
