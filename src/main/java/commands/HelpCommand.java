@@ -18,39 +18,11 @@ public class HelpCommand extends Command {
         this.aliases = new String[]{"help"};
     }
 
-    @Override
-    protected void execute(CommandEvent event) {
-        String[] args = event.getMessage().getContentRaw().split(" ");
-        if (args.length > 1) {
-            if (!CommandCache.commands.containsKey(args[1].toLowerCase())) {
-                event.getMessage().delete().queue();
-                event.getChannel().sendMessage("Hmm, não encontrei o comando `" + args[1] + "` tente usar `" + Lauren.config.prefix + "ajuda` para ver meus comandos.")
-                        .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-                return;
-            }
-            RawCommand command = CommandCache.commands.get(args[1].toLowerCase());
+    public final EmbedBuilder help = new EmbedBuilder();
 
-            EmbedBuilder embed = new EmbedBuilder()
-                    .setImage("https://pa1.narvii.com/7093/1d8551884cec1cb2dd99b88ff4c745436b21f1b4r1-500-500_hq.gif")
-                    .setAuthor("Informações do comando " + command.name, "https://google.com", event.getJDA().getSelfUser().getAvatarUrl())
-                    .setDescription("Você está vendo as informações específicas do comando `" + command.name + "`," +
-                            " para ver todos os comandos utilize `" + Lauren.config.prefix + "ajuda <comando>`")
-
-                    .addField("__Informações do comando:__", "", false)
-                    .addField("**Nome** ❓ - _Identificador principal do comando_", command.name, false)
-                    .addField("**Categoria** \uD83E\uDDE9 - _Categoria do comando_", command.type.name, false)
-                    .addField("**Descrição** ⭐️ - _Pequena descrição do comando_", command.description, false)
-
-                    .setFooter("Comando usado por " + event.getMember().getNickname(), event.getMember().getUser().getAvatarUrl())
-                    .setColor(event.getMember().getColor())
-                    .setTimestamp(Instant.now());
-            event.getChannel().sendMessage(embed.build()).queue();
-            return;
-        }
-
-        EmbedBuilder embed = new EmbedBuilder()
-                .setImage("https://i.imgur.com/mQVFSrP.gif")
-                .setAuthor("Comandos atacaaaaar \uD83E\uDDF8", "https://google.com", event.getJDA().getSelfUser().getAvatarUrl())
+    public void register() {
+        help.setImage("https://i.imgur.com/mQVFSrP.gif")
+                .setAuthor("Comandos atacaaaaar \uD83E\uDDF8", "https://google.com", Lauren.bot.getSelfUser().getAvatarUrl())
                 .setDescription(
                         "Para mais informações sobre um comando, digite `" + Lauren.config.prefix + "ajuda <comando>` que eu lhe informarei mais sobre ele <a:feliz:712669414566395944>")
 
@@ -67,12 +39,31 @@ public class HelpCommand extends Command {
                 .addField("**Mensagens Customizadas** \uD83D\uDD79 - _Este módulo possui comandos para você enviar minhas mensagens customizadas._",
                         getCommands(CommandHandler.CommandType.CUSTOM_MESSAGES), false)
                 .addField("**Suporte** \uD83E\uDDF0 - _Comandos para dar suporte aos moderadores do servidor_",
-                        getCommands(CommandHandler.CommandType.SUPORT), false)
+                        getCommands(CommandHandler.CommandType.SUPORT), false);
+    }
 
-                .setFooter("Comando usado por " + event.getMember().getNickname(), event.getMember().getUser().getAvatarUrl())
+    @Override
+    protected void execute(CommandEvent event) {
+        String[] args = event.getMessage().getContentRaw().split(" ");
+        if (args.length > 1) {
+            if (!CommandCache.commands.containsKey(args[1].toLowerCase())) {
+                event.getMessage().delete().queue();
+                event.getChannel().sendMessage("Hmm, não encontrei o comando `" + args[1] + "` tente usar `" + Lauren.config.prefix + "ajuda` para ver meus comandos.")
+                        .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+                return;
+            }
+            EmbedBuilder embed = CommandCache.commands.get(args[1].toLowerCase())
+                    .setFooter("Comando usado por " + event.getMember().getNickname(), event.getMember().getUser().getAvatarUrl())
+                    .setColor(event.getMember().getColor())
+                    .setTimestamp(Instant.now());
+            event.getChannel().sendMessage(embed.build()).queue();
+            return;
+        }
+
+        help.setFooter("Comando usado por " + event.getMember().getNickname(), event.getMember().getUser().getAvatarUrl())
                 .setColor(event.getMember().getColor())
                 .setTimestamp(Instant.now());
-        event.getChannel().sendMessage(embed.build()).queue();
+        event.getChannel().sendMessage(help.build()).queue();
     }
 
     private String getCommands(CommandHandler.CommandType commandType) {
