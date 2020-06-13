@@ -28,7 +28,7 @@ public class Database {
         PreparedStatement statement;
         try {
             statement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS " + tablePlayers + " (`id` LONG PRIMARY KEY, `data` TEXT);");
+                    "CREATE TABLE IF NOT EXISTS " + tablePlayers + " (`id` LONG, `data` TEXT);");
             statement.executeUpdate();
             statement.close();
 
@@ -105,9 +105,9 @@ public class Database {
     public void create(Long userID) {
         PreparedStatement statement;
         try {
-            statement = connection.prepareStatement("INSERT INTO " + tablePlayers + "(`id`, `data`) VALUES(?,?)");
+            statement = connection.prepareStatement("INSERT INTO " + tablePlayers + " (`id`, `data`) VALUES(?,?)");
             statement.setLong(1, userID);
-            statement.setString(2, "");
+            statement.setString(2, PlayerDataGson.serialize(new PlayerData(userID)));
 
             statement.executeUpdate();
             statement.close();

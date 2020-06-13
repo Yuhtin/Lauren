@@ -4,6 +4,7 @@ import application.Lauren;
 import com.google.common.reflect.ClassPath;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
+import commands.HelpCommand;
 import core.RawCommand;
 import logger.Logger;
 import models.annotations.CommandHandler;
@@ -46,6 +47,7 @@ public class CommandStartup {
                 } else
                     throw new InstantiationException();
 
+                CommandCache.makeEmbed();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException exception) {
                 Logger.log("The " + classInfo.getName() + " class could not be instantiated");
             }

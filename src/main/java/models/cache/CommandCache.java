@@ -12,8 +12,9 @@ import java.util.Map;
 
 public class CommandCache {
 
-    public static Map<String, EmbedBuilder> commands = new HashMap<>();
-    public static Map<CommandHandler.CommandType, List<RawCommand>> commandsType = new HashMap<>();
+    public static final Map<String, EmbedBuilder> commands = new HashMap<>();
+    public static final Map<CommandHandler.CommandType, List<RawCommand>> commandsType = new HashMap<>();
+    public static EmbedBuilder helpEmbed;
 
     public static void start() {
         for (CommandHandler.CommandType value : CommandHandler.CommandType.values()) {
@@ -34,5 +35,34 @@ public class CommandCache {
                 .addField("**Descrição** ⭐️ - _Pequena descrição do comando_", rawCommand.description, false));
 
         commandsType.get(type).add(rawCommand);
+    }
+
+    public static void makeEmbed() {
+        helpEmbed = new EmbedBuilder().setImage("https://i.imgur.com/mQVFSrP.gif")
+                .setAuthor("Comandos atacaaaaar \uD83E\uDDF8", "https://google.com", Lauren.bot.getSelfUser().getAvatarUrl())
+                .setDescription(
+                        "Para mais informações sobre um comando, digite `" + Lauren.config.prefix + "ajuda <comando>` que eu lhe informarei mais sobre ele <a:feliz:712669414566395944>")
+
+                .addField("**Ajuda** ❓ - _Este módulo tem comandos para te ajudar na utilização do bot e do servidor._",
+                        getCommands(CommandHandler.CommandType.HELP), false)
+                .addField("**Utilidade** \uD83D\uDEE0 - _Este módulo possui coisas úteis pro eu dia a dia._",
+                        getCommands(CommandHandler.CommandType.UTILITY), false)
+                .addField("**Scrim** \uD83D\uDC7E - _Aqui você pode encontrar comandos relacionados ao meu sistema de partidas._",
+                        getCommands(CommandHandler.CommandType.SCRIM), false)
+
+                .addField("__Comandos de Administrador:__", "", false)
+                .addField("**Configurações** ⚙ - _Em configurações você define preferências de como agirei em seu servidor._",
+                        getCommands(CommandHandler.CommandType.CONFIG), false)
+                .addField("**Mensagens Customizadas** \uD83D\uDD79 - _Este módulo possui algumas de minhas mensagens customizadas._",
+                        getCommands(CommandHandler.CommandType.CUSTOM_MESSAGES), false)
+                .addField("**Suporte** \uD83E\uDDF0 - _Comandos para dar suporte aos moderadores do servidor._",
+                        getCommands(CommandHandler.CommandType.SUPORT), false);
+    }
+
+    private static String getCommands(CommandHandler.CommandType commandType) {
+        StringBuilder builder = new StringBuilder();
+        commandsType.get(commandType).forEach(command -> builder.append("`").append(command.name).append("` "));
+
+        return builder.toString();
     }
 }

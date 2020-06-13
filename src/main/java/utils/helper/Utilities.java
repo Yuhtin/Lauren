@@ -5,6 +5,7 @@ import enums.Rank;
 import logger.Logger;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 import java.text.DecimalFormat;
@@ -37,7 +38,11 @@ public class Utilities {
         nickname = Lauren.config.formatNickname.replace("@level", "" + level) + nickname;
         if (nickname.length() > 32) nickname = nickname.substring(0, 32);
 
-        member.modifyNickname(nickname).queue();
+        try {
+            member.modifyNickname(nickname).queue();
+        }catch (HierarchyException exception) {
+            Logger.log("Can't modify a member with higher or equal highest role than yourself");
+        }
     }
 
     public static String format(double valor) {
