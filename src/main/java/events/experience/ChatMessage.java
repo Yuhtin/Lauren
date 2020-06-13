@@ -19,7 +19,7 @@ public class ChatMessage extends ListenerAdapter {
 
         if (event.getMessage().getMentionedMembers().size() > 0) {
             User user = event.getMessage().getMentionedMembers().get(0).getUser();
-            if (user.isBot() && user.getName().equalsIgnoreCase("Lauren") && user.getDiscriminator().equalsIgnoreCase("6455"))
+            if (user.equals(event.getJDA().getSelfUser()))
                 event.getChannel().sendMessage("Oi bb tudo bem?").queue();
         }
 

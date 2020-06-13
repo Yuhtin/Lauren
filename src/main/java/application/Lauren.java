@@ -31,7 +31,7 @@ public class Lauren {
             return;
         }
 
-        if (!config.log) {
+        if (config.log) {
             logger = new LoggerController("log");
             Logger.log("Lauren is now registering logs").save();
         }

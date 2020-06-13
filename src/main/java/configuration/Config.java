@@ -25,6 +25,7 @@ public class Config {
                 config.setOwnerID(272879983326658570L);
                 config.setFormatNickname("[@level] ");
                 config.setDatabaseType("SQLite");
+                config.setLog(true);
 
                 BufferedWriter writer = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
                 writer.write(ConfigGson.serialize(config));
