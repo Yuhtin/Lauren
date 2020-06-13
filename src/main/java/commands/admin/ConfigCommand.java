@@ -5,6 +5,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import logger.Logger;
 import lombok.SneakyThrows;
+import models.annotations.CommandHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import utils.helper.Utilities;
@@ -12,6 +13,7 @@ import utils.helper.Utilities;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
+@CommandHandler(name = "config", type = CommandHandler.CommandType.CONFIG, description = "Configurar algumas informações minha")
 public class ConfigCommand extends Command {
 
     public ConfigCommand() {

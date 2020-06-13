@@ -2,6 +2,7 @@ package commands.scrim;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import models.annotations.CommandHandler;
 import models.cache.PlayerDataCache;
 import models.data.PlayerData;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -10,11 +11,11 @@ import utils.helper.Utilities;
 
 import java.time.Instant;
 
+@CommandHandler(name = "perfil", type = CommandHandler.CommandType.SCRIM, description = "Visualizar o perfil de outro usuário")
 public class PlayerInfoCommand extends Command {
     public PlayerInfoCommand() {
         this.name = "playerinfo";
-        this.aliases = new String[]{"pinfo"};
-        this.help = "Informações sobre um jogador.";
+        this.aliases = new String[]{"pinfo", "perfil"};
     }
 
     @Override

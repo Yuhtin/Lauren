@@ -3,14 +3,15 @@ package commands;
 import application.Lauren;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import models.annotations.CommandHandler;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import utils.helper.Utilities;
 
+@CommandHandler(name = "createregister", type = CommandHandler.CommandType.CUSTOM_MESSAGES, description = "Criar a mensagem de registro de cargos")
 public class RegisterCommand extends Command {
     public RegisterCommand() {
         this.name = "createregister";
-        this.help = "Criar a mensagem de registro";
     }
 
     @Override

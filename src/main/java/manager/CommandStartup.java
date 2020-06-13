@@ -15,6 +15,7 @@ import java.io.IOException;
 
 public class CommandStartup {
     public CommandStartup(JDA bot, String folder) {
+        CommandCache.start();
 
         CommandClientBuilder clientBuilder = new CommandClientBuilder();
         clientBuilder.setOwnerId("702518526753243156");
@@ -37,8 +38,8 @@ public class CommandStartup {
 
                 if (object instanceof Command) {
                     if (aClass.isAnnotationPresent(CommandHandler.class)) {
-                        CommandHandler type = this.getClass().getAnnotation(CommandHandler.class);
-                        CommandCache.commands.put(type.type(), new RawCommand(type.name(), type.description()));
+                        CommandHandler type = (CommandHandler) aClass.getAnnotation(CommandHandler.class);
+                        CommandCache.insert(type.type(), new RawCommand(type.name(), type.description()));
                     }
 
                     clientBuilder.addCommand((Command) object);

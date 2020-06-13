@@ -2,17 +2,18 @@ package commands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import models.annotations.CommandHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
+@CommandHandler(name = "avatar", type = CommandHandler.CommandType.UTILITY, description = "Espiar a imagem de outro usuário OjO")
 public class AvatarCommand extends Command {
     public AvatarCommand() {
         this.name = "avatar";
         this.aliases = new String[]{"image", "imagem"};
-        this.help = "Ver o avatar de um jogador";
     }
 
     @Override

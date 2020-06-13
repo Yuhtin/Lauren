@@ -4,15 +4,16 @@ import application.Lauren;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import logger.Logger;
+import models.annotations.CommandHandler;
 import net.dv8tion.jda.api.Permission;
 import utils.helper.Utilities;
 
+@CommandHandler(name = "restartdata", type = CommandHandler.CommandType.CONFIG, description = "Reiniciar a minha database :D")
 public class RestartDatabaseCommand extends Command {
 
     public RestartDatabaseCommand() {
         this.name = "restartdata";
         this.aliases = new String[]{"rdatabase", "restart", "reiniciar", "restartdatabase", "databaser"};
-        this.help = "Reiniciar a database";
     }
 
     @Override

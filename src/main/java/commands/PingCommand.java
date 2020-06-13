@@ -3,15 +3,16 @@ package commands;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import lombok.SneakyThrows;
+import models.annotations.CommandHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.time.Instant;
 
+@CommandHandler(name = "ping", type = CommandHandler.CommandType.UTILITY, description = "Verificar as informações da minha hospedagem")
 public class PingCommand extends Command {
     public PingCommand() {
         this.name = "ping";
         this.aliases = new String[]{"pong", "delay"};
-        this.help = "Veja o ping do bot";
     }
 
     @SneakyThrows

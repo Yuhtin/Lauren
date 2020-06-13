@@ -3,6 +3,7 @@ package commands;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import logger.Logger;
+import models.annotations.CommandHandler;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageHistory;
@@ -13,11 +14,11 @@ import utils.helper.Utilities;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@CommandHandler(name = "clear", type = CommandHandler.CommandType.SUPORT, description = "Limpar algumas mensagens do canal atual")
 public class ClearCommand extends Command {
     public ClearCommand() {
         this.name = "clear";
         this.aliases = new String[]{"clearchat", "cc"};
-        this.help = "Limpar mensagens no chat.";
     }
 
     @Override

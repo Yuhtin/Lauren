@@ -2,6 +2,7 @@ package commands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import models.annotations.CommandHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 
@@ -11,11 +12,11 @@ import java.time.format.TextStyle;
 import java.time.temporal.TemporalUnit;
 import java.util.Locale;
 
+@CommandHandler(name = "servidor", type = CommandHandler.CommandType.UTILITY, description = "Visualizar as informações deste servidor")
 public class ServerInfoCommand extends Command {
     public ServerInfoCommand() {
         this.name = "serverinfo";
-        this.aliases = new String[]{"sinfo", "server"};
-        this.help = "Informações sobre o servidor.";
+        this.aliases = new String[]{"sinfo", "server", "servidor"};
     }
 
     @Override

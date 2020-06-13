@@ -4,6 +4,7 @@ import application.Lauren;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import lombok.SneakyThrows;
+import models.annotations.CommandHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.entities.User;
@@ -15,11 +16,11 @@ import java.time.format.TextStyle;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+@CommandHandler(name = "info", type = CommandHandler.CommandType.HELP, description = "Veja um pouco mais sobre mim")
 public class InfoCommand extends Command {
     public InfoCommand() {
         this.name = "botinfo";
         this.aliases = new String[]{"info", "binfo"};
-        this.help = "Informações do bot";
     }
 
     @SneakyThrows

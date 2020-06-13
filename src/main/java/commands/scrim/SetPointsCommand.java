@@ -2,6 +2,7 @@ package commands.scrim;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import models.annotations.CommandHandler;
 import models.data.PlayerData;
 import models.cache.PlayerDataCache;
 import net.dv8tion.jda.api.Permission;
@@ -10,11 +11,11 @@ import utils.helper.Utilities;
 
 import java.util.concurrent.TimeUnit;
 
+@CommandHandler(name = "setarpontos", type = CommandHandler.CommandType.SUPORT, description = "Setar os pontos de ranked para um jogador")
 public class SetPointsCommand extends Command {
     public SetPointsCommand() {
         this.name = "setpoints";
         this.aliases = new String[]{"setarpontos"};
-        this.help = "Setar os pontos de um certo jogo a uma uma pessoa";
     }
 
     @Override
