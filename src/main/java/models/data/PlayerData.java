@@ -1,9 +1,8 @@
-package data;
+package models.data;
 
 import application.Lauren;
 import enums.GameType;
 import enums.Rank;
-import matches.Match;
 import utils.helper.Utilities;
 
 import java.util.ArrayList;

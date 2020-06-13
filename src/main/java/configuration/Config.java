@@ -1,4 +1,4 @@
-package objects.configuration;
+package configuration;
 
 import logger.Logger;
 import lombok.Setter;
@@ -9,7 +9,7 @@ import java.io.*;
 @Setter
 public class Config {
     public String prefix, token, formatNickname, mySqlUser, mySqlPassword, mySqlDatabase, mySqlHost, mongoPassword, databaseType;
-    public long resgistrationId;
+    public long ownerID, resgistrationId;
     public boolean log = false;
 
     public static Config startup() {
@@ -22,6 +22,7 @@ public class Config {
                 config.setPrefix("$");
                 config.setToken("COLOQUE O TOKEN AQUI");
                 config.setResgistrationId(704303594211639356L);
+                config.setOwnerID(272879983326658570L);
                 config.setFormatNickname("[@level] ");
                 config.setDatabaseType("SQLite");
 

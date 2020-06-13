@@ -2,7 +2,7 @@ package utils.serialization;
 
 import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
-import matches.Match;
+import models.data.Match;
 
 @AllArgsConstructor
 public class MatchGson {

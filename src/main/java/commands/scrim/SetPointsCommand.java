@@ -2,8 +2,8 @@ package commands.scrim;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import data.PlayerData;
-import data.controller.PlayerDataController;
+import models.data.PlayerData;
+import models.cache.PlayerDataCache;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import utils.helper.Utilities;
@@ -38,7 +38,7 @@ public class SetPointsCommand extends Command {
         }
 
         int xp = Integer.parseInt(arguments[3]);
-        PlayerData data = PlayerDataController.get(member);
+        PlayerData data = PlayerDataCache.get(member);
 
         if (arguments[2].equalsIgnoreCase("Ludo")) data.ludoPoints = xp;
          else if (arguments[2].equalsIgnoreCase("Ball")) data.poolPoints = xp;

@@ -1,9 +1,9 @@
 package database;
 
-import data.PlayerData;
-import data.controller.PlayerDataController;
-import matches.Match;
-import matches.controller.MatchController;
+import models.data.PlayerData;
+import models.cache.PlayerDataCache;
+import models.data.Match;
+import models.cache.MatchCache;
 import utils.serialization.MatchGson;
 import utils.serialization.PlayerDataGson;
 
@@ -51,14 +51,14 @@ public class Database {
             ResultSet result = statement.executeQuery();
             statement.close();
             while (result.next()) {
-                PlayerDataController.insert(PlayerDataGson.deserialize(result.getString("data")));
+                PlayerDataCache.insert(PlayerDataGson.deserialize(result.getString("data")));
             }
             statement.close();
 
             statement = connection.prepareStatement("SELECT * FROM " + tableMatches);
             result = statement.executeQuery();
             while (result.next()) {
-                MatchController.insert(MatchGson.deserialize(result.getString("data")));
+                MatchCache.insert(MatchGson.deserialize(result.getString("data")));
             }
             statement.close();
 
@@ -135,7 +135,7 @@ public class Database {
     public void close() {
         if (connection != null) {
             try {
-                PlayerDataController.getDATA().forEach(this::save);
+                PlayerDataCache.getDATA().forEach(this::save);
 
                 connection.close();
                 System.out.println("Connection to the database has been closed");

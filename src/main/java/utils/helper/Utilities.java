@@ -4,9 +4,7 @@ import application.Lauren;
 import enums.Rank;
 import logger.Logger;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 import java.text.DecimalFormat;
@@ -67,5 +65,15 @@ public class Utilities {
         }
 
         return sb.toString();
+    }
+
+    public static boolean isOwner(MessageChannel channel, User user) {
+        if (Lauren.config.ownerID != user.getIdLong()) {
+            MessageAction message = channel.sendMessage("<a:nao:704295026036834375> Você não tem permissão para usar esta função");
+            message.queue((m) -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+            Logger.log("Failed to check owner permission for user " + user.getName() + "#" + user.getDiscriminator());
+            return false;
+        }
+        return true;
     }
 }

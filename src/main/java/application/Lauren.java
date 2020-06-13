@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
-import objects.configuration.Config;
+import configuration.Config;
 
 public class Lauren {
 
@@ -62,7 +62,7 @@ public class Lauren {
     }
 
     private static Data selectDatabase(String databaseType) {
-        if ("MySQL".equals(databaseType))
+        if (databaseType.equalsIgnoreCase("MySQL"))
             return new MySQL(config.mySqlHost, config.mySqlUser, config.mySqlPassword, config.mySqlDatabase, 3306);
         return new SQLite();
     }

@@ -1,7 +1,7 @@
 package utils.serialization;
 
 import com.google.gson.Gson;
-import objects.configuration.Config;
+import configuration.Config;
 
 public class ConfigGson {
     private static final Gson GSON = new Gson();

@@ -1,7 +1,7 @@
 package utils.serialization;
 
 import com.google.gson.Gson;
-import data.PlayerData;
+import models.data.PlayerData;
 
 public class PlayerDataGson {
     private static final Gson GSON = new Gson();

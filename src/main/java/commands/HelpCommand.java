@@ -27,7 +27,7 @@ public class HelpCommand extends Command {
                 .addField("**Utilidade** \uD83D\uDEE0 - _Este módulo possui coisas úteis pro eu dia a dia._", "`ping` `avatar`", false)
                 .addField("**Scrim** \uD83D\uDC7E - _Aqui você pode encontrar comandos relacionados ao meu sistema de partidas_", "`playerinfo` `match`", false)
                 .addField("__Comandos de Administrador:__", "", false)
-                .addField("**Configurações** ⚙ - _Em configurações você define preferências de como agirei em seu servidor_", "`config` `restart`", false)
+                .addField("**Configurações** ⚙ - _Em configurações você define preferências de como agirei em seu servidor_", "`config` `restartdata`", false)
                 .addField("**Mensagens Customizadas** \uD83D\uDD79 - _Este módulo possui comandos para você enviar minhas mensagens customizadas._", "`createregister`", false)
                 .addField("**Suporte** \uD83E\uDDF0 - _Comandos para dar suporte aos moderadores do servidor_", "`setpoints` `clear`", false)
 

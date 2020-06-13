@@ -1,13 +1,13 @@
-package matches.controller;
+package models.cache;
 
-import matches.Match;
+import models.data.Match;
 import net.dv8tion.jda.api.entities.Member;
 
 import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class MatchController {
+public class MatchCache {
 
     public static final Map<String, Match> matches = new LinkedHashMap<>();
     public static final Map<String, Match> pastMatches = new LinkedHashMap<>();

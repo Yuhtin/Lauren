@@ -1,7 +1,7 @@
-package data.controller;
+package models.cache;
 
 import application.Lauren;
-import data.PlayerData;
+import models.data.PlayerData;
 import lombok.Getter;
 import net.dv8tion.jda.api.entities.Member;
 
@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class PlayerDataController {
+public class PlayerDataCache {
 
     @Getter
     private static final Map<Long, PlayerData> DATA = new LinkedHashMap<>();

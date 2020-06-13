@@ -2,8 +2,8 @@ package commands.scrim;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import data.controller.PlayerDataController;
-import data.PlayerData;
+import models.cache.PlayerDataCache;
+import models.data.PlayerData;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import utils.helper.Utilities;
@@ -20,7 +20,7 @@ public class PlayerInfoCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
         Member target = event.getMessage().getMentionedMembers().size() < 1 ? event.getMember() : event.getMessage().getMentionedMembers().get(0);
-        PlayerData controller = PlayerDataController.get(target);
+        PlayerData controller = PlayerDataCache.get(target);
 
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setColor(target.getColor());

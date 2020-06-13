@@ -4,7 +4,10 @@ import application.Lauren;
 import com.google.common.reflect.ClassPath;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
+import core.RawCommand;
 import logger.Logger;
+import models.annotations.CommandHandler;
+import models.cache.CommandCache;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 
@@ -29,12 +32,17 @@ public class CommandStartup {
 
         for (ClassPath.ClassInfo classInfo : cp.getTopLevelClassesRecursive(folder)) {
             try {
-                Class command = Class.forName(classInfo.getName());
-                Object object = command.newInstance();
+                Class aClass = Class.forName(classInfo.getName());
+                Object object = aClass.newInstance();
 
-                if (object instanceof Command)
+                if (object instanceof Command) {
+                    if (aClass.isAnnotationPresent(CommandHandler.class)) {
+                        CommandHandler type = this.getClass().getAnnotation(CommandHandler.class);
+                        CommandCache.commands.put(type.type(), new RawCommand(type.name(), type.description()));
+                    }
+
                     clientBuilder.addCommand((Command) object);
-                else
+                } else
                     throw new InstantiationException();
 
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException exception) {

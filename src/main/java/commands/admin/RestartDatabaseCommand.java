@@ -10,8 +10,8 @@ import utils.helper.Utilities;
 public class RestartDatabaseCommand extends Command {
 
     public RestartDatabaseCommand() {
-        this.name = "databaser";
-        this.aliases = new String[]{"restart"};
+        this.name = "restartdata";
+        this.aliases = new String[]{"rdatabase", "restart", "reiniciar", "restartdatabase", "databaser"};
         this.help = "Reiniciar a database";
     }
 

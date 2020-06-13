@@ -1,7 +1,7 @@
 package events.experience;
 
 import application.Lauren;
-import data.controller.PlayerDataController;
+import models.cache.PlayerDataCache;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -23,6 +23,6 @@ public class ChatMessage extends ListenerAdapter {
                 event.getChannel().sendMessage("Oi bb tudo bem?").queue();
         }
 
-        PlayerDataController.get(event.getMember()).gainXP(3).updateLevel().save();
+        PlayerDataCache.get(event.getMember()).gainXP(3).updateLevel().save();
     }
 }

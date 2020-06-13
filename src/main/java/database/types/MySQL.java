@@ -1,7 +1,5 @@
 package database.types;
 
-import data.controller.PlayerDataController;
-import data.PlayerData;
 import database.Data;
 import lombok.AllArgsConstructor;
 

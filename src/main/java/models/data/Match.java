@@ -1,9 +1,9 @@
-package matches;
+package models.data;
 
 import application.Lauren;
-import data.controller.PlayerDataController;
+import models.cache.PlayerDataCache;
 import enums.GameType;
-import matches.controller.MatchController;
+import models.cache.MatchCache;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 import utils.helper.Utilities;
@@ -39,7 +39,7 @@ public class Match {
         if (players.size() > confirmedPlayers.size())
             return false;
 
-        MatchController.insert(this);
+        MatchCache.insert(this);
         return true;
     }
 
@@ -48,9 +48,9 @@ public class Match {
         this.urlPrint = urlPrint;
         this.finishTime = System.currentTimeMillis();
 
-        players.forEach(id -> PlayerDataController.get(id).computMatch(this).save());
+        players.forEach(id -> PlayerDataCache.get(id).computMatch(this).save());
 
-        MatchController.finishMatch(this);
+        MatchCache.finishMatch(this);
     }
 
     public boolean containsPlayer(Long userID) {
