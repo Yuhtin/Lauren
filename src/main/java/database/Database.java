@@ -1,5 +1,6 @@
 package database;
 
+import logger.Logger;
 import models.data.PlayerData;
 import models.cache.PlayerDataCache;
 import models.data.Match;
@@ -28,11 +29,11 @@ public class Database {
         PreparedStatement statement;
         try {
             statement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS " + tablePlayers + " (`id` LONG, `data` TEXT);");
+                    "CREATE TABLE IF NOT EXISTS " + tablePlayers + " (`id` LONG PRIMARY KEY NOT NULL, `data` TEXT);");
             statement.executeUpdate();
             statement.close();
 
-            statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tableMatches + " (`id` VARCHAR(15), `data` TEXT);");
+            statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tableMatches + " (`id` VARCHAR(15) PRIMARY KEY NOT NULL, `data` TEXT);");
             statement.executeUpdate();
             statement.close();
             return true;
@@ -49,7 +50,6 @@ public class Database {
             statement = connection.prepareStatement("SELECT * FROM " + tablePlayers);
 
             ResultSet result = statement.executeQuery();
-            statement.close();
             while (result.next()) {
                 PlayerDataCache.insert(PlayerDataGson.deserialize(result.getString("data")));
             }

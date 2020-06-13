@@ -40,8 +40,7 @@ public class Utilities {
 
         try {
             member.modifyNickname(nickname).queue();
-        }catch (HierarchyException exception) {
-            Logger.log("Can't modify a member with higher or equal highest role than yourself");
+        }catch (HierarchyException ignored) {
         }
     }
 
