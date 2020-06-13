@@ -1,5 +1,7 @@
 package models.annotations;
 
+import lombok.AllArgsConstructor;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -15,12 +17,15 @@ public @interface CommandHandler {
 
     String description();
 
+    @AllArgsConstructor
     enum CommandType {
-        HELP(),
-        UTILITY(),
-        SCRIM(),
-        CONFIG(),
-        CUSTOM_MESSAGES(),
-        SUPORT()
+        HELP("Ajuda"),
+        UTILITY("Utilidade"),
+        SCRIM("Scrim"),
+        CONFIG("Configurações"),
+        CUSTOM_MESSAGES("Mensagens Customizadas"),
+        SUPORT("Suporte");
+
+        public String name;
     }
 }

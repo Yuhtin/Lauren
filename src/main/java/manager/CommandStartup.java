@@ -38,8 +38,8 @@ public class CommandStartup {
 
                 if (object instanceof Command) {
                     if (aClass.isAnnotationPresent(CommandHandler.class)) {
-                        CommandHandler type = (CommandHandler) aClass.getAnnotation(CommandHandler.class);
-                        CommandCache.insert(type.type(), new RawCommand(type.name(), type.description()));
+                        CommandHandler handler = (CommandHandler) aClass.getAnnotation(CommandHandler.class);
+                        CommandCache.insert(handler.type(), new RawCommand(handler.name(), handler.description(), handler.type()));
                     }
 
                     clientBuilder.addCommand((Command) object);

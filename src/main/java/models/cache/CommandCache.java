@@ -20,7 +20,7 @@ public class CommandCache {
     }
 
     public static void insert(CommandHandler.CommandType type, RawCommand rawCommand) {
-        commands.put(rawCommand.name, rawCommand);
+        commands.put(rawCommand.name.toLowerCase(), rawCommand);
         commandsType.get(type).add(rawCommand);
     }
 }
