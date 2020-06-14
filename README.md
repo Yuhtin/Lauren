@@ -2,7 +2,7 @@
 
 ## Lauren
 
-[![Discord](https://img.shields.io/discord/700673055982354472?label=Discord)][discord-invite-link]
+[![Discord](https://img.shields.io/discord/700673055982354472?label=Discord)](https://discord.gg/Jy2ad3G)
 [![GitHub stars](https://img.shields.io/github/stars/Yuhtin/Lauren.svg)](https://github.com/Yuhtin/Lauren/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues-raw/Yuhtin/Lauren.svg?label=issues)](https://github.com/Yuhtin/Lauren/issues)
 [![GitHub last commit](https://img.shields.io/github/last-commit/Lauren/Lauren/develop.svg)](https://github.com/Yuhtin/Lauren/commit)
@@ -15,7 +15,7 @@ Lauren is a discord bot that contains a scrim system for 8ballpool and LudoKing 
 
   * [JDA](https://github.com/DV8FromTheWorld/JDA) for providing the client-side code and documentation to help with the discord api
   * [JDA-Utilities](https://github.com/JDA-Applications/JDA-Utilities) for providing many utility codes for the JDA
-  * [Elytra Readme](https://github.com/Elytra-Server/Elytra/blob/develop/README.md) i don't know how to create beautiful readme, so I based it on the github of the Elytra project
+  * [Elytra Readme](https://github.com/Elytra-Server/Elytra/blob/develop/README.md) i don't know how to create beautiful readme, so I based it on the readme of the Elytra project
 
 ## Contributors
 
@@ -34,5 +34,3 @@ Lauren is a discord bot that contains a scrim system for 8ballpool and LudoKing 
 
 ## Donate
 <a href="https://www.buymeacoffee.com/Yuhtin" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/lato-orange.png" alt="Buy Me A Coffee" style="height: 51px !important;width: 217px !important;" ></a>
-
-[discord-invite-link]: https://discord.gg/Jy2ad3G
