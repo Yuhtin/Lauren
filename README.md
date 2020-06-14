@@ -5,7 +5,7 @@
 [![Discord](https://img.shields.io/discord/700673055982354472?label=Discord)](https://discord.gg/Jy2ad3G)
 [![GitHub stars](https://img.shields.io/github/stars/Yuhtin/Lauren.svg)](https://github.com/Yuhtin/Lauren/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues-raw/Yuhtin/Lauren.svg?label=issues)](https://github.com/Yuhtin/Lauren/issues)
-[![GitHub last commit](https://img.shields.io/github/last-commit/Lauren/Lauren/develop.svg)](https://github.com/Yuhtin/Lauren/commit)
+[![GitHub last commit](https://img.shields.io/github/last-commit/Yuhtin/Lauren.svg)](https://github.com/Yuhtin/Lauren/commit)
 [![MIT License](https://img.shields.io/badge/license-AGPLV3-blue.svg?color=1bcc1b)](https://choosealicense.com/licenses/agpl-3.0/)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.png?v=103)](https://github.com/ellerbrock/open-source-badges/)
 
@@ -24,7 +24,7 @@ Lauren is a discord bot that contains a scrim system for 8ballpool and LudoKing 
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/Yuhtin"><img src="https://avatars1.githubusercontent.com/u/26367735?v=4" width="100px;" alt=""/><br /><sub><b>Yuhtin</b></sub></a><br /><a href="https://github.com/Elytra-Server/Elytra/commits?author=heroslender" title="Code">💻</a> <a href="https://github.com/Elytra-Server/Elytra/commits?author=heroslender" title="Documentation">📖</a></td>   
+    <td align="center"><a href="https://github.com/Yuhtin"><img src="https://avatars1.githubusercontent.com/u/26367735?v=4" width="100px;" alt=""/><br /><sub><b>Yuhtin</b></sub></a><br /><a href="https://github.com/Elytra-Server/Elytra/commits?author=heroslender" title="Code">💻</a>  <a href="https://github.com/Elytra-Server/Elytra/commits?author=heroslender" title="Documentation">📖</a></td>   
   </tr>
 </table>
 
