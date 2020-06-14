@@ -19,22 +19,20 @@ public class Lauren {
 
     public static JDA bot;
     public static Guild guild;
-    public static LoggerController logger;
     public static long startTime;
     public static Config config;
     public static Database data;
 
     public static void main(String[] args) throws Exception {
+        long loadStart = System.currentTimeMillis();
         config = Config.startup();
         if (config == null) {
             Logger.log("There was an error loading the config");
             return;
         }
 
-        if (config.log) {
-            logger = new LoggerController("log");
-            Logger.log("Lauren is now registering logs").save();
-        }
+        if (config.log)
+            new LoggerController("log");
 
         if (!startDatabase()) return;
 
@@ -43,8 +41,9 @@ public class Lauren {
         new ListenersStartup(bot, "events");
         new CommandStartup(bot, "commands");
         guild = bot.getGuildById(700673055982354472L);
-        Logger.log("Lauren is now online").save();
         startTime = System.currentTimeMillis();
+        Logger.log("Lauren is now online").save();
+        Logger.log("Time to load: " + (startTime - loadStart) + " millis");
         System.gc();
     }
 

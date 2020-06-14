@@ -12,29 +12,29 @@ import java.time.LocalDateTime;
 @Getter
 public class LoggerController {
 
+    private static LoggerController INSTANCE;
+
     private final File file;
     private final BufferedWriter bufferedWriter;
 
     public LoggerController(String logName) throws IOException {
+        INSTANCE = this;
         LocalDateTime now = LocalDateTime.now();
         int month = now.getMonthValue();
         int day = now.getDayOfMonth();
 
         // create a infinite log archives
+        String prefix = "logs/" + logName + "-" + day + "-" + month + "-";
         int i = 1;
-        File file = new File("logs/" + logName + "-" + day + "-" + month + "-" + i + ".log");
+        File file = new File(prefix + "1.log");
         while (file.exists()) {
-            file = new File("logs/" + logName + "-" + day + "-" + month + "-" + i + ".log");
+            file = new File(prefix + i + ".log");
             i++;
         }
         this.file = file;
 
         // try to create log file
-        try {
-            if (!file.createNewFile()) Logger.log("ERROR Can't create a log file");
-        } catch (Exception exception) {
-            Logger.log("ERROR An error ocurred on create a log file");
-        }
+        file.createNewFile();
 
         // starting log
         now = LocalDateTime.now();
@@ -45,6 +45,7 @@ public class LoggerController {
         bufferedWriter.flush();
 
         Logger.log("Registering logs to " + file.getName());
+        Logger.log("Lauren is now registering logs").save();
     }
 
     public void toFile(String log) {
@@ -57,5 +58,9 @@ public class LoggerController {
         } catch (IOException exception) {
             Logger.log("Attemp to save log: " + log);
         }
+    }
+
+    public static LoggerController get() {
+        return INSTANCE;
     }
 }

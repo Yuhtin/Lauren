@@ -1,6 +1,7 @@
 package logger;
 
 import application.Lauren;
+import logger.controller.LoggerController;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -11,7 +12,7 @@ public class Logger {
 
     public void save() {
         if (Lauren.config.log)
-            Lauren.logger.toFile(message);
+            LoggerController.get().toFile(message);
     }
 
     public static Logger log(String message) {
