@@ -43,7 +43,7 @@ public class Lauren {
         guild = bot.getGuildById(700673055982354472L);
         startTime = System.currentTimeMillis();
         Logger.log("Lauren is now online").save();
-        Logger.log("Time to load: " + (startTime - loadStart) + " millis");
+        Logger.log("It took me " + (startTime - loadStart) + " millis to load my systems");
         System.gc();
     }
 

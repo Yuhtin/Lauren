@@ -20,7 +20,7 @@ public class ChatMessage extends ListenerAdapter {
         if (event.getMessage().getMentionedMembers().size() > 0) {
             User user = event.getMessage().getMentionedMembers().get(0).getUser();
             if (user.equals(event.getJDA().getSelfUser()))
-                event.getChannel().sendMessage("Oi bb tudo bem?").queue();
+                event.getChannel().sendMessage("Oi bb tudo bem? Se tiver alguma dúvida sobre mim, use `" + Lauren.config.prefix + "ajuda`").queue();
         }
 
         PlayerDataCache.get(event.getMember()).gainXP(3).updateLevel().save();
