@@ -1,4 +1,4 @@
-<img src="https://cdn.discordapp.com/avatars/702518526753243156/9583ce0d8dc42d7fe2a16ac243410f52.png?size=96" alt="Lauren" title="Lauren" align="right"/>
+<img src="https://i.imgur.com/frICFCC.png?size=96" alt="Lauren" title="Lauren" align="right"/>
 
 ## Lauren
 
