@@ -2,7 +2,7 @@
 
 ## Lauren
 
-[![Discord](https://img.shields.io/discord/700673055982354472?label=Discord)][discord]
+[![Discord](https://img.shields.io/discord/700673055982354472?label=Discord)][discord-invite-link]
 [![GitHub stars](https://img.shields.io/github/stars/Yuhtin/Lauren.svg)](https://github.com/Yuhtin/Lauren/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues-raw/Yuhtin/Lauren.svg?label=issues)](https://github.com/Yuhtin/Lauren/issues)
 [![GitHub last commit](https://img.shields.io/github/last-commit/Lauren/Lauren/develop.svg)](https://github.com/Yuhtin/Lauren/commit)
@@ -35,4 +35,4 @@ Lauren is a discord bot that contains a scrim system for 8ballpool and LudoKing 
 ## Donate
 <a href="https://www.buymeacoffee.com/Yuhtin" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/lato-orange.png" alt="Buy Me A Coffee" style="height: 51px !important;width: 217px !important;" ></a>
 
-[discord]: https://discord.gg/Jy2ad3G
+[discord-invite-link]: https://discord.gg/Jy2ad3G
