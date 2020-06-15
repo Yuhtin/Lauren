@@ -1,8 +1,8 @@
-package configuration;
+package entities;
 
 import logger.Logger;
 import lombok.Setter;
-import utils.serialization.ConfigGson;
+import utils.serialization.Serializer;
 
 import java.io.*;
 
@@ -28,7 +28,7 @@ public class Config {
                 config.setLog(true);
 
                 BufferedWriter writer = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
-                writer.write(ConfigGson.serialize(config));
+                writer.write(Serializer.config.serialize(config));
                 writer.newLine();
                 writer.flush();
 
@@ -36,7 +36,7 @@ public class Config {
                 return null;
             }
             BufferedReader reader = new BufferedReader(new FileReader(file.getAbsolutePath()));
-            return ConfigGson.deserialize(reader.readLine());
+            return Serializer.config.deserialize(reader.readLine());
         } catch (Exception exception) {
             return null;
         }
@@ -45,7 +45,7 @@ public class Config {
     public void updateConfig() throws IOException {
         File file = new File("config/config.json");
         BufferedWriter writer = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
-        writer.write(ConfigGson.serialize(this));
+        writer.write(Serializer.config.serialize(this));
         writer.newLine();
         writer.close();
     }

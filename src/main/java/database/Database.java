@@ -1,12 +1,10 @@
 package database;
 
-import logger.Logger;
 import models.data.PlayerData;
 import models.cache.PlayerDataCache;
 import models.data.Match;
 import models.cache.MatchCache;
-import utils.serialization.MatchGson;
-import utils.serialization.PlayerDataGson;
+import utils.serialization.Serializer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -51,14 +49,14 @@ public class Database {
 
             ResultSet result = statement.executeQuery();
             while (result.next()) {
-                PlayerDataCache.insert(PlayerDataGson.deserialize(result.getString("data")));
+                PlayerDataCache.insert(Serializer.playerData.deserialize(result.getString("data")));
             }
             statement.close();
 
             statement = connection.prepareStatement("SELECT * FROM " + tableMatches);
             result = statement.executeQuery();
             while (result.next()) {
-                MatchCache.insert(MatchGson.deserialize(result.getString("data")));
+                MatchCache.insert(Serializer.match.deserialize(result.getString("data")));
             }
             statement.close();
 
@@ -73,7 +71,7 @@ public class Database {
     public void save(Long userID, PlayerData controller) {
         PreparedStatement statement;
         try {
-            String result = PlayerDataGson.serialize(controller);
+            String result = Serializer.playerData.serialize(controller);
             statement = connection.prepareStatement("UPDATE " + tablePlayers + " SET `data` = ? WHERE `id` = ?");
             statement.setString(1, result);
             statement.setLong(2, userID);
@@ -89,7 +87,7 @@ public class Database {
     public void save(String id, Match match) {
         PreparedStatement statement;
         try {
-            String result = MatchGson.serialize(match);
+            String result = Serializer.match.serialize(match);
             statement = connection.prepareStatement("UPDATE " + tableMatches + " SET `data` = ? WHERE `id` = ?");
             statement.setString(1, result);
             statement.setString(2, id);
@@ -107,7 +105,7 @@ public class Database {
         try {
             statement = connection.prepareStatement("INSERT INTO " + tablePlayers + " (`id`, `data`) VALUES(?,?)");
             statement.setLong(1, userID);
-            statement.setString(2, PlayerDataGson.serialize(new PlayerData(userID)));
+            statement.setString(2, Serializer.playerData.serialize(new PlayerData(userID)));
 
             statement.executeUpdate();
             statement.close();

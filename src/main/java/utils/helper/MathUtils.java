@@ -44,4 +44,60 @@ public class MathUtils {
         }
         return format;
     }
+
+    public static int parseTime(String minutes) {
+        try {
+            return Integer.parseInt(minutes);
+        }catch (Exception exception) {
+            return 60;
+        }
+    }
+
+    /**
+     * The methods below are from:
+     *
+     * @author John Grosh (john.a.grosh@gmail.com)
+     */
+
+    public static String plural(long x, String singular, String plural) {
+        return x == 1 ? singular : plural;
+    }
+
+    public static String secondsToTime(long timeseconds) {
+        StringBuilder builder = new StringBuilder();
+        int years = (int) (timeseconds / (60 * 60 * 24 * 365));
+        if (years > 0) {
+            builder.append("**").append(years).append("** ").append(plural(years, "ano", "anos")).append(", ");
+            timeseconds = timeseconds % (60 * 60 * 24 * 365);
+        }
+        int weeks = (int) (timeseconds / (60 * 60 * 24 * 7));
+        if (weeks > 0) {
+            builder.append("**").append(weeks).append("** ").append(plural(weeks, "mês", "messes")).append(", ");
+            timeseconds = timeseconds % (60 * 60 * 24 * 7);
+        }
+        int days = (int) (timeseconds / (60 * 60 * 24));
+        if (days > 0) {
+            builder.append("**").append(days).append("** ").append(plural(days, "dia", "dias")).append(", ");
+            timeseconds = timeseconds % (60 * 60 * 24);
+        }
+        int hours = (int) (timeseconds / (60 * 60));
+        if (hours > 0) {
+            builder.append("**").append(hours).append("** ").append(plural(hours, "hora", "horas")).append(", ");
+            timeseconds = timeseconds % (60 * 60);
+        }
+        int minutes = (int) (timeseconds / (60));
+        if (minutes > 0) {
+            builder.append("**").append(minutes).append("** ").append(plural(minutes, "minuto", "minutos")).append(", ");
+            timeseconds = timeseconds % (60);
+        }
+        if (timeseconds > 0) {
+            builder.append("**").append(timeseconds).append("** ").append(plural(timeseconds, "segundo", "segundos"));
+        }
+        String str = builder.toString();
+        if (str.endsWith(", "))
+            str = str.substring(0, str.length() - 2);
+        if (str.equals(""))
+            str = "**Finalizado**";
+        return str;
+    }
 }

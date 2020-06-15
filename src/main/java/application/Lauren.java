@@ -4,6 +4,8 @@ import database.Data;
 import database.Database;
 import database.types.MySQL;
 import database.types.SQLite;
+import draw.controller.DrawController;
+import entities.Config;
 import logger.Logger;
 import logger.controller.LoggerController;
 import manager.CommandStartup;
@@ -13,7 +15,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
-import configuration.Config;
 
 public class Lauren {
 
@@ -30,17 +31,18 @@ public class Lauren {
             Logger.log("There was an error loading the config");
             return;
         }
-
-        if (config.log)
-            new LoggerController("log");
+        if (config.log) new LoggerController("log");
 
         if (!startDatabase()) return;
 
-        bot = new JDABuilder(AccountType.BOT).setToken(config.token).setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren")).setAutoReconnect(true).build();
+        bot = new JDABuilder(AccountType.BOT)
+                .setToken(config.token)
+                .setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"))
+                .setAutoReconnect(true)
+                .build();
 
         new ListenersStartup(bot, "events");
         new CommandStartup(bot, "commands");
-        guild = bot.getGuildById(700673055982354472L);
         startTime = System.currentTimeMillis();
         Logger.log("Lauren is now online").save();
         Logger.log("It took me " + (startTime - loadStart) + " millis to load my systems");

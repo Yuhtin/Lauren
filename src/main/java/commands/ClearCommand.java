@@ -45,8 +45,6 @@ public class ClearCommand extends Command {
         if (args.length > 2)
             id = event.getMessage().getMentionedMembers().get(0).getIdLong();
 
-        event.getMessage().delete().queue();
-
         MessageHistory messageHistory = new MessageHistory(event.getChannel());
         List<Message> messages;
 

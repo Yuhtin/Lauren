@@ -21,7 +21,7 @@ public class Utilities {
         if (!member.hasPermission(permission)) {
             MessageAction message = channel.sendMessage("<a:nao:704295026036834375> Você não tem permissão para usar esta função");
             message.queue((m) -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-            Logger.log("Failed to check permissions for user " + member.getUser().getName() + "#" + member.getUser().getDiscriminator());
+            Logger.log("Failed to check permissions for user " + getFullName(member.getUser()));
             return false;
         }
         return true;
@@ -40,13 +40,17 @@ public class Utilities {
 
         try {
             member.modifyNickname(nickname).queue();
-        }catch (HierarchyException ignored) {
+        } catch (HierarchyException ignored) {
         }
     }
 
     public static String format(double valor) {
         DecimalFormat decimalFormat = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US));
         return decimalFormat.format(valor);
+    }
+
+    public static String getFullName(User user) {
+        return user.getName() + "#" + user.getDiscriminator();
     }
 
     public static String rolesToString(List<Role> roles) {
