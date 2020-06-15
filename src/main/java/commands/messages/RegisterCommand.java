@@ -1,4 +1,4 @@
-package commands;
+package commands.messages;
 
 import application.Lauren;
 import com.jagrosh.jdautilities.command.Command;

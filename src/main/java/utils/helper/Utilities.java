@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.List;
@@ -83,5 +84,15 @@ public class Utilities {
             return false;
         }
         return true;
+    }
+
+    public static File getAttachment(Message.Attachment attachment) {
+        File file = new File("temporary/" + attachment.getFileName());
+        try {
+            file.createNewFile();
+            return attachment.downloadToFile(file).get();
+        } catch (Exception exception) {
+            return null;
+        }
     }
 }

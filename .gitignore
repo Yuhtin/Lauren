@@ -64,6 +64,7 @@ cmake-build-*/
 
 # Hide from github
 logs/
+temporary/
 gources/
 images/
 config/

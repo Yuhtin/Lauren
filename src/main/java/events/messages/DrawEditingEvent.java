@@ -46,7 +46,7 @@ public class DrawEditingEvent extends ListenerAdapter {
                 } else break;
             }
             case WINNERS: {
-                int winners = 0;
+                int winners;
                 try {
                     if (message.contains(" ")) break;
                     else winners = Integer.parseInt(message);
@@ -76,7 +76,7 @@ public class DrawEditingEvent extends ListenerAdapter {
 
                 if (minutes > 0) {
                     if (minutes > 1440) minutes = 1440;
-                    
+
                     editting.seconds = minutes * 60;
                     editting.status = DrawEditingStatus.CONFIRM;
 
