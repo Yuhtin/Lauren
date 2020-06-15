@@ -33,14 +33,14 @@ public class Draw {
     public boolean finished;
 
     public void send() {
-        channel.sendMessage(render(Color.DARK_GRAY)).queue(m -> {
+        channel.sendMessage(render()).queue(m -> {
             message = m;
             m.addReaction("⭐").queue();
         });
         schedule.scheduleWithFixedDelay(this::update, 1, 1, TimeUnit.MINUTES);
     }
 
-    public Message render(Color color) {
+    public Message render() {
         Instant now = Instant.now();
         String time = MathUtils.secondsToTime(now.until(end, ChronoUnit.SECONDS));
         if (time.equalsIgnoreCase("**Finalizado**")) {
@@ -54,7 +54,7 @@ public class Draw {
 
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setColor(close ? Color.RED : color == null ? Color.MAGENTA : color);
+        eb.setColor(Color.DARK_GRAY);
         eb.setFooter((winners == 1 ? "" : winners + " ganhadores | ") + "Encerra em", null);
         eb.setTimestamp(end);
         eb.setDescription("Clique no ⭐ para entrar!"
@@ -71,7 +71,7 @@ public class Draw {
     }
 
     public void update() {
-        Message render = render(Color.BLUE);
+        Message render = render();
         if (render == null) return;
 
         message.editMessage(render).queue(m -> {
@@ -84,7 +84,7 @@ public class Draw {
         mb.append("\uD83C\uDFA8 **SORTEIO FINALIZADO** \uD83C\uDFA8");
 
         EmbedBuilder eb = new EmbedBuilder();
-        eb.setColor(new Color(0x36393F));
+        eb.setColor(Color.DARK_GRAY);
         eb.setFooter((winners == 1 ? "" : winners + " Winners | ") + "Finalizado no dia", null);
         eb.setTimestamp(end);
         if (prize != null) eb.setAuthor(prize, null, null);

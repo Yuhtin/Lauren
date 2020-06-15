@@ -26,7 +26,6 @@ public class DrawEditingEvent extends ListenerAdapter {
 
         DrawEditting editting = DrawController.editing;
         String message = event.getMessage().getContentRaw();
-        boolean error = false;
 
         switch (editting.status) {
             case PRIZE: {
@@ -35,7 +34,7 @@ public class DrawEditingEvent extends ListenerAdapter {
                     editting.status = DrawEditingStatus.WINNERS;
 
                     EmbedBuilder embed = new EmbedBuilder()
-                            .setAuthor("\uD83D\uDCB3 Criando um sorteio")
+                            .setTitle("\uD83D\uDCB3 Criando um sorteio")
                             .setDescription("\uD83D\uDCC4 Informações do sorteio:\n\n" +
                                     " ✏️ Item a ser sorteado: `" + message + "`\n" +
                                     " \uD83D\uDCCB Número de vencedores: `Digite no chat`")
@@ -44,45 +43,45 @@ public class DrawEditingEvent extends ListenerAdapter {
 
                     editting.message.editMessage(embed.build()).queue();
                     return;
-                }
+                } else break;
             }
             case WINNERS: {
                 int winners = 0;
                 try {
-                    if (message.contains(" ")) error = true;
+                    if (message.contains(" ")) break;
                     else winners = Integer.parseInt(message);
 
-                    if (winners < 1 || winners > 50) error = true;
+                    if (winners < 1 || winners > 50) break;
                 } catch (Exception exception) {
-                    error = true;
+                    break;
                 }
 
-                if (!error) {
-                    editting.winnersCount = winners;
-                    editting.status = DrawEditingStatus.TIME;
+                editting.winnersCount = winners;
+                editting.status = DrawEditingStatus.TIME;
 
-                    EmbedBuilder embed = new EmbedBuilder()
-                            .setAuthor("\uD83D\uDCB3 Criando um sorteio")
-                            .setDescription("\uD83D\uDCC4 Informações do sorteio:\n\n" +
-                                    " ✏️ Item a ser sorteado: `" + editting.prize + "`\n" +
-                                    " \uD83D\uDCCB Número de vencedores: `" + winners + " " + MathUtils.plural(editting.winnersCount, "vencedor", "vencedores") + "`\n" +
-                                    " ⏳ Tempo de sorteio: `Digite no chat`")
-                            .setTimestamp(Instant.now())
-                            .setFooter("Editando as informações do sorteio", event.getJDA().getSelfUser().getAvatarUrl());
+                EmbedBuilder embed = new EmbedBuilder()
+                        .setTitle("\uD83D\uDCB3 Criando um sorteio")
+                        .setDescription("\uD83D\uDCC4 Informações do sorteio:\n\n" +
+                                " ✏️ Item a ser sorteado: `" + editting.prize + "`\n" +
+                                " \uD83D\uDCCB Número de vencedores: `" + winners + " " + MathUtils.plural(editting.winnersCount, "vencedor", "vencedores") + "`\n" +
+                                " ⏳ Tempo de sorteio: `Digite no chat`")
+                        .setTimestamp(Instant.now())
+                        .setFooter("Editando as informações do sorteio", event.getJDA().getSelfUser().getAvatarUrl());
 
-                    editting.message.editMessage(embed.build()).queue();
-                    return;
-                }
+                editting.message.editMessage(embed.build()).queue();
+                return;
             }
             case TIME: {
                 int minutes = MathUtils.parseTime(message);
 
                 if (minutes > 0) {
+                    if (minutes > 1440) minutes = 1440;
+                    
                     editting.seconds = minutes * 60;
                     editting.status = DrawEditingStatus.CONFIRM;
 
                     EmbedBuilder embed = new EmbedBuilder()
-                            .setAuthor("\uD83D\uDCB3 Criando um sorteio")
+                            .setTitle("\uD83D\uDCB3 Criando um sorteio")
                             .setDescription("\uD83D\uDCC4 Informações do sorteio:\n\n" +
                                     " ✏️ Item a ser sorteado: `" + editting.prize + "`\n" +
                                     " \uD83D\uDCCB Número de vencedores: `" + editting.winnersCount + " " + MathUtils.plural(editting.winnersCount, "vencedor", "vencedores") + "`\n" +
