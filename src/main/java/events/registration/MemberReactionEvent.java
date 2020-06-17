@@ -32,7 +32,7 @@ public class MemberReactionEvent extends ListenerAdapter {
     public void onMessageReactionRemove(MessageReactionRemoveEvent event) {
         if (event.getMember() == null || event.getMember().getUser().isBot()) return;
 
-        if (event.getMessageIdLong() != Lauren.config.resgistrationId) {
+        if (event.getMessageIdLong() == Lauren.config.resgistrationId) {
             Role boy = event.getJDA().getRoleById("701293438821335040");
             Role girl = event.getJDA().getRoleById("701293834780540938");
             if (boy == null || girl == null) return;

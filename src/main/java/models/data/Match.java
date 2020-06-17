@@ -2,7 +2,7 @@ package models.data;
 
 import application.Lauren;
 import models.cache.PlayerDataCache;
-import enums.GameType;
+import enums.Game;
 import models.cache.MatchCache;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -15,12 +15,12 @@ import java.util.List;
 public class Match {
 
     public String id, urlPrint;
-    public GameType type;
+    public Game type;
     public Long winPlayer, startTime, finishTime;
     public TextChannel channel;
     public List<Long> players, confirmedPlayers = new ArrayList<>();
 
-    public Match(GameType type, Long startTime) {
+    public Match(Game type, Long startTime) {
         this.type = type;
         this.startTime = startTime;
 

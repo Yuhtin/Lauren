@@ -26,7 +26,7 @@ public class PlayerInfoCommand extends Command {
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setColor(target.getColor());
         embedBuilder.setAuthor("Informações do jogador " + target.getNickname(), "https://google.com", target.getUser().getAvatarUrl());
-        embedBuilder.setThumbnail(target.getUser().getAvatarUrl());
+        embedBuilder.setThumbnail(controller.ludoRank.position > controller.poolRank.position ? controller.ludoRank.url : controller.poolRank.url);
 
         embedBuilder.addField("⚗️ Experiência", "`Nível " + controller.level + " (" + Utilities.format(controller.experience) + " XP)`", false);
         embedBuilder.addField("🧶 Cargos", "`" + Utilities.rolesToString(target.getRoles()) + "`", false);
@@ -34,12 +34,12 @@ public class PlayerInfoCommand extends Command {
         embedBuilder.addField("\uD83D\uDCB0 Dinheiro", "`$" + (Utilities.format(controller.money)) + "`", false);
         embedBuilder.addField("\uD83C\uDFB1 8BallPool",
                 "  \uD83D\uDD25 Partidas: " + controller.poolMatches + " \n" +
-                "  \uD83E\uDD47 Vitórias: " + controller.poolWins + " \n\n" +
-                "  \uD83C\uDFC6 Patente: " + controller.poolRank + "", true);
+                        "  \uD83E\uDD47 Vitórias: " + controller.poolWins + " \n\n" +
+                        "  \uD83C\uDFC6 Patente: " + controller.poolRank + "", true);
         embedBuilder.addField("👑 LudoKing",
                 "  \uD83D\uDD25 Partidas: " + controller.ludoMatches + " \n" +
-                "  \uD83E\uDD47 Vitórias: " + controller.ludoWins + " \n\n" +
-                "  \uD83C\uDFC6 Patente: " + controller.ludoRank + "", true);
+                        "  \uD83E\uDD47 Vitórias: " + controller.ludoWins + " \n\n" +
+                        "  \uD83C\uDFC6 Patente: " + controller.ludoRank + "", true);
 
         embedBuilder.setFooter("Comando usado por " + event.getMember().getNickname(), event.getMember().getUser().getAvatarUrl());
         embedBuilder.setTimestamp(Instant.now());

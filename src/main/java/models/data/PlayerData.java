@@ -1,7 +1,7 @@
 package models.data;
 
 import application.Lauren;
-import enums.GameType;
+import enums.Game;
 import enums.Rank;
 import utils.helper.Utilities;
 
@@ -20,6 +20,7 @@ public class PlayerData {
             poolRank = Rank.NOTHING;
     public int ludoPoints, ludoWins, ludoMatches,
             poolPoints, poolWins, poolMatches = 0;
+
 
     public final List<Match> winMatches;
 
@@ -64,7 +65,7 @@ public class PlayerData {
             winMatches.add(match);
         }
 
-        if (match.type == GameType.BALL) {
+        if (match.type == Game.POOL) {
             multiplier = poolRank.multiplier;
             ++poolMatches;
             poolPoints += points;

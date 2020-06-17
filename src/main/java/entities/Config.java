@@ -8,8 +8,8 @@ import java.io.*;
 
 @Setter
 public class Config {
-    public String prefix, token, formatNickname, mySqlUser, mySqlPassword, mySqlDatabase, mySqlHost, mongoPassword, databaseType;
-    public long ownerID, resgistrationId;
+    public String prefix, token, formatNickname, mySqlUser, mySqlPassword, mySqlDatabase, mySqlHost, mongoPassword, databaseType = "";
+    public long ownerID, resgistrationId, ludoCasual, ludoRanked, poolCasual, poolRanked = 0;
     public boolean log = false;
 
     public static Config startup() {
@@ -42,12 +42,17 @@ public class Config {
         }
     }
 
-    public void updateConfig() throws IOException {
+    public void updateConfig() {
         File file = new File("config/config.json");
-        BufferedWriter writer = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
-        writer.write(Serializer.config.serialize(this));
-        writer.newLine();
-        writer.close();
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
+            writer.write(Serializer.config.serialize(this));
+            writer.newLine();
+            writer.close();
+        } catch (Exception exception) {
+            Logger.error(exception).save();
+            Logger.log("An error occurred on save config").save();
+        }
     }
 
     public void updatePrefix(String newPrefix) {
