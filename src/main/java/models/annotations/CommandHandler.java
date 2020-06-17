@@ -20,6 +20,7 @@ public @interface CommandHandler {
     @AllArgsConstructor
     enum CommandType {
         HELP("Ajuda"),
+        MUSIC("Música"),
         UTILITY("Utilidade"),
         SCRIM("Scrim"),
         CONFIG("Configurações"),

@@ -1,8 +1,8 @@
 package models.data;
 
 import application.Lauren;
-import enums.Game;
-import enums.Rank;
+import core.enums.Game;
+import core.enums.Rank;
 import utils.helper.Utilities;
 
 import java.util.ArrayList;

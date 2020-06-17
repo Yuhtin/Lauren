@@ -2,7 +2,7 @@ package models.data;
 
 import application.Lauren;
 import models.cache.PlayerDataCache;
-import enums.Game;
+import core.enums.Game;
 import models.cache.MatchCache;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;

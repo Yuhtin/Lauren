@@ -1,7 +1,6 @@
 package utils.helper;
 
 import application.Lauren;
-import enums.Rank;
 import logger.Logger;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -94,5 +93,9 @@ public class Utilities {
         } catch (Exception exception) {
             return null;
         }
+    }
+
+    public static boolean isDJ(Member member) {
+        return member.getRoles().stream().anyMatch(r -> r.getIdLong() == 722957999949348935L);
     }
 }

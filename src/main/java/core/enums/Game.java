@@ -1,14 +1,14 @@
-package enums;
+package core.enums;
 
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public enum GameType {
+public enum Game {
 
-    CASUAL("Casual"),
-    RANKED("Ranked");
+    POOL("8BallPool"),
+    LUDO("LudoKing");
 
-    private final String name;
+    public final String name;
 
     @Override
     public String toString() {

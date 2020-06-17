@@ -2,7 +2,7 @@ package utils.serialization;
 
 import com.google.gson.Gson;
 import draw.Draw;
-import entities.Config;
+import core.entities.Config;
 import lombok.AllArgsConstructor;
 import models.data.Match;
 import models.data.PlayerData;

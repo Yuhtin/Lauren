@@ -1,4 +1,4 @@
-package entities;
+package core.entities;
 
 import logger.Logger;
 import lombok.Setter;

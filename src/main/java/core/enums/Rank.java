@@ -1,4 +1,4 @@
-package enums;
+package core.enums;
 
 import lombok.AllArgsConstructor;
 

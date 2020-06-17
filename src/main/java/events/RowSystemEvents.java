@@ -1,10 +1,9 @@
 package events;
 
 import application.Lauren;
-import enums.Game;
-import enums.GameType;
+import core.enums.Game;
+import core.enums.GameType;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import utils.helper.Utilities;
 
