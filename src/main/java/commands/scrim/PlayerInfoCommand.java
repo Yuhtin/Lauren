@@ -13,9 +13,10 @@ import java.time.Instant;
 
 @CommandHandler(name = "perfil", type = CommandHandler.CommandType.SCRIM, description = "Visualizar o perfil de outro usuário")
 public class PlayerInfoCommand extends Command {
+
     public PlayerInfoCommand() {
-        this.name = "playerinfo";
-        this.aliases = new String[]{"pinfo", "perfil"};
+        this.name = "perfil";
+        this.aliases = new String[]{"pinfo", "jogador", "playerinfo", "player"};
     }
 
     @Override
@@ -23,26 +24,25 @@ public class PlayerInfoCommand extends Command {
         Member target = event.getMessage().getMentionedMembers().size() < 1 ? event.getMember() : event.getMessage().getMentionedMembers().get(0);
         PlayerData controller = PlayerDataCache.get(target);
 
-        EmbedBuilder embedBuilder = new EmbedBuilder();
-        embedBuilder.setColor(target.getColor());
-        embedBuilder.setAuthor("Informações do jogador " + target.getNickname(), "https://google.com", target.getUser().getAvatarUrl());
-        embedBuilder.setThumbnail(controller.ludoRank.position > controller.poolRank.position ? controller.ludoRank.url : controller.poolRank.url);
+        EmbedBuilder embedBuilder = new EmbedBuilder()
+                .setColor(target.getColor())
+                .setAuthor("Informações do jogador " + target.getNickname(), "https://google.com", target.getUser().getAvatarUrl())
+                .setThumbnail(controller.ludoRank.position > controller.poolRank.position ? controller.ludoRank.url : controller.poolRank.url)
+                .addField("⚗️ Experiência", "`Nível " + controller.level + " (" + Utilities.format(controller.experience) + " XP)`", false)
+                .addField("🧶 Cargos", "`" + Utilities.rolesToString(target.getRoles()) + "`", false)
+                .addField("\uD83D\uDCB0 Dinheiro", "`$" + (Utilities.format(controller.money)) + "`", false)
+                .addField("\uD83D\uDC7E Partidas totais", "`" + (controller.ludoMatches + controller.poolMatches) + "`", false)
+                .addField("\uD83C\uDFB1 8BallPool",
+                        "  \uD83D\uDD25 Partidas: " + controller.poolMatches + " \n" +
+                                "  \uD83E\uDD47 Vitórias: " + controller.poolWins + " \n\n" +
+                                "  \uD83C\uDFC6 Patente: " + controller.poolRank + "", true)
+                .addField("👑 LudoKing",
+                        "  \uD83D\uDD25 Partidas: " + controller.ludoMatches + " \n" +
+                                "  \uD83E\uDD47 Vitórias: " + controller.ludoWins + " \n\n" +
+                                "  \uD83C\uDFC6 Patente: " + controller.ludoRank + "", true)
+                .setFooter("Comando usado por " + event.getMember().getNickname(), event.getMember().getUser().getAvatarUrl())
+                .setTimestamp(Instant.now());
 
-        embedBuilder.addField("⚗️ Experiência", "`Nível " + controller.level + " (" + Utilities.format(controller.experience) + " XP)`", false);
-        embedBuilder.addField("🧶 Cargos", "`" + Utilities.rolesToString(target.getRoles()) + "`", false);
-        embedBuilder.addField("\uD83D\uDC7E Partidas totais", "`" + (controller.ludoMatches + controller.poolMatches) + "`", false);
-        embedBuilder.addField("\uD83D\uDCB0 Dinheiro", "`$" + (Utilities.format(controller.money)) + "`", false);
-        embedBuilder.addField("\uD83C\uDFB1 8BallPool",
-                "  \uD83D\uDD25 Partidas: " + controller.poolMatches + " \n" +
-                        "  \uD83E\uDD47 Vitórias: " + controller.poolWins + " \n\n" +
-                        "  \uD83C\uDFC6 Patente: " + controller.poolRank + "", true);
-        embedBuilder.addField("👑 LudoKing",
-                "  \uD83D\uDD25 Partidas: " + controller.ludoMatches + " \n" +
-                        "  \uD83E\uDD47 Vitórias: " + controller.ludoWins + " \n\n" +
-                        "  \uD83C\uDFC6 Patente: " + controller.ludoRank + "", true);
-
-        embedBuilder.setFooter("Comando usado por " + event.getMember().getNickname(), event.getMember().getUser().getAvatarUrl());
-        embedBuilder.setTimestamp(Instant.now());
         event.getChannel().sendMessage(embedBuilder.build()).queue();
     }
 }

@@ -11,9 +11,8 @@ import java.util.List;
 public class PlayerData {
 
     // Geral
-    public Long userID;
-    public int level = 0;
-    public double money = 100, experience = 0;
+    public long userID, dailyDelay;
+    public int level = 0, money = 100, experience = 0;
 
     // LudoKing and 8ballpool variables
     public Rank ludoRank = Rank.NOTHING,
@@ -24,13 +23,13 @@ public class PlayerData {
 
     public final List<Match> winMatches;
 
-    public PlayerData(Long userID) {
+    public PlayerData(long userID) {
         this.userID = userID;
         winMatches = new ArrayList<>();
     }
 
     public PlayerData updateLevel() {
-        level = (int) experience / 1000;
+        level = experience / 1000;
         Utilities.setNick(userID, level);
 
         return this;
@@ -39,6 +38,18 @@ public class PlayerData {
     public PlayerData updateRank() {
         this.poolRank = Rank.getByPoints(poolPoints);
         this.ludoRank = Rank.getByPoints(ludoPoints);
+
+        return this;
+    }
+
+    public PlayerData setDelay(long delay) {
+        this.dailyDelay = delay;
+
+        return this;
+    }
+
+    public PlayerData addMoney(double quantity) {
+        money += quantity;
 
         return this;
     }
