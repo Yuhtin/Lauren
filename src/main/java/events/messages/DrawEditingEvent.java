@@ -7,6 +7,7 @@ import core.draw.controller.DrawEditting;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import utils.helper.MathUtils;
 
@@ -118,6 +119,14 @@ public class DrawEditingEvent extends ListenerAdapter {
         DrawController.set(DrawController.editing.build());
         event.getChannel().sendMessage("\uD83D\uDD14 Você criou o sorteio com sucesso").queue();
         DrawController.editing = null;
+    }
+
+    @Override
+    public void onMessageReactionRemove(MessageReactionRemoveEvent event) {
+        if (event.getMember() == null || event.getMember().getUser().isBot()) return;
+
+        if (DrawController.get() != null && DrawController.get().message.getIdLong() == event.getMessageIdLong() && !DrawController.get().finished)
+            DrawController.get().users.remove(event.getUserIdLong());
     }
 
     private String getError(DrawEditingStatus status) {
