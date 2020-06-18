@@ -45,6 +45,8 @@ public class CommandCache {
 
                 .addField("**Ajuda** ❓ - _Este módulo tem comandos para te ajudar na utilização do bot e do servidor._",
                         getCommands(CommandHandler.CommandType.HELP), false)
+                .addField("**Música** \uD83C\uDFB6 - _Comandos relacionados ao meu sistema de tocar batidões._",
+                        getCommands(CommandHandler.CommandType.MUSIC), false)
                 .addField("**Utilidade** \uD83D\uDEE0 - _Este módulo possui coisas úteis pro eu dia a dia._",
                         getCommands(CommandHandler.CommandType.UTILITY), false)
                 .addField("**Scrim** \uD83D\uDC7E - _Aqui você pode encontrar comandos relacionados ao meu sistema de partidas._",

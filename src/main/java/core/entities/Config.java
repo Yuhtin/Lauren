@@ -8,7 +8,7 @@ import java.io.*;
 
 @Setter
 public class Config {
-    public String prefix, token, formatNickname, mySqlUser, mySqlPassword, mySqlDatabase, mySqlHost, mongoPassword, databaseType = "";
+    public String prefix, token, formatNickname, mySqlUser, mySqlPassword, mySqlDatabase, mySqlHost, mongoPassword, databaseType, spotifyClient = "";
     public long ownerID, resgistrationId, ludoCasual, ludoRanked, poolCasual, poolRanked = 0;
     public boolean log = false;
 

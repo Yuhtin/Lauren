@@ -21,6 +21,10 @@ import utils.helper.Utilities;
 import java.util.Arrays;
 import java.util.Set;
 
+import static utils.helper.TrackUtils.buildQueueMessage;
+import static utils.helper.TrackUtils.getProgressBar;
+import static utils.helper.TrackUtils.getTimestamp;
+
 @CommandHandler(name = "tocar", type = CommandHandler.CommandType.MUSIC, description = "Colocar eu para por um som na caixa")
 public class MusicCommand extends Command {
 
@@ -61,14 +65,14 @@ public class MusicCommand extends Command {
                     String CD = "\ud83d\udcbf";
                     EmbedBuilder embed = new EmbedBuilder()
                             .setTitle(CD + " Informações da música atual")
-                            .setDescription("\uD83D\uDCBD Informações da música:\n" +
+                            .setDescription(
                                     DVD + " Nome: `" + track.getInfo().title + "`\n" +
                                     "\uD83D\uDCB0 Autor: `" + track.getInfo().author + "`\n" +
                                     "\uD83D\uDCE2 Tipo de vídeo: `" +
                                     (track.getInfo().isStream ? "Stream" : track.getInfo().title.contains("Podcast") ?
                                             "Podcast" : "Música") + "`\n" +
-                                    "\uD83E\uDDEA Tempo tocado: " + getTimestamp(track.getPosition()) + " / " + getTimestamp(track.getInfo().length) + "\n" +
-                                    "\uD83E\uDDEC Membro que adicionou: <@" + trackManager.getTrackInfo(track).getAuthor() + ">\n" +
+                                    "\uD83E\uDDEA Tempo tocado: " + getProgressBar(track) + "\n" +
+                                    "\uD83E\uDDEC Membro que adicionou: <@" + trackManager.getTrackInfo(track).getAuthor().getIdLong() + ">\n" +
                                     "\n" +
                                     "\uD83D\uDCCC Link: [Clique aqui](" + track.getInfo().uri + ")");
 
@@ -141,7 +145,7 @@ public class MusicCommand extends Command {
                 }
                 case "sair":
                 case "leave": {
-                    if (Utilities.isDJ(event.getMember())) {
+                    if (!Utilities.isDJ(event.getMember())) {
                         event.getChannel().sendMessage("Ahhh, que pena \uD83D\uDC94 você não pode realizar essa operação").queue();
                         return;
                     }
@@ -174,7 +178,6 @@ public class MusicCommand extends Command {
 
             case "play":
             case "tocar": {
-                System.out.println(input);
                 trackManager.loadTrack(input, event.getMember(), event.getMessage(), event.getTextChannel());
                 return;
             }
@@ -231,21 +234,5 @@ public class MusicCommand extends Command {
         chat.sendMessage(builder.build()).queue();
     }
 
-    private String buildQueueMessage(AudioInfo info) {
-        AudioTrackInfo trackInfo = info.getTrack().getInfo();
-        String title = trackInfo.title;
-        long length = trackInfo.length;
 
-        return "`[ " + getTimestamp(length) + " ]` " + title + "\n";
-    }
-
-    private String getTimestamp(long milis) {
-        long seconds = milis / 1000L;
-        final long hours = Math.floorDiv(seconds, 3600L);
-        seconds -= hours * 3600L;
-        final long mins = Math.floorDiv(seconds, 60L);
-        seconds -= mins * 60L;
-
-        return ((hours == 0L) ? "" : (hours + ":")) + String.format("%02d", mins) + ":" + String.format("%02d", seconds);
-    }
 }

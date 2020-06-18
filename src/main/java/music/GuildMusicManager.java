@@ -8,6 +8,8 @@ public class GuildMusicManager {
 
     public GuildMusicManager(AudioPlayer player) {
         this.player = player;
+        this.player.setVolume(35);
+
         this.scheduler = new TrackScheduler(player);
         player.addListener(scheduler);
     }
