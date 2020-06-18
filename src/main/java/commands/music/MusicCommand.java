@@ -89,7 +89,7 @@ public class MusicCommand extends Command {
                                             "\uD83D\uDCE2 Tipo de vídeo: `" +
                                             (track.getInfo().isStream ? "Stream" : track.getInfo().title.contains("Podcast") ?
                                                     "Podcast" : "Música") + "`\n" +
-                                            "\uD83E\uDDEA Timeline: ⏸ ⏭ " + (trackManager.player.getVolume() < 50 ? "\uD83D\uDD09" : "\uD83D\uDD0A") + " " + getProgressBar(track) + "\n" +
+                                            "\uD83E\uDDEA Timeline: " + (trackManager.player.isPaused() ? "▶️" : "⏸") + " ⏭ " + (trackManager.player.getVolume() < 50 ? "\uD83D\uDD09" : "\uD83D\uDD0A") + " " + getProgressBar(track) + "\n" +
                                             "\uD83E\uDDEC Membro que adicionou: <@" + trackManager.getTrackInfo(track).getAuthor().getIdLong() + ">\n" +
                                             "\n" +
                                             "\uD83D\uDCCC Link: [Clique aqui](" + track.getInfo().uri + ")");
@@ -192,7 +192,8 @@ public class MusicCommand extends Command {
 
         String input = String.join(" ", Arrays.copyOfRange(arguments, 1, arguments.length));
         switch (operation) {
-            case "buscar": input = "ytsearch: " + input;
+            case "buscar":
+                input = "ytsearch: " + input;
 
             case "play":
             case "tocar": {

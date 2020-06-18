@@ -43,6 +43,8 @@ public class TrackManager extends AudioEventAdapter {
 
             @Override
             public void trackLoaded(AudioTrack track) {
+                if (player.isPaused()) player.setPaused(false);
+
                 EmbedBuilder embed = new EmbedBuilder()
                         .setTitle("💿 " + Utilities.getFullName(member.getUser()) + " adicionou 1 música a fila")
                         .setDescription(
@@ -53,8 +55,8 @@ public class TrackManager extends AudioEventAdapter {
                                                 "Podcast" : "Música") + "`\n" +
                                         "\uD83D\uDCCC Link: [Clique aqui](" + track.getInfo().uri + ")");
 
-                channel.sendMessage(embed.build()).queue();
                 play(track, member);
+                channel.sendMessage(embed.build()).queue();
             }
 
             @Override
@@ -64,6 +66,8 @@ public class TrackManager extends AudioEventAdapter {
                 } else if (playlist.isSearchResult()) {
                     trackLoaded(playlist.getTracks().get(0));
                 } else {
+                    if (player.isPaused()) player.setPaused(false);
+
                     EmbedBuilder embed = new EmbedBuilder()
                             .setTitle("💿 " + Utilities.getFullName(member.getUser()) + " adicionou " + playlist.getTracks().size() + " músicas a fila")
                             .setDescription("\uD83D\uDCBD Informações da playlist:\n" +
@@ -71,10 +75,11 @@ public class TrackManager extends AudioEventAdapter {
                                     "\uD83C\uDFB6 Músicas: `" + playlist.getTracks().size() + "`\n\n" +
                                     "\uD83D\uDCCC Link: [Clique aqui](" + trackUrl + ")");
 
-                    channel.sendMessage(embed.build()).queue();
                     for (int i = 0; i < Math.min(playlist.getTracks().size(), 200); ++i) {
                         play(playlist.getTracks().get(i), member);
                     }
+
+                    channel.sendMessage(embed.build()).queue();
                 }
             }
 
