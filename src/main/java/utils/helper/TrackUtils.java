@@ -7,17 +7,17 @@ import core.music.AudioInfo;
 public class TrackUtils {
 
     public static String getProgressBar(AudioTrack info) {
-        long percent = info.getPosition() / info.getInfo().length;
-        int progressBars = 10 * (int) percent;
+        double percent = (double) info.getPosition() / info.getInfo().length;
+        int progressBars = (int) (10 * percent);
 
         StringBuilder builder = new StringBuilder();
         builder.append(getTimestamp(info.getPosition())).append(" / ").append(getTimestamp(info.getInfo().length)).append(" [");
 
-        for (int i = 0; i < progressBars - 1; i++) {
+        for (int i = 0; i < progressBars; i++) {
             builder.append("-");
         }
 
-        builder.append("\uD83D\uDD37");
+        builder.append("\uD83D\uDD35");
 
         for (int i = progressBars + 1; i < 10; i++) {
             builder.append("-");

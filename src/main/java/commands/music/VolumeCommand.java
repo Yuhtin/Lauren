@@ -21,7 +21,7 @@ public class VolumeCommand extends Command {
 
         if (event.getArgs().isEmpty()) {
             event.getChannel().sendMessage("\uD83D\uDD0A Meu volume atual está em: `" + MusicCommand.trackManager.player.getVolume() + "%`").queue();
-            event.getChannel().sendMessage("\uD83D\uDCA2 Eita calma ai, se quiser mudar o volume, insira um valor de `1 a 100` (Padrão: 35)").queue();
+            event.getChannel().sendMessage("\uD83D\uDCA2 Eita calma ai, se quiser mudar o volume, insira um valor de `1 a 100` (Padrão: 25)").queue();
             return;
         }
 

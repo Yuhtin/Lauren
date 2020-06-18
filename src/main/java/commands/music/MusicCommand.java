@@ -28,7 +28,7 @@ public class MusicCommand extends Command {
 
     public MusicCommand() {
         name = "tocar";
-        aliases = new String[]{"core/music", "play", "musica"};
+        aliases = new String[]{"music", "play", "musica"};
     }
 
     public static TrackManager trackManager;
@@ -41,23 +41,40 @@ public class MusicCommand extends Command {
             return;
         }
 
-        createPlayer(event.getGuild());
-
         String[] arguments = event.getArgs().split(" ");
         if (arguments.length == 0) {
             sendHelpMessage(event.getTextChannel());
             return;
         }
 
+        if (event.getMember().getVoiceState() == null || event.getMember().getVoiceState().getChannel() == null
+                || event.getMember().getVoiceState().getChannel().getIdLong() != 722935562155196506L) {
+            event.getChannel().sendMessage("\uD83C\uDFB6 Amiguinho, entre no canal `\uD83C\uDFB6┇Batidões` para poder usar comandos de música").queue();
+            return;
+        }
+        createPlayer(event.getGuild(), event.getMember().getVoiceState().getChannel());
+
         String operation = arguments[0].toLowerCase();
         if (arguments.length == 1) {
             String DVD = "\ud83d\udcc0";
             switch (operation) {
-                case "info": {
-                    if (trackManager.player.getPlayingTrack() == null) {
-                        event.getChannel().sendMessage("\uD83D\uDCCC Olha, eu não to tocando nada atualmente, que tal por som na caixa?").queue();
+                case "pause":
+                case "pausar": {
+                    if (isIdle(event.getTextChannel())) return;
+
+                    if (!Utilities.isDJ(event.getMember())) {
+                        event.getChannel().sendMessage("Ahhh, que pena \uD83D\uDC94 você não pode realizar essa operação").queue();
                         return;
                     }
+
+                    trackManager.player.setPaused(!trackManager.player.isPaused());
+                    if (trackManager.player.isPaused())
+                        event.getChannel().sendMessage("\uD83E\uDD7A Taxaram meu batidão, espero que me liberem logo").queue();
+                    else event.getChannel().sendMessage("\uD83E\uDD73 Liberaram meu batidão uhhuuuu").queue();
+                    return;
+                }
+                case "info": {
+                    if (isIdle(event.getTextChannel())) return;
 
                     AudioTrack track = trackManager.player.getPlayingTrack();
                     String CD = "\ud83d\udcbf";
@@ -65,14 +82,14 @@ public class MusicCommand extends Command {
                             .setTitle(CD + " Informações da música atual")
                             .setDescription(
                                     DVD + " Nome: `" + track.getInfo().title + "`\n" +
-                                    "\uD83D\uDCB0 Autor: `" + track.getInfo().author + "`\n" +
-                                    "\uD83D\uDCE2 Tipo de vídeo: `" +
-                                    (track.getInfo().isStream ? "Stream" : track.getInfo().title.contains("Podcast") ?
-                                            "Podcast" : "Música") + "`\n" +
-                                    "\uD83E\uDDEA Tempo tocado: " + getProgressBar(track) + "\n" +
-                                    "\uD83E\uDDEC Membro que adicionou: <@" + trackManager.getTrackInfo(track).getAuthor().getIdLong() + ">\n" +
-                                    "\n" +
-                                    "\uD83D\uDCCC Link: [Clique aqui](" + track.getInfo().uri + ")");
+                                            "\uD83D\uDCB0 Autor: `" + track.getInfo().author + "`\n" +
+                                            "\uD83D\uDCE2 Tipo de vídeo: `" +
+                                            (track.getInfo().isStream ? "Stream" : track.getInfo().title.contains("Podcast") ?
+                                                    "Podcast" : "Música") + "`\n" +
+                                            "\uD83E\uDDEA Timeline: ⏸ ⏭ " + (trackManager.player.getVolume() < 50 ? "\uD83D\uDD09" : "\uD83D\uDD0A") + " " + getProgressBar(track) + "\n" +
+                                            "\uD83E\uDDEC Membro que adicionou: <@" + trackManager.getTrackInfo(track).getAuthor().getIdLong() + ">\n" +
+                                            "\n" +
+                                            "\uD83D\uDCCC Link: [Clique aqui](" + track.getInfo().uri + ")");
 
                     event.getChannel().sendMessage(embed.build()).queue();
                     return;
@@ -172,7 +189,8 @@ public class MusicCommand extends Command {
 
         String input = String.join(" ", Arrays.copyOfRange(arguments, 1, arguments.length));
         switch (operation) {
-            case "buscar": input = "ytsearch: " + input;
+            case "buscar":
+                input = "ytsearch: " + input;
 
             case "play":
             case "tocar": {
@@ -184,12 +202,12 @@ public class MusicCommand extends Command {
         sendHelpMessage(event.getTextChannel());
     }
 
-    private void createPlayer(Guild guild) {
+    private void createPlayer(Guild guild, VoiceChannel voice) {
         if (trackManager != null) return;
 
         trackManager = new TrackManager();
-        audio = guild.getVoiceChannelById(722935562155196506L);
-        trackManager.player.addListener(trackManager);
+        audio = voice;
+        trackManager.player.addListener(trackManager.musicManager.scheduler);
 
         guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(trackManager.player));
     }
@@ -200,7 +218,7 @@ public class MusicCommand extends Command {
 
     private boolean isIdle(TextChannel channel) {
         if (trackManager.player.getPlayingTrack() == null) {
-            channel.sendMessage("Amigo, eu não to tocando nada não '-'").queue();
+            channel.sendMessage("\uD83D\uDCCC Olha, eu não to tocando nada atualmente, que tal por som na caixa?").queue();
             return true;
         }
 
