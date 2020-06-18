@@ -19,8 +19,8 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class TrackManager extends AudioEventAdapter {
-    private final GuildMusicManager musicManager;
-    private final AudioPlayerManager audioManager;
+    public final GuildMusicManager musicManager;
+    public final AudioPlayerManager audioManager;
     public final AudioPlayer player;
 
     public TrackManager() {
@@ -103,7 +103,7 @@ public class TrackManager extends AudioEventAdapter {
         });
     }
 
-    private void play(AudioTrack track, Member member) {
+    public void play(AudioTrack track, Member member) {
         musicManager.scheduler.queue(track, member);
     }
 

@@ -95,10 +95,10 @@ public class Utilities {
         }
     }
 
-    public static boolean isDJ(Member member, MessageChannel channel) {
+    public static boolean isDJ(Member member, MessageChannel channel, boolean message) {
         boolean isDJ = member.getRoles().stream().anyMatch(r -> r.getIdLong() == 722957999949348935L);
 
-        if (!isDJ) channel.sendMessage("Ahhh, que pena \uD83D\uDC94 você não pode realizar essa operação").queue();
+        if (!isDJ && message) channel.sendMessage("Ahhh, que pena \uD83D\uDC94 você não pode realizar essa operação").queue();
         return isDJ;
     }
 }

@@ -14,7 +14,7 @@ public class VolumeCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        if (!Utilities.isDJ(event.getMember())) {
+        if (!Utilities.isDJ(event.getMember(), event.getChannel(), false)) {
             event.getChannel().sendMessage("\uD83D\uDD0A Meu volume atual está em: `" + MusicCommand.trackManager.player.getVolume() + "%`").queue();
             return;
         }
