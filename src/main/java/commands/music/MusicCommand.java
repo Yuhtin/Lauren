@@ -5,7 +5,6 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import core.music.AudioInfo;
 import core.music.AudioPlayerSendHandler;
 import core.music.TrackManager;
@@ -42,13 +41,18 @@ public class MusicCommand extends Command {
             return;
         }
 
-        createPlayer(event.getGuild());
-
         String[] arguments = event.getArgs().split(" ");
         if (arguments.length == 0) {
             sendHelpMessage(event.getTextChannel());
             return;
         }
+
+        if (event.getMember().getVoiceState() == null || event.getMember().getVoiceState().getChannel() == null
+                || event.getMember().getVoiceState().getChannel().getIdLong() != 722935562155196506L) {
+            event.getChannel().sendMessage("\uD83C\uDFB6 Amiguinho, entre no canal `\uD83C\uDFB6┇Batidões` para poder usar comandos de música").queue();
+            return;
+        }
+        createPlayer(event.getGuild(), event.getMember().getVoiceState().getChannel());
 
         String operation = arguments[0].toLowerCase();
         if (arguments.length == 1) {
@@ -200,11 +204,11 @@ public class MusicCommand extends Command {
         sendHelpMessage(event.getTextChannel());
     }
 
-    private void createPlayer(Guild guild) {
+    private void createPlayer(Guild guild, VoiceChannel channel) {
         if (trackManager != null) return;
 
+        audio = channel;
         trackManager = new TrackManager();
-        audio = guild.getVoiceChannelById(722935562155196506L);
         trackManager.player.addListener(trackManager);
 
         guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(trackManager.player));
