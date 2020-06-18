@@ -24,7 +24,7 @@ Lauren is a discord bot that contains a scrim system for 8ballpool and LudoKing 
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/Yuhtin"><img src="https://avatars1.githubusercontent.com/u/26367735?v=4" width="100px;" alt=""/><br /><sub><b>Yuhtin</b></sub></a><br /><a href="https://github.com/Elytra-Server/Elytra/commits?author=heroslender" title="Code">💻</a>  <a href="https://github.com/Elytra-Server/Elytra/commits?author=heroslender" title="Documentation">📖</a></td>   
+    <td align="center"><a href="https://github.com/Yuhtin"><img src="https://avatars1.githubusercontent.com/u/26367735?v=4" width="100px;" alt=""/><br /><sub><b>Yuhtin</b></sub></a><br /><a href="https://github.com/Yuhtin/Lauren/commits?author=Yuhtin" title="Code">💻</a>  <a href="https://github.com/Yuhtin/Lauren/commits?author=Yuhtin" title="Documentation">📖</a></td>   
   </tr>
 </table>
 
