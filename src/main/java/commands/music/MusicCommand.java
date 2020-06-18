@@ -5,11 +5,10 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import models.annotations.CommandHandler;
-import music.AudioInfo;
-import music.AudioPlayerSendHandler;
-import music.TrackManager;
+import core.music.AudioInfo;
+import core.music.AudioPlayerSendHandler;
+import core.music.TrackManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -23,14 +22,13 @@ import java.util.Set;
 
 import static utils.helper.TrackUtils.buildQueueMessage;
 import static utils.helper.TrackUtils.getProgressBar;
-import static utils.helper.TrackUtils.getTimestamp;
 
 @CommandHandler(name = "tocar", type = CommandHandler.CommandType.MUSIC, description = "Colocar eu para por um som na caixa")
 public class MusicCommand extends Command {
 
     public MusicCommand() {
         name = "tocar";
-        aliases = new String[]{"music", "play", "musica"};
+        aliases = new String[]{"core/music", "play", "musica"};
     }
 
     public static TrackManager trackManager;
@@ -229,7 +227,8 @@ public class MusicCommand extends Command {
                                 "\n" +
                                 "$tocar fpular | Pule a música atual sem precisar de voto \n" +
                                 "$tocar sair | Desconectar o bot do canal atual\n" +
-                                "$tocar misturar | Misturar as faixas da playlist");
+                                "$tocar misturar | Misturar as faixas da playlist")
+                .setThumbnail("https://4.bp.blogspot.com/-VsJl1xpTTpM/Vw60V5qQsZI/AAAAAAAADII/0hFTwzDvsf0-h6O3GOquAYSIzHXHn3mXwCKgB/s1600/tumblr_o4z3cn2Fzc1qdiaboo3_250.gif");
 
         chat.sendMessage(builder.build()).queue();
     }

@@ -1,4 +1,4 @@
-package commands;
+package commands.utility;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -29,6 +29,6 @@ public class DailyCommand extends Command {
         double bonus = event.getMember().getRoles().contains(event.getJDA().getRoleById(722116789055782912L)) ? 1.5 : 1;
 
         data.setDelay(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1)).addMoney(15 * bonus).gainXP(100 * bonus).save();
-        event.getChannel().sendMessage("🌟 Aaaaa, eu to muito feliz por ter lembrado de mim e pego seu daily 💙").queue();
+        event.getChannel().sendMessage("🌟 Aaaaa, eu to muito feliz por ter lembrado de mim e pego seu daily 💙 Veja suas informações atualizadas usando `$perfil`").queue();
     }
 }

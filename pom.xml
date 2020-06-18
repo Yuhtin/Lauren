@@ -88,11 +88,6 @@
             <artifactId>guava</artifactId>
             <version>29.0-jre</version>
         </dependency>
-        <dependency>
-            <groupId>se.michaelthelin.spotify</groupId>
-            <artifactId>spotify-web-api-java</artifactId>
-            <version>6.1.0</version>
-        </dependency>
     </dependencies>
     <repositories>
         <repository>

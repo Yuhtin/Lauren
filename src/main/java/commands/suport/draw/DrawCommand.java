@@ -1,4 +1,4 @@
-package commands.draw;
+package commands.suport.draw;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;

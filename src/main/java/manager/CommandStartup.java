@@ -4,7 +4,6 @@ import application.Lauren;
 import com.google.common.reflect.ClassPath;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
-import commands.HelpCommand;
 import core.RawCommand;
 import logger.Logger;
 import models.annotations.CommandHandler;

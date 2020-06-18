@@ -1,4 +1,4 @@
-package commands.scrim;
+package commands.suport;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 @CommandHandler(name = "setarpontos", type = CommandHandler.CommandType.SUPORT, description = "Setar os pontos de ranked para um jogador")
 public class SetPointsCommand extends Command {
+
     public SetPointsCommand() {
         this.name = "setpoints";
         this.aliases = new String[]{"setarpontos"};

@@ -1,4 +1,4 @@
-package commands.draw;
+package commands.suport.draw;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -7,12 +7,11 @@ import models.annotations.CommandHandler;
 import net.dv8tion.jda.api.Permission;
 import utils.helper.Utilities;
 
-@CommandHandler(name = "reroll", type = CommandHandler.CommandType.SUPORT, description = "Sortear um ganhador novamente")
-public class RerollCommand extends Command {
+@CommandHandler(name = "finishdraw", type = CommandHandler.CommandType.SUPORT, description = "Finalizar um sorteio")
+public class FinishDrawCommand extends Command {
 
-    public RerollCommand() {
-        this.name = "reroll";
-        this.aliases = new String[]{"sortearnovamente", "redraw"};
+    public FinishDrawCommand() {
+        this.name = "finishdraw";
     }
 
     @Override
@@ -24,7 +23,7 @@ public class RerollCommand extends Command {
             return;
         }
 
-        event.getChannel().sendMessage("♻️ Eu realmente não sei o que aconteceu, mas, como mandaram, sorteando um novo vencedor").queue();
-        DrawController.get().finish();
+        event.getChannel().sendMessage("\uD83C\uDF89 Sorteio finalizado, parabéns aos vencedores ❤️").queue();
+        DrawController.delete();
     }
 }

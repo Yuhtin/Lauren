@@ -2,14 +2,12 @@ package utils.helper;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
-import music.AudioInfo;
+import core.music.AudioInfo;
 
 public class TrackUtils {
 
     public static String getProgressBar(AudioTrack info) {
         long percent = info.getPosition() / info.getInfo().length;
-        System.out.println("Position: " + info.getPosition());
-        System.out.println("Total: " + info.getInfo().length);
         int progressBars = 10 * (int) percent;
 
         StringBuilder builder = new StringBuilder();

@@ -31,7 +31,6 @@ public class Lauren {
             return;
         }
         if (config.log) new LoggerController("log");
-
         if (!startDatabase()) return;
 
         bot = new JDABuilder(AccountType.BOT)

@@ -1,6 +1,5 @@
-package music;
+package core.music;
 
-import application.Lauren;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -10,9 +9,6 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.wrapper.spotify.SpotifyApi;
-import com.wrapper.spotify.requests.data.tracks.GetTrackRequest;
-import logger.Logger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -25,13 +21,11 @@ import java.util.concurrent.TimeUnit;
 public class TrackManager extends AudioEventAdapter {
     private final GuildMusicManager musicManager;
     private final AudioPlayerManager audioManager;
-    private final SpotifyApi spotifyApi;
     public final AudioPlayer player;
 
     public TrackManager() {
         this.audioManager = new DefaultAudioPlayerManager();
         this.player = audioManager.createPlayer();
-        spotifyApi = new SpotifyApi.Builder().setAccessToken(Lauren.config.spotifyClient).build();
 
         musicManager = new GuildMusicManager(player);
         AudioSourceManagers.registerRemoteSources(audioManager);
@@ -45,20 +39,6 @@ public class TrackManager extends AudioEventAdapter {
         }
         message.getTextChannel().sendTyping().queue();
 
-        if (trackUrl.contains("spotify.com")) {
-            String[] parsed = trackUrl.split("/track/");
-            if (parsed.length == 2) {
-                GetTrackRequest build = spotifyApi.getTrack(parsed[1]).build();
-                try {
-                    trackUrl = build.execute().getName();
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                    Logger.log("An error occurred on try access Spotify Api").save();
-                }
-            }
-        }
-
-        String finalTrackUrl = trackUrl;
         audioManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
 
             @Override
@@ -89,7 +69,7 @@ public class TrackManager extends AudioEventAdapter {
                             .setDescription("\uD83D\uDCBD Informações da playlist:\n" +
                                     "\ud83d\udcc0 Nome: `" + playlist.getName() + "`\n" +
                                     "\uD83C\uDFB6 Músicas: `" + playlist.getTracks().size() + "`\n\n" +
-                                    "\uD83D\uDCCC Link: [Clique aqui](" + finalTrackUrl + ")");
+                                    "\uD83D\uDCCC Link: [Clique aqui](" + trackUrl + ")");
 
                     channel.sendMessage(embed.build()).queue();
                     for (int i = 0; i < Math.min(playlist.getTracks().size(), 200); ++i) {
@@ -137,7 +117,9 @@ public class TrackManager extends AudioEventAdapter {
         musicManager.scheduler.queue.addAll(tQueue);
     }
 
-    public Set<AudioInfo> getQueuedTracks() { return new LinkedHashSet<>(musicManager.scheduler.queue); }
+    public Set<AudioInfo> getQueuedTracks() {
+        return new LinkedHashSet<>(musicManager.scheduler.queue);
+    }
 
     public void purgeQueue() {
         musicManager.scheduler.queue.clear();
