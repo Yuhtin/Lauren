@@ -40,7 +40,7 @@ public class TrackScheduler extends AudioEventAdapter {
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        Guild guild = Objects.requireNonNull(queue.poll()).getAuthor().getGuild();
+        Guild guild = queue.poll().getAuthor().getGuild();
 
         if (queue.isEmpty()) guild.getAudioManager().closeAudioConnection();
         else player.playTrack(queue.element().getTrack());

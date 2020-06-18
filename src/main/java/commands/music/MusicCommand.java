@@ -5,10 +5,11 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import models.annotations.CommandHandler;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import core.music.AudioInfo;
 import core.music.AudioPlayerSendHandler;
 import core.music.TrackManager;
+import models.annotations.CommandHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -41,18 +42,13 @@ public class MusicCommand extends Command {
             return;
         }
 
+        createPlayer(event.getGuild());
+
         String[] arguments = event.getArgs().split(" ");
         if (arguments.length == 0) {
             sendHelpMessage(event.getTextChannel());
             return;
         }
-
-        if (event.getMember().getVoiceState() == null || event.getMember().getVoiceState().getChannel() == null
-                || event.getMember().getVoiceState().getChannel().getIdLong() != 722935562155196506L) {
-            event.getChannel().sendMessage("\uD83C\uDFB6 Amiguinho, entre no canal `\uD83C\uDFB6┇Batidões` para poder usar comandos de música").queue();
-            return;
-        }
-        createPlayer(event.getGuild(), event.getMember().getVoiceState().getChannel());
 
         String operation = arguments[0].toLowerCase();
         if (arguments.length == 1) {
@@ -74,7 +70,10 @@ public class MusicCommand extends Command {
                     return;
                 }
                 case "info": {
-                    if (isIdle(event.getTextChannel())) return;
+                    if (trackManager.player.getPlayingTrack() == null) {
+                        event.getChannel().sendMessage("\uD83D\uDCCC Olha, eu não to tocando nada atualmente, que tal por som na caixa?").queue();
+                        return;
+                    }
 
                     AudioTrack track = trackManager.player.getPlayingTrack();
                     String CD = "\ud83d\udcbf";
@@ -189,8 +188,7 @@ public class MusicCommand extends Command {
 
         String input = String.join(" ", Arrays.copyOfRange(arguments, 1, arguments.length));
         switch (operation) {
-            case "buscar":
-                input = "ytsearch: " + input;
+            case "buscar": input = "ytsearch: " + input;
 
             case "play":
             case "tocar": {
@@ -202,12 +200,12 @@ public class MusicCommand extends Command {
         sendHelpMessage(event.getTextChannel());
     }
 
-    private void createPlayer(Guild guild, VoiceChannel voice) {
+    private void createPlayer(Guild guild) {
         if (trackManager != null) return;
 
         trackManager = new TrackManager();
-        audio = voice;
-        trackManager.player.addListener(trackManager.musicManager.scheduler);
+        audio = guild.getVoiceChannelById(722935562155196506L);
+        trackManager.player.addListener(trackManager);
 
         guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(trackManager.player));
     }
@@ -218,7 +216,7 @@ public class MusicCommand extends Command {
 
     private boolean isIdle(TextChannel channel) {
         if (trackManager.player.getPlayingTrack() == null) {
-            channel.sendMessage("\uD83D\uDCCC Olha, eu não to tocando nada atualmente, que tal por som na caixa?").queue();
+            channel.sendMessage("Amigo, eu não to tocando nada não '-'").queue();
             return true;
         }
 
@@ -232,7 +230,7 @@ public class MusicCommand extends Command {
 
     private void sendHelpMessage(TextChannel chat) {
         EmbedBuilder builder = new EmbedBuilder()
-                .setTitle(":bookmark: Comandos de Música")
+                .setTitle("🔖 Comandos de Música")
                 .setDescription(
                         "\n" +
                                 "$tocar play [link da música] | Carrega uma música ou playlist \n" +
@@ -245,8 +243,7 @@ public class MusicCommand extends Command {
                                 "\n" +
                                 "$tocar fpular | Pule a música atual sem precisar de voto \n" +
                                 "$tocar sair | Desconectar o bot do canal atual\n" +
-                                "$tocar misturar | Misturar as faixas da playlist")
-                .setThumbnail("https://4.bp.blogspot.com/-VsJl1xpTTpM/Vw60V5qQsZI/AAAAAAAADII/0hFTwzDvsf0-h6O3GOquAYSIzHXHn3mXwCKgB/s1600/tumblr_o4z3cn2Fzc1qdiaboo3_250.gif");
+                                "$tocar misturar | Misturar as faixas da playlist");
 
         chat.sendMessage(builder.build()).queue();
     }

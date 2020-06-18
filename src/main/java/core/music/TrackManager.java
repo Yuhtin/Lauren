@@ -18,8 +18,8 @@ import utils.helper.Utilities;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class TrackManager {
-    public final GuildMusicManager musicManager;
+public class TrackManager extends AudioEventAdapter {
+    private final GuildMusicManager musicManager;
     private final AudioPlayerManager audioManager;
     public final AudioPlayer player;
 
