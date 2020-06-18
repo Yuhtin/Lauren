@@ -1,9 +1,8 @@
-package logger;
+package core.logger;
 
 import application.Lauren;
-import logger.controller.LoggerController;
+import core.logger.controller.LoggerController;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 @AllArgsConstructor
 public class Logger {

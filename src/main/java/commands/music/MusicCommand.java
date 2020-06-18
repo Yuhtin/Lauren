@@ -69,6 +69,9 @@ public class MusicCommand extends Command {
                     else event.getChannel().sendMessage("\uD83E\uDD73 Liberaram meu batidão uhhuuuu").queue();
                     return;
                 }
+
+                case "atual":
+                case "help":
                 case "info": {
                     if (trackManager.player.getPlayingTrack() == null) {
                         event.getChannel().sendMessage("\uD83D\uDCCC Olha, eu não to tocando nada atualmente, que tal por som na caixa?").queue();
@@ -94,6 +97,7 @@ public class MusicCommand extends Command {
                     return;
                 }
 
+                case "listar":
                 case "lista":
                 case "l": {
                     if (trackManager.getQueuedTracks().isEmpty()) {
@@ -121,6 +125,8 @@ public class MusicCommand extends Command {
                     }
                     return;
                 }
+
+                case "votar":
                 case "pular": {
                     if (isIdle(event.getTextChannel())) return;
                     if (isCurrentDj(event.getMember())) {
@@ -144,6 +150,7 @@ public class MusicCommand extends Command {
                     event.getChannel().sendMessage("\uD83E\uDDEC **" + event.getMember().getNickname() + "** votou para pular a música **(" + info.getSkips() + "/" + (audio.getMembers().size() - 1) + ")**").queue();
                     return;
                 }
+
                 case "fpular":
                 case "fp": {
                     if (isIdle(event.getTextChannel())) return;
@@ -152,6 +159,8 @@ public class MusicCommand extends Command {
                     forceSkipTrack(event.getTextChannel());
                     return;
                 }
+
+                case "limpar":
                 case "sair":
                 case "leave": {
                     if (!Utilities.isDJ(event.getMember(), event.getTextChannel())) return;
@@ -162,6 +171,8 @@ public class MusicCommand extends Command {
                     event.getChannel().sendMessage("Que ⁉️ Pensei que estavam gostando do batidão \uD83D\uDC94 Prometo que da próxima será melhor").queue();
                     return;
                 }
+
+                case "misture":
                 case "misturar":
                 case "m": {
                     if (isIdle(event.getTextChannel())) return;
@@ -176,9 +187,11 @@ public class MusicCommand extends Command {
 
         String input = String.join(" ", Arrays.copyOfRange(arguments, 1, arguments.length));
         switch (operation) {
+            case "search":
             case "buscar":
                 input = "ytsearch: " + input;
 
+            case "link":
             case "play":
             case "tocar": {
                 trackManager.loadTrack(input, event.getMember(), event.getMessage(), event.getTextChannel());
@@ -219,19 +232,18 @@ public class MusicCommand extends Command {
 
     private void sendHelpMessage(TextChannel chat) {
         EmbedBuilder builder = new EmbedBuilder()
-                .setTitle("🔖 Comandos de Música")
-                .setDescription(
-                        "\n" +
+                .setTitle("♨️ Vamo agitar um flow pesadão?")
+                .setDescription("Todos \uD83C\uDF20 - _Aqui são os comandos liberados a todos os jogadores_\n"+
                                 "$tocar play [link da música] | Carrega uma música ou playlist \n" +
                                 "$tocar buscar [nome da música] | Procure no YouTube um vídeo pelo nome \n" +
                                 "$tocar lista | Veja a fila atual de músicas do servidor \n" +
                                 "$tocar pular | Execute um voto para ignorar a faixa atual \n" +
                                 "$tocar info | Exibir informações relacionadas à faixa atual \n" +
+                                "$tocar pausar | Pausar a minha música atual\n"+
                                 "\n" +
-                                "\uD83D\uDC8E Os comandos abaixo são exclusivos para DJ \uD83D\uDC8E \n" +
-                                "\n" +
+                                "DJ \uD83C\uDF99 - _Abaixo são comandos apenas para meus produtores_\n" +
                                 "$tocar fpular | Pule a música atual sem precisar de voto \n" +
-                                "$tocar sair | Desconectar o bot do canal atual\n" +
+                                "$tocar limpar | Limpar a fila de músicas\n" +
                                 "$tocar misturar | Misturar as faixas da playlist")
                 .setThumbnail("https://i.pinimg.com/originals/c4/1d/e9/c41de98f6fd11ca86b897763fbfb4559.gif");
 

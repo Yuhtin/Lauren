@@ -2,9 +2,9 @@ package commands.suport.draw;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import draw.controller.DrawController;
-import draw.controller.DrawEditting;
-import logger.Logger;
+import core.draw.controller.DrawController;
+import core.draw.controller.DrawEditting;
+import core.logger.Logger;
 import models.annotations.CommandHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -20,7 +20,7 @@ public class DrawCommand extends Command {
 
     public DrawCommand() {
         this.name = "sorteio";
-        this.aliases = new String[]{"sortear", "draw"};
+        this.aliases = new String[]{"sortear", "core/draw"};
     }
 
 

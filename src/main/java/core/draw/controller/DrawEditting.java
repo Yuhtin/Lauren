@@ -1,7 +1,7 @@
-package draw.controller;
+package core.draw.controller;
 
 import application.Lauren;
-import draw.Draw;
+import core.draw.Draw;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.requests.RestAction;

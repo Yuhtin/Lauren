@@ -1,6 +1,6 @@
-package logger.controller;
+package core.logger.controller;
 
-import logger.Logger;
+import core.logger.Logger;
 import lombok.Getter;
 
 import java.io.BufferedWriter;

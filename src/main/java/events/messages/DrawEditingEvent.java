@@ -1,9 +1,9 @@
 package events.messages;
 
 import application.Lauren;
-import draw.controller.DrawController;
-import draw.controller.DrawEditingStatus;
-import draw.controller.DrawEditting;
+import core.draw.controller.DrawController;
+import core.draw.controller.DrawEditingStatus;
+import core.draw.controller.DrawEditting;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;

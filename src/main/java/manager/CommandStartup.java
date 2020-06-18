@@ -5,7 +5,7 @@ import com.google.common.reflect.ClassPath;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import core.RawCommand;
-import logger.Logger;
+import core.logger.Logger;
 import models.annotations.CommandHandler;
 import models.cache.CommandCache;
 import net.dv8tion.jda.api.JDA;

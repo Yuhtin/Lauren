@@ -3,7 +3,7 @@ package commands.admin;
 import application.Lauren;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import logger.Logger;
+import core.logger.Logger;
 import lombok.SneakyThrows;
 import models.annotations.CommandHandler;
 import net.dv8tion.jda.api.EmbedBuilder;

@@ -1,7 +1,7 @@
 package events.registration;
 
 import application.Lauren;
-import draw.controller.DrawController;
+import core.draw.controller.DrawController;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;

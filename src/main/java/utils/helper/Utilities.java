@@ -1,7 +1,7 @@
 package utils.helper;
 
 import application.Lauren;
-import logger.Logger;
+import core.logger.Logger;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.HierarchyException;

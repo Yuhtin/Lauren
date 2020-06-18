@@ -1,6 +1,6 @@
 package core.entities;
 
-import logger.Logger;
+import core.logger.Logger;
 import lombok.Setter;
 import utils.serialization.Serializer;
 

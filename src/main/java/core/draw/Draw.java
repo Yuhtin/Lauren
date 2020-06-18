@@ -1,6 +1,6 @@
-package draw;
+package core.draw;
 
-import draw.controller.DrawController;
+import core.draw.controller.DrawController;
 import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;

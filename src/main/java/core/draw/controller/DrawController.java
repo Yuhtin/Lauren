@@ -1,6 +1,6 @@
-package draw.controller;
+package core.draw.controller;
 
-import draw.Draw;
+import core.draw.Draw;
 
 public class DrawController {
 

@@ -1,8 +1,7 @@
 package manager;
 
 import com.google.common.reflect.ClassPath;
-import com.jagrosh.jdautilities.command.Command;
-import logger.Logger;
+import core.logger.Logger;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 

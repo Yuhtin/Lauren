@@ -1,4 +1,4 @@
-package draw.controller;
+package core.draw.controller;
 
 public enum DrawEditingStatus {
 
