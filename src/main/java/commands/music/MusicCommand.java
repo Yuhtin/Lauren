@@ -61,11 +61,7 @@ public class MusicCommand extends Command {
                 case "pause":
                 case "pausar": {
                     if (isIdle(event.getTextChannel())) return;
-
-                    if (!Utilities.isDJ(event.getMember())) {
-                        event.getChannel().sendMessage("Ahhh, que pena \uD83D\uDC94 você não pode realizar essa operação").queue();
-                        return;
-                    }
+                    if (!Utilities.isDJ(event.getMember(), event.getTextChannel())) return;
 
                     trackManager.player.setPaused(!trackManager.player.isPaused());
                     if (trackManager.player.isPaused())
@@ -127,7 +123,6 @@ public class MusicCommand extends Command {
                 }
                 case "pular": {
                     if (isIdle(event.getTextChannel())) return;
-
                     if (isCurrentDj(event.getMember())) {
                         forceSkipTrack(event.getTextChannel());
                         return;
@@ -146,27 +141,20 @@ public class MusicCommand extends Command {
 
                     info.addSkip(event.getAuthor());
                     event.getMessage().delete().queue();
-                    event.getChannel().sendMessage("\uD83E\uDDEC **" + event.getMember().getNickname() + "** votou para pular a música **(" + info.getSkips() + "/" + (audio.getMembers().size() - 1) + "**").queue();
+                    event.getChannel().sendMessage("\uD83E\uDDEC **" + event.getMember().getNickname() + "** votou para pular a música **(" + info.getSkips() + "/" + (audio.getMembers().size() - 1) + ")**").queue();
                     return;
                 }
                 case "fpular":
                 case "fp": {
                     if (isIdle(event.getTextChannel())) return;
+                    if (!Utilities.isDJ(event.getMember(), event.getTextChannel())) return;
 
-                    if (Utilities.isDJ(event.getMember())) {
-                        forceSkipTrack(event.getTextChannel());
-                        return;
-                    }
-
-                    event.getChannel().sendMessage("Ahhh, que pena \uD83D\uDC94 você não pode realizar essa operação").queue();
+                    forceSkipTrack(event.getTextChannel());
                     return;
                 }
                 case "sair":
                 case "leave": {
-                    if (!Utilities.isDJ(event.getMember())) {
-                        event.getChannel().sendMessage("Ahhh, que pena \uD83D\uDC94 você não pode realizar essa operação").queue();
-                        return;
-                    }
+                    if (!Utilities.isDJ(event.getMember(), event.getTextChannel())) return;
 
                     trackManager.player.destroy();
                     trackManager.purgeQueue();
@@ -177,14 +165,10 @@ public class MusicCommand extends Command {
                 case "misturar":
                 case "m": {
                     if (isIdle(event.getTextChannel())) return;
+                    if (!Utilities.isDJ(event.getMember(), event.getTextChannel())) return;
 
-                    if (Utilities.isDJ(event.getMember())) {
-                        trackManager.shuffleQueue();
-                        event.getChannel().sendMessage("<a:infinito:703187274912759899> Misturando a lista de músicas").queue();
-                        return;
-                    }
-
-                    event.getChannel().sendMessage("Ahhh, que pena \uD83D\uDC94 você não pode realizar essa operação").queue();
+                    trackManager.shuffleQueue();
+                    event.getChannel().sendMessage("<a:infinito:703187274912759899> Misturando a lista de músicas").queue();
                     return;
                 }
             }
