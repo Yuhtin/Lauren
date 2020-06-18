@@ -101,8 +101,6 @@ public class TrackManager extends AudioEventAdapter {
                         .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             }
         });
-
-        message.delete().queue();
     }
 
     private void play(AudioTrack track, Member member) {

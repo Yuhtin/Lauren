@@ -248,7 +248,8 @@ public class MusicCommand extends Command {
                                 "\n" +
                                 "$tocar fpular | Pule a música atual sem precisar de voto \n" +
                                 "$tocar sair | Desconectar o bot do canal atual\n" +
-                                "$tocar misturar | Misturar as faixas da playlist");
+                                "$tocar misturar | Misturar as faixas da playlist")
+                .setThumbnail("https://i.pinimg.com/originals/c4/1d/e9/c41de98f6fd11ca86b897763fbfb4559.gif");
 
         chat.sendMessage(builder.build()).queue();
     }
