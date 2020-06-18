@@ -31,10 +31,8 @@ public class TrackScheduler extends AudioEventAdapter {
 
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
-        AudioInfo info = queue.element();
-        VoiceChannel vChan = MusicCommand.audio;
-
-        info.getAuthor().getGuild().getAudioManager().openAudioConnection(vChan);
+        VoiceChannel voice = MusicCommand.audio;
+        voice.getGuild().getAudioManager().openAudioConnection(voice);
     }
 
     @Override

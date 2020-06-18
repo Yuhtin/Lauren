@@ -8,6 +8,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import core.music.AudioInfo;
 import core.music.AudioPlayerSendHandler;
 import core.music.TrackManager;
@@ -189,88 +190,16 @@ public class MusicCommand extends Command {
             }
         }
 
-        if (arguments.length == 2) {
-            String input = String.join(" ", Arrays.copyOfRange(arguments, 1, arguments.length));
-            switch (operation) {
-                case "search":
-                case "buscar":
-                    input = "ytsearch: " + input;
-
-                case "link":
-                case "play":
-                case "tocar": {
-                    trackManager.loadTrack(input, event.getMember(), event.getMessage(), event.getTextChannel());
-                    return;
-                }
-            }
-        }
-
-        String input = String.join(" ", Arrays.copyOfRange(arguments, 2, arguments.length));
+        String input = String.join(" ", Arrays.copyOfRange(arguments, 1, arguments.length));
         switch (operation) {
-            case "jump":
-            case "teleport": {
-                String urlLink = input;
-                if (arguments[1].equalsIgnoreCase("buscar")) urlLink = "ytsearch: " + urlLink;
-                final AudioTrack[] tracks = {null};
-                trackManager.audioManager.loadItemOrdered(trackManager.musicManager, urlLink, new AudioLoadResultHandler() {
-                    @Override
-                    public void trackLoaded(AudioTrack audioTrack) {
-                        tracks[0] = audioTrack;
-                    }
+            case "search":
+            case "buscar":
+                input = "ytsearch: " + input;
 
-                    @Override
-                    public void playlistLoaded(AudioPlaylist playlist) {
-                        if (playlist.getSelectedTrack() != null) trackLoaded(playlist.getSelectedTrack());
-                        else if (playlist.isSearchResult()) trackLoaded(playlist.getTracks().get(0));
-                        else
-                            event.getChannel().sendMessage(":anger: Playlist não são suportadas neste comando").queue();
-                    }
-
-                    @Override
-                    public void noMatches() {
-                        event.getChannel().sendMessage("\uD83D\uDC94 Como assim??? Você quer quebrar meus sistemas? \uD83D\uDE2D")
-                                .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-                        event.getChannel().sendMessage("\uD83D\uDCCC Não consegui encontrar nada relacionado ao que me enviou :p")
-                                .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-                    }
-
-                    @Override
-                    public void loadFailed(FriendlyException exception) {
-                        exception.printStackTrace();
-                        event.getChannel().sendMessage("\uD83D\uDC94 Como assim??? Você quer quebrar meus sistemas? \uD83D\uDE2D")
-                                .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-                        event.getChannel().sendMessage("\uD83D\uDCCC Esse formato de arquivo não é valido \uD83D\uDEE9")
-                                .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-                    }
-                });
-
-                if (tracks[0] == null) {
-                    event.getChannel().sendMessage(":pleading_face: Não encontrei nada sobre o que me enviou").queue();
-                    return;
-                }
-
-                AudioTrack track = tracks[0];
-                AudioInfo trackInfo = trackManager.getTrackInfo(track);
-                if (trackInfo == null) {
-                    EmbedBuilder embed = new EmbedBuilder()
-                            .setTitle("💿 " + Utilities.getFullName(event.getMember().getUser()) + " adicionou 1 música a fila")
-                            .setDescription(
-                                    "\ud83d\udcc0 Nome: `" + track.getInfo().title + "`\n" +
-                                            "\uD83D\uDCB0 Autor: `" + track.getInfo().author + "`\n" +
-                                            "\uD83D\uDCE2 Tipo de vídeo: `" +
-                                            (track.getInfo().isStream ? "Stream" : track.getInfo().title.contains("Podcast") ?
-                                                    "Podcast" : "Música") + "`\n" +
-                                            "\uD83D\uDCCC Link: [Clique aqui](" + track.getInfo().uri + ")");
-
-                    trackManager.play(track, event.getMember());
-                    event.getChannel().sendMessage(embed.build()).queue();
-                    event.getChannel().sendMessage(":pleading_face: Não encontrei a música que pediu então adicionei ela na lista").queue();
-                    return;
-                }
-
-                trackManager.play(track, event.getMember());
-                trackManager.player.playTrack(track);
-                event.getChannel().sendMessage("\u23e9 Pulei para a música `" + track.getInfo().title + "` pra você <3").queue();
+            case "link":
+            case "play":
+            case "tocar": {
+                trackManager.loadTrack(input, event.getMember(), event.getMessage(), event.getTextChannel());
                 return;
             }
         }
@@ -309,7 +238,7 @@ public class MusicCommand extends Command {
     private void sendHelpMessage(TextChannel chat) {
         EmbedBuilder builder = new EmbedBuilder()
                 .setTitle("♨️ Vamo agitar um flow pesadão?")
-                .setDescription("Todos \uD83C\uDF20 - _Aqui são os comandos liberados a todos os jogadores_\n" +
+                .setDescription("Todos \uD83D\uDC7E - _Aqui são os comandos liberados a todos os jogadores_\n\n" +
                         "$tocar play [link da música] | Carrega uma música ou playlist \n" +
                         "$tocar buscar [nome da música] | Procure no YouTube um vídeo pelo nome \n" +
                         "$tocar lista | Veja a fila atual de músicas do servidor \n" +
@@ -317,12 +246,11 @@ public class MusicCommand extends Command {
                         "$tocar info | Exibir informações relacionadas à faixa atual \n" +
                         "$tocar pausar | Pausar a minha música atual\n" +
                         "\n" +
-                        "DJ \uD83C\uDF99 - _Abaixo são comandos apenas para meus produtores_\n" +
+                        "DJ \uD83C\uDF99 - _Abaixo são comandos apenas para meus produtores_\n\n" +
                         "$tocar fpular | Pule a música atual sem precisar de voto \n" +
                         "$tocar limpar | Limpar a fila de músicas\n" +
-                        "$tocar misturar | Misturar as faixas da playlist\n" +
-                        "$tocar teleport <buscar ou link> <link ou nome> | Pular para uma música da lista")
-                .setThumbnail("https://i.pinimg.com/originals/c4/1d/e9/c41de98f6fd11ca86b897763fbfb4559.gif");
+                        "$tocar misturar | Misturar as faixas da playlist\n")
+                .setImage("https://i.pinimg.com/originals/c4/1d/e9/c41de98f6fd11ca86b897763fbfb4559.gif");
 
         chat.sendMessage(builder.build()).queue();
     }
