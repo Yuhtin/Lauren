@@ -62,9 +62,7 @@ public class Lauren {
                 ZipOutputStream zipOS = new ZipOutputStream(fos);
 
                 writeToZip(LoggerController.get().getFile(), zipOS);
-                if (LoggerController.get().getFile().delete()) {
-                    Logger.log("Can't delete a log file");
-                }
+                if (!LoggerController.get().getFile().delete()) Logger.log("Can't delete a log file");
                 zipOS.close();
                 fos.close();
             } catch (Exception exception) {

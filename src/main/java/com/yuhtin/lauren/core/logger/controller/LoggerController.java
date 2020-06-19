@@ -20,17 +20,19 @@ public class LoggerController {
     public LoggerController(String logName) throws IOException {
         INSTANCE = this;
         LocalDateTime now = LocalDateTime.now();
+        int year = now.getYear();
         int month = now.getMonthValue();
         int day = now.getDayOfMonth();
 
         // create a infinite log archives
-        String prefix = "logs/" + logName + "-" + day + "-" + month + "-";
+        String prefix = "logs/" + logName + "-" + day + "-" + month + "-" + year + "-";
         int i = 1;
-        File file = new File(prefix + "1.log");
+        File file = new File(prefix + "1.zip");
         while (file.exists()) {
-            file = new File(prefix + i + ".log");
+            file = new File(prefix + i + ".zip");
             i++;
         }
+        file = new File(prefix + i + ".log");
         this.file = file;
 
         // try to create log file
