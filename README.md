@@ -16,6 +16,7 @@ Lauren is a discord bot that contains a scrim system for 8ballpool and LudoKing 
   * [JDA](https://github.com/DV8FromTheWorld/JDA) for providing the client-side code and documentation to help with the discord api
   * [JDA-Utilities](https://github.com/JDA-Applications/JDA-Utilities) for providing many utility codes for the JDA
   * [Elytra Readme](https://github.com/Elytra-Server/Elytra/blob/develop/README.md) i don't know how to create beautiful readme, so I based it on the readme of the Elytra project
+  * [LavaPlayer](https://github.com/sedmelluq/lavaplayer) is an audio player library written in Java which can load audio tracks
 
 ## Contributors
 
