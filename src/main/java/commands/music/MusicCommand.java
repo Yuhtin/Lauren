@@ -19,14 +19,14 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import org.json.JSONObject;
+import utils.helper.MathUtils;
 import utils.helper.Utilities;
 
 import java.util.Arrays;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import static utils.helper.TrackUtils.buildQueueMessage;
-import static utils.helper.TrackUtils.getProgressBar;
+import static utils.helper.TrackUtils.*;
 
 @CommandHandler(name = "tocar", type = CommandHandler.CommandType.MUSIC, description = "Colocar eu para por um som na caixa")
 public class MusicCommand extends Command {
@@ -93,8 +93,8 @@ public class MusicCommand extends Command {
                                             "\uD83D\uDCE2 Tipo de vídeo: `" +
                                             (track.getInfo().isStream ? "Stream" : track.getInfo().title.contains("Podcast") ?
                                                     "Podcast" : "Música") + "`\n" +
-                                            "\uD83E\uDDEA Timeline: " + (trackManager.player.isPaused() ? "▶️" : "⏸") + " ⏭ " + (trackManager.player.getVolume() < 50 ? "\uD83D\uDD09" : "\uD83D\uDD0A") + " " + getProgressBar(track) + "\n" +
                                             "\uD83E\uDDEC Membro que adicionou: <@" + trackManager.getTrackInfo(track).getAuthor().getIdLong() + ">\n" +
+                                            "\uD83E\uDDEA Timeline: " + (trackManager.player.isPaused() ? "▶️" : "⏸") + " ⏭ " + (trackManager.player.getVolume() < 50 ? "\uD83D\uDD09" : "\uD83D\uDD0A") + " " + getProgressBar(track) + "\n" +
                                             "\n" +
                                             "\uD83D\uDCCC Link: [Clique aqui](" + track.getInfo().uri + ")");
 
@@ -112,16 +112,26 @@ public class MusicCommand extends Command {
 
                     StringBuilder builder = new StringBuilder();
                     Set<AudioInfo> queue = trackManager.getQueuedTracks();
-                    queue.forEach(audioInfo -> builder.append(buildQueueMessage(audioInfo)));
-                    EmbedBuilder embed = new EmbedBuilder()
-                            .setTitle(DVD + " Informações da fila [" + queue.size() + "]")
-                            .setDescription(builder.toString());
+                    long totalTime = 0;
 
-                    if (builder.length() <= 1959)
+                    for (AudioInfo audioInfo : queue) {
+                        builder.append(buildQueueMessage(audioInfo));
+                        totalTime += audioInfo.getTrack().getInfo().length;
+                    }
+
+                    EmbedBuilder embed = new EmbedBuilder()
+                            .setTitle("\ud83d\udcbf Informações da fila [" + getTimestamp(totalTime) + "]")
+                            .setDescription(
+                                    DVD + " " + queue.size() + " " + MathUtils.plural(queue.size(), "música", "músicas") + "\n\n" +
+                                    builder.toString());
+
+                    if (builder.length() <= 1900)
                         event.getChannel().sendMessage(embed.build()).queue();
                     else {
                         try {
                             HttpResponse response = Unirest.post("https://hastebin.com/documents").body(builder.toString()).asString();
+
+                            builder.setLength(builder.length() - 20);
                             event.getChannel().sendMessage(embed.setDescription(builder.toString() + "\n[Clique aqui para ver o resto das músicas](https://hastebin.com/" + new JSONObject(response.getBody().toString()).getString("key") + ")").build()).queue();
                         } catch (Exception exception) {
                             event.getChannel().sendMessage("❌ Eita, algo de errado não está certo, tentei criar um linkzin com as músicas da playlist pra você, mas o hastebin ta off \uD83D\uDE2D").queue();

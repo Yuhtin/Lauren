@@ -14,13 +14,13 @@ public class TrackUtils {
         builder.append(getTimestamp(info.getPosition())).append(" / ").append(getTimestamp(info.getInfo().length)).append(" [");
 
         for (int i = 0; i < progressBars; i++) {
-            builder.append("-");
+            builder.append("─");
         }
 
-        builder.append("\uD83D\uDD35");
+        builder.append("◯");
 
         for (int i = progressBars + 1; i < 10; i++) {
-            builder.append("-");
+            builder.append("─");
         }
 
         builder.append("](").append(info.getInfo().uri).append(")");
@@ -33,7 +33,7 @@ public class TrackUtils {
         String title = trackInfo.title;
         long length = trackInfo.length;
 
-        return "`[ " + getTimestamp(length) + " ]` " + title + "\n";
+        return "`[ " + getTimestamp(length) + " ]` " + title + " (<@" + info.getAuthor().getIdLong() + ">)\n";
     }
 
     public static String getTimestamp(long milis) {

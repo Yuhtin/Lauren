@@ -14,7 +14,6 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.format.TextStyle;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 @CommandHandler(name = "info", type = CommandHandler.CommandType.HELP, description = "Veja um pouco mais sobre mim")
 public class InfoCommand extends Command {

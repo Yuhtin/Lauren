@@ -4,7 +4,6 @@ import application.Lauren;
 import core.draw.controller.DrawController;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
-import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.util.concurrent.TimeUnit;

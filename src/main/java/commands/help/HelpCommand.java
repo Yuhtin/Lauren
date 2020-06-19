@@ -3,7 +3,6 @@ package commands.help;
 import application.Lauren;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import core.RawCommand;
 import models.annotations.CommandHandler;
 import models.cache.CommandCache;
 import net.dv8tion.jda.api.EmbedBuilder;
