@@ -32,7 +32,7 @@ public class PingCommand extends Command {
                 .setColor(event.getMember().getColor())
                 .setTimestamp(Instant.now())
                 .addField("\uD83D\uDDA5 Informações do Host", "", false)
-                .addField("\uD83D\uDEE2 Processadores disponíveis:", "`" + Runtime.getRuntime().availableProcessors() + " cores`", false)
+                .addField("\uD83D\uDEE2 Núcleos disponíveis:", "`" + Runtime.getRuntime().availableProcessors() + " cores`", false)
                 .addField("\uD83C\uDF9E Memória RAM", "`" + MathUtils.bytesToLegibleValue(usedMemory) + "/" + MathUtils.bytesToLegibleValue(maxMemory) + "`", false)
                 .addField("\uD83D\uDD2E Sistema Operacional", "`" + System.getProperty("os.name") + "`", false)
                 .addField("\uD83D\uDED2 Empresa fornecedora:", "[HypeHost - Hospedagem de Minecraft e VPS](https://hypehost.com.br)", false)
