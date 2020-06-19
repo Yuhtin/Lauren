@@ -9,7 +9,6 @@ import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
 import com.yuhtin.lauren.manager.CommandStartup;
 import com.yuhtin.lauren.manager.ListenersStartup;
-import com.yuhtin.lauren.utils.serialization.CompressLog;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
