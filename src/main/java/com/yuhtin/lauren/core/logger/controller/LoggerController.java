@@ -29,8 +29,8 @@ public class LoggerController {
         int i = 1;
         File file = new File(prefix + "1.zip");
         while (file.exists()) {
+            ++i;
             file = new File(prefix + i + ".zip");
-            i++;
         }
         file = new File(prefix + i + ".log");
         this.file = file;

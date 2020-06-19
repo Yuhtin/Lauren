@@ -29,16 +29,16 @@ public class InfoCommand extends Command {
         SelfUser bot = event.getJDA().getSelfUser();
         User user = event.getJDA().getUserById(272879983326658570L);
         String authorBot = user == null ? bot.getName() + "#" + bot.getDiscriminator() : user.getName() + "#" + user.getDiscriminator();
-        OffsetDateTime before = bot.getTimeCreated();
+        OffsetDateTime timeCreated = bot.getTimeCreated();
         long maxMemory = Runtime.getRuntime().maxMemory();
         long freeMemory = Runtime.getRuntime().freeMemory();
         long usedMemory = maxMemory - freeMemory;
 
         EmbedBuilder builder = new EmbedBuilder()
-                .setAuthor("\uD83D\uDDC2 Informações sobre a bot mais linda do mundo", "https://google.com", bot.getAvatarUrl())
+                .setAuthor("Informações sobre a bot mais linda do mundo", "https://google.com", bot.getAvatarUrl())
 
-                .addField("📆 Criado em", "`" + before.getDayOfMonth() + " de " + before.getMonth().getDisplayName(TextStyle.SHORT, Locale.US) + ", "
-                        + before.getYear() + " às " + before.getHour() + ":" + before.getMinute() + "`", true)
+                .addField("📆 Criado em", "`" + timeCreated.getDayOfMonth() + " de " + timeCreated.getMonth().getDisplayName(TextStyle.SHORT, Locale.US) + ", "
+                        + timeCreated.getYear() + " às " + timeCreated.getHour() + ":" + timeCreated.getMinute() + "`", true)
                 .addField("🌌 Meu ID", "`" + bot.getId() + "`", true)
                 .addField("🙍‍♂️ Dono", "`" + authorBot + "`", true)
 
@@ -47,8 +47,8 @@ public class InfoCommand extends Command {
                 .addField("🏓 Ping da API", "`" + event.getJDA().getGatewayPing() + "ms`", true)
 
                 .addField("\uD83D\uDD8A Prefixos", "Padrão: `$`", true)
-                .addField("<:java:723609384428503071> Versão Java", "`" + System.getProperty("java.version") + "`", true)
-                .addField("<:discord:723587554422816889> Versão Discord API", "`v4.1.1_137`", true)
+                .addField("<:java:723609384428503071> Versão Java", "`v" + System.getProperty("java.version") + "`", true)
+                .addField("<:discord:723587554422816889> Versão JDA", "`v4.1.1_137`", true)
 
                 .addField("⚙️ Núcleos", "`" + Runtime.getRuntime().availableProcessors() + " cores`", true)
                 .addField("\uD83D\uDEE2 Banco de Dados", "`" + Lauren.config.databaseType + "`", true)
