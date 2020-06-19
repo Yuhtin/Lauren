@@ -39,7 +39,7 @@ public class InfoCommand extends Command {
                 .addField("🙍‍♂️ Dono", "`" + authorBot + "`", true)
 
                 .addField("<a:infinito:703187274912759899> Uptime", "`" + MathUtils.format(Lauren.startTime) + "`", true)
-                .addField("💥 Servidores", "`" + event.getJDA().getGuilds().size() + " " + (event.getJDA().getGuilds().size() > 1 ? "servidores" : "servidor") + "`", true)
+                .addField("💥 Servidores", "`Sou exclusiva deste servidor :d`", true)
                 .addField("🏓 Ping da API", "`" + event.getJDA().getGatewayPing() + "ms`", true)
 
                 .addField("", "", true)

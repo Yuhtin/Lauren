@@ -52,9 +52,6 @@ public class Lauren {
         Logger.log("It took me " + (startTime - loadStart) + " millis to load my systems");
         System.gc();
 
-        /*
-            This system is in Beta
-         */
         Scanner scanner = new Scanner(System.in);
         while (scanner.nextLine().equalsIgnoreCase("stop")) {
             try {
