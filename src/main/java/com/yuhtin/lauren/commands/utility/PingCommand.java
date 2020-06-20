@@ -43,9 +43,9 @@ public class PingCommand extends Command {
                 .addField("\uD83D\uDED2 Empresa fornecedora:", "[HypeHost - Hospedagem de Minecraft e VPS](https://hypehost.com.br)", true)
                 .addField("\uD83E\uDDEA Local do Host", "`Lenoir, North Carolina, USA`", true)
                 .addField("", "\uD83D\uDCE1 Informações de conexão", false)
-                .addField("<:discord:723587554422816889> Discord Ping", "`" + (toEpochMilli) + "ms`", false)
+                .addField("<:discord:723587554422816889> Discord Ping", "`" + toEpochMilli + "ms`", false)
                 .addField("\uD83E\uDDEC Discord API", "`" + jda.getGatewayPing() + "ms`", false)
-                .setFooter("Ping médio: " + ((jda.getGatewayPing() + (toEpochMilli)) / 2) + "ms", member.getUser().getAvatarUrl());
+                .setFooter("Ping médio: " + ((jda.getGatewayPing() + toEpochMilli) / 2) + "ms", member.getUser().getAvatarUrl());
         return builder.build();
     }
 }

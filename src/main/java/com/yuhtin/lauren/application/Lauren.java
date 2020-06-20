@@ -88,7 +88,7 @@ public class Lauren {
     }
 
     public static void writeToZip(File file, ZipOutputStream zipStream) throws IOException {
-        Logger.log("Writing file : '" + file.getName() + "' to zip file");
+        Logger.log("Compressing the log '" + file.getName() + "' to a zip file");
         FileInputStream fis = new FileInputStream(file);
         ZipEntry zipEntry = new ZipEntry(file.getName());
 

@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.database;
 
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.data.PlayerData;
 import com.yuhtin.lauren.models.cache.PlayerDataCache;
 import com.yuhtin.lauren.models.data.Match;
@@ -36,8 +37,7 @@ public class Database {
             statement.close();
             return true;
         } catch (SQLException e) {
-            System.out.println("The table could not be created");
-            e.printStackTrace();
+            Logger.log("Database tables could not be created");
             return false;
         }
     }
@@ -62,8 +62,7 @@ public class Database {
 
             return true;
         } catch (SQLException exception) {
-            exception.printStackTrace();
-            System.out.println("Could not save data to database");
+            Logger.log("Could not load data from database").save();
             return false;
         }
     }
@@ -79,8 +78,7 @@ public class Database {
             statement.executeUpdate();
             statement.close();
         } catch (SQLException exception) {
-            exception.printStackTrace();
-            System.out.println("Could not save data to database");
+            Logger.log("Could not save data to database").save();
         }
     }
 
@@ -95,8 +93,7 @@ public class Database {
             statement.executeUpdate();
             statement.close();
         } catch (SQLException exception) {
-            exception.printStackTrace();
-            System.out.println("Could not save data to database");
+            Logger.log("Could not save data to database").save();
         }
     }
 
@@ -110,8 +107,7 @@ public class Database {
             statement.executeUpdate();
             statement.close();
         } catch (SQLException exception) {
-            exception.printStackTrace();
-            System.out.println("Could not save data to database");
+            Logger.log("Could not create data in database").save();
         }
     }
 
@@ -125,8 +121,7 @@ public class Database {
             statement.executeUpdate();
             statement.close();
         } catch (SQLException exception) {
-            exception.printStackTrace();
-            System.out.println("Could not save data to database");
+            Logger.log("Could not create data in database").save();
         }
     }
 
@@ -136,10 +131,9 @@ public class Database {
                 PlayerDataCache.getDATA().forEach(this::save);
 
                 connection.close();
-                System.out.println("Connection to the database has been closed");
-            } catch (SQLException e) {
-                e.printStackTrace();
-                System.out.println("Could not close the connection to the database");
+                Logger.log("Connection to the database has been closed").save();
+            } catch (SQLException exception) {
+                Logger.log("Could not close the connection to the database").save();
             }
         }
     }

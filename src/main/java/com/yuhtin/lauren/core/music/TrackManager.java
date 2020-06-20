@@ -98,10 +98,9 @@ public class TrackManager extends AudioEventAdapter {
 
             @Override
             public void loadFailed(FriendlyException exception) {
-                exception.printStackTrace();
                 channel.sendMessage("\uD83D\uDC94 Como assim??? Você quer quebrar meus sistemas? \uD83D\uDE2D")
                         .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-                channel.sendMessage("\uD83D\uDCCC Esse formato de arquivo não é valido \uD83D\uDEE9")
+                channel.sendMessage("\uD83D\uDCCC Esse formato de arquivo não é valido ou a playlist é privada \uD83D\uDEE9")
                         .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             }
         });

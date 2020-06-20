@@ -19,13 +19,9 @@ public class LoggerController {
 
     public LoggerController(String logName) throws IOException {
         INSTANCE = this;
-        LocalDateTime now = LocalDateTime.now();
-        int year = now.getYear();
-        int month = now.getMonthValue();
-        int day = now.getDayOfMonth();
 
         // create a infinite log archives
-        String prefix = "logs/" + logName + "-" + day + "-" + month + "-" + year + "-";
+        String prefix = "logs/" + logName + "-";
         int i = 1;
         File file = new File(prefix + "1.zip");
         while (file.exists()) {
@@ -39,7 +35,7 @@ public class LoggerController {
         file.createNewFile();
 
         // starting log
-        now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now();
 
         bufferedWriter = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
         bufferedWriter.write("Starting log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s");

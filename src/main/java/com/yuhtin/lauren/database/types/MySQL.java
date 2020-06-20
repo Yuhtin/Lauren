@@ -11,7 +11,7 @@ public class MySQL implements Data {
 
     @Override
     public Connection openConnection() {
-        String url = "jdbc:mysql://" + host + ":3306/" + database;
+        String url = "jdbc:mysql://" + host + ":3306/" + database + "?autoReconnect=true";
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             return DriverManager.getConnection(url, user, password);
