@@ -4,7 +4,7 @@ import com.yuhtin.lauren.application.Lauren;
 import com.google.common.reflect.ClassPath;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
-import com.yuhtin.lauren.core.RawCommand;
+import com.yuhtin.lauren.core.entities.RawCommand;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.models.cache.CommandCache;
 import com.yuhtin.lauren.core.logger.Logger;
@@ -13,8 +13,8 @@ import net.dv8tion.jda.api.entities.Activity;
 
 import java.io.IOException;
 
-public class CommandStartup {
-    public CommandStartup(JDA bot, String folder) {
+public class CommandManager {
+    public CommandManager(JDA bot, String folder) {
         CommandCache.start();
 
         CommandClientBuilder clientBuilder = new CommandClientBuilder();

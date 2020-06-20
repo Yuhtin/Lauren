@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.TemporalAccessor;
 
 @Getter
 public class LoggerController {
@@ -38,12 +40,10 @@ public class LoggerController {
         LocalDateTime now = LocalDateTime.now();
 
         bufferedWriter = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
-        bufferedWriter.write("Starting log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s");
-        bufferedWriter.newLine();
-        bufferedWriter.flush();
 
         Logger.log("Registering logs to " + file.getName());
         Logger.log("Lauren is now registering logs").save();
+        Logger.log("Starting log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s").save();
     }
 
     public void toFile(String log) {

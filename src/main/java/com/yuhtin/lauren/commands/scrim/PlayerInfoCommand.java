@@ -3,7 +3,7 @@ package com.yuhtin.lauren.commands.scrim;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.cache.PlayerDataCache;
+import com.yuhtin.lauren.manager.PlayerDataManager;
 import com.yuhtin.lauren.models.data.PlayerData;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -22,14 +22,17 @@ public class PlayerInfoCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
         Member target = event.getMessage().getMentionedMembers().size() < 1 ? event.getMember() : event.getMessage().getMentionedMembers().get(0);
-        PlayerData controller = PlayerDataCache.get(target);
+        PlayerData controller = PlayerDataManager.get(target.getIdLong());
+
+        String roles = Utilities.rolesToString(target.getRoles());
+        String name = target.getNickname() == null ? target.getUser().getName() : target.getNickname();
 
         EmbedBuilder embedBuilder = new EmbedBuilder()
                 .setColor(target.getColor())
-                .setAuthor("Informações do jogador " + target.getNickname(), "https://google.com", target.getUser().getAvatarUrl())
+                .setAuthor("Informações do jogador " + name, "https://google.com", target.getUser().getAvatarUrl())
                 .setThumbnail(controller.ludoRank.position > controller.poolRank.position ? controller.ludoRank.url : controller.poolRank.url)
                 .addField("⚗️ Experiência", "`Nível " + controller.level + " (" + Utilities.format(controller.experience) + " XP)`", false)
-                .addField("🧶 Cargos", "`" + Utilities.rolesToString(target.getRoles()) + "`", false)
+                .addField("🧶 Cargos", "`" + (roles.equalsIgnoreCase("") ? "Nenhum" : roles) + "`", false)
                 .addField("\uD83D\uDCB0 Dinheiro", "`$" + (Utilities.format(controller.money)) + "`", false)
                 .addField("\uD83D\uDC7E Partidas totais", "`" + (controller.ludoMatches + controller.poolMatches) + "`", false)
                 .addField("\uD83C\uDFB1 8BallPool",

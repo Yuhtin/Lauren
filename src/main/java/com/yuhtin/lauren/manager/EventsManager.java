@@ -7,8 +7,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.io.IOException;
 
-public class ListenersStartup {
-    public ListenersStartup(JDA bot, String folder) {
+public class EventsManager {
+    public EventsManager(JDA bot, String folder) {
         ClassPath cp;
 
         try {

@@ -23,4 +23,5 @@ public class Logger {
         System.out.println(message);
         return new Logger(message);
     }
+
 }

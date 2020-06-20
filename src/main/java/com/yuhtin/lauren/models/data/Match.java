@@ -2,7 +2,7 @@ package com.yuhtin.lauren.models.data;
 
 import com.yuhtin.lauren.application.Lauren;
 import com.yuhtin.lauren.models.cache.MatchCache;
-import com.yuhtin.lauren.models.cache.PlayerDataCache;
+import com.yuhtin.lauren.manager.PlayerDataManager;
 import com.yuhtin.lauren.core.enums.Game;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -48,7 +48,7 @@ public class Match {
         this.urlPrint = urlPrint;
         this.finishTime = System.currentTimeMillis();
 
-        players.forEach(id -> PlayerDataCache.get(id).computMatch(this).save());
+        players.forEach(id -> PlayerDataManager.get(id).computMatch(this).save());
 
         MatchCache.finishMatch(this);
     }

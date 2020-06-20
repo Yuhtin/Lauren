@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.core;
+package com.yuhtin.lauren.core.entities;
 
 import lombok.AllArgsConstructor;
 import com.yuhtin.lauren.models.annotations.CommandHandler;

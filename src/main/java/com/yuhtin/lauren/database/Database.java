@@ -2,11 +2,11 @@ package com.yuhtin.lauren.database;
 
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.data.PlayerData;
-import com.yuhtin.lauren.models.cache.PlayerDataCache;
 import com.yuhtin.lauren.models.data.Match;
 import com.yuhtin.lauren.models.cache.MatchCache;
 import com.yuhtin.lauren.utils.serialization.Serializer;
 
+import javax.annotation.Nullable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -45,18 +45,10 @@ public class Database {
     public boolean loadData() {
         PreparedStatement statement;
         try {
-            statement = connection.prepareStatement("SELECT * FROM " + tablePlayers);
-
-            ResultSet result = statement.executeQuery();
-            while (result.next()) {
-                PlayerDataCache.insert(Serializer.playerData.deserialize(result.getString("data")));
-            }
-            statement.close();
-
             statement = connection.prepareStatement("SELECT * FROM " + tableMatches);
-            result = statement.executeQuery();
-            while (result.next()) {
-                MatchCache.insert(Serializer.match.deserialize(result.getString("data")));
+            ResultSet query = statement.executeQuery();
+            while (query.next()) {
+                MatchCache.insert(Serializer.match.deserialize(query.getString("data")));
             }
             statement.close();
 
@@ -64,6 +56,28 @@ public class Database {
         } catch (SQLException exception) {
             Logger.log("Could not load data from database").save();
             return false;
+        }
+    }
+
+    @Nullable
+    public String loadPlayer(Long userID) {
+        PreparedStatement statement;
+        String data = null;
+        try {
+            statement = connection.prepareStatement("SELECT * FROM " + tablePlayers + " WHERE `id` = ?");
+            statement.setLong(1, userID);
+
+            ResultSet query = statement.executeQuery();
+
+            while(query.next()) {
+                data = query.getString("data");
+            }
+            statement.close();
+
+            return data;
+        }catch (SQLException exception) {
+            Logger.log("Could not load player from database").save();
+            return null;
         }
     }
 
@@ -128,8 +142,6 @@ public class Database {
     public void close() {
         if (connection != null) {
             try {
-                PlayerDataCache.getDATA().forEach(this::save);
-
                 connection.close();
                 Logger.log("Connection to the database has been closed").save();
             } catch (SQLException exception) {
