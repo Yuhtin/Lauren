@@ -53,8 +53,7 @@ public class ConfigCommand extends Command {
         }
         String value = arguments[2];
         if (arguments[1].equalsIgnoreCase("setprefix")) {
-            Lauren.config.updatePrefix(value);
-            Lauren.config.updateConfig();
+            Lauren.config.setPrefix(value);
             Logger.log("The player " + event.getMember().getUser().getName() + " changed the prefix to " + value).save();
 
             event.getChannel().sendMessage("<a:sim:704295025374265387> O meu prefixo foi alterado para '" + value + "'. Reinicie o bot para realizar a troca.").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
@@ -75,7 +74,6 @@ public class ConfigCommand extends Command {
         if (arguments[1].equalsIgnoreCase("setlog")) {
             try {
                 Lauren.config.setLog(Boolean.parseBoolean(value));
-                Lauren.config.updateConfig();
                 Logger.log("The player " + event.getMember().getUser().getName() + " turned logs to " + value).save();
             } catch (Exception exception) {
                 event.getChannel().sendMessage("<a:nao:704295026036834375> O valor inserido é invalido: '" + value + "' (insira true ou false).").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));

@@ -67,7 +67,6 @@ public class MatchEmbedMessage extends Command {
                 Lauren.config.setPoolRanked(event.getChannel().getIdLong());
             }
         }
-        Lauren.config.updateConfig();
 
         event.getChannel().sendMessage(embed.build()).queue(message -> message.addReaction("\uD83C\uDFAE").queue());
     }

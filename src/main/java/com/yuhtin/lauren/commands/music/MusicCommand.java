@@ -198,6 +198,7 @@ public class MusicCommand extends Command {
         switch (operation) {
             case "search":
             case "buscar":
+            case "busca":
                 input = "ytsearch: " + input;
 
             case "link":

@@ -37,6 +37,7 @@ public class Database {
             statement.close();
             return true;
         } catch (SQLException e) {
+            e.printStackTrace();
             Logger.log("Database tables could not be created");
             return false;
         }

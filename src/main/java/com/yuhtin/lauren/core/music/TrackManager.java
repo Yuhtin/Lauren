@@ -56,6 +56,7 @@ public class TrackManager extends AudioEventAdapter {
                                                 "Podcast" : "Música") + "`\n" +
                                         "\uD83D\uDCCC Link: [Clique aqui](" + track.getInfo().uri + ")");
 
+                Logger.log("The player " + Utilities.getFullName(member.getUser()) + " added a music").save();
                 play(track, member);
                 channel.sendMessage(embed.build()).queue();
             }
@@ -70,16 +71,17 @@ public class TrackManager extends AudioEventAdapter {
                     if (player.isPaused()) player.setPaused(false);
 
                     int limit = Utilities.isBooster(member) || Utilities.isDJ(member, null, false) ? 100 : 25;
+                    int maxMusics = Math.min(playlist.getTracks().size(), limit);
 
                     EmbedBuilder embed = new EmbedBuilder()
-                            .setTitle("💿 " + Utilities.getFullName(member.getUser()) + " adicionou " + limit + " músicas a fila")
+                            .setTitle("💿 " + Utilities.getFullName(member.getUser()) + " adicionou " + maxMusics + " músicas a fila")
                             .setDescription("\uD83D\uDCBD Informações da playlist:\n" +
                                     "\ud83d\udcc0 Nome: `" + playlist.getName() + "`\n" +
-                                    "\uD83C\uDFB6 Músicas: `" + limit + "`\n\n" +
+                                    "\uD83C\uDFB6 Músicas: `" + maxMusics + "`\n\n" +
                                     "\uD83D\uDCCC Link: [Clique aqui](" + trackUrl + ")");
 
-                    Logger.log("The player " + Utilities.getFullName(member.getUser()) + " added a playlist with " + limit + " musics");
-                    for (int i = 0; i < Math.min(playlist.getTracks().size(), limit); ++i) {
+                    Logger.log("The player " + Utilities.getFullName(member.getUser()) + " added a playlist with " + maxMusics + " musics").save();
+                    for (int i = 0; i < maxMusics; ++i) {
                         play(playlist.getTracks().get(i), member);
                     }
 
@@ -89,7 +91,6 @@ public class TrackManager extends AudioEventAdapter {
 
             @Override
             public void noMatches() {
-
                 channel.sendMessage("\uD83D\uDC94 Como assim??? Você quer quebrar meus sistemas? \uD83D\uDE2D")
                         .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
                 channel.sendMessage("\uD83D\uDCCC Não consegui encontrar nada relacionado ao que me enviou :p")
@@ -100,7 +101,7 @@ public class TrackManager extends AudioEventAdapter {
             public void loadFailed(FriendlyException exception) {
                 channel.sendMessage("\uD83D\uDC94 Como assim??? Você quer quebrar meus sistemas? \uD83D\uDE2D")
                         .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-                channel.sendMessage("\uD83D\uDCCC Esse formato de arquivo não é valido ou a playlist é privada \uD83D\uDEE9")
+                channel.sendMessage("\uD83D\uDCCC Este link não é suportado ou a playlist é privada \uD83D\uDEE9")
                         .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             }
         });

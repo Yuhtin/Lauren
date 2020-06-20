@@ -9,6 +9,7 @@ import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
 import com.yuhtin.lauren.manager.CommandManager;
 import com.yuhtin.lauren.manager.EventsManager;
+import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -16,8 +17,10 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 
 import java.io.*;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -55,24 +58,7 @@ public class Lauren {
 
         Scanner scanner = new Scanner(System.in);
         while (scanner.nextLine().equalsIgnoreCase("stop")) {
-            try {
-                LocalDateTime now = LocalDateTime.now(ZoneId.of("BET"));
-
-                File file = LoggerController.get().getFile();
-                Logger.log("Compressing the log '" + file.getName() + "' to a zip file").save();
-                Logger.log("Starting log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s").save();
-
-                FileOutputStream fos = new FileOutputStream(file.getPath().split("\\.")[0] + ".zip");
-                ZipOutputStream zipOS = new ZipOutputStream(fos);
-
-                writeToZip(file, zipOS);
-                if (!file.delete()) Logger.log("Can't delete a log file");
-                zipOS.close();
-                fos.close();
-            } catch (Exception exception) {
-                Logger.log("Can't compress a log file").save();
-            }
-            System.exit(0);
+            finish();
         }
     }
 
@@ -95,18 +81,25 @@ public class Lauren {
         return new SQLite();
     }
 
-    public static void writeToZip(File file, ZipOutputStream zipStream) throws IOException {
-        FileInputStream fis = new FileInputStream(file);
-        ZipEntry zipEntry = new ZipEntry(file.getName());
+    public static void finish() {
+        try {
+            LocalDateTime now = LocalDateTime.now();
 
-        zipStream.putNextEntry(zipEntry);
-        byte[] bytes = new byte[1024];
-        int length;
-        while ((length = fis.read(bytes)) >= 0) {
-            zipStream.write(bytes, 0, length);
+            File file = LoggerController.get().getFile();
+            Logger.log("Compressing the log '" + file.getName() + "' to a zip file").save();
+            Logger.log("Starting log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s").save();
+
+            FileOutputStream fos = new FileOutputStream(file.getPath().split("\\.")[0] + ".zip");
+            ZipOutputStream zipOS = new ZipOutputStream(fos);
+
+            Utilities.writeToZip(file, zipOS);
+            if (!file.delete()) Logger.log("Can't delete a log file");
+            zipOS.close();
+            fos.close();
+        } catch (Exception exception) {
+            Logger.log("Can't compress a log file").save();
         }
-
-        zipStream.closeEntry();
-        fis.close();
+        Lauren.config.updateConfig();
+        System.exit(0);
     }
 }

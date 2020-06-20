@@ -54,12 +54,4 @@ public class Config {
             Logger.log("An error occurred on save config").save();
         }
     }
-
-    public void updatePrefix(String newPrefix) {
-        prefix = newPrefix;
-        try {
-            updateConfig();
-        } catch (Exception ignored) {
-        }
-    }
 }

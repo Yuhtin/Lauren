@@ -32,9 +32,9 @@ public class RegisterCommand extends Command {
                 "\n" +
                 "@everyone");
         action.queue(message -> {
-            Lauren.config.setResgistrationId(message.getIdLong());
             message.addReaction(":nao_pertubar:703089222185386056").queue();
             message.addReaction(":live:704293077623504957").queue();
+            Lauren.config.setResgistrationId(message.getIdLong());
         });
     }
 }
