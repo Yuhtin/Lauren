@@ -53,7 +53,6 @@ public class CommandManager {
         }
 
         bot.addEventListener(clientBuilder.build());
-        Logger.log("All commands has been registred").save();
     }
 
 }

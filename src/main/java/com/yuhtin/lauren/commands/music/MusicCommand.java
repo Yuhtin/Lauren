@@ -5,6 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.MathUtils;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
@@ -114,20 +115,26 @@ public class MusicCommand extends Command {
                     }
 
                     EmbedBuilder embed = new EmbedBuilder()
-                            .setTitle("\ud83d\udcbf Informações da fila [" + TrackUtils.getTimestamp(totalTime) + "]")
-                            .setDescription(
-                                    DVD + " " + queue.size() + " " + MathUtils.plural(queue.size(), "música", "músicas") + "\n\n" +
-                                            builder.toString());
+                            .setTitle("\ud83d\udcbf Informações da fila [" + TrackUtils.getTimestamp(totalTime) + "]");
 
-                    if (builder.length() <= 1900)
+                    if (builder.length() <= 2001) {
+                        embed.setDescription(
+                                DVD + " " + queue.size() + " " + MathUtils.plural(queue.size(), "música", "músicas") + "\n\n" +
+                                        builder.toString());
                         event.getChannel().sendMessage(embed.build()).queue();
-                    else {
+                    } else {
                         try {
+
                             HttpResponse response = Unirest.post("https://hastebin.com/documents").body(builder.toString()).asString();
 
-                            builder.setLength(builder.length() + (2048 - builder.length()));
-                            event.getChannel().sendMessage(embed.setDescription(builder.toString() + "\n[Clique aqui para ver o resto das músicas](https://hastebin.com/" + new JSONObject(response.getBody().toString()).getString("key") + ")").build()).queue();
+                            builder.setLength(1924);
+                            embed.setDescription(
+                                    DVD + " " + queue.size() + " " + MathUtils.plural(queue.size(), "música", "músicas") + "\n\n" + builder.toString() +
+                                    "\n[Clique aqui para ver o resto das músicas](https://hastebin.com/" + new JSONObject(response.getBody().toString()).getString("key") + ")");
+
+                            event.getChannel().sendMessage(embed.build()).queue();
                         } catch (Exception exception) {
+                            event.getChannel().sendMessage(exception.getMessage()).queue();
                             event.getChannel().sendMessage("❌ Eita, algo de errado não está certo, tentei criar um linkzin com as músicas da playlist pra você, mas o hastebin ta off \uD83D\uDE2D").queue();
                             return;
                         }
@@ -204,7 +211,7 @@ public class MusicCommand extends Command {
             case "link":
             case "play":
             case "tocar": {
-                trackManager.loadTrack(input, event.getMember(), event.getMessage(), event.getTextChannel());
+                trackManager.loadTrack(input, event.getMember(), event.getTextChannel());
                 return;
             }
         }

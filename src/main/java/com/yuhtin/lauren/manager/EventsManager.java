@@ -14,7 +14,7 @@ public class EventsManager {
         try {
             cp = ClassPath.from(getClass().getClassLoader());
         } catch (IOException exception) {
-            Logger.log("Não foi possível instanciar a ClassPath");
+            Logger.log("ClassPath could not be instantiated");
             return;
         }
 
@@ -29,9 +29,8 @@ public class EventsManager {
                     throw new InstantiationException();
 
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException exception) {
-                Logger.log("Não foi possível instanciar a classe " + classInfo.getName());
+                Logger.log("The " + classInfo.getName() + " class could not be instantiated");
             }
         }
-        Logger.log("All events has been registred");
     }
 }

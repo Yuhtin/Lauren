@@ -15,8 +15,7 @@ public class MemberReactionEvent extends ListenerAdapter {
         if (event.getUser() == null || event.getUser().isBot() || event.getMember() == null) return;
 
         if (event.getMessageIdLong() == Lauren.config.resgistrationId) {
-            Role boy = event.getJDA().getRoleById("701293438821335040");
-            Role girl = event.getJDA().getRoleById("701293834780540938");
+            Role boy = Lauren.bot.getRoleById("701293438821335040"), girl = Lauren.bot.getRoleById("701293834780540938");
             if (boy == null || girl == null) return;
 
             event.getGuild().addRoleToMember(event.getMember(), event.getReactionEmote().getId().equals("704293077623504957") ? girl : boy).queue();

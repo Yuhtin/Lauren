@@ -33,12 +33,12 @@ public class TrackManager extends AudioEventAdapter {
         AudioSourceManagers.registerLocalSource(audioManager);
     }
 
-    public void loadTrack(String trackUrl, Member member, Message message, TextChannel channel) {
+    public void loadTrack(String trackUrl, Member member, TextChannel channel) {
         if (member.getVoiceState() == null || member.getVoiceState().getChannel() == null) {
             channel.sendMessage("\ud83d\udcbf Você não está em um canal de voz \uD83D\uDE2D").queue();
             return;
         }
-        message.getTextChannel().sendTyping().queue();
+        channel.sendTyping().queue();
 
         audioManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
 
@@ -92,17 +92,17 @@ public class TrackManager extends AudioEventAdapter {
             @Override
             public void noMatches() {
                 channel.sendMessage("\uD83D\uDC94 Como assim??? Você quer quebrar meus sistemas? \uD83D\uDE2D")
-                        .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+                        .queue(message -> message.delete().queueAfter(5, TimeUnit.SECONDS));
                 channel.sendMessage("\uD83D\uDCCC Não consegui encontrar nada relacionado ao que me enviou :p")
-                        .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+                        .queue(message -> message.delete().queueAfter(5, TimeUnit.SECONDS));
             }
 
             @Override
             public void loadFailed(FriendlyException exception) {
                 channel.sendMessage("\uD83D\uDC94 Como assim??? Você quer quebrar meus sistemas? \uD83D\uDE2D")
-                        .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+                        .queue(message -> message.delete().queueAfter(5, TimeUnit.SECONDS));
                 channel.sendMessage("\uD83D\uDCCC Este link não é suportado ou a playlist é privada \uD83D\uDEE9")
-                        .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+                        .queue(message -> message.delete().queueAfter(5, TimeUnit.SECONDS));
             }
         });
     }
@@ -112,16 +112,16 @@ public class TrackManager extends AudioEventAdapter {
     }
 
     public void shuffleQueue() {
-        List<AudioInfo> tQueue = new ArrayList<>(this.getQueuedTracks());
+        List<AudioInfo> tempQueue = new ArrayList<>(this.getQueuedTracks());
 
-        AudioInfo current = tQueue.get(0);
-        tQueue.remove(0);
+        AudioInfo current = tempQueue.get(0);
+        tempQueue.remove(0);
 
-        Collections.shuffle(tQueue);
-        tQueue.add(0, current);
+        Collections.shuffle(tempQueue);
+        tempQueue.add(0, current);
 
         purgeQueue();
-        musicManager.scheduler.queue.addAll(tQueue);
+        musicManager.scheduler.queue.addAll(tempQueue);
     }
 
     public Set<AudioInfo> getQueuedTracks() {

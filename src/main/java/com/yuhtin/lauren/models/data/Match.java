@@ -30,9 +30,7 @@ public class Match {
     public void createChannel() {
         Lauren.guild.createTextChannel("match-" + id)
                 .addPermissionOverride(Lauren.guild.getPublicRole(), null, EnumSet.of(Permission.VIEW_CHANNEL))
-                .queue(text -> {
-                    channel = text;
-                });
+                .queue(text -> channel = text);
     }
 
     public boolean startMatch() {

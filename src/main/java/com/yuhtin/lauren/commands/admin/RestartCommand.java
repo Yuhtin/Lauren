@@ -20,8 +20,8 @@ public class RestartCommand extends Command {
     protected void execute(CommandEvent event) {
         if (!Utilities.isOwner(event.getChannel(), event.getMember().getUser())) return;
 
-        Logger.log("The player " + event.getMember().getUser().getName() + " restarting my systems").save();
         event.getChannel().sendMessage("Reiniciando meus sistemas :satisfied:").queue();
+        Logger.log("The player " + event.getMember().getUser().getName() + " restarting my systems").save();
         Lauren.finish();
     }
 }

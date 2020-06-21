@@ -10,14 +10,12 @@ public class ChatMessage extends ListenerAdapter {
 
     /*
         Earn 3 XP for every message sent
-        But, if member has patent, these XP has multiplied
      */
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        if (!event.getChannelType().isGuild() || event.getMember() == null) return;
-        if (Lauren.guild == null) Lauren.guild = event.getGuild();
-
-        if (event.getAuthor().isBot() || event.getMessage().getContentRaw().startsWith(Lauren.config.prefix)) return;
+        if (!event.getChannelType().isGuild() || event.getMember() == null ||
+                event.getAuthor().isBot() || event.getMessage().getContentRaw().startsWith(Lauren.config.prefix))
+            return;
 
         if (event.getMessage().getMentionedMembers().size() > 0) {
             User user = event.getMessage().getMentionedMembers().get(0).getUser();

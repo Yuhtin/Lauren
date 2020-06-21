@@ -122,6 +122,6 @@ public class Utilities {
     }
 
     public static boolean isBooster(Member member) {
-        return member.getRoles().stream().anyMatch(r -> r.getIdLong() == 722116789055782912L);
+        return member.getRoles().stream().anyMatch(role -> role.getIdLong() == 722116789055782912L);
     }
 }
