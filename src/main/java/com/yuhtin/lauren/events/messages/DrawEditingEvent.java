@@ -64,7 +64,7 @@ public class DrawEditingEvent extends ListenerAdapter {
                         .setTitle("\uD83D\uDCB3 Criando um sorteio")
                         .setDescription("\uD83D\uDCC4 Informações do sorteio:\n\n" +
                                 " ✏️ Item a ser sorteado: `" + editting.prize + "`\n" +
-                                " \uD83D\uDCCB Número de vencedores: `" + winners + " " + MathUtils.plural(editting.winnersCount, "vencedor", "vencedores") + "`\n" +
+                                " \uD83D\uDCCB Número de vencedores: `" + MathUtils.plural(editting.winnersCount, "vencedor", "vencedores") + "`\n" +
                                 " ⏳ Tempo de sorteio: `Digite no chat`")
                         .setTimestamp(Instant.now())
                         .setFooter("Editando as informações do sorteio", event.getJDA().getSelfUser().getAvatarUrl());
@@ -85,8 +85,8 @@ public class DrawEditingEvent extends ListenerAdapter {
                             .setTitle("\uD83D\uDCB3 Criando um sorteio")
                             .setDescription("\uD83D\uDCC4 Informações do sorteio:\n\n" +
                                     " ✏️ Item a ser sorteado: `" + editting.prize + "`\n" +
-                                    " \uD83D\uDCCB Número de vencedores: `" + editting.winnersCount + " " + MathUtils.plural(editting.winnersCount, "vencedor", "vencedores") + "`\n" +
-                                    " ⏳ Tempo de sorteio: `" + minutes + " " + MathUtils.plural(minutes, "minuto", "minutos") + "`\n\n" +
+                                    " \uD83D\uDCCB Número de vencedores: `" + MathUtils.plural(editting.winnersCount, "vencedor", "vencedores") + "`\n" +
+                                    " ⏳ Tempo de sorteio: `" + MathUtils.plural(minutes, "minuto", "minutos") + "`\n\n" +
                                     "♻️ Para confirmar o sorteio clique no emoji abaixo")
                             .setTimestamp(Instant.now())
                             .setFooter("Editando as informações do sorteio", event.getJDA().getSelfUser().getAvatarUrl());

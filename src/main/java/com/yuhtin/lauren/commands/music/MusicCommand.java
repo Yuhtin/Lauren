@@ -119,7 +119,7 @@ public class MusicCommand extends Command {
 
                     if (builder.length() <= 2001) {
                         embed.setDescription(
-                                DVD + " " + queue.size() + " " + MathUtils.plural(queue.size(), "música", "músicas") + "\n\n" +
+                                DVD + " " + MathUtils.plural(queue.size(), "música", "músicas") + "\n\n" +
                                         builder.toString());
                         event.getChannel().sendMessage(embed.build()).queue();
                     } else {
@@ -129,8 +129,8 @@ public class MusicCommand extends Command {
 
                             builder.setLength(1924);
                             embed.setDescription(
-                                    DVD + " " + queue.size() + " " + MathUtils.plural(queue.size(), "música", "músicas") + "\n\n" + builder.toString() +
-                                    "\n[Clique aqui para ver o resto das músicas](https://hastebin.com/" + new JSONObject(response.getBody().toString()).getString("key") + ")");
+                                    DVD + " " + MathUtils.plural(queue.size(), "música", "músicas") + "\n\n" + builder.toString() +
+                                            "\n[Clique aqui para ver o resto das músicas](https://hastebin.com/" + new JSONObject(response.getBody().toString()).getString("key") + ")");
 
                             event.getChannel().sendMessage(embed.build()).queue();
                         } catch (Exception exception) {

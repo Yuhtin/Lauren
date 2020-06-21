@@ -28,7 +28,7 @@ public class VolumeCommand extends Command {
         int i;
         try {
             i = Integer.parseInt(event.getArgs());
-            if (i < 1 || i > 100) i = 65;
+            if (i < 1 || i > 100) i = 25;
         }catch (Exception exception) {
             event.getChannel().sendMessage("\uD83D\uDCA2 Eita calma ai, insira um valor de `1 a 100` para ser o volume").queue();
             return;

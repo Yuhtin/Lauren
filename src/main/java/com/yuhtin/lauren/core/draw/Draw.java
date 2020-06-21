@@ -42,7 +42,7 @@ public class Draw {
 
     public Message render() {
         Instant now = Instant.now();
-        String time = MathUtils.secondsToTime(now.until(end, ChronoUnit.SECONDS));
+        String time = MathUtils.format(System.currentTimeMillis() - end.toEpochMilli());
         if (time.equalsIgnoreCase("**Finalizado**")) {
             finish();
             return null;

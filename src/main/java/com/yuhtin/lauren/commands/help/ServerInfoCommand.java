@@ -1,8 +1,9 @@
-package com.yuhtin.lauren.commands.utility;
+package com.yuhtin.lauren.commands.help;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.utils.helper.MathUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 
@@ -11,7 +12,7 @@ import java.time.OffsetDateTime;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
-@CommandHandler(name = "servidor", type = CommandHandler.CommandType.UTILITY, description = "Visualizar as informações deste servidor")
+@CommandHandler(name = "servidor", type = CommandHandler.CommandType.HELP, description = "Visualizar as informações deste servidor")
 public class ServerInfoCommand extends Command {
     public ServerInfoCommand() {
         this.name = "serverinfo";
@@ -23,8 +24,8 @@ public class ServerInfoCommand extends Command {
         String guildId = event.getGuild().getId();
         String roleSize = event.getGuild().getRoles().size() + "";
         String regionName = event.getGuild().getRegion().getName();
-        String creationDate = subtractTime(OffsetDateTime.now(), event.getGuild().getTimeCreated());
-        String userDate = event.getMessage().getMember() == null ? "Erro" : subtractTime(OffsetDateTime.now(), event.getMessage().getMember().getTimeJoined());
+        String creationDate = subtractTime(event.getGuild().getTimeCreated());
+        String userDate = event.getMessage().getMember() == null ? "Erro" : subtractTime(event.getMessage().getMember().getTimeJoined());
 
         Member owner = event.getGuild().getOwner();
         String ownerName = (owner == null ? "Ningúem" : owner.getUser().getName() + "#" + owner.getUser().getDiscriminator());
@@ -80,31 +81,9 @@ public class ServerInfoCommand extends Command {
         event.getChannel().sendMessage(embedBuilder.build()).queue();
     }
 
-    private String subtractTime(OffsetDateTime actual, OffsetDateTime before) {
-        before = before.minusHours(3);
-        int year = actual.getYear() - before.getYear();
-        actual = actual.minusYears(before.getYear());
-        int months = actual.getMonthValue() - before.getMonthValue();
-        actual = actual.minusMonths(before.getMonthValue());
-        int days = actual.getDayOfMonth() - before.getDayOfMonth();
-        actual = actual.minusDays(before.getDayOfMonth());
-        int hours = actual.getHour() - before.getHour();
-        actual = actual.minusHours(before.getHour());
-        int minute = actual.getMinute() - before.getMinute();
-        actual = actual.minusMinutes(before.getMinute());
-        StringBuilder builder = new StringBuilder();
-        if (year > 0)
-            builder.append(actual.getYear()).append(" ").append(actual.getYear() > 1 ? "anos" : "ano").append(" ");
-        if (months > 0)
-            builder.append(actual.getMonthValue()).append(" ").append(actual.getMonthValue() > 1 ? "meses" : "mes").append(" ");
-        if (days > 0)
-            builder.append(actual.getDayOfMonth()).append(" ").append(actual.getDayOfMonth() > 1 ? "dias" : "dia").append(" ");
-        if (hours > 0)
-            builder.append(actual.getHour()).append(" ").append(actual.getHour() > 1 ? "horas" : "hora").append(" ");
-        if (minute > 0)
-            builder.append(actual.getMinute()).append(" ").append(actual.getMinute() > 1 ? "minutos" : "minuto").append(" ");
+    private String subtractTime(OffsetDateTime before) {
         return before.getDayOfMonth() + " de " + before.getMonth().getDisplayName(TextStyle.SHORT, Locale.US) + ", "
                 + before.getYear() + " às " + before.getHour() + ":" + before.getMinute() +
-                " (" + builder.toString() + ")";
+                " (" + MathUtils.format(System.currentTimeMillis() - before.toInstant().toEpochMilli()) + ")";
     }
 }
