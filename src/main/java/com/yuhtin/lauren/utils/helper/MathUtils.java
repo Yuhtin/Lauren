@@ -15,7 +15,13 @@ public class MathUtils {
             if (days > 0) {
                 time = time - TimeUnit.DAYS.toMillis(days);
                 hours = TimeUnit.MILLISECONDS.toHours(time - minutesInMillis);
-                format = plural(days, "dia", "dias") + ", " + plural(hours, "hora", "horas");
+                String daysAndMonth;
+                if (days >= 30) {
+                    int months = days / 30;
+                    int restDays = days - (30 * months);
+                    daysAndMonth = plural(months, "mês", "meses") + (restDays > 0 ? ", " + plural(restDays, "dia", "dias") : "");
+                } else daysAndMonth = plural(days, "dia", "dias");
+                format = daysAndMonth + ", " + plural(hours, "hora", "horas");
                 return format;
             } else {
                 format = plural(hours, "hora", "horas");
