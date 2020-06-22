@@ -3,8 +3,8 @@ package com.yuhtin.lauren.commands.suport;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.data.PlayerData;
-import com.yuhtin.lauren.manager.PlayerDataManager;
+import com.yuhtin.lauren.core.player.PlayerData;
+import com.yuhtin.lauren.core.player.controller.PlayerDataController;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import com.yuhtin.lauren.utils.helper.Utilities;
@@ -40,7 +40,7 @@ public class SetPointsCommand extends Command {
         }
 
         int xp = Integer.parseInt(arguments[3]);
-        PlayerData data = PlayerDataManager.get(member.getIdLong());
+        PlayerData data = PlayerDataController.get(member.getIdLong());
 
         if (arguments[2].equalsIgnoreCase("Ludo")) data.ludoPoints = xp;
          else if (arguments[2].equalsIgnoreCase("Ball")) data.poolPoints = xp;

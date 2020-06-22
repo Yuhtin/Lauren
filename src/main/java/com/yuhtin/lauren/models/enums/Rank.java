@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.core.enums;
+package com.yuhtin.lauren.models.enums;
 
 import lombok.AllArgsConstructor;
 

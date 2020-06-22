@@ -3,8 +3,8 @@ package com.yuhtin.lauren.utils.serialization;
 import com.google.gson.Gson;
 import com.yuhtin.lauren.core.draw.Draw;
 import com.yuhtin.lauren.core.entities.Config;
-import com.yuhtin.lauren.models.data.Match;
-import com.yuhtin.lauren.models.data.PlayerData;
+import com.yuhtin.lauren.core.match.Match;
+import com.yuhtin.lauren.core.player.PlayerData;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

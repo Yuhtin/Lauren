@@ -158,6 +158,7 @@ public class MusicCommand extends Command {
 
                     info.addSkip(event.getAuthor());
                     if (info.getSkips() >= audio.getMembers().size() - 2) {
+                        forceSkipTrack(event.getTextChannel());
                         event.getChannel().sendMessage("\uD83E\uDDF6 Amo quando todos concordam entre si, pulando a música").queue();
                         return;
                     }
@@ -181,9 +182,8 @@ public class MusicCommand extends Command {
                 case "leave": {
                     if (!Utilities.isDJ(event.getMember(), event.getTextChannel(), true)) return;
 
-                    trackManager.player.destroy();
                     trackManager.purgeQueue();
-                    event.getGuild().getAudioManager().closeAudioConnection();
+                    trackManager.player.stopTrack();
                     event.getChannel().sendMessage("Que ⁉️ Pensei que estavam gostando do batidão \uD83D\uDC94 Prometo que da próxima será melhor").queue();
                     return;
                 }

@@ -1,8 +1,6 @@
 package com.yuhtin.lauren.events;
 
 import com.yuhtin.lauren.application.Lauren;
-import com.yuhtin.lauren.manager.PlayerDataManager;
-import com.yuhtin.lauren.models.data.PlayerData;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 

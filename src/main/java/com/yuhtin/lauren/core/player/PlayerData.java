@@ -1,8 +1,10 @@
-package com.yuhtin.lauren.models.data;
+package com.yuhtin.lauren.core.player;
 
 import com.yuhtin.lauren.application.Lauren;
-import com.yuhtin.lauren.core.enums.Game;
-import com.yuhtin.lauren.core.enums.Rank;
+import com.yuhtin.lauren.core.match.Match;
+import com.yuhtin.lauren.models.enums.GameMode;
+import com.yuhtin.lauren.models.enums.GameType;
+import com.yuhtin.lauren.models.enums.Rank;
 import com.yuhtin.lauren.utils.helper.Utilities;
 
 import java.util.ArrayList;
@@ -10,18 +12,15 @@ import java.util.List;
 
 public class PlayerData {
 
+    public final List<String> winMatches;
     // Geral
     public long userID, dailyDelay;
     public int level = 0, money = 100, experience = 0;
-
     // LudoKing and 8ballpool variables
     public Rank ludoRank = Rank.NOTHING,
             poolRank = Rank.NOTHING;
     public int ludoPoints, ludoWins, ludoMatches,
             poolPoints, poolWins, poolMatches = 0;
-
-
-    public final List<Match> winMatches;
 
     public PlayerData(long userID) {
         this.userID = userID;
@@ -29,8 +28,11 @@ public class PlayerData {
     }
 
     public PlayerData updateLevel() {
-        level = experience / 1000;
-        Utilities.setNick(userID, level);
+        int result = experience / 1000;
+        if (result != level) {
+            level = result;
+            Utilities.setNick(userID, level);
+        }
 
         return this;
     }
@@ -69,14 +71,14 @@ public class PlayerData {
 
         if (match.winPlayer.equals(userID)) {
             win = true;
-            winMatches.add(match);
+            winMatches.add(match.id);
             points = 3;
             experience += 200;
             money += 35;
-            winMatches.add(match);
         }
+        if (match.game.mode == GameMode.RANKED) points = 0;
 
-        if (match.type == Game.POOL) {
+        if (match.game.type == GameType.POOL) {
             multiplier = poolRank.multiplier;
             ++poolMatches;
             poolPoints += points;

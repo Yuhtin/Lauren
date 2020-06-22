@@ -1,9 +1,9 @@
 package com.yuhtin.lauren.database;
 
 import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.models.data.PlayerData;
-import com.yuhtin.lauren.models.data.Match;
-import com.yuhtin.lauren.models.cache.MatchCache;
+import com.yuhtin.lauren.core.player.PlayerData;
+import com.yuhtin.lauren.core.match.Match;
+import com.yuhtin.lauren.core.match.controller.MatchController;
 import com.yuhtin.lauren.utils.serialization.Serializer;
 
 import javax.annotation.Nullable;
@@ -49,7 +49,7 @@ public class Database {
             statement = connection.prepareStatement("SELECT * FROM " + tableMatches);
             ResultSet query = statement.executeQuery();
             while (query.next()) {
-                MatchCache.insert(Serializer.match.deserialize(query.getString("data")));
+                MatchController.insert(Serializer.match.deserialize(query.getString("data")));
             }
             statement.close();
 

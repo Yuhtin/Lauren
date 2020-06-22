@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.events.experience;
 
 import com.yuhtin.lauren.application.Lauren;
-import com.yuhtin.lauren.manager.PlayerDataManager;
+import com.yuhtin.lauren.core.player.controller.PlayerDataController;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -23,6 +23,6 @@ public class ChatMessage extends ListenerAdapter {
                 event.getChannel().sendMessage("Oi bb tudo bem? Se tiver alguma dúvida sobre mim, use `" + Lauren.config.prefix + "ajuda`").queue();
         }
 
-        PlayerDataManager.get(event.getMember().getIdLong()).gainXP(3).updateLevel().save();
+        PlayerDataController.get(event.getMember().getIdLong()).gainXP(3).updateLevel().save();
     }
 }

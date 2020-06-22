@@ -1,14 +1,15 @@
-package com.yuhtin.lauren.core.enums;
+package com.yuhtin.lauren.models.enums;
 
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum GameType {
 
-    CASUAL("Casual"),
-    RANKED("Ranked");
+    POOL("8BallPool", 2),
+    LUDO("LudoKing", 4);
 
-    private final String name;
+    public final String name;
+    public final int minPlayers;
 
     @Override
     public String toString() {

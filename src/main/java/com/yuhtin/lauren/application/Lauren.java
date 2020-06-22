@@ -3,12 +3,14 @@ package com.yuhtin.lauren.application;
 import com.yuhtin.lauren.core.entities.Config;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
+import com.yuhtin.lauren.core.match.controller.MatchController;
 import com.yuhtin.lauren.database.Data;
 import com.yuhtin.lauren.database.Database;
 import com.yuhtin.lauren.database.types.MySQL;
 import com.yuhtin.lauren.database.types.SQLite;
 import com.yuhtin.lauren.manager.CommandManager;
 import com.yuhtin.lauren.manager.EventsManager;
+import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
@@ -21,8 +23,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.time.LocalDateTime;
 import java.util.Scanner;
-import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipOutputStream;
 
 public class Lauren {
@@ -68,7 +70,8 @@ public class Lauren {
         new Thread(() -> {
             new EventsManager(bot, "com.yuhtin.lauren.events");
             new CommandManager(bot, "com.yuhtin.lauren.commands");
-            loadGuild();
+            new Thread(Lauren::loadTasks).start();
+            MatchController.startup();
         }).start();
 
 
@@ -80,18 +83,23 @@ public class Lauren {
         Logger.log("Lauren is now online").save();
     }
 
-    private static void loadGuild() {
+    private static void loadTasks() {
         /*
             Wait 2 seconds for the bot to connect completely before asking for a value
          */
-        new Timer().schedule(
-                new TimerTask() {
+        TaskHelper.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        guild = bot.getGuildById(723625569111113740L);
+                        guild = bot.getGuildCache().iterator().next();
                     }
-                }, 2000
-        );
+                }, TimeUnit.SECONDS.toMillis(2));
+
+        TaskHelper.timer(new TimerTask() {
+            @Override
+            public void run() {
+                MatchController.findMatch();
+            }
+        }, TimeUnit.SECONDS.toMillis(1), TimeUnit.SECONDS.toMillis(1));
     }
 
     public static boolean startDatabase() {

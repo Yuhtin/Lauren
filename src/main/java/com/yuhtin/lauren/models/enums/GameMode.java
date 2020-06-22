@@ -1,12 +1,12 @@
-package com.yuhtin.lauren.core.enums;
+package com.yuhtin.lauren.models.enums;
 
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public enum Game {
+public enum GameMode {
 
-    POOL("8BallPool"),
-    LUDO("LudoKing");
+    CASUAL("Casual"),
+    RANKED("Ranked");
 
     public final String name;
 

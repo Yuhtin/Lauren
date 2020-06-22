@@ -31,6 +31,16 @@ public class Utilities {
         return true;
     }
 
+    public static boolean isOwner(MessageChannel channel, User user) {
+        if (Lauren.config.ownerID != user.getIdLong()) {
+            MessageAction message = channel.sendMessage("<a:nao:704295026036834375> Você não tem permissão para usar esta função");
+            message.queue((m) -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+            Logger.log("Failed to check owner permission for user " + getFullName(user));
+            return false;
+        }
+        return true;
+    }
+
     public static void setNick(Long userID, int level) {
         Member member = Lauren.bot.getGuilds().get(0).getMemberById(userID);
         if (member == null) return;
@@ -69,24 +79,14 @@ public class Utilities {
 
     public static String randomString() {
         StringBuilder sb = new StringBuilder();
-        String a = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        String a = "1234567890";
         int i;
-        for (int t = 0; t < 15; t++) {
+        for (int t = 0; t < 6; t++) {
             i = new Random().nextInt(a.length());
             sb.append(a, i, i + 1);
         }
 
         return sb.toString();
-    }
-
-    public static boolean isOwner(MessageChannel channel, User user) {
-        if (Lauren.config.ownerID != user.getIdLong()) {
-            MessageAction message = channel.sendMessage("<a:nao:704295026036834375> Você não tem permissão para usar esta função");
-            message.queue((m) -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-            Logger.log("Failed to check owner permission for user " + user.getName() + "#" + user.getDiscriminator());
-            return false;
-        }
-        return true;
     }
 
     public static void writeToZip(File file, ZipOutputStream zipStream) throws IOException {
