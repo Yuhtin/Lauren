@@ -1,12 +1,9 @@
 package com.yuhtin.lauren.events;
 
 import com.yuhtin.lauren.application.Lauren;
-import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.core.match.Game;
 import com.yuhtin.lauren.core.match.controller.MatchController;
-import com.yuhtin.lauren.models.enums.GameType;
-import com.yuhtin.lauren.utils.helper.Utilities;
 import com.yuhtin.lauren.models.enums.GameMode;
+import com.yuhtin.lauren.models.enums.GameType;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -41,12 +38,14 @@ public class RowSystemEvents extends ListenerAdapter {
         }
 
         if (type == null) return;
-
-        MatchController.getByType(type, mode).add(event.getUser().getIdLong());
-        Logger.log("The player " + Utilities.getFullName(event.getUser()) + " entred in the row " + type + " " + mode).save();
-
-        event.getChannel().sendMessage("<a:sim:704295025374265387> " + Utilities.getFullName(event.getUser()) + ", você entrou na fila de partida")
-                .queue(message -> message.delete().queueAfter(3, TimeUnit.SECONDS));
         event.getReaction().removeReaction(event.getUser()).queue();
+
+        if (MatchController.putPlayerInRow(type, mode, event.getUserIdLong())) {
+            event.getChannel().sendMessage("<a:sim:704295025374265387> <@" + event.getUserIdLong() + ">, você entrou na fila de partida")
+                    .queue(message -> message.delete().queueAfter(3, TimeUnit.SECONDS));
+        } else {
+            event.getChannel().sendMessage("<a:nao:704295026036834375> <@" + event.getUserIdLong() + ">, você já está numa fila, use `$sair` para sair dela")
+                    .queue(message -> message.delete().queueAfter(3, TimeUnit.SECONDS));
+        }
     }
 }

@@ -21,6 +21,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 import java.util.TimerTask;
@@ -88,18 +89,18 @@ public class Lauren {
             Wait 2 seconds for the bot to connect completely before asking for a value
          */
         TaskHelper.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        guild = bot.getGuildCache().iterator().next();
-                    }
-                }, TimeUnit.SECONDS.toMillis(2));
+            @Override
+            public void run() {
+                guild = bot.getGuildCache().iterator().next();
+            }
+        }, TimeUnit.SECONDS.toMillis(4));
 
-        TaskHelper.timer(new TimerTask() {
+        new Thread(() -> TaskHelper.timer(new TimerTask() {
             @Override
             public void run() {
                 MatchController.findMatch();
             }
-        }, TimeUnit.SECONDS.toMillis(1), TimeUnit.SECONDS.toMillis(1));
+        }, TimeUnit.MINUTES.toMillis(1), TimeUnit.MINUTES.toMillis(1))).start();
     }
 
     public static boolean startDatabase() {
@@ -132,7 +133,13 @@ public class Lauren {
             FileOutputStream fos = new FileOutputStream(file.getPath().split("\\.")[0] + ".zip");
             ZipOutputStream zipOS = new ZipOutputStream(fos);
 
-            Utilities.writeToZip(file, zipOS);
+            new Thread(() -> {
+                try {
+                    Utilities.writeToZip(file, zipOS);
+                } catch (IOException exception) {
+                    Logger.log("Can't write log file to zip file").save();
+                }
+            }).start();
             if (!file.delete()) Logger.log("Can't delete a log file");
             zipOS.close();
             fos.close();

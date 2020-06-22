@@ -6,7 +6,7 @@ import com.yuhtin.lauren.utils.serialization.Serializer;
 
 public class PlayerDataController {
 
-    public static PlayerData get(Long userID) {
+    public static PlayerData get(long userID) {
         String data = Lauren.data.loadPlayer(userID);
         if (data == null) {
             Lauren.data.create(userID);

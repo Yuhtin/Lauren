@@ -42,7 +42,10 @@ public class Match {
             TaskHelper.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    if (startTime == null) Lauren.bot.getTextChannelById(channel).delete().queue();
+                    if (startTime == null) {
+                        Lauren.bot.getTextChannelById(channel).delete().queue();
+                        players.forEach(MatchController.playersInQueue::remove);
+                    }
                 }
             }, TimeUnit.SECONDS.toMillis(20));
         else {
@@ -66,7 +69,7 @@ public class Match {
         this.urlPrint = urlPrint;
         this.finishTime = System.currentTimeMillis();
 
-        players.forEach(id -> PlayerDataController.get(id).computMatch(this).save());
+        new Thread(() -> players.forEach(id -> PlayerDataController.get(id).computMatch(this).save())).start();
 
         MatchController.finishMatch(this);
     }

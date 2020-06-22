@@ -31,7 +31,7 @@ public class PlayerData {
         int result = experience / 1000;
         if (result != level) {
             level = result;
-            Utilities.setNick(userID, level);
+            new Thread(() -> Utilities.setNick(userID, level)).start();
         }
 
         return this;

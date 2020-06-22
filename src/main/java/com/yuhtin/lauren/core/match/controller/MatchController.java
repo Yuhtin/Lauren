@@ -1,6 +1,5 @@
 package com.yuhtin.lauren.core.match.controller;
 
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.match.Game;
 import com.yuhtin.lauren.core.match.Match;
 import com.yuhtin.lauren.models.enums.GameMode;
@@ -14,6 +13,7 @@ public class MatchController {
 
     public static final Map<String, Match> matches = new HashMap<>();
     public static final Map<Game, LinkedList<Long>> row = new HashMap<>();
+    public static final Map<Long, Game> playersInQueue = new HashMap<>();
     public static final Map<String, Match> pastMatches = new HashMap<>();
 
     public static void startup() {
@@ -22,6 +22,20 @@ public class MatchController {
                 row.put(new Game(type, mode), new LinkedList<>());
             }
         }
+    }
+
+    public static boolean putPlayerInRow(GameType type, GameMode mode, Long userID) {
+        if (playersInQueue.containsKey(userID)) return false;
+        getByType(type, mode).add(userID);
+        playersInQueue.put(userID, new Game(type, mode));
+
+        return true;
+    }
+
+    public static void removePlayerFromRow(Long userID) {
+        Game game = MatchController.playersInQueue.get(userID);
+        MatchController.getByType(game.type, game.mode).remove(userID);
+        MatchController.playersInQueue.remove(userID);
     }
 
     public static List<Long> getByType(GameType type, GameMode mode) {
@@ -51,23 +65,18 @@ public class MatchController {
     }
 
     public static void findMatch() {
-        Map<Game, Match> newMatches = new HashMap<>();
-
         row.forEach((game, users) -> {
-            //if (!newMatches.containsKey(game) && users.size() >= game.type.minPlayers) {
-            if (users.size() > 0) {
-                Logger.log("The game " + game + " has " + users.size() + " players").save();
+            if (users.size() >= 1) {
                 Match match = new Match(game);
 
                 List<Long> selectedPlayers = new ArrayList<>();
                 for (int i = 0; i < Math.min(game.type.minPlayers, users.size()); i++) {
-                    selectedPlayers.add(users.get(i));
-                    users.remove(i);
+                    Long userID = users.get(i);
+                    selectedPlayers.add(userID);
+                    users.remove(userID);
                 }
                 match.players = selectedPlayers;
                 match.createChannel();
-
-                new Thread(() -> newMatches.put(game, match)).start();
             }
         });
     }
