@@ -14,7 +14,7 @@ public class ChatMessage extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         if (!event.getChannelType().isGuild() || event.getMember() == null ||
-                event.getAuthor().isBot() || event.getMessage().getContentRaw().startsWith(Lauren.config.prefix))
+                event.getAuthor().isBot())
             return;
 
         if (event.getMessage().getMentionedMembers().size() > 0) {

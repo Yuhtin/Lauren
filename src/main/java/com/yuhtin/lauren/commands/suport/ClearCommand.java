@@ -2,6 +2,7 @@ package com.yuhtin.lauren.commands.suport;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.core.logger.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import net.dv8tion.jda.api.Permission;
@@ -61,6 +62,6 @@ public class ClearCommand extends Command {
 
         Logger.log("The user " + event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator()
                 + " cleared " + cleared + " messages from channel #" + event.getChannel().getName()
-                + " (" + event.getChannel().getId() + ")").save();
+                + " (" + event.getChannel().getId() + ")", LogType.LOG).save();
     }
 }

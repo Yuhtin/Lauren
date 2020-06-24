@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.core.logger.controller;
 
+import com.yuhtin.lauren.core.logger.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
 import lombok.Getter;
 
@@ -8,8 +9,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.temporal.TemporalAccessor;
 
 @Getter
 public class LoggerController {
@@ -41,9 +40,13 @@ public class LoggerController {
 
         bufferedWriter = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
 
-        Logger.log("Registering logs to " + file.getName());
-        Logger.log("Lauren is now registering logs").save();
-        Logger.log("Starting log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s").save();
+        Logger.log("Registering logs to " + file.getName(), LogType.STARTUP);
+        Logger.log("Lauren is now registering logs", LogType.STARTUP).save();
+        Logger.log("Starting log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s", LogType.STARTUP).save();
+    }
+
+    public static LoggerController get() {
+        return INSTANCE;
     }
 
     public void toFile(String log) {
@@ -54,11 +57,7 @@ public class LoggerController {
             bufferedWriter.newLine();
             bufferedWriter.flush();
         } catch (IOException exception) {
-            Logger.log("Attemp to save log: " + log);
+            Logger.log("Attemp to save log: " + log, LogType.WARN);
         }
-    }
-
-    public static LoggerController get() {
-        return INSTANCE;
     }
 }

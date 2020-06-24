@@ -5,6 +5,7 @@ import com.google.common.reflect.ClassPath;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.yuhtin.lauren.core.entities.RawCommand;
+import com.yuhtin.lauren.core.logger.LogType;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.models.cache.CommandCache;
 import com.yuhtin.lauren.core.logger.Logger;
@@ -27,7 +28,7 @@ public class CommandManager {
         try {
             cp = ClassPath.from(getClass().getClassLoader());
         } catch (IOException exception) {
-            Logger.log("ClassPath could not be instantiated");
+            Logger.log("ClassPath could not be instantiated", LogType.ERROR);
             return;
         }
 
@@ -48,7 +49,7 @@ public class CommandManager {
 
                 CommandCache.makeEmbed();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException exception) {
-                Logger.log("The " + classInfo.getName() + " class could not be instantiated");
+                Logger.log("The " + classInfo.getName() + " class could not be instantiated", LogType.WARN);
             }
         }
 

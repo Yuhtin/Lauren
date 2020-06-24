@@ -1,6 +1,7 @@
 package com.yuhtin.lauren.core.match;
 
 import com.yuhtin.lauren.application.Lauren;
+import com.yuhtin.lauren.core.logger.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.match.controller.MatchController;
 import com.yuhtin.lauren.core.player.controller.PlayerDataController;
@@ -47,11 +48,11 @@ public class Match {
                         players.forEach(MatchController.playersInQueue::remove);
                     }
                 }
-            }, TimeUnit.SECONDS.toMillis(20));
+            }, 20, TimeUnit.SECONDS);
         else {
             confirmedPlayers = players;
             if (!startMatch()) {
-                Logger.log("Error in match " + id).save();
+                Logger.log("Error in match " + id, LogType.ERROR).save();
             }
         }
     }

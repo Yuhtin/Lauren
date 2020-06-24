@@ -1,6 +1,7 @@
 package com.yuhtin.lauren.manager;
 
 import com.google.common.reflect.ClassPath;
+import com.yuhtin.lauren.core.logger.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -14,7 +15,7 @@ public class EventsManager {
         try {
             cp = ClassPath.from(getClass().getClassLoader());
         } catch (IOException exception) {
-            Logger.log("ClassPath could not be instantiated");
+            Logger.log("ClassPath could not be instantiated", LogType.ERROR);
             return;
         }
 
@@ -29,7 +30,7 @@ public class EventsManager {
                     throw new InstantiationException();
 
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException exception) {
-                Logger.log("The " + classInfo.getName() + " class could not be instantiated");
+                Logger.log("The " + classInfo.getName() + " class could not be instantiated", LogType.WARN);
             }
         }
     }

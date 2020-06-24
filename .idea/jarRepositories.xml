@@ -22,6 +22,16 @@
       <option name="url" value="http://jcenter.bintray.com" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="lauren-dependencies" />
+      <option name="name" value="Dependencies of Lauren" />
+      <option name="url" value="file://$PROJECT_DIR$/../lauren-dependencies/target/lauren-dependencies.jar" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="lauren-dependencies" />
+      <option name="name" value="Dependencies of Lauren" />
+      <option name="url" value="file://$PROJECT_DIR$/../lauren-dependencies/target/" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="jboss.community" />
       <option name="name" value="JBoss Community repository" />
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />

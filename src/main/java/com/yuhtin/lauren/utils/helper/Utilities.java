@@ -1,6 +1,7 @@
 package com.yuhtin.lauren.utils.helper;
 
 import com.yuhtin.lauren.application.Lauren;
+import com.yuhtin.lauren.core.logger.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -25,17 +26,19 @@ public class Utilities {
         if (!member.hasPermission(permission)) {
             MessageAction message = channel.sendMessage("<a:nao:704295026036834375> Você não tem permissão para usar esta função");
             message.queue((m) -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-            Logger.log("Failed to check permissions for user " + getFullName(member.getUser()));
+            Logger.log("Failed to check permissions for user " + getFullName(member.getUser()), LogType.LOG);
             return false;
         }
         return true;
     }
 
-    public static boolean isOwner(MessageChannel channel, User user) {
+    public static boolean isOwner(MessageChannel channel, User user, boolean showMessage) {
         if (Lauren.config.ownerID != user.getIdLong()) {
+            if (!showMessage) return false;
+
             MessageAction message = channel.sendMessage("<a:nao:704295026036834375> Você não tem permissão para usar esta função");
             message.queue((m) -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-            Logger.log("Failed to check owner permission for user " + getFullName(user));
+            Logger.log("Failed to check owner permission for user " + getFullName(user), LogType.LOG);
             return false;
         }
         return true;

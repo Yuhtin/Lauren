@@ -1,9 +1,10 @@
 package com.yuhtin.lauren.database;
 
+import com.yuhtin.lauren.core.logger.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.core.player.PlayerData;
 import com.yuhtin.lauren.core.match.Match;
 import com.yuhtin.lauren.core.match.controller.MatchController;
+import com.yuhtin.lauren.core.player.PlayerData;
 import com.yuhtin.lauren.utils.serialization.Serializer;
 
 import javax.annotation.Nullable;
@@ -38,7 +39,7 @@ public class Database {
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
-            Logger.log("Database tables could not be created");
+            Logger.log("Database tables could not be created", LogType.ERROR);
             return false;
         }
     }
@@ -55,7 +56,7 @@ public class Database {
 
             return true;
         } catch (SQLException exception) {
-            Logger.log("Could not load data from database").save();
+            Logger.log("Could not load data from database", LogType.ERROR).save();
             return false;
         }
     }
@@ -69,15 +70,16 @@ public class Database {
             statement.setLong(1, userID);
 
             ResultSet query = statement.executeQuery();
+            if (query.getFetchSize() > 1) Logger.log("I found multiple values for id " + userID, LogType.WARN).save();
 
-            while(query.next()) {
+            while (query.next()) {
                 data = query.getString("data");
             }
             statement.close();
 
             return data;
-        }catch (SQLException exception) {
-            Logger.log("Could not load player from database").save();
+        } catch (SQLException exception) {
+            Logger.log("Could not load player from database", LogType.ERROR).save();
             return null;
         }
     }
@@ -93,7 +95,7 @@ public class Database {
             statement.executeUpdate();
             statement.close();
         } catch (SQLException exception) {
-            Logger.log("Could not save data to database").save();
+            Logger.log("Could not save data to database", LogType.ERROR).save();
         }
     }
 
@@ -108,7 +110,7 @@ public class Database {
             statement.executeUpdate();
             statement.close();
         } catch (SQLException exception) {
-            Logger.log("Could not save data to database").save();
+            Logger.log("Could not save data to database", LogType.ERROR).save();
         }
     }
 
@@ -122,7 +124,7 @@ public class Database {
             statement.executeUpdate();
             statement.close();
         } catch (SQLException exception) {
-            Logger.log("Could not create data in database").save();
+            Logger.log("Could not create data in database", LogType.ERROR).save();
         }
     }
 
@@ -136,7 +138,7 @@ public class Database {
             statement.executeUpdate();
             statement.close();
         } catch (SQLException exception) {
-            Logger.log("Could not create data in database").save();
+            Logger.log("Could not create data in database", LogType.ERROR).save();
         }
     }
 
@@ -144,9 +146,9 @@ public class Database {
         if (connection != null) {
             try {
                 connection.close();
-                Logger.log("Connection to the database has been closed").save();
+                Logger.log("Connection to the database has been closed", LogType.LOG).save();
             } catch (SQLException exception) {
-                Logger.log("Could not close the connection to the database").save();
+                Logger.log("Could not close the connection to the database", LogType.ERROR).save();
             }
         }
     }

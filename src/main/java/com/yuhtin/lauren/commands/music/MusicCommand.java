@@ -48,7 +48,7 @@ public class MusicCommand extends Command {
         }
 
         if (event.getMember().getVoiceState() == null || event.getMember().getVoiceState().getChannel() == null
-                || event.getMember().getVoiceState().getChannel().getIdLong() != 722935562155196506L) {
+                || (!Utilities.isOwner(event.getChannel(), event.getAuthor(), false) && event.getMember().getVoiceState().getChannel().getIdLong() != 722935562155196506L)) {
             event.getChannel().sendMessage("\uD83C\uDFB6 Amiguinho, entre no canal `\uD83C\uDFB6┇Batidões` para poder usar comandos de música").queue();
             return;
         }

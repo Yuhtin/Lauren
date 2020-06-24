@@ -9,11 +9,11 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.yuhtin.lauren.core.logger.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.*;
@@ -56,7 +56,7 @@ public class TrackManager extends AudioEventAdapter {
                                                 "Podcast" : "Música") + "`\n" +
                                         "\uD83D\uDCCC Link: [Clique aqui](" + track.getInfo().uri + ")");
 
-                Logger.log("The player " + Utilities.getFullName(member.getUser()) + " added a music").save();
+                Logger.log("The player " + Utilities.getFullName(member.getUser()) + " added a music", LogType.LOG).save();
                 play(track, member);
                 channel.sendMessage(embed.build()).queue();
             }
@@ -80,7 +80,7 @@ public class TrackManager extends AudioEventAdapter {
                                     "\uD83C\uDFB6 Músicas: `" + maxMusics + "`\n\n" +
                                     "\uD83D\uDCCC Link: [Clique aqui](" + trackUrl + ")");
 
-                    Logger.log("The player " + Utilities.getFullName(member.getUser()) + " added a playlist with " + maxMusics + " musics").save();
+                    Logger.log("The player " + Utilities.getFullName(member.getUser()) + " added a playlist with " + maxMusics + " musics", LogType.LOG).save();
                     for (int i = 0; i < maxMusics; ++i) {
                         play(playlist.getTracks().get(i), member);
                     }

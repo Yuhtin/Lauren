@@ -9,19 +9,19 @@ public class Logger {
 
     public final String message;
 
-    public void save() {
-        if (Lauren.config.log)
-            LoggerController.get().toFile(message);
-    }
-
     public static Logger error(Exception exception) {
-        exception.printStackTrace();
-        return new Logger(exception.getMessage());
+        return log(exception.getMessage(), LogType.ERROR);
     }
 
-    public static Logger log(String message) {
+    public static Logger log(String message, LogType logType) {
+        message = logType.toString() + "> " + message;
+
         System.out.println(message);
         return new Logger(message);
     }
 
+    public void save() {
+        if (Lauren.config.log)
+            LoggerController.get().toFile(message);
+    }
 }

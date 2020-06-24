@@ -1,6 +1,7 @@
 package com.yuhtin.lauren.application;
 
 import com.yuhtin.lauren.core.entities.Config;
+import com.yuhtin.lauren.core.logger.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
 import com.yuhtin.lauren.core.match.controller.MatchController;
@@ -39,7 +40,7 @@ public class Lauren {
     public static void main(String[] args) throws InterruptedException {
         config = Config.startup();
         if (config == null) {
-            Logger.log("There was an error loading the config");
+            Logger.log("There was an error loading the config", LogType.ERROR);
             return;
         }
 
@@ -48,7 +49,7 @@ public class Lauren {
                 new LoggerController("log");
             } catch (Exception exception) {
                 config.setLog(false);
-                Logger.log("I founded a error on load LoggerController, logs turned off");
+                Logger.log("I founded a error on load LoggerController, logs turned off", LogType.ERROR);
             }
         }
 
@@ -60,9 +61,9 @@ public class Lauren {
                         .setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"))
                         .setAutoReconnect(true)
                         .build();
-                Logger.log("Lauren has connected to DiscordAPI").save();
+                Logger.log("Lauren has connected to DiscordAPI", LogType.STARTUP).save();
             } catch (LoginException exception) {
-                Logger.log("The bot token is wrong").save();
+                Logger.log("The bot token is wrong", LogType.ERROR).save();
             }
         });
         buildThread.start();
@@ -71,17 +72,17 @@ public class Lauren {
         new Thread(() -> {
             new EventsManager(bot, "com.yuhtin.lauren.events");
             new CommandManager(bot, "com.yuhtin.lauren.commands");
-            new Thread(Lauren::loadTasks).start();
             MatchController.startup();
+            new Thread(Lauren::loadTasks).start();
         }).start();
 
 
         Scanner scanner = new Scanner(System.in);
         while (scanner.nextLine().equalsIgnoreCase("stop")) {
-            finish();
+            new Thread(Lauren::finish).start();
         }
 
-        Logger.log("Lauren is now online").save();
+        Logger.log("Lauren is now online", LogType.STARTUP).save();
     }
 
     private static void loadTasks() {
@@ -93,26 +94,26 @@ public class Lauren {
             public void run() {
                 guild = bot.getGuildCache().iterator().next();
             }
-        }, TimeUnit.SECONDS.toMillis(4));
+        }, 4, TimeUnit.SECONDS);
 
         new Thread(() -> TaskHelper.timer(new TimerTask() {
             @Override
             public void run() {
                 MatchController.findMatch();
             }
-        }, TimeUnit.MINUTES.toMillis(1), TimeUnit.MINUTES.toMillis(1))).start();
+        }, 1, 1, TimeUnit.MINUTES)).start();
     }
 
     public static boolean startDatabase() {
         data = new Database(selectDatabase(config.databaseType), "lauren");
 
         if (data.isNull() || !data.createTable() || !data.loadData()) {
-            Logger.log("Database initialization error occurred").save();
-            Logger.log("Shutting down the system");
+            Logger.log("Database initialization error occurred", LogType.ERROR).save();
+            Logger.log("Shutting down the system", LogType.ERROR);
             return false;
         }
 
-        Logger.log("Connection to database successful").save();
+        Logger.log("Connection to database successful", LogType.STARTUP).save();
         return true;
     }
 
@@ -124,11 +125,12 @@ public class Lauren {
 
     public static void finish() {
         try {
+            data.close();
             LocalDateTime now = LocalDateTime.now();
 
             File file = LoggerController.get().getFile();
-            Logger.log("Compressing the log '" + file.getName() + "' to a zip file").save();
-            Logger.log("Ending log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s").save();
+            Logger.log("Compressing the log '" + file.getName() + "' to a zip file", LogType.LOG).save();
+            Logger.log("Ending log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s", LogType.LOG).save();
 
             FileOutputStream fos = new FileOutputStream(file.getPath().split("\\.")[0] + ".zip");
             ZipOutputStream zipOS = new ZipOutputStream(fos);
@@ -137,14 +139,16 @@ public class Lauren {
                 try {
                     Utilities.writeToZip(file, zipOS);
                 } catch (IOException exception) {
-                    Logger.log("Can't write log file to zip file").save();
+                    Logger.log("Can't write log file to zip file", LogType.ERROR).save();
                 }
             }).start();
-            if (!file.delete()) Logger.log("Can't delete a log file");
+            if (!file.delete()) Logger.log("Can't delete a log file", LogType.WARN).save();
             zipOS.close();
             fos.close();
+
+            Logger.log("Successfully compressed file", LogType.LOG).save();
         } catch (Exception exception) {
-            Logger.log("Can't compress a log file").save();
+            Logger.log("Can't compress a log file", LogType.ERROR).save();
         }
         Lauren.config.updateConfig();
         System.exit(0);

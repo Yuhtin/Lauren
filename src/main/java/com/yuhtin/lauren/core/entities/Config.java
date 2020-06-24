@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.core.entities;
 
+import com.yuhtin.lauren.core.logger.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
 import lombok.Setter;
 import com.yuhtin.lauren.utils.serialization.Serializer;
@@ -32,7 +33,7 @@ public class Config {
                 writer.newLine();
                 writer.flush();
 
-                Logger.log("Put a valid token in the bot's config").save();
+                Logger.log("Put a valid token in the bot's config", LogType.WARN).save();
                 return null;
             }
             BufferedReader reader = new BufferedReader(new FileReader(file.getAbsolutePath()));
@@ -51,7 +52,7 @@ public class Config {
             writer.close();
         } catch (Exception exception) {
             Logger.error(exception).save();
-            Logger.log("An error occurred on save config").save();
+            Logger.log("An error occurred on save config", LogType.ERROR).save();
         }
     }
 }

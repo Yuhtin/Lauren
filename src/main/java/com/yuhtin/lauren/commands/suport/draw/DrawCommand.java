@@ -3,6 +3,7 @@ package com.yuhtin.lauren.commands.suport.draw;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.draw.controller.DrawEditting;
+import com.yuhtin.lauren.core.logger.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.Utilities;
@@ -64,13 +65,13 @@ public class DrawCommand extends Command {
                         DrawController.editing = null;
 
                     } catch (Exception exception) {
-                        Logger.log("Can't send a private message for user " + Utilities.getFullName(event.getMember().getUser()));
+                        Logger.log("Can't send a private message for user " + Utilities.getFullName(event.getMember().getUser()), LogType.LOG);
                     }
                 }
             }, 2, TimeUnit.MINUTES);
 
         } catch (Exception exception) {
-            Logger.log("Can't send a private message for user " + Utilities.getFullName(event.getMember().getUser()));
+            Logger.log("Can't send a private message for user " + Utilities.getFullName(event.getMember().getUser()), LogType.LOG);
         }
     }
 }
