@@ -76,13 +76,13 @@ public class Lauren {
             new Thread(Lauren::loadTasks).start();
         }).start();
 
+        Logger.log("Lauren is now online", LogType.STARTUP).save();
 
         Scanner scanner = new Scanner(System.in);
         while (scanner.nextLine().equalsIgnoreCase("stop")) {
             new Thread(Lauren::finish).start();
         }
 
-        Logger.log("Lauren is now online", LogType.STARTUP).save();
     }
 
     private static void loadTasks() {
@@ -135,20 +135,20 @@ public class Lauren {
             FileOutputStream fos = new FileOutputStream(file.getPath().split("\\.")[0] + ".zip");
             ZipOutputStream zipOS = new ZipOutputStream(fos);
 
-            new Thread(() -> {
-                try {
-                    Utilities.writeToZip(file, zipOS);
-                } catch (IOException exception) {
-                    Logger.log("Can't write log file to zip file", LogType.ERROR).save();
-                }
-            }).start();
+            try {
+                Utilities.writeToZip(file, zipOS);
+            } catch (IOException exception) {
+                Logger.log("Can't write log file to zip file", LogType.ERROR).save();
+            }
+
             if (!file.delete()) Logger.log("Can't delete a log file", LogType.WARN).save();
             zipOS.close();
             fos.close();
 
             Logger.log("Successfully compressed file", LogType.LOG).save();
         } catch (Exception exception) {
-            Logger.log("Can't compress a log file", LogType.ERROR).save();
+            exception.printStackTrace();
+            Logger.log("Can't compress a log file", LogType.WARN).save();
         }
         Lauren.config.updateConfig();
         System.exit(0);
