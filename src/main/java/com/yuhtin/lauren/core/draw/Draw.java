@@ -11,10 +11,8 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.awt.*;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @AllArgsConstructor
@@ -26,6 +24,7 @@ public class Draw {
     public final long user;
     public final TextChannel channel;
     public final List<Long> users = new ArrayList<>();
+    public Timer timer;
     public Message message;
     public boolean finished;
 
@@ -35,7 +34,7 @@ public class Draw {
             m.addReaction("⭐").queue();
         });
 
-        TaskHelper.timer(new TimerTask() {
+        timer = TaskHelper.timer(new TimerTask() {
             @Override
             public void run() {
                 update();
@@ -105,7 +104,7 @@ public class Draw {
             channel.sendMessage("\uD83E\uDD26\uD83C\uDFFD Oh Deus, desde quando tem pessoas que não querem ganhar sorteios DE GRAÇA, em que mundo estou \uD83D\uDE2D").queue();
         }
 
-        schedule.shutdown();
+        timer.cancel();
     }
 
     private void rollWinners(MessageBuilder mb, EmbedBuilder eb) {
