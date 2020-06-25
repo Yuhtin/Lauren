@@ -44,7 +44,7 @@ public class Utilities {
         return true;
     }
 
-    public static void setNick(Long userID, int level) {
+    public static void updateNickByLevel(Long userID, int level) {
         Member member = Lauren.bot.getGuilds().get(0).getMemberById(userID);
         if (member == null) return;
 
