@@ -92,7 +92,7 @@ public class DrawEditingEvent extends ListenerAdapter {
                             .setFooter("Editando as informações do sorteio", event.getJDA().getSelfUser().getAvatarUrl());
 
                     editting.message.editMessage(embed.build()).queue();
-                    editting.message.addReaction(":sim:704295025374265387").queue();
+                    editting.message.addReaction("\uD83D\uDE06").queue();
                     return;
                 }
             }

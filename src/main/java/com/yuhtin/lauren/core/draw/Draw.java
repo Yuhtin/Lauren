@@ -1,7 +1,8 @@
 package com.yuhtin.lauren.core.draw;
 
-import com.yuhtin.lauren.utils.helper.MathUtils;
 import com.yuhtin.lauren.core.draw.controller.DrawController;
+import com.yuhtin.lauren.utils.helper.MathUtils;
+import com.yuhtin.lauren.utils.helper.TaskHelper;
 import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
@@ -10,18 +11,14 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.awt.*;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 @AllArgsConstructor
 public class Draw {
-
-    private final ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
 
     public final String prize;
     public final int winners;
@@ -37,7 +34,13 @@ public class Draw {
             message = m;
             m.addReaction("⭐").queue();
         });
-        schedule.scheduleWithFixedDelay(this::update, 1, 1, TimeUnit.MINUTES);
+
+        TaskHelper.timer(new TimerTask() {
+            @Override
+            public void run() {
+                update();
+            }
+        }, 1, 1, TimeUnit.MINUTES);
     }
 
     public Message render() {
@@ -75,7 +78,10 @@ public class Draw {
         if (render == null) return;
 
         message.editMessage(render).queue(m -> {
-        }, t -> DrawController.delete());
+        }, t -> {
+            message.delete().queue();
+            DrawController.delete();
+        });
     }
 
     public void finish() {

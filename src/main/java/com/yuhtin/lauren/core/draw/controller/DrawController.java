@@ -17,7 +17,6 @@ public class DrawController {
     }
 
     public static void delete() {
-        current.message.delete().queue();
         current = null;
     }
 }
