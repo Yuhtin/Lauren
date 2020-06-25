@@ -96,12 +96,12 @@ public class Lauren {
             }
         }, 4, TimeUnit.SECONDS);
 
-        new Thread(() -> TaskHelper.timer(new TimerTask() {
+        TaskHelper.timer(new TimerTask() {
             @Override
             public void run() {
                 MatchController.findMatch();
             }
-        }, 1, 1, TimeUnit.MINUTES)).start();
+        }, 1, 1, TimeUnit.MINUTES);
     }
 
     public static boolean startDatabase() {

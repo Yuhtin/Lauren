@@ -37,7 +37,7 @@ public class CommandCache {
         commandsType.get(type).add(rawCommand);
     }
 
-    public static void makeEmbed() {
+    public static void construct() {
         helpEmbed = new EmbedBuilder().setImage("https://i.imgur.com/mQVFSrP.gif")
                 .setAuthor("Comandos atacaaaaar \uD83E\uDDF8", "https://google.com", Lauren.bot.getSelfUser().getAvatarUrl())
                 .setDescription(
@@ -59,6 +59,8 @@ public class CommandCache {
                         getCommands(CommandHandler.CommandType.CUSTOM_MESSAGES), false)
                 .addField("**Suporte** \uD83E\uDDF0 - _Comandos para dar suporte aos moderadores do servidor._",
                         getCommands(CommandHandler.CommandType.SUPORT), false);
+
+        commandsType.clear();
     }
 
     private static String getCommands(CommandHandler.CommandType commandType) {

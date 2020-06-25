@@ -12,6 +12,7 @@ public class PlayerDataController {
             Lauren.data.create(userID);
             return new PlayerData(userID);
         }
+        if (data.equalsIgnoreCase("SQLError")) return null;
 
         return Serializer.playerData.deserialize(data);
     }

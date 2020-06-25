@@ -47,12 +47,12 @@ public class CommandManager {
                 } else
                     throw new InstantiationException();
 
-                CommandCache.makeEmbed();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException exception) {
                 Logger.log("The " + classInfo.getName() + " class could not be instantiated", LogType.WARN);
             }
         }
 
+        CommandCache.construct();
         bot.addEventListener(clientBuilder.build());
     }
 

@@ -79,8 +79,9 @@ public class Database {
 
             return data;
         } catch (SQLException exception) {
+            exception.printStackTrace();
             Logger.log("Could not load player from database", LogType.ERROR).save();
-            return null;
+            return "SQLError";
         }
     }
 

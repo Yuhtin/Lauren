@@ -31,7 +31,7 @@ public class RestartCommand extends Command {
         TaskHelper.schedule(new TimerTask() {
             @Override
             public void run() {
-                new Thread(Lauren::finish).start();
+                Lauren.finish();
             }
         }, 3, TimeUnit.SECONDS);
     }
