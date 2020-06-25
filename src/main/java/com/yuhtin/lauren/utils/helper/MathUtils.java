@@ -1,13 +1,12 @@
 package com.yuhtin.lauren.utils.helper;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class MathUtils {
     public static String format(long time) {
         String format = "";
+        if (time < 0) return format;
+
         long hours = TimeUnit.MILLISECONDS.toHours(time);
         long hoursInMillis = TimeUnit.HOURS.toMillis(hours);
         long minutes = TimeUnit.MILLISECONDS.toMinutes(time - hoursInMillis);

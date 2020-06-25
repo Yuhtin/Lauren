@@ -42,8 +42,8 @@ public class Draw {
 
     public Message render() {
         Instant now = Instant.now();
-        String time = MathUtils.format(System.currentTimeMillis() - end.toEpochMilli());
-        if (time.equalsIgnoreCase("**Finalizado**")) {
+        String time = MathUtils.format(end.toEpochMilli() - System.currentTimeMillis());
+        if (time.equalsIgnoreCase("")) {
             finish();
             return null;
         }
