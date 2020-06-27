@@ -2,6 +2,7 @@ package com.yuhtin.lauren.commands.utility;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.application.Lauren;
 import com.yuhtin.lauren.core.player.PlayerData;
 import com.yuhtin.lauren.core.player.controller.PlayerDataController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
@@ -10,7 +11,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import java.awt.*;
 import java.time.Instant;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 @CommandHandler(name = "apostar", type = CommandHandler.CommandType.UTILITY, description = "Apostar uma quantidade de dinheiro")
 public class BetCommand extends Command {
@@ -22,7 +22,6 @@ public class BetCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        event.getMessage().delete().queue();
         String[] arguments = event.getArgs().split(" ");
 
         if (arguments.length < 2) {
@@ -43,7 +42,7 @@ public class BetCommand extends Command {
             }
 
             case "amarelo": {
-                color = "Amarelo";
+                color = "Amarela";
                 multiplier = 2;
                 chance = 19;
                 break;
@@ -75,7 +74,7 @@ public class BetCommand extends Command {
         }
 
         if (money < 20) {
-            event.getChannel().sendMessage("<:chorano:726207542413230142> <@"+ event.getAuthor().getId() +">, você precisa apostar no mínimo `$20`").queue();
+            event.getChannel().sendMessage("<:chorano:726207542413230142> <@" + event.getAuthor().getId() + ">, você precisa apostar no mínimo `$20`").queue();
             return;
         }
 
@@ -87,15 +86,13 @@ public class BetCommand extends Command {
 
         if (new Random().nextInt(100) > chance) {
             data.removeMoney(money).save();
-            event.getChannel().sendMessage("<:chorano:726207542413230142> <@" + event.getAuthor().getId() + ">, você perdeu `$" + money + "` tentando apostar na cor " + color)
-                    .queue(message -> message.delete().queueAfter(5, TimeUnit.SECONDS));
+            event.getChannel().sendMessage("<:chorano:726207542413230142> <@" + event.getAuthor().getId() + ">, você perdeu `$" + money + "` tentando apostar na cor " + color).queue();
             return;
         }
 
         int total = (int) (money * multiplier - (money));
         data.addMoney(total).save();
-        event.getChannel().sendMessage("<a:palmas:726205273974374440> Você ganhou `+ $" + total + "` apostando na cor " + color)
-                .queue(message -> message.delete().queueAfter(5, TimeUnit.SECONDS));
+        event.getChannel().sendMessage("<a:palmas:726205273974374440> <@" + event.getAuthor().getId() + ">, você ganhou `+ $" + total + "` apostando na cor " + color).queue();
     }
 
     private EmbedBuilder helpMessage(Color color) {
@@ -108,7 +105,7 @@ public class BetCommand extends Command {
                         "- <:online:703089222021808170> Verde (**5x**)")
                 .setColor(color)
                 .setTimestamp(Instant.now())
-                .setFooter("Informações de apostas usado em");
+                .setFooter("Sistema de apostas", Lauren.bot.getSelfUser().getAvatarUrl());
     }
 
 }

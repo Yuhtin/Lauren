@@ -32,6 +32,11 @@ public class PlayerData {
         if (result != level) {
             level = result;
             new Thread(() -> Utilities.updateNickByLevel(userID, level)).start();
+            if (level == 21) {
+                Lauren.guild.addRoleToMember(userID, Lauren.guild.getRoleById(722091214400258068L)).queue();
+                Lauren.guild.getTextChannelById(700683423429165096L)
+                        .sendMessage("<:prime:722115525232296056> O jogador " + Utilities.getFullName(Lauren.bot.getUserById(userID)) + " se tornou prime").queue();
+            }
         }
 
         return this;
