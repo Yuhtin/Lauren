@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.application;
 
+import com.yuhtin.lauren.commands.music.MusicCommand;
 import com.yuhtin.lauren.core.entities.Config;
 import com.yuhtin.lauren.core.logger.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
@@ -144,6 +145,8 @@ public class Lauren {
             zipFileOutput.close();
             outputStream.close();
 
+            MusicCommand.trackManager.musicManager.scheduler.queue.clear();
+            MusicCommand.trackManager.audioManager.shutdown();
             Logger.log("Successfully compressed file", LogType.LOG).save();
         } catch (Exception exception) {
             exception.printStackTrace();

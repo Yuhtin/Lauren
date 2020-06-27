@@ -38,6 +38,9 @@ public class TrackScheduler extends AudioEventAdapter {
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         if (queue.isEmpty()) Lauren.guild.getAudioManager().closeAudioConnection();
-        else player.playTrack(queue.element().getTrack());
+        else {
+            queue.poll();
+            player.playTrack(queue.element().getTrack());
+        }
     }
 }

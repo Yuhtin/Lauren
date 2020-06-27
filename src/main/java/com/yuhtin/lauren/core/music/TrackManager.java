@@ -76,7 +76,7 @@ public class TrackManager extends AudioEventAdapter {
                                     "\uD83D\uDCCC Link: [Clique aqui](" + trackUrl + ")");
 
                     Logger.log("The player " + Utilities.getFullName(member.getUser()) + " added a playlist with " + maxMusics + " musics", LogType.LOG).save();
-                    for (int i = 0; i < maxMusics; ++i) {
+                    for (int i = 0; i < maxMusics; i++) {
                         play(playlist.getTracks().get(i), member);
                     }
 
