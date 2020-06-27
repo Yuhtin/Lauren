@@ -75,19 +75,19 @@ public class BetCommand extends Command {
         }
 
         if (money < 20) {
-            event.getChannel().sendMessage("<:chorano:726207542413230142> Você precisa apostar no mínimo `$20`").queue();
+            event.getChannel().sendMessage("<:chorano:726207542413230142> <@"+ event.getAuthor().getId() +">, você precisa apostar no mínimo `$20`").queue();
             return;
         }
 
         PlayerData data = PlayerDataController.get(event.getAuthor().getIdLong());
         if (data.money < money) {
-            event.getChannel().sendMessage("<:chorano:726207542413230142> Você não tem dinheiro suficiente para realizar esta aposta.").queue();
+            event.getChannel().sendMessage("<:chorano:726207542413230142> <@" + event.getAuthor().getId() + ">, você não tem dinheiro suficiente para realizar esta aposta.").queue();
             return;
         }
 
         if (new Random().nextInt(100) > chance) {
             data.removeMoney(money).save();
-            event.getChannel().sendMessage("<:chorano:726207542413230142> Você perdeu `$" + money + "` tentando apostar na cor " + color)
+            event.getChannel().sendMessage("<:chorano:726207542413230142> <@" + event.getAuthor().getId() + ">, você perdeu `$" + money + "` tentando apostar na cor " + color)
                     .queue(message -> message.delete().queueAfter(5, TimeUnit.SECONDS));
             return;
         }
