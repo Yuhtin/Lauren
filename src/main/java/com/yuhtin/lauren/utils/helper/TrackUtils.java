@@ -11,7 +11,7 @@ public class TrackUtils {
         int progressBars = (int) (10 * percent);
 
         StringBuilder builder = new StringBuilder();
-        builder.append(getTimestamp(info.getPosition())).append(" / ").append(getTimestamp(info.getInfo().length)).append(" [");
+        builder.append(getTimeStamp(info.getPosition())).append(" / ").append(getTimeStamp(info.getInfo().length)).append(" [");
 
         for (int i = 0; i < progressBars; i++) {
             builder.append("─");
@@ -33,10 +33,10 @@ public class TrackUtils {
         String title = trackInfo.title;
         long length = trackInfo.length;
 
-        return "`[ " + getTimestamp(length) + " ]` " + title + " (<@" + info.getAuthor().getIdLong() + ">)\n";
+        return "`[ " + getTimeStamp(length) + " ]` " + title + " (<@" + info.getAuthor().getIdLong() + ">)\n";
     }
 
-    public static String getTimestamp(long milis) {
+    public static String getTimeStamp(long milis) {
         long seconds = milis / 1000L;
         final long hours = Math.floorDiv(seconds, 3600L);
         seconds -= hours * 3600L;

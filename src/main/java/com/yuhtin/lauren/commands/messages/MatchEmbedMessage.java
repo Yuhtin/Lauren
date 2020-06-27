@@ -24,8 +24,7 @@ public class MatchEmbedMessage extends Command {
 
         String[] arguments = event.getArgs().split(" ");
         if (arguments.length < 2) {
-            event.getChannel().sendMessage("♻️ Calma kkkk, vou tentar te ajudar ❤️. Use o comando `" +
-                    Lauren.config.prefix + "matchembed <ludo ou pool> <casual ou ranked>`").queue();
+            event.getChannel().sendMessage("♻️ Calma kkkk, vou tentar te ajudar ❤️. Use o comando `$matchembed <ludo ou pool> <casual ou ranked>`").queue();
             return;
        }
 

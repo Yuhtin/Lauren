@@ -2,7 +2,6 @@ package com.yuhtin.lauren.core.draw;
 
 import com.yuhtin.lauren.core.draw.controller.DrawController;
 import com.yuhtin.lauren.utils.helper.MathUtils;
-import com.yuhtin.lauren.utils.helper.TaskHelper;
 import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
@@ -11,12 +10,17 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.awt.*;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @AllArgsConstructor
 public class Draw {
+
+    private final ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
 
     public final String prize;
     public final int winners;
@@ -24,7 +28,6 @@ public class Draw {
     public final long user;
     public final TextChannel channel;
     public final List<Long> users = new ArrayList<>();
-    public Timer timer;
     public Message message;
     public boolean finished;
 
@@ -33,13 +36,7 @@ public class Draw {
             message = m;
             m.addReaction("⭐").queue();
         });
-
-        timer = TaskHelper.timer(new TimerTask() {
-            @Override
-            public void run() {
-                update();
-            }
-        }, 1, 1, TimeUnit.MINUTES);
+        schedule.scheduleWithFixedDelay(this::update, 1, 1, TimeUnit.MINUTES);
     }
 
     public Message render() {
@@ -104,7 +101,7 @@ public class Draw {
             channel.sendMessage("\uD83E\uDD26\uD83C\uDFFD Oh Deus, desde quando tem pessoas que não querem ganhar sorteios DE GRAÇA, em que mundo estou \uD83D\uDE2D").queue();
         }
 
-        timer.cancel();
+        schedule.shutdown();
     }
 
     private void rollWinners(MessageBuilder mb, EmbedBuilder eb) {

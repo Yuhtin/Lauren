@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.core.draw.controller;
+package com.yuhtin.lauren.models.enums;
 
 public enum DrawEditingStatus {
 

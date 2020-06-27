@@ -86,9 +86,8 @@ public class Lauren {
     }
 
     private static void loadTasks() {
-        /*
-            Wait 2 seconds for the bot to connect completely before asking for a value
-         */
+        /* Wait 4 seconds for the bot to connect completely before asking for a value */
+
         TaskHelper.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -132,24 +131,25 @@ public class Lauren {
             Logger.log("Compressing the log '" + file.getName() + "' to a zip file", LogType.LOG).save();
             Logger.log("Ending log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s", LogType.LOG).save();
 
-            FileOutputStream fos = new FileOutputStream(file.getPath().split("\\.")[0] + ".zip");
-            ZipOutputStream zipOS = new ZipOutputStream(fos);
+            FileOutputStream outputStream = new FileOutputStream(file.getPath().split("\\.")[0] + ".zip");
+            ZipOutputStream zipFileOutput = new ZipOutputStream(outputStream);
 
             try {
-                Utilities.writeToZip(file, zipOS);
+                Utilities.writeToZip(file, zipFileOutput);
             } catch (IOException exception) {
                 Logger.log("Can't write log file to zip file", LogType.ERROR).save();
             }
 
             if (!file.delete()) Logger.log("Can't delete a log file", LogType.WARN).save();
-            zipOS.close();
-            fos.close();
+            zipFileOutput.close();
+            outputStream.close();
 
             Logger.log("Successfully compressed file", LogType.LOG).save();
         } catch (Exception exception) {
             exception.printStackTrace();
             Logger.log("Can't compress a log file", LogType.WARN).save();
         }
+
         Lauren.config.updateConfig();
         System.exit(0);
     }

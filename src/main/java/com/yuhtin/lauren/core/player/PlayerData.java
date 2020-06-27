@@ -56,6 +56,12 @@ public class PlayerData {
         return this;
     }
 
+    public PlayerData removeMoney(double quantity) {
+        money -= quantity;
+
+        return this;
+    }
+
     public PlayerData gainXP(double quantity) {
         experience += (quantity * (poolRank.multiplier + ludoRank.multiplier));
 
@@ -100,6 +106,10 @@ public class PlayerData {
     }
 
     public void save() {
+        if (money < 0) money = 0;
+        if (ludoPoints < 0) ludoPoints = 0;
+        if (poolPoints < 0) poolPoints = 0;
+
         Lauren.data.save(userID, this);
     }
 }

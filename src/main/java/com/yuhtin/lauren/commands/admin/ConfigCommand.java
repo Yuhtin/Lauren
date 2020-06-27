@@ -39,13 +39,13 @@ public class ConfigCommand extends Command {
 
                     .setDescription(
                             "\n" +
-                                    " **• " + Lauren.config.prefix + "config** setprefix <prefixo>\n" +
+                                    " **• $config** setprefix <prefixo>\n" +
                                     "  Atual: " + Lauren.config.prefix + "\n" +
                                     "  Use para trocar o meu identificador\n\n" +
-                                    " **• " + Lauren.config.prefix + "config** setregistration <messageid>\n" +
+                                    " **• $config** setregistration <messageid>\n" +
                                     "  Atual: " + Lauren.config.resgistrationId + "\n" +
                                     "  Troque o ID da mensagem de registro\n\n" +
-                                    " **• " + Lauren.config.prefix + "config** setlog <true/false>\n" +
+                                    " **• $config** setlog <true/false>\n" +
                                     "  Atual: " + (Lauren.config.log ? "Ativado" : "Desativado") + "\n" +
                                     "  Ativar ou desativar o salvamento de logs\n\n" +
                                     "\n");

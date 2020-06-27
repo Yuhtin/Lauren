@@ -1,6 +1,5 @@
 package com.yuhtin.lauren.commands.help;
 
-import com.yuhtin.lauren.application.Lauren;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
@@ -12,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 @CommandHandler(name = "ajuda", type = CommandHandler.CommandType.HELP, description = "Informações de comandos do bot")
 public class HelpCommand extends Command {
+
     public HelpCommand() {
         this.name = "ajuda";
         this.aliases = new String[]{"help"};
@@ -23,7 +23,7 @@ public class HelpCommand extends Command {
         if (args.length > 1) {
             if (!CommandCache.commands.containsKey(args[1].toLowerCase())) {
                 event.getMessage().delete().queue();
-                event.getChannel().sendMessage("Hmm, não encontrei o comando `" + args[1] + "` tente usar `" + Lauren.config.prefix + "ajuda` para ver meus comandos.")
+                event.getChannel().sendMessage("Hmm, não encontrei o comando `" + args[1] + "` tente usar `$ajuda` para ver meus comandos.")
                         .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
                 return;
             }

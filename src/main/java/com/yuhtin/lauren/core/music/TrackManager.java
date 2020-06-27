@@ -34,12 +34,7 @@ public class TrackManager extends AudioEventAdapter {
     }
 
     public void loadTrack(String trackUrl, Member member, TextChannel channel) {
-        if (member.getVoiceState() == null || member.getVoiceState().getChannel() == null) {
-            channel.sendMessage("\ud83d\udcbf Você não está em um canal de voz \uD83D\uDE2D").queue();
-            return;
-        }
         channel.sendTyping().queue();
-
         audioManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
 
             @Override

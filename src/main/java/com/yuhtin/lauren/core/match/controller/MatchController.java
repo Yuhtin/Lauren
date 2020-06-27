@@ -2,6 +2,8 @@ package com.yuhtin.lauren.core.match.controller;
 
 import com.yuhtin.lauren.core.match.Game;
 import com.yuhtin.lauren.core.match.Match;
+import com.yuhtin.lauren.core.player.PlayerData;
+import com.yuhtin.lauren.core.player.controller.PlayerDataController;
 import com.yuhtin.lauren.models.enums.GameMode;
 import com.yuhtin.lauren.models.enums.GameType;
 import net.dv8tion.jda.api.entities.Member;
@@ -69,12 +71,30 @@ public class MatchController {
             if (users.size() >= 1) {
                 Match match = new Match(game);
 
+                int rankPosition = 99;
                 List<Long> selectedPlayers = new ArrayList<>();
                 for (int i = 0; i < Math.min(game.type.minPlayers, users.size()); i++) {
                     Long userID = users.get(i);
-                    selectedPlayers.add(userID);
-                    users.remove(userID);
+
+                    if (game.mode == GameMode.RANKED) {
+                        PlayerData data = PlayerDataController.get(userID);
+                        int pessoalPosition = game.type == GameType.LUDO ? data.ludoRank.position : data.poolRank.position;
+
+                        if (rankPosition == 99) rankPosition = pessoalPosition;
+                        for (i = pessoalPosition - 1; i < pessoalPosition + 1; i++) {
+                            if (rankPosition == i) {
+                                selectedPlayers.add(userID);
+                                users.remove(userID);
+                                break;
+                            }
+
+                        }
+                    } else {
+                        selectedPlayers.add(userID);
+                        users.remove(userID);
+                    }
                 }
+
                 match.players = selectedPlayers;
                 match.createChannel();
             }

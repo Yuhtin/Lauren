@@ -27,7 +27,7 @@ public class CommandCache {
                 .setImage("https://pa1.narvii.com/7093/1d8551884cec1cb2dd99b88ff4c745436b21f1b4r1-500-500_hq.gif")
                 .setAuthor("Informações do comando " + rawCommand.name, "https://google.com", Lauren.bot.getSelfUser().getAvatarUrl())
                 .setDescription("Você está vendo as informações específicas do comando `" + rawCommand.name + "`," +
-                        " para ver todos os comandos utilize `" + Lauren.config.prefix + "ajuda <comando>`")
+                        " para ver todos os comandos utilize `$ajuda <comando>`")
 
                 .addField("__Informações do comando:__", "", false)
                 .addField("**Nome** ❓ - _Identificador principal do comando_", rawCommand.name, false)
@@ -41,7 +41,7 @@ public class CommandCache {
         helpEmbed = new EmbedBuilder().setImage("https://i.imgur.com/mQVFSrP.gif")
                 .setAuthor("Comandos atacaaaaar \uD83E\uDDF8", "https://google.com", Lauren.bot.getSelfUser().getAvatarUrl())
                 .setDescription(
-                        "Para mais informações sobre um comando, digite `" + Lauren.config.prefix + "ajuda <comando>` que eu lhe informarei mais sobre ele <a:feliz:712669414566395944>")
+                        "Para mais informações sobre um comando, digite `$ajuda <comando>` que eu lhe informarei mais sobre ele <a:feliz:712669414566395944>")
 
                 .addField("**Ajuda** ❓ - _Este módulo tem comandos para te ajudar na utilização do bot e do servidor._",
                         getCommands(CommandHandler.CommandType.HELP), false)

@@ -5,7 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.yuhtin.lauren.core.logger.Logger;
+import com.yuhtin.lauren.application.Lauren;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.MathUtils;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
@@ -115,7 +115,7 @@ public class MusicCommand extends Command {
                     }
 
                     EmbedBuilder embed = new EmbedBuilder()
-                            .setTitle("\ud83d\udcbf Informações da fila [" + TrackUtils.getTimestamp(totalTime) + "]");
+                            .setTitle("\ud83d\udcbf Informações da fila [" + TrackUtils.getTimeStamp(totalTime) + "]");
 
                     if (builder.length() <= 2001) {
                         embed.setDescription(
@@ -164,7 +164,8 @@ public class MusicCommand extends Command {
                     }
 
                     event.getMessage().delete().queue();
-                    event.getChannel().sendMessage("\uD83E\uDDEC **" + event.getMember().getNickname() + "** votou para pular a música **(" + info.getSkips() + "/" + (audio.getMembers().size() - 2) + ")**").queue();
+                    String name = event.getMember().getNickname() == null ? Utilities.getFullName(event.getAuthor()) : event.getMember().getNickname();
+                    event.getChannel().sendMessage("\uD83E\uDDEC **" + name + "** votou para pular a música **(" + info.getSkips() + "/" + (audio.getMembers().size() - 2) + ")**").queue();
                     return;
                 }
 
@@ -184,6 +185,7 @@ public class MusicCommand extends Command {
 
                     trackManager.purgeQueue();
                     trackManager.player.stopTrack();
+
                     event.getChannel().sendMessage("Que ⁉️ Pensei que estavam gostando do batidão \uD83D\uDC94 Prometo que da próxima será melhor").queue();
                     return;
                 }

@@ -3,7 +3,7 @@ package com.yuhtin.lauren.events.messages;
 import com.yuhtin.lauren.application.Lauren;
 import com.yuhtin.lauren.utils.helper.MathUtils;
 import com.yuhtin.lauren.core.draw.controller.DrawController;
-import com.yuhtin.lauren.core.draw.controller.DrawEditingStatus;
+import com.yuhtin.lauren.models.enums.DrawEditingStatus;
 import com.yuhtin.lauren.core.draw.controller.DrawEditting;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;

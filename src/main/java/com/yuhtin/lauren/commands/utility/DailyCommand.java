@@ -21,6 +21,7 @@ public class DailyCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
         PlayerData data = PlayerDataController.get(event.getMember().getIdLong());
+
         if (data.dailyDelay > System.currentTimeMillis()) {
             event.getChannel().sendMessage("Poxa 😥 Você precisa aguardar mais `"
                     + MathUtils.format(data.dailyDelay - System.currentTimeMillis()) + "` para usar este comando novamente").queue();
@@ -30,6 +31,6 @@ public class DailyCommand extends Command {
         double bonus = Utilities.isBooster(event.getMember()) ? 1.5 : 1;
 
         data.setDelay(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1)).addMoney(15 * bonus).gainXP(100 * bonus).save();
-        event.getChannel().sendMessage("🌟 Aaaaa, eu to muito feliz por ter lembrado de mim e pego seu daily 💙 Veja suas informações atualizadas usando `$perfil`").queue();
+        event.getChannel().sendMessage("🌟 Aaaaa, eu to muito feliz por ter lembrado de mim e pego seu daily 💙 Veja suas informações atualizadas usando `$perfil` ").queue();
     }
 }
