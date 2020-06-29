@@ -146,7 +146,8 @@ public class MusicCommand extends Command {
                 case "pular": {
                     if (isIdle(event.getTextChannel())) return;
                     if (isCurrentDj(event.getMember())) {
-                        forceSkipTrack(event.getTextChannel());
+                        forceSkipTrack();
+                        event.getChannel().sendMessage("\u23e9 Pulei a música pra você <3").queue();
                         return;
                     }
 
@@ -158,7 +159,7 @@ public class MusicCommand extends Command {
 
                     info.addSkip(event.getAuthor());
                     if (info.getSkips() >= audio.getMembers().size() - 2) {
-                        forceSkipTrack(event.getTextChannel());
+                        forceSkipTrack();
                         event.getChannel().sendMessage("\uD83E\uDDF6 Amo quando todos concordam entre si, pulando a música").queue();
                         return;
                     }
@@ -174,7 +175,9 @@ public class MusicCommand extends Command {
                     if (isIdle(event.getTextChannel())) return;
                     if (!Utilities.isDJ(event.getMember(), event.getTextChannel(), true)) return;
 
-                    forceSkipTrack(event.getTextChannel());
+                    forceSkipTrack();
+                    event.getChannel().sendMessage("\u23e9 Pulei a música pra você <3").queue();
+
                     return;
                 }
 
@@ -244,9 +247,8 @@ public class MusicCommand extends Command {
         return false;
     }
 
-    private void forceSkipTrack(TextChannel channel) {
+    private void forceSkipTrack() {
         trackManager.player.stopTrack();
-        channel.sendMessage("\u23e9 Pulei a música pra você <3").queue();
     }
 
     private void sendHelpMessage(TextChannel chat) {
