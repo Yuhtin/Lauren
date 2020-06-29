@@ -1,6 +1,6 @@
 package com.yuhtin.lauren.database;
 
-import com.yuhtin.lauren.core.logger.LogType;
+import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.match.Match;
 import com.yuhtin.lauren.core.match.controller.MatchController;

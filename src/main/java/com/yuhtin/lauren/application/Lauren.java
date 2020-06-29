@@ -1,8 +1,7 @@
 package com.yuhtin.lauren.application;
 
-import com.yuhtin.lauren.commands.music.MusicCommand;
 import com.yuhtin.lauren.core.entities.Config;
-import com.yuhtin.lauren.core.logger.LogType;
+import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
 import com.yuhtin.lauren.core.match.controller.MatchController;
@@ -39,6 +38,8 @@ public class Lauren {
     public static Database data;
 
     public static void main(String[] args) throws InterruptedException {
+        startTime = System.currentTimeMillis();
+
         config = Config.startup();
         if (config == null) {
             Logger.log("There was an error loading the config", LogType.ERROR);
@@ -145,8 +146,6 @@ public class Lauren {
             zipFileOutput.close();
             outputStream.close();
 
-            MusicCommand.trackManager.musicManager.scheduler.queue.clear();
-            MusicCommand.trackManager.audioManager.shutdown();
             Logger.log("Successfully compressed file", LogType.LOG).save();
         } catch (Exception exception) {
             exception.printStackTrace();

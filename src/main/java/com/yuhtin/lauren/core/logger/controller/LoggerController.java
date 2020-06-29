@@ -1,6 +1,6 @@
 package com.yuhtin.lauren.core.logger.controller;
 
-import com.yuhtin.lauren.core.logger.LogType;
+import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
 import lombok.Getter;
 

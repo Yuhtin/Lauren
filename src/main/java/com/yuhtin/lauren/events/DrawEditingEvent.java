@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.events.messages;
+package com.yuhtin.lauren.events;
 
 import com.yuhtin.lauren.application.Lauren;
 import com.yuhtin.lauren.utils.helper.MathUtils;

@@ -5,7 +5,7 @@ import com.google.common.reflect.ClassPath;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.yuhtin.lauren.core.entities.RawCommand;
-import com.yuhtin.lauren.core.logger.LogType;
+import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.models.cache.CommandCache;
 import com.yuhtin.lauren.core.logger.Logger;

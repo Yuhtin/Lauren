@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.utils.helper;
 
 import com.yuhtin.lauren.application.Lauren;
-import com.yuhtin.lauren.core.logger.LogType;
+import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;

@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.core.logger;
+package com.yuhtin.lauren.models.enums;
 
 public enum LogType {
     LOG,

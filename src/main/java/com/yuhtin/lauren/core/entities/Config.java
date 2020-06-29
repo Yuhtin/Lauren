@@ -1,6 +1,6 @@
 package com.yuhtin.lauren.core.entities;
 
-import com.yuhtin.lauren.core.logger.LogType;
+import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
 import lombok.Setter;
 import com.yuhtin.lauren.utils.serialization.Serializer;

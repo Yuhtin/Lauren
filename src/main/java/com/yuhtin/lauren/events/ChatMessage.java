@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.events.experience;
+package com.yuhtin.lauren.events;
 
 import com.yuhtin.lauren.core.player.controller.PlayerDataController;
 import net.dv8tion.jda.api.entities.User;

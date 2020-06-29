@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.manager;
 
 import com.google.common.reflect.ClassPath;
-import com.yuhtin.lauren.core.logger.LogType;
+import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
