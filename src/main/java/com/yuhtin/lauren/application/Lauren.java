@@ -1,7 +1,6 @@
 package com.yuhtin.lauren.application;
 
 import com.yuhtin.lauren.core.entities.Config;
-import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
 import com.yuhtin.lauren.core.match.controller.MatchController;
@@ -11,8 +10,10 @@ import com.yuhtin.lauren.database.types.MySQL;
 import com.yuhtin.lauren.database.types.SQLite;
 import com.yuhtin.lauren.manager.CommandManager;
 import com.yuhtin.lauren.manager.EventsManager;
+import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.messages.AsciiBox;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -78,7 +79,21 @@ public class Lauren {
             new Thread(Lauren::loadTasks).start();
         }).start();
 
-        Logger.log("Lauren is now online", LogType.STARTUP).save();
+
+        String[] loadNonFormated = new String[]{
+                "",
+                "Lauren v1.3.1-SNAPSHOT",
+                "Author: Yuhtin#9147",
+                "",
+                "All systems has loaded",
+                "Lauren is now online"
+        };
+
+        Logger.log(new AsciiBox()
+                .size(50)
+                .borders("━", "┃")
+                .corners("┏", "┓", "┗", "┛")
+                .render(loadNonFormated), LogType.STARTUP);
 
         Scanner scanner = new Scanner(System.in);
         while (scanner.nextLine().equalsIgnoreCase("stop")) {
