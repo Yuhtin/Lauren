@@ -9,7 +9,11 @@ import net.dv8tion.jda.api.entities.Member;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
-@CommandHandler(name = "avatar", type = CommandHandler.CommandType.UTILITY, description = "Espiar a imagem de outro usuário OjO")
+@CommandHandler(
+        name = "avatar",
+        type = CommandHandler.CommandType.UTILITY,
+        description = "Espiar a imagem de outro usuário OjO",
+        alias = {"image", "imagem"})
 public class AvatarCommand extends Command {
     public AvatarCommand() {
         this.name = "avatar";

@@ -21,6 +21,8 @@ public class Logger {
         return new Logger(message);
     }
 
+    public static Logger log(String message) { return log(message, LogType.LOG); }
+
     public void save() {
         if (Lauren.config.log)
             LoggerController.get().toFile(message);

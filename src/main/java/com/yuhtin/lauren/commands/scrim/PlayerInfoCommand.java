@@ -2,16 +2,20 @@ package com.yuhtin.lauren.commands.scrim;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.core.player.controller.PlayerDataController;
 import com.yuhtin.lauren.core.player.PlayerData;
+import com.yuhtin.lauren.core.player.controller.PlayerDataController;
+import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
-import com.yuhtin.lauren.utils.helper.Utilities;
 
 import java.time.Instant;
 
-@CommandHandler(name = "perfil", type = CommandHandler.CommandType.SCRIM, description = "Visualizar o perfil de outro usuário")
+@CommandHandler(
+        name = "perfil",
+        type = CommandHandler.CommandType.SCRIM,
+        description = "Visualizar o perfil de outro usuário",
+        alias = {"pinfo", "jogador", "playerinfo", "player"})
 public class PlayerInfoCommand extends Command {
 
     public PlayerInfoCommand() {

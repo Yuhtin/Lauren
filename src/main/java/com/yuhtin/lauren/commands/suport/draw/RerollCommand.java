@@ -4,15 +4,19 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.draw.controller.DrawController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import net.dv8tion.jda.api.Permission;
 import com.yuhtin.lauren.utils.helper.Utilities;
+import net.dv8tion.jda.api.Permission;
 
-@CommandHandler(name = "reroll", type = CommandHandler.CommandType.SUPORT, description = "Sortear um ganhador novamente")
+@CommandHandler(
+        name = "reroll",
+        type = CommandHandler.CommandType.SUPORT,
+        description = "Sortear um ganhador novamente",
+        alias = {"resortear", "redraw"})
 public class RerollCommand extends Command {
 
     public RerollCommand() {
         this.name = "reroll";
-        this.aliases = new String[]{"sortearnovamente", "redraw"};
+        this.aliases = new String[]{"resortear", "redraw"};
     }
 
     @Override

@@ -5,14 +5,13 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.yuhtin.lauren.application.Lauren;
+import com.yuhtin.lauren.core.music.AudioInfo;
+import com.yuhtin.lauren.core.music.AudioPlayerSendHandler;
+import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.MathUtils;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
 import com.yuhtin.lauren.utils.helper.Utilities;
-import com.yuhtin.lauren.core.music.AudioInfo;
-import com.yuhtin.lauren.core.music.AudioPlayerSendHandler;
-import com.yuhtin.lauren.core.music.TrackManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -23,16 +22,19 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.Set;
 
-@CommandHandler(name = "tocar", type = CommandHandler.CommandType.MUSIC, description = "Colocar eu para por um som na caixa")
+@CommandHandler(
+        name = "tocar",
+        type = CommandHandler.CommandType.MUSIC,
+        description = "Colocar eu para por um som na caixa",
+        alias = {"m", "music", "musica", "play"})
 public class MusicCommand extends Command {
 
+    public static TrackManager trackManager;
+    public static VoiceChannel audio = null;
     public MusicCommand() {
         name = "tocar";
         aliases = new String[]{"m", "music", "play", "musica"};
     }
-
-    public static TrackManager trackManager;
-    public static VoiceChannel audio = null;
 
     @Override
     protected void execute(CommandEvent event) {

@@ -7,13 +7,16 @@ import com.yuhtin.lauren.utils.helper.MathUtils;
 import lombok.SneakyThrows;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.time.Instant;
 
-@CommandHandler(name = "ping", type = CommandHandler.CommandType.UTILITY, description = "Verificar as informações da minha hospedagem")
+@CommandHandler(
+        name = "ping",
+        type = CommandHandler.CommandType.UTILITY,
+        description = "Verificar as informações da minha hospedagem",
+        alias = {"pong", "delay"})
 public class PingCommand extends Command {
     public PingCommand() {
         this.name = "ping";

@@ -26,7 +26,7 @@ public class Utilities {
         if (!member.hasPermission(permission)) {
             MessageAction message = channel.sendMessage("<a:nao:704295026036834375> Você não tem permissão para usar esta função");
             message.queue((m) -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-            Logger.log("Failed to check permissions for user " + getFullName(member.getUser()), LogType.LOG);
+            Logger.log("Failed to check permissions for user " + getFullName(member.getUser()));
             return false;
         }
         return true;
@@ -38,7 +38,7 @@ public class Utilities {
 
             MessageAction message = channel.sendMessage("<a:nao:704295026036834375> Você não tem permissão para usar esta função");
             message.queue((m) -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-            Logger.log("Failed to check owner permission for user " + getFullName(user), LogType.LOG);
+            Logger.log("Failed to check owner permission for user " + getFullName(user));
             return false;
         }
         return true;

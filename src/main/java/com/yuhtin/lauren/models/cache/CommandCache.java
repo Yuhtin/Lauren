@@ -2,18 +2,17 @@ package com.yuhtin.lauren.models.cache;
 
 import com.yuhtin.lauren.application.Lauren;
 import com.yuhtin.lauren.core.entities.RawCommand;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CommandCache {
 
     public static final Map<String, EmbedBuilder> commands = new HashMap<>();
     public static final Map<CommandHandler.CommandType, List<RawCommand>> commandsType = new HashMap<>();
+    public static final List<String> aliases = new ArrayList<>();
     public static EmbedBuilder helpEmbed;
 
     public static void start() {
@@ -23,6 +22,9 @@ public class CommandCache {
     }
 
     public static void insert(CommandHandler.CommandType type, RawCommand rawCommand) {
+        aliases.add(rawCommand.name);
+        aliases.addAll(Arrays.asList(rawCommand.aliases));
+
         commands.put(rawCommand.name.toLowerCase(), new EmbedBuilder()
                 .setImage("https://pa1.narvii.com/7093/1d8551884cec1cb2dd99b88ff4c745436b21f1b4r1-500-500_hq.gif")
                 .setAuthor("Informações do comando " + rawCommand.name, "https://google.com", Lauren.bot.getSelfUser().getAvatarUrl())

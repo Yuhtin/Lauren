@@ -17,6 +17,8 @@ public @interface CommandHandler {
 
     String description();
 
+    String[] alias();
+
     @AllArgsConstructor
     enum CommandType {
         HELP("Ajuda"),

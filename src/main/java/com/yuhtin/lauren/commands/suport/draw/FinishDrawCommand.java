@@ -7,11 +7,16 @@ import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.Permission;
 
-@CommandHandler(name = "finishdraw", type = CommandHandler.CommandType.SUPORT, description = "Finalizar um sorteio")
+@CommandHandler(
+        name = "finishdraw",
+        type = CommandHandler.CommandType.SUPORT,
+        description = "Finalizar um sorteio",
+        alias = {"finalizar"})
 public class FinishDrawCommand extends Command {
 
     public FinishDrawCommand() {
         this.name = "finishdraw";
+        this.aliases = new String[]{"finalizar"};
     }
 
     @Override

@@ -145,8 +145,8 @@ public class Lauren {
             LocalDateTime now = LocalDateTime.now();
 
             File file = LoggerController.get().getFile();
-            Logger.log("Compressing the log '" + file.getName() + "' to a zip file", LogType.LOG).save();
-            Logger.log("Ending log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s", LogType.LOG).save();
+            Logger.log("Compressing the log '" + file.getName() + "' to a zip file").save();
+            Logger.log("Ending log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s").save();
 
             FileOutputStream outputStream = new FileOutputStream(file.getPath().split("\\.")[0] + ".zip");
             ZipOutputStream zipFileOutput = new ZipOutputStream(outputStream);
@@ -161,7 +161,7 @@ public class Lauren {
             zipFileOutput.close();
             outputStream.close();
 
-            Logger.log("Successfully compressed file", LogType.LOG).save();
+            Logger.log("Successfully compressed file").save();
         } catch (Exception exception) {
             exception.printStackTrace();
             Logger.log("Can't compress a log file", LogType.WARN).save();

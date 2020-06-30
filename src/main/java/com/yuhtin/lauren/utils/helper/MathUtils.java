@@ -6,7 +6,6 @@ public class MathUtils {
     public static String format(long time) {
         String format = "";
         if (time < 0) return format;
-        System.out.println(time);
 
         long hours = TimeUnit.MILLISECONDS.toHours(time);
         long hoursInMillis = TimeUnit.HOURS.toMillis(hours);

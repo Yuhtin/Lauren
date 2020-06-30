@@ -9,7 +9,11 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
-@CommandHandler(name = "ajuda", type = CommandHandler.CommandType.HELP, description = "Informações de comandos do bot")
+@CommandHandler(
+        name = "ajuda",
+        type = CommandHandler.CommandType.HELP,
+        description = "Informações de comandos do bot",
+        alias = {"help"})
 public class HelpCommand extends Command {
 
     public HelpCommand() {

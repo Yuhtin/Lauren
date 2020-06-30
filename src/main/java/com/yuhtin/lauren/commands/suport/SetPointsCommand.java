@@ -2,16 +2,20 @@ package com.yuhtin.lauren.commands.suport;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.core.player.PlayerData;
 import com.yuhtin.lauren.core.player.controller.PlayerDataController;
+import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import com.yuhtin.lauren.utils.helper.Utilities;
 
 import java.util.concurrent.TimeUnit;
 
-@CommandHandler(name = "setarpontos", type = CommandHandler.CommandType.SUPORT, description = "Setar os pontos de ranked para um jogador")
+@CommandHandler(
+        name = "setarpontos",
+        type = CommandHandler.CommandType.SUPORT,
+        description = "Setar os pontos de ranked para um jogador",
+        alias = {"setpoints"})
 public class SetPointsCommand extends Command {
 
     public SetPointsCommand() {
@@ -43,7 +47,7 @@ public class SetPointsCommand extends Command {
         PlayerData data = PlayerDataController.get(member.getIdLong());
 
         if (arguments[2].equalsIgnoreCase("Ludo")) data.ludoPoints = xp;
-         else if (arguments[2].equalsIgnoreCase("Ball")) data.poolPoints = xp;
+        else if (arguments[2].equalsIgnoreCase("Ball")) data.poolPoints = xp;
 
         else {
             event.getChannel().sendMessage("Este jogo é invalido. Jogos válidos:")

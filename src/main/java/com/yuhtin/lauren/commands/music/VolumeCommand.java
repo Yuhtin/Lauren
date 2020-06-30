@@ -5,11 +5,16 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.Utilities;
 
-@CommandHandler(name = "volume", type = CommandHandler.CommandType.MUSIC, description = "Definir um volume para meus batidões (não coloca menos de 30 se não deixa de ser batidão ;-;)")
+@CommandHandler(
+        name = "volume",
+        type = CommandHandler.CommandType.MUSIC,
+        description = "Definir um volume para meus batidões (não coloca menos de 30 se não deixa de ser batidão ;-;)",
+        alias = {"som"})
 public class VolumeCommand extends Command {
 
     public VolumeCommand() {
         this.name = "volume";
+        this.aliases = new String[]{"som"};
     }
 
     @Override
@@ -29,7 +34,7 @@ public class VolumeCommand extends Command {
         try {
             i = Integer.parseInt(event.getArgs());
             if (i < 1 || i > 100) i = 25;
-        }catch (Exception exception) {
+        } catch (Exception exception) {
             event.getChannel().sendMessage("\uD83D\uDCA2 Eita calma ai, insira um valor de `1 a 100` para ser o volume").queue();
             return;
         }

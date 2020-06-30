@@ -12,7 +12,11 @@ import java.time.OffsetDateTime;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
-@CommandHandler(name = "servidor", type = CommandHandler.CommandType.HELP, description = "Visualizar as informações deste servidor")
+@CommandHandler(
+        name = "servidor",
+        type = CommandHandler.CommandType.HELP,
+        description = "Visualizar as informações deste servidor",
+        alias = {"sinfo", "server", "servidor"})
 public class ServerInfoCommand extends Command {
     public ServerInfoCommand() {
         this.name = "serverinfo";

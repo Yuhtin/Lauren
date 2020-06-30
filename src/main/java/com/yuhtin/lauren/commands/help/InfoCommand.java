@@ -1,22 +1,25 @@
 package com.yuhtin.lauren.commands.help;
 
-import com.yuhtin.lauren.application.Lauren;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import lombok.SneakyThrows;
+import com.yuhtin.lauren.application.Lauren;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.utils.helper.MathUtils;
+import lombok.SneakyThrows;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.entities.User;
-import com.yuhtin.lauren.utils.helper.MathUtils;
 
-import java.lang.management.OperatingSystemMXBean;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
-@CommandHandler(name = "info", type = CommandHandler.CommandType.HELP, description = "Veja um pouco mais sobre mim")
+@CommandHandler(
+        name = "info",
+        type = CommandHandler.CommandType.HELP,
+        description = "Veja um pouco mais sobre mim",
+        alias = {"info", "binfo"})
 public class InfoCommand extends Command {
     public InfoCommand() {
         this.name = "botinfo";

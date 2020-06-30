@@ -8,7 +8,11 @@ import com.yuhtin.lauren.utils.helper.Utilities;
 
 import java.util.concurrent.TimeUnit;
 
-@CommandHandler(name = "sairfila", type = CommandHandler.CommandType.SCRIM, description = "Serve para sair da fila de partida atual")
+@CommandHandler(
+        name = "sairfila",
+        type = CommandHandler.CommandType.SCRIM,
+        description = "Serve para sair da fila de partida atual",
+        alias = {"filasair", "leave"})
 public class LeaveRowCommand extends Command {
 
     public LeaveRowCommand() {

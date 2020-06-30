@@ -40,7 +40,7 @@ public class CommandManager {
                 if (object instanceof Command) {
                     if (aClass.isAnnotationPresent(CommandHandler.class)) {
                         CommandHandler handler = (CommandHandler) aClass.getAnnotation(CommandHandler.class);
-                        CommandCache.insert(handler.type(), new RawCommand(handler.name(), handler.description(), handler.type()));
+                        CommandCache.insert(handler.type(), new RawCommand(handler.name(), handler.description(), handler.type(), handler.alias()));
                     }
 
                     clientBuilder.addCommand((Command) object);
@@ -51,9 +51,9 @@ public class CommandManager {
                 Logger.log("The " + classInfo.getName() + " class could not be instantiated", LogType.WARN);
             }
         }
+        bot.addEventListener(clientBuilder.build());
 
         CommandCache.construct();
-        bot.addEventListener(clientBuilder.build());
     }
 
 }

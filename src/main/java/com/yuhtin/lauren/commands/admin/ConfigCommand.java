@@ -3,9 +3,9 @@ package com.yuhtin.lauren.commands.admin;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.application.Lauren;
-import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.SneakyThrows;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -14,7 +14,11 @@ import net.dv8tion.jda.api.Permission;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
-@CommandHandler(name = "config", type = CommandHandler.CommandType.CONFIG, description = "Configurar algumas informações minha")
+@CommandHandler(
+        name = "config",
+        type = CommandHandler.CommandType.CONFIG,
+        description = "Configurar algumas informações minha",
+        alias = {"configurar", "cfg", "editar", "edit"})
 public class ConfigCommand extends Command {
 
     public ConfigCommand() {
@@ -55,7 +59,7 @@ public class ConfigCommand extends Command {
         String value = arguments[2];
         if (arguments[1].equalsIgnoreCase("setprefix")) {
             Lauren.config.setPrefix(value);
-            Logger.log("The player " + event.getMember().getUser().getName() + " changed the prefix to " + value, LogType.LOG).save();
+            Logger.log("The player " + event.getMember().getUser().getName() + " changed the prefix to " + value).save();
 
             event.getChannel().sendMessage("<a:sim:704295025374265387> O meu prefixo foi alterado para '" + value + "'. Reinicie o bot para realizar a troca.").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             return;
@@ -63,7 +67,7 @@ public class ConfigCommand extends Command {
         if (arguments[1].equalsIgnoreCase("setregistration")) {
             try {
                 Lauren.config.setResgistrationId(Long.parseLong(value));
-                Logger.log("The player " + event.getMember().getUser().getName() + " changed the registrationID to " + value, LogType.LOG).save();
+                Logger.log("The player " + event.getMember().getUser().getName() + " changed the registrationID to " + value).save();
             } catch (Exception exception) {
                 event.getChannel().sendMessage("<a:nao:704295026036834375> O valor inserido é invalido: '" + value + "' (insira um id).").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
                 return;
@@ -75,7 +79,7 @@ public class ConfigCommand extends Command {
         if (arguments[1].equalsIgnoreCase("setlog")) {
             try {
                 Lauren.config.setLog(Boolean.parseBoolean(value));
-                Logger.log("The player " + event.getMember().getUser().getName() + " turned logs to " + value, LogType.LOG).save();
+                Logger.log("The player " + event.getMember().getUser().getName() + " turned logs to " + value).save();
             } catch (Exception exception) {
                 event.getChannel().sendMessage("<a:nao:704295026036834375> O valor inserido é invalido: '" + value + "' (insira true ou false).").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
                 return;

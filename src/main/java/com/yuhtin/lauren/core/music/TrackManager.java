@@ -51,7 +51,7 @@ public class TrackManager extends AudioEventAdapter {
                                                 "Podcast" : "Música") + "`\n" +
                                         "\uD83D\uDCCC Link: [Clique aqui](" + track.getInfo().uri + ")");
 
-                Logger.log("The player " + Utilities.getFullName(member.getUser()) + " added a music", LogType.LOG).save();
+                Logger.log("The player " + Utilities.getFullName(member.getUser()) + " added a music").save();
                 play(track, member);
                 channel.sendMessage(embed.build()).queue();
             }
@@ -75,7 +75,7 @@ public class TrackManager extends AudioEventAdapter {
                                     "\uD83C\uDFB6 Músicas: `" + maxMusics + "`\n\n" +
                                     "\uD83D\uDCCC Link: [Clique aqui](" + trackUrl + ")");
 
-                    Logger.log("The player " + Utilities.getFullName(member.getUser()) + " added a playlist with " + maxMusics + " musics", LogType.LOG).save();
+                    Logger.log("The player " + Utilities.getFullName(member.getUser()) + " added a playlist with " + maxMusics + " musics").save();
                     for (int i = 0; i < maxMusics; i++) {
                         play(playlist.getTracks().get(i), member);
                     }

@@ -147,7 +147,7 @@ public class Database {
         if (connection != null) {
             try {
                 connection.close();
-                Logger.log("Connection to the database has been closed", LogType.LOG).save();
+                Logger.log("Connection to the database has been closed").save();
             } catch (SQLException exception) {
                 Logger.log("Could not close the connection to the database", LogType.ERROR).save();
             }

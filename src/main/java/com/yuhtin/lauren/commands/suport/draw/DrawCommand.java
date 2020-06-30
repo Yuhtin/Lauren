@@ -2,12 +2,12 @@ package com.yuhtin.lauren.commands.suport.draw;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.core.draw.controller.DrawController;
 import com.yuhtin.lauren.core.draw.controller.DrawEditting;
-import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.utils.helper.Utilities;
-import com.yuhtin.lauren.core.draw.controller.DrawController;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 
@@ -16,12 +16,16 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-@CommandHandler(name = "sorteio", type = CommandHandler.CommandType.SUPORT, description = "Iniciar um sorteio sobre algum conteúdo")
+@CommandHandler(
+        name = "sorteio",
+        type = CommandHandler.CommandType.SUPORT,
+        description = "Iniciar um sorteio sobre algum conteúdo",
+        alias = {"sortear", "draw"})
 public class DrawCommand extends Command {
 
     public DrawCommand() {
         this.name = "sorteio";
-        this.aliases = new String[]{"sortear", "com/yuhtin/lauren/core/draw"};
+        this.aliases = new String[]{"sortear", "draw"};
     }
 
 
@@ -65,13 +69,13 @@ public class DrawCommand extends Command {
                         DrawController.editing = null;
 
                     } catch (Exception exception) {
-                        Logger.log("Can't send a private message for user " + Utilities.getFullName(event.getMember().getUser()), LogType.LOG);
+                        Logger.log("Can't send a private message for user " + Utilities.getFullName(event.getMember().getUser()));
                     }
                 }
             }, 2, TimeUnit.MINUTES);
 
         } catch (Exception exception) {
-            Logger.log("Can't send a private message for user " + Utilities.getFullName(event.getMember().getUser()), LogType.LOG);
+            Logger.log("Can't send a private message for user " + Utilities.getFullName(event.getMember().getUser()));
         }
     }
 }

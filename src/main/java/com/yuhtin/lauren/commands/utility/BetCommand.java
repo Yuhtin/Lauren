@@ -12,7 +12,11 @@ import java.awt.*;
 import java.time.Instant;
 import java.util.Random;
 
-@CommandHandler(name = "apostar", type = CommandHandler.CommandType.UTILITY, description = "Apostar uma quantidade de dinheiro")
+@CommandHandler(
+        name = "apostar",
+        type = CommandHandler.CommandType.UTILITY,
+        description = "Apostar uma quantidade de dinheiro",
+        alias = {"bet", "aposta"})
 public class BetCommand extends Command {
 
     public BetCommand() {

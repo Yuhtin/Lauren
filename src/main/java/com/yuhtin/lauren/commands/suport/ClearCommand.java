@@ -2,19 +2,23 @@ package com.yuhtin.lauren.commands.suport;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.models.enums.LogType;
+import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageHistory;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
-import com.yuhtin.lauren.utils.helper.Utilities;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-@CommandHandler(name = "clear", type = CommandHandler.CommandType.SUPORT, description = "Limpar algumas mensagens do canal atual")
+@CommandHandler(
+        name = "clear",
+        type = CommandHandler.CommandType.SUPORT,
+        description = "Limpar algumas mensagens do canal atual",
+        alias = {"clearchat", "cc"})
 public class ClearCommand extends Command {
     public ClearCommand() {
         this.name = "clear";
