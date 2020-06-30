@@ -2,7 +2,6 @@ package com.yuhtin.lauren.commands.scrim;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.core.match.Game;
 import com.yuhtin.lauren.core.match.controller.MatchController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.Utilities;
@@ -14,7 +13,7 @@ public class LeaveRowCommand extends Command {
 
     public LeaveRowCommand() {
         this.name = "sair";
-        this.aliases = new String[]{"sairfila", "filasair", "leave"};
+        this.aliases = new String[]{"filasair", "leave"};
     }
 
     @Override

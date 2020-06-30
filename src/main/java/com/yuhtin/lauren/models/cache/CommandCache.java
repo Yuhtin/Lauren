@@ -51,6 +51,8 @@ public class CommandCache {
                         getCommands(CommandHandler.CommandType.UTILITY), false)
                 .addField("**Scrim** \uD83D\uDC7E - _Aqui você pode encontrar comandos relacionados ao meu sistema de partidas._",
                         getCommands(CommandHandler.CommandType.SCRIM), false)
+                .addField("**Outros** \uD83D\uDC7E - _Aqui você pode encontrar comandos sem categoria._",
+                        getCommands(CommandHandler.CommandType.OTHER), false)
 
                 .addField("__Comandos de Administrador:__", "", false)
                 .addField("**Configurações** ⚙ - _Em configurações você define preferências de como agirei em seu servidor._",

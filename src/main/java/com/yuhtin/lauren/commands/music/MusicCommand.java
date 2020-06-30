@@ -28,7 +28,7 @@ public class MusicCommand extends Command {
 
     public MusicCommand() {
         name = "tocar";
-        aliases = new String[]{"music", "play", "musica"};
+        aliases = new String[]{"m", "music", "play", "musica"};
     }
 
     public static TrackManager trackManager;

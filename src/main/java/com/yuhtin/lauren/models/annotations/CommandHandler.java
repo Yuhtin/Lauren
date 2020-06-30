@@ -25,7 +25,8 @@ public @interface CommandHandler {
         SCRIM("Scrim"),
         CONFIG("Configurações"),
         CUSTOM_MESSAGES("Mensagens Customizadas"),
-        SUPORT("Suporte");
+        SUPORT("Suporte"),
+        OTHER("Outros");
 
         public String name;
     }
