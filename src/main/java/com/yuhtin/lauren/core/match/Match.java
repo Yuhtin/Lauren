@@ -39,12 +39,15 @@ public class Match {
         textChannel.addPermissionOverride(Lauren.guild.getPublicRole(), null, EnumSet.of(Permission.VIEW_CHANNEL));
         textChannel.queue(createdChannel -> channel = createdChannel.getIdLong());
 
+        TextChannel channel = Lauren.bot.getTextChannelById(this.channel);
+        channel.sendMessage("Confirme sua presença, clique no <a:sim:704295025374265387>").queue(message -> message.addReaction("a:sim:704295025374265387"));
+
         if (game.mode == GameMode.RANKED)
             TaskHelper.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     if (startTime == null) {
-                        Lauren.bot.getTextChannelById(channel).delete().queue();
+                        channel.delete().queue();
                         players.forEach(MatchController.playersInQueue::remove);
                     }
                 }

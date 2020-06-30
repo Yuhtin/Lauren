@@ -40,12 +40,11 @@ public class RowSystemEvents extends ListenerAdapter {
         if (type == null) return;
         event.getReaction().removeReaction(event.getUser()).queue();
 
-        if (MatchController.putPlayerInRow(type, mode, event.getUserIdLong())) {
+        if (MatchController.putPlayerInRow(type, mode, event.getUserIdLong()))
             event.getChannel().sendMessage("<a:sim:704295025374265387> <@" + event.getUserIdLong() + ">, você entrou na fila de partida")
                     .queue(message -> message.delete().queueAfter(3, TimeUnit.SECONDS));
-        } else {
+        else
             event.getChannel().sendMessage("<a:nao:704295026036834375> <@" + event.getUserIdLong() + ">, você já está numa fila, use `$sair` para sair dela")
                     .queue(message -> message.delete().queueAfter(3, TimeUnit.SECONDS));
-        }
     }
 }

@@ -14,7 +14,7 @@ public class PlayerDataController {
             Utilities.updateNickByLevel(userID, 0);
             return new PlayerData(userID);
         }
-        if (data.equalsIgnoreCase("SQLError")) return null;
+        if (data.equalsIgnoreCase("SQLError")) return new PlayerData(userID);
 
         return Serializer.playerData.deserialize(data);
     }

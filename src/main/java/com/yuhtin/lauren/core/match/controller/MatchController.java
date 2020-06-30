@@ -35,9 +35,9 @@ public class MatchController {
     }
 
     public static void removePlayerFromRow(Long userID) {
-        Game game = MatchController.playersInQueue.get(userID);
-        MatchController.getByType(game.type, game.mode).remove(userID);
-        MatchController.playersInQueue.remove(userID);
+        Game game = playersInQueue.get(userID);
+        getByType(game.type, game.mode).remove(userID);
+        playersInQueue.remove(userID);
     }
 
     public static List<Long> getByType(GameType type, GameMode mode) {
