@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.manager;
+package com.yuhtin.lauren.models.manager;
 
 import com.yuhtin.lauren.application.Lauren;
 import com.google.common.reflect.ClassPath;

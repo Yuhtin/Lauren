@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.manager;
+package com.yuhtin.lauren.models.manager;
 
 import com.google.common.reflect.ClassPath;
 import com.yuhtin.lauren.models.enums.LogType;
