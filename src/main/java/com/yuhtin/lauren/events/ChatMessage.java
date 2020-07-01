@@ -21,7 +21,7 @@ public class ChatMessage extends ListenerAdapter {
             if (!CommandCache.aliases.contains(command)) {
                 for (String alias : CommandCache.aliases) {
                     if (LevenshteinCalculator.eval(command, alias) < 6) {
-                        event.getChannel().sendMessage("<:chorano:726207542413230142> Esse comandinho não existe porém encontrei um parecido: `" + alias + "`").queue();
+                        event.getChannel().sendMessage("<:chorano:726207542413230142> Esse comandinho não existe porém encontrei um parecido: `$" + alias + "`").queue();
                         break;
                     }
                 }
