@@ -1,9 +1,8 @@
 package com.yuhtin.lauren.events;
 
 import com.yuhtin.lauren.core.player.controller.PlayerDataController;
-import com.yuhtin.lauren.models.cache.CommandCache;
+import com.yuhtin.lauren.service.CommandCache;
 import com.yuhtin.lauren.utils.helper.LevenshteinCalculator;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 

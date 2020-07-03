@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.models.cache;
+package com.yuhtin.lauren.service;
 
 import com.yuhtin.lauren.application.Lauren;
 import com.yuhtin.lauren.core.entities.RawCommand;

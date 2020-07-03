@@ -63,6 +63,8 @@ cmake-build-*/
 *.iws
 
 # Hide from github
+.idea/
+src/main/java/META-INF/
 logs/
 temporary/
 gources/

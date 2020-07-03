@@ -7,7 +7,7 @@ import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.yuhtin.lauren.core.entities.RawCommand;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.cache.CommandCache;
+import com.yuhtin.lauren.service.CommandCache;
 import com.yuhtin.lauren.core.logger.Logger;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;

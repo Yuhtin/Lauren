@@ -3,7 +3,7 @@ package com.yuhtin.lauren.commands.help;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.cache.CommandCache;
+import com.yuhtin.lauren.service.CommandCache;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.time.Instant;
