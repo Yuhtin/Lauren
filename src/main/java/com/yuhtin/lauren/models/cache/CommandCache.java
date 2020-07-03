@@ -2,7 +2,6 @@ package com.yuhtin.lauren.models.cache;
 
 import com.yuhtin.lauren.application.Lauren;
 import com.yuhtin.lauren.core.entities.RawCommand;
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
 
