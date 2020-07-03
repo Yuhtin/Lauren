@@ -13,7 +13,7 @@ public class CommandCache {
     public static final Map<String, EmbedBuilder> commands = new HashMap<>();
     public static final Map<CommandHandler.CommandType, List<RawCommand>> commandsType = new HashMap<>();
     public static final List<String> aliases = new ArrayList<>();
-    public static EmbedBuilder helpEmbed;
+    public static final EmbedBuilder helpEmbed = new EmbedBuilder();
 
     public static void start() {
         for (CommandHandler.CommandType value : CommandHandler.CommandType.values()) {
@@ -40,7 +40,7 @@ public class CommandCache {
     }
 
     public static void construct() {
-        helpEmbed = new EmbedBuilder().setImage("https://i.imgur.com/mQVFSrP.gif")
+        helpEmbed.setImage("https://i.imgur.com/mQVFSrP.gif")
                 .setAuthor("Comandos atacaaaaar \uD83E\uDDF8", "https://google.com", Lauren.bot.getSelfUser().getAvatarUrl())
                 .setDescription(
                         "Para mais informações sobre um comando, digite `$ajuda <comando>` que eu lhe informarei mais sobre ele <a:feliz:712669414566395944>")

@@ -21,17 +21,11 @@ public class ChatMessage extends ListenerAdapter {
             if (!CommandCache.aliases.contains(command)) {
                 for (String alias : CommandCache.aliases) {
                     if (LevenshteinCalculator.eval(command, alias) < 6) {
-                        event.getChannel().sendMessage("<:chorano:726207542413230142> Esse comandinho não existe porém encontrei um parecido: `" + alias + "`").queue();
+                        event.getChannel().sendMessage("<:chorano:726207542413230142> Esse comandinho não existe porém encontrei um parecido: `$" + alias + "`").queue();
                         break;
                     }
                 }
             }
-        }
-
-        if (event.getMessage().getMentionedMembers().size() > 0) {
-            User user = event.getMessage().getMentionedMembers().get(0).getUser();
-            if (user.equals(event.getJDA().getSelfUser()))
-                event.getChannel().sendMessage("Oi bb tudo bem? Se tiver alguma dúvida sobre mim, use `$ajuda`").queue();
         }
 
         PlayerDataController.get(event.getMember().getIdLong()).gainXP(3).updateLevel().save();
