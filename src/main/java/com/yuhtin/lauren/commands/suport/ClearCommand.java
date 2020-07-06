@@ -28,7 +28,7 @@ public class ClearCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
 
-        if (!Utilities.isPermission(event.getMember(), event.getChannel(), Permission.MESSAGE_MANAGE)) return;
+        if (!Utilities.isPermission(event.getMember(), event.getChannel(), Permission.MESSAGE_MANAGE, true)) return;
 
         String[] args = event.getMessage().getContentRaw().split(" ");
         if (args.length < 2) {

@@ -26,7 +26,7 @@ public class SendMessageCommand extends Command {
     @SneakyThrows
     @Override
     protected void execute(CommandEvent event) {
-        if (!Utilities.isPermission(event.getMember(), event.getChannel(), Permission.MANAGE_CHANNEL)) return;
+        if (!Utilities.isPermission(event.getMember(), event.getChannel(), Permission.MANAGE_CHANNEL, true)) return;
 
         if (!event.getMessage().getAttachments().isEmpty()) {
             Message.Attachment attachment = event.getMessage().getAttachments().get(0);

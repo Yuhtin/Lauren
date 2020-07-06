@@ -30,7 +30,7 @@ public class ConfigCommand extends Command {
     @SneakyThrows
     @Override
     protected void execute(CommandEvent event) {
-        if (!Utilities.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR))
+        if (!Utilities.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true))
             return;
         String[] arguments = event.getMessage().getContentRaw().split(" ");
         if (arguments.length < 2) {
