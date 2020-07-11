@@ -25,7 +25,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Properties;
 import java.util.Scanner;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -81,6 +80,7 @@ public class Lauren {
             MatchController.startup();
             new Thread(Lauren::loadTasks).start();
         }).start();
+
 
         String[] loadNonFormated = new String[]{
                 "",
