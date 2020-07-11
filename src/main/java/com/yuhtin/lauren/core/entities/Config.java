@@ -21,7 +21,7 @@ public class Config {
                 if (!file.createNewFile()) return null;
                 Config config = new Config();
                 config.setPrefix("$");
-                config.setToken("COLOQUE O TOKEN AQUI");
+                config.setToken("Put token here");
                 config.setResgistrationId(704303594211639356L);
                 config.setOwnerID(272879983326658570L);
                 config.setFormatNickname("[@level] ");

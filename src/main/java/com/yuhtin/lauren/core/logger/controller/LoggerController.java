@@ -18,11 +18,11 @@ public class LoggerController {
     private final File file;
     private final BufferedWriter bufferedWriter;
 
-    public LoggerController(String logName) throws IOException {
+    public LoggerController() throws IOException {
         INSTANCE = this;
 
         // create a infinite log archives
-        String prefix = "logs/" + logName + "-";
+        String prefix = "logs/log-";
         int i = 1;
         File file = new File(prefix + "1.zip");
         while (file.exists()) {

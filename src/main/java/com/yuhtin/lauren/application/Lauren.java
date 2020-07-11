@@ -50,7 +50,7 @@ public class Lauren {
 
         if (config.log) {
             try {
-                new LoggerController("log");
+                new LoggerController();
             } catch (Exception exception) {
                 config.setLog(false);
                 Logger.log("I founded a error on load LoggerController, logs turned off", LogType.ERROR);
