@@ -19,6 +19,7 @@ public class MemberEvents extends ListenerAdapter {
                 channel.sendMessage("Olá! você foi kickado automaticamente por suspeita de divulgação em nosso servidor.\nContas com menos de 3 dias no discord não podem ter domínios (exemplo twitter.com)").queue();
                 event.getMember().kick("Autokick: Selfbots não são bem vindos").queue();
             });
+            return;
         }
 
         Lauren.data.create(event.getUser().getIdLong());
