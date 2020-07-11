@@ -117,7 +117,7 @@ public class DrawEditingEvent extends ListenerAdapter {
         }
 
         DrawController.set(DrawController.editing.build());
-        event.getChannel().sendMessage("\uD83D\uDD14 Você criou o sorteio com sucesso").queue();
+        event.getChannel().sendMessage("<a:sino:731450603619745792> Você criou o sorteio com sucesso").queue();
         DrawController.editing = null;
     }
 

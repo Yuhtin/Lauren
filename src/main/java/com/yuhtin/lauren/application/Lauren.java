@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Properties;
 import java.util.Scanner;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -37,6 +38,7 @@ public class Lauren {
     public static long startTime;
     public static Config config;
     public static Database data;
+    public static String version;
 
     public static void main(String[] args) throws InterruptedException {
         startTime = System.currentTimeMillis();
@@ -59,6 +61,7 @@ public class Lauren {
         if (!startDatabase()) return;
         Thread buildThread = new Thread(() -> {
             try {
+                Utilities.foundVersion();
                 bot = new JDABuilder(AccountType.BOT)
                         .setToken(config.token)
                         .setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"))
@@ -79,10 +82,9 @@ public class Lauren {
             new Thread(Lauren::loadTasks).start();
         }).start();
 
-
         String[] loadNonFormated = new String[]{
                 "",
-                "Lauren v1.3.1-SNAPSHOT",
+                "Lauren v" + version,
                 "Author: Yuhtin#9147",
                 "",
                 "All systems has loaded",
@@ -103,14 +105,15 @@ public class Lauren {
     }
 
     private static void loadTasks() {
-        /* Wait 4 seconds for the bot to connect completely before asking for a value */
+        /* Wait 7 seconds for the bot to connect completely before asking for a value */
 
         TaskHelper.schedule(new TimerTask() {
             @Override
             public void run() {
                 guild = bot.getGuildCache().iterator().next();
+                Logger.log("Loaded main guild");
             }
-        }, 4, TimeUnit.SECONDS);
+        }, 7, TimeUnit.SECONDS);
 
         TaskHelper.timer(new TimerTask() {
             @Override

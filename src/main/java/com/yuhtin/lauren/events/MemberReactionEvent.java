@@ -35,6 +35,7 @@ public class MemberReactionEvent extends ListenerAdapter {
             Match match = MatchController.matches.get(event.getChannel().getName().split("-")[1]);
             if (match.startTime != 0) return;
 
+            match.confirmedPlayers.add(event.getUserIdLong());
             event.getChannel().sendMessage("Você foi confirmado na lita de partida").queue();
         }
     }

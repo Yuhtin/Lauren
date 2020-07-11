@@ -42,14 +42,14 @@ public class InfoCommand extends Command {
 
                 .addField("📆 Criado em", "`" + timeCreated.getDayOfMonth() + " de " + timeCreated.getMonth().getDisplayName(TextStyle.SHORT, Locale.US) + ", "
                         + timeCreated.getYear() + " às " + timeCreated.getHour() + ":" + timeCreated.getMinute() + "`", true)
-                .addField("🌌 Meu ID", "`" + bot.getId() + "`", true)
+                .addField("<a:feliz_2:726220815749611603> Versão atual", "`v" + Lauren.version + "`", true)
                 .addField("🙍‍♂️ Dono", "`" + authorBot + "`", true)
 
                 .addField("<a:infinito:703187274912759899> Uptime", "`" + MathUtils.format(System.currentTimeMillis() - Lauren.startTime) + "`", true)
                 .addField("💥 Servidores", "`Sou exclusiva deste servidor :d`", true)
                 .addField("🏓 Ping da API", "`" + event.getJDA().getGatewayPing() + "ms`", true)
 
-                .addField("\uD83D\uDD8A Prefixos", "Padrão: `$`", true)
+                .addField("\uD83D\uDD8A Prefixo", "Padrão: `$`", true)
                 .addField("<:java:723609384428503071> Versão Java", "`v" + System.getProperty("java.version") + "`", true)
                 .addField("<:discord:723587554422816889> Versão JDA", "`v4.1.1_137`", true)
 

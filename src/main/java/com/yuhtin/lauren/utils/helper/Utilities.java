@@ -1,8 +1,8 @@
 package com.yuhtin.lauren.utils.helper;
 
 import com.yuhtin.lauren.application.Lauren;
-import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
+import com.yuhtin.lauren.models.enums.LogType;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
@@ -11,10 +11,12 @@ import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
@@ -36,11 +38,11 @@ public class Utilities {
 
     public static boolean isOwner(MessageChannel channel, User user, boolean showMessage) {
         if (Lauren.config.ownerID != user.getIdLong()) {
+            Logger.log("Failed to check owner permission for user " + getFullName(user));
             if (!showMessage) return false;
 
             MessageAction message = channel.sendMessage("<a:nao:704295026036834375> Você não tem permissão para usar esta função");
             message.queue((m) -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-            Logger.log("Failed to check owner permission for user " + getFullName(user));
             return false;
         }
         return true;
@@ -129,5 +131,17 @@ public class Utilities {
 
     public static boolean isBooster(Member member) {
         return member.getRoles().stream().anyMatch(role -> role.getIdLong() == 722116789055782912L);
+    }
+
+    public static  void foundVersion() {
+        Properties properties = new Properties();
+
+        try {
+            properties.load(Lauren.class.getClassLoader().getResourceAsStream("project.properties"));
+            Lauren.version = properties.getProperty("version");
+        }catch (Exception exception) {
+            Logger.log("An exception was caught while searching for my client version", LogType.ERROR);
+            Logger.error(exception);
+        }
     }
 }

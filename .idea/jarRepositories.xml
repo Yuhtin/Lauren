@@ -17,14 +17,14 @@
       <option name="url" value="https://repo1.maven.org/maven2" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="lauren-dependencies" />
-      <option name="name" value="Dependencies of Lauren" />
-      <option name="url" value="file://$PROJECT_DIR$/../lauren-dependencies/target/lauren-dependencies.jar" />
-    </remote-repository>
-    <remote-repository>
       <option name="id" value="central" />
       <option name="name" value="bintray" />
       <option name="url" value="http://jcenter.bintray.com" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="lauren-dependencies" />
+      <option name="name" value="Dependencies of Lauren" />
+      <option name="url" value="file://$PROJECT_DIR$/../lauren-dependencies/target/lauren-dependencies.jar" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="lauren-dependencies" />

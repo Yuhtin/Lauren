@@ -52,7 +52,6 @@ public class Draw {
         mb.append(close ? "\uD83C\uDFA8 **SORTEIO FINALIZADO** \uD83C\uDFA8" : "\uD83C\uDFB2 **SORTEIO** \uD83C\uDFB2");
 
         EmbedBuilder eb = new EmbedBuilder();
-
         eb.setColor(Color.DARK_GRAY);
         eb.setFooter((winners == 1 ? "" : winners + " ganhadores | ") + "Encerra em", null);
         eb.setTimestamp(end);
@@ -60,7 +59,7 @@ public class Draw {
                 + "\nTempo restante: " + time
                 + "\nSorteador: <@" + user + ">");
 
-        if (prize != null) eb.setAuthor(prize, null, null);
+        if (prize != null) eb.setAuthor("<a:sino:731450603619745792> " + prize, null, null);
         if (close) eb.setTitle("Última chance para entrar", null);
 
         mb.setEmbed(eb.build());
@@ -73,8 +72,7 @@ public class Draw {
         Message render = render();
         if (render == null) return;
 
-        message.editMessage(render).queue(m -> {
-        }, t -> {
+        message.editMessage(render).queue(m -> {}, t -> {
             message.delete().queue();
             DrawController.delete();
         });

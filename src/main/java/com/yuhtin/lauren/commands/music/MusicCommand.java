@@ -172,6 +172,7 @@ public class MusicCommand extends Command {
                     return;
                 }
 
+                case "forcepular":
                 case "fpular":
                 case "fp": {
                     if (isIdle(event.getTextChannel())) return;
