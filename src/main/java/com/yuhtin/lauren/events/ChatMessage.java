@@ -1,9 +1,10 @@
 package com.yuhtin.lauren.events;
 
 import com.yuhtin.lauren.core.player.controller.PlayerDataController;
-import com.yuhtin.lauren.models.cache.CommandCache;
+import com.yuhtin.lauren.service.CommandCache;
 import com.yuhtin.lauren.utils.helper.LevenshteinCalculator;
-import net.dv8tion.jda.api.entities.User;
+import com.yuhtin.lauren.utils.helper.Utilities;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -28,10 +29,10 @@ public class ChatMessage extends ListenerAdapter {
             }
         }
 
-        if (event.getMessage().getMentionedMembers().size() > 0) {
-            User user = event.getMessage().getMentionedMembers().get(0).getUser();
-            if (user.equals(event.getJDA().getSelfUser()))
-                event.getChannel().sendMessage("Oi bb tudo bem? Se tiver alguma dúvida sobre mim, use `$ajuda`").queue();
+        if (event.getMessage().getContentRaw().contains("https://") && !Utilities.isPermission(event.getMember(), event.getChannel(), Permission.MESSAGE_MANAGE, false)) {
+            event.getChannel().sendMessage("<:chorano:726207542413230142> Poxa, não divulga aqui amigo, temos nosso sistema de parceria, fale com o <@272879983326658570> no privado.").queue();
+            event.getMessage().delete().queue();
+            return;
         }
 
         PlayerDataController.get(event.getMember().getIdLong()).gainXP(3).updateLevel().save();

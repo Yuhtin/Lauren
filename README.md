@@ -34,7 +34,7 @@ Lauren is a discord bot that contains a scrim system for 8ballpool and LudoKing 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## Recommended
-<a href="https://www.hypehost.com.br" target="_blank"><img src="https://image.prntscr.com/image/pIf1D3_cRRmUmOd3Z74q0w.png" title="My host (i was not paid to disclose)" style="height: 20px !important;width: 20px !important;" ></a>
+<a href="https://www.hypehost.com.br" target="_blank"><img src="https://media.discordapp.net/attachments/613180160639893544/727702405449383986/cEaF9bm.png?width=435&height=136" title="My host (i was not paid to disclose)" style="height: 51px !important;width: 217px !important;" ></a>
 
 ## Donate
 <a href="https://www.buymeacoffee.com/Yuhtin" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/lato-orange.png" title="Buy Me A Coffee" style="height: 51px !important;width: 217px !important;" ></a>

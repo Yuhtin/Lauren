@@ -22,8 +22,10 @@ import java.util.zip.ZipOutputStream;
 
 public class Utilities {
 
-    public static boolean isPermission(Member member, MessageChannel channel, Permission permission) {
+    public static boolean isPermission(Member member, MessageChannel channel, Permission permission, boolean showMessage) {
         if (!member.hasPermission(permission)) {
+            if (!showMessage) return false;
+
             MessageAction message = channel.sendMessage("<a:nao:704295026036834375> Você não tem permissão para usar esta função");
             message.queue((m) -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             Logger.log("Failed to check permissions for user " + getFullName(member.getUser()));

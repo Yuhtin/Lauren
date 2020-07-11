@@ -21,7 +21,7 @@ public class RerollCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        if (!Utilities.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR)) return;
+        if (!Utilities.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true)) return;
 
         if (DrawController.get() == null || !DrawController.get().finished) {
             event.getMessage().delete().queue();
