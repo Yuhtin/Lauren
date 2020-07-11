@@ -32,7 +32,7 @@ public class HelpCommand extends Command {
                 return;
             }
             EmbedBuilder embed = CommandCache.commands.get(args[1].toLowerCase())
-                    .setFooter("Comando usado por " + event.getMember().getNickname(), event.getMember().getUser().getAvatarUrl())
+                    .setFooter("Comando usado por " + event.getMember().getEffectiveName(), event.getMember().getUser().getAvatarUrl())
                     .setColor(event.getMember().getColor())
                     .setTimestamp(Instant.now());
             event.getChannel().sendMessage(embed.build()).queue();
@@ -40,7 +40,7 @@ public class HelpCommand extends Command {
         }
 
         EmbedBuilder helpEmbed = CommandCache.helpEmbed;
-        helpEmbed.setFooter("Comando usado por " + event.getMember().getNickname(), event.getMember().getUser().getAvatarUrl())
+        helpEmbed.setFooter("Comando usado por " + event.getMember().getEffectiveName(), event.getMember().getUser().getAvatarUrl())
                 .setColor(event.getMember().getColor())
                 .setTimestamp(Instant.now());
         event.getChannel().sendMessage(helpEmbed.build()).queue();

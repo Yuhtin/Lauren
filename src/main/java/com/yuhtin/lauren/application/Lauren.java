@@ -82,7 +82,7 @@ public class Lauren {
 
         String[] loadNonFormated = new String[]{
                 "",
-                "Lauren v1.3.1-SNAPSHOT",
+                "Lauren v1.3.1.2-SNAPSHOT",
                 "Author: Yuhtin#9147",
                 "",
                 "All systems has loaded",
@@ -103,14 +103,15 @@ public class Lauren {
     }
 
     private static void loadTasks() {
-        /* Wait 4 seconds for the bot to connect completely before asking for a value */
+        /* Wait 7 seconds for the bot to connect completely before asking for a value */
 
         TaskHelper.schedule(new TimerTask() {
             @Override
             public void run() {
                 guild = bot.getGuildCache().iterator().next();
+                Logger.log("Loaded main guild");
             }
-        }, 4, TimeUnit.SECONDS);
+        }, 7, TimeUnit.SECONDS);
 
         TaskHelper.timer(new TimerTask() {
             @Override
