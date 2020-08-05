@@ -2,7 +2,7 @@
 
 ## Lauren
 
-[![Discord](https://img.shields.io/discord/700673055982354472?label=Discord)](https://discord.gg/Jy2ad3G)
+[![Discord](https://img.shields.io/discord/700673055982354472?label=Discord)](https://discord.gg/ShpKBgk)
 [![GitHub stars](https://img.shields.io/github/stars/Yuhtin/Lauren.svg)](https://github.com/Yuhtin/Lauren/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues-raw/Yuhtin/Lauren.svg?label=issues)](https://github.com/Yuhtin/Lauren/issues)
 [![GitHub last commit](https://img.shields.io/github/last-commit/Yuhtin/Lauren.svg)](https://github.com/Yuhtin/Lauren/commit)
