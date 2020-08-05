@@ -33,7 +33,7 @@ public class TrackUtils {
         String title = trackInfo.title;
         long length = trackInfo.length;
 
-        return "`[ " + getTimeStamp(length) + " ]` " + title + " (<@" + info.getAuthor().getIdLong() + ">)\n";
+        return "`[" + getTimeStamp(length) + "]` " + title + " (<@" + info.getAuthor().getIdLong() + ">)\n";
     }
 
     public static String getTimeStamp(long milis) {

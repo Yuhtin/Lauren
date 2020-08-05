@@ -51,7 +51,7 @@ public class InfoCommand extends Command {
 
                 .addField("\uD83D\uDD8A Prefixo", "Padrão: `$`", true)
                 .addField("<:java:723609384428503071> Versão Java", "`v" + System.getProperty("java.version") + "`", true)
-                .addField("<:discord:723587554422816889> Versão JDA", "`v4.1.1_137`", true)
+                .addField("<:discord:723587554422816889> Versão JDA", "`v4.2.0_186`", true)
 
                 .addField("⚙️ Núcleos", "`" + Runtime.getRuntime().availableProcessors() + " cores`", true)
                 .addField("\uD83D\uDEE2 Banco de Dados", "`" + Lauren.config.databaseType + "`", true)

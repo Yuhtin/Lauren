@@ -1,6 +1,11 @@
 package com.yuhtin.lauren.application;
 
+import com.wrapper.spotify.SpotifyApi;
+import com.wrapper.spotify.exceptions.SpotifyWebApiException;
+import com.wrapper.spotify.requests.data.tracks.GetTrackRequest;
+import com.yuhtin.lauren.commands.music.MusicCommand;
 import com.yuhtin.lauren.core.entities.Config;
+import com.yuhtin.lauren.core.entities.SpotifyConfig;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
 import com.yuhtin.lauren.core.match.controller.MatchController;
@@ -19,11 +24,14 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
+import org.apache.hc.core5.http.ParseException;
+
 
 import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 import java.util.TimerTask;
@@ -34,6 +42,7 @@ public class Lauren {
 
     public static JDA bot;
     public static Guild guild;
+    public static SpotifyApi spotifyApi;
     public static long startTime;
     public static Config config;
     public static Database data;
@@ -48,6 +57,8 @@ public class Lauren {
             return;
         }
 
+        spotifyApi = SpotifyConfig.construct();
+
         if (config.log) {
             try {
                 new LoggerController();
@@ -61,6 +72,7 @@ public class Lauren {
         Thread buildThread = new Thread(() -> {
             try {
                 Utilities.foundVersion();
+                MusicCommand.constructFields();
                 bot = new JDABuilder(AccountType.BOT)
                         .setToken(config.token)
                         .setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"))

@@ -2,14 +2,16 @@ package com.yuhtin.lauren.commands.music;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.wrapper.spotify.model_objects.specification.Playlist;
+import com.wrapper.spotify.model_objects.specification.Track;
+import com.yuhtin.lauren.application.Lauren;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.music.AudioInfo;
 import com.yuhtin.lauren.core.music.AudioPlayerSendHandler;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.service.ConnectionFactory;
 import com.yuhtin.lauren.utils.helper.MathUtils;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
 import com.yuhtin.lauren.utils.helper.Utilities;
@@ -18,10 +20,8 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
-import org.json.JSONObject;
 
-import java.util.Arrays;
-import java.util.Set;
+import java.util.*;
 
 @CommandHandler(
         name = "tocar",
@@ -30,11 +30,25 @@ import java.util.Set;
         alias = {"m", "music", "musica", "play"})
 public class MusicCommand extends Command {
 
+    public static final Map<String, String> fields = new HashMap<>();
     public static TrackManager trackManager;
     public static VoiceChannel audio = null;
+
+
     public MusicCommand() {
         name = "tocar";
         aliases = new String[]{"m", "music", "play", "musica"};
+    }
+
+    public static void constructFields() {
+        fields.put("api_dev_key", Lauren.config.pastebinDevKey);
+        fields.put("api_user_key", Lauren.config.pastebinUserKey);
+        fields.put("api_paste_private", "1");
+        fields.put("api_paste_expire_date", "10M");
+        fields.put("api_paste_format", "yaml");
+        fields.put("api_option", "paste");
+        fields.put("api_paste_code", "");
+        fields.put("api_paste_name", "");
     }
 
     @Override
@@ -50,8 +64,10 @@ public class MusicCommand extends Command {
             return;
         }
 
-        if (event.getMember().getVoiceState() == null || event.getMember().getVoiceState().getChannel() == null
-                || (!Utilities.isOwner(event.getChannel(), event.getAuthor(), false) && event.getMember().getVoiceState().getChannel().getIdLong() != 722935562155196506L)) {
+        if (!Utilities.isOwner(event.getChannel(), event.getAuthor(), false)
+                && (event.getMember().getVoiceState() == null
+                || event.getMember().getVoiceState().getChannel() == null
+                || event.getMember().getVoiceState().getChannel().getIdLong() != 722935562155196506L)) {
             event.getChannel().sendMessage("\uD83C\uDFB6 Amiguinho, entre no canal `\uD83C\uDFB6┇Batidões` para poder usar comandos de música").queue();
             return;
         }
@@ -88,9 +104,7 @@ public class MusicCommand extends Command {
                             .setDescription(
                                     DVD + " Nome: `" + track.getInfo().title + "`\n" +
                                             "\uD83D\uDCB0 Autor: `" + track.getInfo().author + "`\n" +
-                                            "\uD83D\uDCE2 Tipo de vídeo: `" +
-                                            (track.getInfo().isStream ? "Stream" : track.getInfo().title.contains("Podcast") ?
-                                                    "Podcast" : "Música") + "`\n" +
+                                            "\uD83D\uDCE2 Tipo de vídeo: `" + (track.getInfo().isStream ? "Stream" : track.getInfo().title.contains("Podcast") ? "Podcast" : "Música") + "`\n" +
                                             "\uD83E\uDDEC Membro que adicionou: <@" + trackManager.getTrackInfo(track).getAuthor().getIdLong() + ">\n" +
                                             "\uD83E\uDDEA Timeline: " + (trackManager.player.isPaused() ? "▶️" : "⏸") + " ⏭ " + (trackManager.player.getVolume() < 50 ? "\uD83D\uDD09" : "\uD83D\uDD0A") + " " + TrackUtils.getProgressBar(track) + "\n" +
                                             "\n" +
@@ -112,30 +126,39 @@ public class MusicCommand extends Command {
                     Set<AudioInfo> queue = trackManager.getQueuedTracks();
                     long totalTime = 0;
 
+                    List<String> users = new ArrayList<>();
                     for (AudioInfo audioInfo : queue) {
                         builder.append(TrackUtils.buildQueueMessage(audioInfo));
                         totalTime += audioInfo.getTrack().getInfo().length;
+
+                        String userId = audioInfo.getAuthor().getId();
+                        if (!users.contains(userId)) users.add(userId);
                     }
 
                     EmbedBuilder embed = new EmbedBuilder()
                             .setTitle("\ud83d\udcbf Informações da fila [" + TrackUtils.getTimeStamp(totalTime) + "]");
 
                     if (builder.length() <= 2001) {
+                        users.clear();
                         embed.setDescription(
                                 DVD + " " + MathUtils.plural(queue.size(), "música", "músicas") + "\n\n" +
                                         builder.toString());
                         event.getChannel().sendMessage(embed.build()).queue();
                     } else {
                         try {
+                            String content = builder.toString();
 
-                            HttpResponse response = Unirest.post("https://hastebin.com/documents").body(builder.toString()).asString();
+                            content = content.replace("`", "");
+                            for (int i = 0; i < users.size(); i++)
+                                content = content.replace("(<@" + users.get(i) + ">)", "");
 
-                            Logger.log(response.getBody().toString());
+                            fields.replace("api_paste_code", content);
+                            fields.replace("api_paste_name", "Lauren playlist (" + queue.size() + " musicas)");
 
+                            ConnectionFactory factory = new ConnectionFactory(fields, "https://pastebin.com/api/api_post.php");
                             builder.setLength(1924);
-                            embed.setDescription(
-                                    DVD + " " + MathUtils.plural(queue.size(), "música", "músicas") + "\n\n" + builder.toString() +
-                                            "\n[Clique aqui para ver o resto das músicas](https://hastebin.com/" + new JSONObject(response.getBody().toString()).getString("key") + ")");
+                            embed.setDescription(DVD + " " + MathUtils.plural(queue.size(), "música", "músicas") + "\n\n" + builder.toString()
+                                    + "\n[Clique aqui para ver o resto das músicas](" + factory.buildConnection() + ")");
 
                             event.getChannel().sendMessage(embed.build()).queue();
                         } catch (Exception exception) {
@@ -148,6 +171,7 @@ public class MusicCommand extends Command {
                 }
 
                 case "votar":
+                case "p":
                 case "pular": {
                     if (isIdle(event.getTextChannel())) return;
                     if (isCurrentDj(event.getMember())) {
@@ -215,14 +239,60 @@ public class MusicCommand extends Command {
         String input = String.join(" ", Arrays.copyOfRange(arguments, 1, arguments.length));
         input = input.contains("http") ? input : "ytsearch: " + input;
 
+        if (input.contains("spotify.com") && Lauren.spotifyApi != null) {
+            String url;
+            if (input.contains("/track/")) {
+                url = input.split("/track/")[1].replace("?si", "").split("=")[0];
+
+                try {
+                    Track track = Lauren.spotifyApi.getTrack(url).build().execute();
+                    input = "ytsearch: " + track.getName();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                    Logger.error(exception);
+                }
+            } else if (input.contains("/playlist/")) {
+                url = input.split("/playlist/")[1].replace("?si", "").split("=")[0];
+
+                try {
+                    Playlist playlist = Lauren.spotifyApi.getPlaylist(url).build().execute();
+
+                    int limit = Utilities.isBooster(event.getMember()) || Utilities.isDJ(event.getMember(), null, false) ? 100 : 25;
+                    int maxMusics = Math.min(playlist.getTracks().getItems().length, limit);
+
+                    for (int i = 0; i < maxMusics; i++) {
+                        Track track = (Track) playlist.getTracks().getItems()[i].getTrack();
+                        trackManager.loadTrack("ytsearch: " + track.getName(),
+                                event.getMember(),
+                                event.getTextChannel(),
+                                false);
+                    }
+
+                    EmbedBuilder embed = new EmbedBuilder()
+                            .setTitle("💿 " + Utilities.getFullName(event.getMember().getUser()) + " adicionou " + maxMusics + " músicas a fila")
+                            .setDescription("\uD83D\uDCBD Informações da playlist:\n" +
+                                    "\ud83d\udcc0 Nome: `" + playlist.getName() + "`\n" +
+                                    "\uD83C\uDFB6 Músicas: `" + maxMusics + "`\n\n" +
+                                    "\uD83D\uDCCC Link: [Clique aqui](" + input + ")");
+
+                    Logger.log("The player " + Utilities.getFullName(event.getMember().getUser()) + " added a playlist with " + maxMusics + " musics").save();
+                    event.getChannel().sendMessage(embed.build()).queue();
+                    return;
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
+        }
+
         switch (operation) {
             case "search":
             case "buscar":
             case "busca":
             case "link":
+            case "b":
             case "play":
             case "tocar": {
-                trackManager.loadTrack(input, event.getMember(), event.getTextChannel());
+                trackManager.loadTrack(input, event.getMember(), event.getTextChannel(), true);
                 return;
             }
         }
@@ -276,6 +346,5 @@ public class MusicCommand extends Command {
 
         chat.sendMessage(builder.build()).queue();
     }
-
 
 }

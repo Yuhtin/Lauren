@@ -9,7 +9,6 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -33,27 +32,29 @@ public class TrackManager extends AudioEventAdapter {
         AudioSourceManagers.registerLocalSource(audioManager);
     }
 
-    public void loadTrack(String trackUrl, Member member, TextChannel channel) {
+    public void loadTrack(String trackUrl, Member member, TextChannel channel, boolean message) {
         channel.sendTyping().queue();
         audioManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
 
             @Override
             public void trackLoaded(AudioTrack track) {
                 if (player.isPaused()) player.setPaused(false);
+                if (message) {
+                    EmbedBuilder embed = new EmbedBuilder()
+                            .setTitle("💿 " + Utilities.getFullName(member.getUser()) + " adicionou 1 música a fila")
+                            .setDescription(
+                                    "\ud83d\udcc0 Nome: `" + track.getInfo().title + "`\n" +
+                                            "\uD83D\uDCB0 Autor: `" + track.getInfo().author + "`\n" +
+                                            "\uD83D\uDCE2 Tipo de vídeo: `" +
+                                            (track.getInfo().isStream ? "Stream" : track.getInfo().title.contains("Podcast") ?
+                                                    "Podcast" : "Música") + "`\n" +
+                                            "\uD83D\uDCCC Link: [Clique aqui](" + track.getInfo().uri + ")");
 
-                EmbedBuilder embed = new EmbedBuilder()
-                        .setTitle("💿 " + Utilities.getFullName(member.getUser()) + " adicionou 1 música a fila")
-                        .setDescription(
-                                "\ud83d\udcc0 Nome: `" + track.getInfo().title + "`\n" +
-                                        "\uD83D\uDCB0 Autor: `" + track.getInfo().author + "`\n" +
-                                        "\uD83D\uDCE2 Tipo de vídeo: `" +
-                                        (track.getInfo().isStream ? "Stream" : track.getInfo().title.contains("Podcast") ?
-                                                "Podcast" : "Música") + "`\n" +
-                                        "\uD83D\uDCCC Link: [Clique aqui](" + track.getInfo().uri + ")");
+                    Logger.log("The player " + Utilities.getFullName(member.getUser()) + " added a music").save();
+                    channel.sendMessage(embed.build()).queue();
+                }
 
-                Logger.log("The player " + Utilities.getFullName(member.getUser()) + " added a music").save();
                 play(track, member);
-                channel.sendMessage(embed.build()).queue();
             }
 
             @Override
