@@ -20,7 +20,7 @@ public class ChatMessage extends ListenerAdapter {
             return;
 
         if (event.getMessage().getContentRaw().startsWith("$")) {
-            String command = event.getMessage().getContentRaw().split(" ")[0].replace("$", "");
+            String command = event.getMessage().getContentRaw().split(" ")[0].replace("$", "").toLowerCase();
             if (!CommandCache.aliases.contains(command)) {
                 for (String alias : CommandCache.aliases) {
                     if (LevenshteinCalculator.eval(command, alias) < 4) {

@@ -5,6 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.music.AudioInfo;
 import com.yuhtin.lauren.core.music.AudioPlayerSendHandler;
 import com.yuhtin.lauren.core.music.TrackManager;
@@ -129,6 +130,8 @@ public class MusicCommand extends Command {
 
                             HttpResponse response = Unirest.post("https://hastebin.com/documents").body(builder.toString()).asString();
 
+                            Logger.log(response.getBody().toString());
+
                             builder.setLength(1924);
                             embed.setDescription(
                                     DVD + " " + MathUtils.plural(queue.size(), "música", "músicas") + "\n\n" + builder.toString() +
@@ -210,12 +213,12 @@ public class MusicCommand extends Command {
         }
 
         String input = String.join(" ", Arrays.copyOfRange(arguments, 1, arguments.length));
+        input = input.contains("http") ? input : "ytsearch: " + input;
+
         switch (operation) {
             case "search":
             case "buscar":
             case "busca":
-                input = "ytsearch: " + input;
-
             case "link":
             case "play":
             case "tocar": {
