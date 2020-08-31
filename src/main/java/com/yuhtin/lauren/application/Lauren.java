@@ -116,7 +116,16 @@ public class Lauren {
 
         TaskHelper.schedule(new TimerTask() {
             @Override
-            public void run() { guild = bot.getGuildCache().iterator().next();
+            public void run() {
+                if (config.laurenTest) {
+                    guild = bot.getGuildById(723625569111113740L);
+
+                    bot.getTextChannelById(749846337016692939L)
+                            .sendMessage("<:online:703089222021808170> Online\n\n" +
+                                    ":flag_br: Estou online atualmente, talvez ocorra algumas interferências com a <@702518526753243156>\n" +
+                                    ":flag_us: I am currently online, there may be some interference with <@702518526753243156>\n\n" +
+                                    "@everyone").queue();
+                } else guild = bot.getGuildCache().iterator().next();
             }
         }, 7, TimeUnit.SECONDS);
         TaskHelper.timer(new TimerTask() {

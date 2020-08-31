@@ -15,7 +15,7 @@ public class Config {
             pastebinUserKey = "";
 
     public long ownerID, resgistrationId, ludoCasual, ludoRanked, poolCasual, poolRanked = 0;
-    public boolean log = false;
+    public boolean log = false, laurenTest = false;
 
     public static Config startup() {
         try {
