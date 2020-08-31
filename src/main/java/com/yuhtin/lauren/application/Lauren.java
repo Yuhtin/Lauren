@@ -1,8 +1,6 @@
 package com.yuhtin.lauren.application;
 
 import com.wrapper.spotify.SpotifyApi;
-import com.wrapper.spotify.exceptions.SpotifyWebApiException;
-import com.wrapper.spotify.requests.data.tracks.GetTrackRequest;
 import com.yuhtin.lauren.commands.music.MusicCommand;
 import com.yuhtin.lauren.core.entities.Config;
 import com.yuhtin.lauren.core.entities.SpotifyConfig;
@@ -13,9 +11,9 @@ import com.yuhtin.lauren.database.Data;
 import com.yuhtin.lauren.database.Database;
 import com.yuhtin.lauren.database.types.MySQL;
 import com.yuhtin.lauren.database.types.SQLite;
+import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.manager.CommandManager;
 import com.yuhtin.lauren.models.manager.EventsManager;
-import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import com.yuhtin.lauren.utils.messages.AsciiBox;
@@ -24,14 +22,11 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
-import org.apache.hc.core5.http.ParseException;
-
 
 import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 import java.util.TimerTask;
@@ -113,7 +108,6 @@ public class Lauren {
         while (scanner.nextLine().equalsIgnoreCase("stop")) {
             new Thread(Lauren::finish).start();
         }
-
     }
 
     private static void loadTasks() {

@@ -4,7 +4,7 @@ import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.match.Match;
 import com.yuhtin.lauren.core.match.controller.MatchController;
-import com.yuhtin.lauren.core.player.PlayerData;
+import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.utils.serialization.Serializer;
 
 import javax.annotation.Nullable;
@@ -62,9 +62,9 @@ public class Database {
     }
 
     @Nullable
-    public String loadPlayer(Long userID) {
+    public Player loadPlayer(Long userID) {
         PreparedStatement statement;
-        String data = null;
+        Player player = null;
         try {
             statement = connection.prepareStatement("SELECT * FROM " + tablePlayers + " WHERE `id` = ?");
             statement.setLong(1, userID);
@@ -72,23 +72,26 @@ public class Database {
             ResultSet query = statement.executeQuery();
             if (query.getFetchSize() > 1) Logger.log("I found multiple values for id " + userID, LogType.WARN).save();
 
-            while (query.next()) {
-                data = query.getString("data");
-            }
+            while (query.next()) player = Serializer.player.deserialize(query.getString("data"));
             statement.close();
 
-            return data;
+            if (player == null) {
+                create(userID);
+                player = new Player(userID);
+            }
+
+            return player;
         } catch (SQLException exception) {
             exception.printStackTrace();
             Logger.log("Could not load player from database", LogType.ERROR).save();
-            return "SQLError";
+            return null;
         }
     }
 
-    public void save(Long userID, PlayerData controller) {
+    public void save(Long userID, Player controller) {
         PreparedStatement statement;
         try {
-            String result = Serializer.playerData.serialize(controller);
+            String result = Serializer.player.serialize(controller);
             statement = connection.prepareStatement("UPDATE " + tablePlayers + " SET `data` = ? WHERE `id` = ?");
             statement.setString(1, result);
             statement.setLong(2, userID);
@@ -120,7 +123,7 @@ public class Database {
         try {
             statement = connection.prepareStatement("INSERT INTO " + tablePlayers + " (`id`, `data`) VALUES(?,?)");
             statement.setLong(1, userID);
-            statement.setString(2, Serializer.playerData.serialize(new PlayerData(userID)));
+            statement.setString(2, Serializer.player.serialize(new Player(userID)));
 
             statement.executeUpdate();
             statement.close();

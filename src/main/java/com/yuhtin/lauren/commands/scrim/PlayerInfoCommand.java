@@ -2,8 +2,8 @@ package com.yuhtin.lauren.commands.scrim;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.core.player.PlayerData;
-import com.yuhtin.lauren.core.player.controller.PlayerDataController;
+import com.yuhtin.lauren.core.player.Player;
+import com.yuhtin.lauren.service.PlayerService;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -26,7 +26,7 @@ public class PlayerInfoCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
         Member target = event.getMessage().getMentionedMembers().size() < 1 ? event.getMember() : event.getMessage().getMentionedMembers().get(0);
-        PlayerData controller = PlayerDataController.get(target.getIdLong());
+        Player controller = PlayerService.INSTANCE.get(target.getIdLong());
 
         String roles = Utilities.rolesToString(target.getRoles());
         String name = target.getNickname() == null ? target.getUser().getName() : target.getNickname();

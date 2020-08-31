@@ -2,8 +2,8 @@ package com.yuhtin.lauren.commands.utility;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.core.player.PlayerData;
-import com.yuhtin.lauren.core.player.controller.PlayerDataController;
+import com.yuhtin.lauren.core.player.Player;
+import com.yuhtin.lauren.service.PlayerService;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.MathUtils;
 import com.yuhtin.lauren.utils.helper.Utilities;
@@ -24,7 +24,7 @@ public class DailyCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        PlayerData data = PlayerDataController.get(event.getMember().getIdLong());
+        Player data = PlayerService.INSTANCE.get(event.getMember().getIdLong());
 
         if (data.dailyDelay > System.currentTimeMillis()) {
             event.getChannel().sendMessage("Poxa 😥 Você precisa aguardar mais `"

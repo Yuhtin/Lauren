@@ -246,7 +246,7 @@ public class MusicCommand extends Command {
 
                 try {
                     Track track = Lauren.spotifyApi.getTrack(url).build().execute();
-                    input = "ytsearch: " + track.getName();
+                    input = "ytsearch: " + track.getName() + " " + track.getArtists()[0].getName();
                 } catch (Exception exception) {
                     exception.printStackTrace();
                     Logger.error(exception);
@@ -262,7 +262,7 @@ public class MusicCommand extends Command {
 
                     for (int i = 0; i < maxMusics; i++) {
                         Track track = (Track) playlist.getTracks().getItems()[i].getTrack();
-                        trackManager.loadTrack("ytsearch: " + track.getName(),
+                        trackManager.loadTrack("ytsearch: " + track.getName() + " " + track.getArtists()[0].getName(),
                                 event.getMember(),
                                 event.getTextChannel(),
                                 false);

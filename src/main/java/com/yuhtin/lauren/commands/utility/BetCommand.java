@@ -3,8 +3,8 @@ package com.yuhtin.lauren.commands.utility;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.application.Lauren;
-import com.yuhtin.lauren.core.player.PlayerData;
-import com.yuhtin.lauren.core.player.controller.PlayerDataController;
+import com.yuhtin.lauren.core.player.Player;
+import com.yuhtin.lauren.service.PlayerService;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -82,7 +82,7 @@ public class BetCommand extends Command {
             return;
         }
 
-        PlayerData data = PlayerDataController.get(event.getAuthor().getIdLong());
+        Player data = PlayerService.INSTANCE.get(event.getAuthor().getIdLong());
         if (data.money < money) {
             event.getChannel().sendMessage("<:chorano:726207542413230142> <@" + event.getAuthor().getId() + ">, você não tem dinheiro suficiente para realizar esta aposta.").queue();
             return;
@@ -96,7 +96,7 @@ public class BetCommand extends Command {
 
         int total = (int) (money * multiplier - (money));
         data.addMoney(total).save();
-        event.getChannel().sendMessage("<a:palmas:726205273974374440> <@" + event.getAuthor().getId() + ">, você ganhou `+ $" + total + "` apostando na cor " + color).queue();
+        event.getChannel().sendMessage("<:felizpakas:742373250037710918> <@" + event.getAuthor().getId() + ">, você ganhou `+ $" + total + "` apostando na cor " + color).queue();
     }
 
     private EmbedBuilder helpMessage(Color color) {

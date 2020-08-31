@@ -1,6 +1,6 @@
 package com.yuhtin.lauren.events;
 
-import com.yuhtin.lauren.core.player.controller.PlayerDataController;
+import com.yuhtin.lauren.service.PlayerService;
 import com.yuhtin.lauren.service.CommandCache;
 import com.yuhtin.lauren.utils.helper.LevenshteinCalculator;
 import com.yuhtin.lauren.utils.helper.Utilities;
@@ -38,7 +38,7 @@ public class ChatMessage extends ListenerAdapter {
             return;
         }
 
-        PlayerDataController.get(event.getMember().getIdLong()).gainXP(3).updateLevel().save();
+        PlayerService.INSTANCE.get(event.getMember().getIdLong()).gainXP(3).updateLevel().save();
     }
 
     private boolean isMusicCommand(String contentRaw) {

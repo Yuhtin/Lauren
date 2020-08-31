@@ -4,14 +4,14 @@ import com.google.gson.Gson;
 import com.yuhtin.lauren.core.draw.Draw;
 import com.yuhtin.lauren.core.entities.Config;
 import com.yuhtin.lauren.core.match.Match;
-import com.yuhtin.lauren.core.player.PlayerData;
+import com.yuhtin.lauren.core.player.Player;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class Serializer<T> {
 
     public static final Serializer<Config> config = new Serializer<>(Config.class);
-    public static final Serializer<PlayerData> playerData = new Serializer<>(PlayerData.class);
+    public static final Serializer<Player> player = new Serializer<>(Player.class);
     public static final Serializer<Match> match = new Serializer<>(Match.class);
     public static final Serializer<Draw> draw = new Serializer<>(Draw.class);
 
