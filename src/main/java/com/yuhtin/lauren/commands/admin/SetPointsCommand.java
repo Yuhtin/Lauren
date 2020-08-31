@@ -25,7 +25,7 @@ public class SetPointsCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        if (!Utilities.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true))
+        if (!Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true))
             return;
 
         if (event.getMessage().getMentionedMembers().size() < 1) {

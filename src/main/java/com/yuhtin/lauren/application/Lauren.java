@@ -67,7 +67,7 @@ public class Lauren {
         if (!startDatabase()) return;
         Thread buildThread = new Thread(() -> {
             try {
-                Utilities.foundVersion();
+                Utilities.INSTANCE.foundVersion();
                 MusicCommand.constructFields();
                 bot = new JDABuilder(AccountType.BOT)
                         .setToken(config.token)
@@ -162,18 +162,19 @@ public class Lauren {
 
     public static void finish() {
         try {
+            PlayerService.INSTANCE.savePlayers();
             data.close();
             LocalDateTime now = LocalDateTime.now();
 
             File file = LoggerController.get().getFile();
-            Logger.log("Compressing the log '" + file.getName() + "' to a zip file").save();
-            Logger.log("Ending log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s").save();
+            Logger.log("Compressing the log '" + file.getName() + "' to a zip file", LogType.FINISH).save();
+            Logger.log("Ending log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s", LogType.FINISH).save();
 
             FileOutputStream outputStream = new FileOutputStream(file.getPath().split("\\.")[0] + ".zip");
             ZipOutputStream zipFileOutput = new ZipOutputStream(outputStream);
 
             try {
-                Utilities.writeToZip(file, zipFileOutput);
+                Utilities.INSTANCE.writeToZip(file, zipFileOutput);
             } catch (IOException exception) {
                 Logger.log("Can't write log file to zip file", LogType.ERROR).save();
             }
@@ -182,7 +183,7 @@ public class Lauren {
             zipFileOutput.close();
             outputStream.close();
 
-            Logger.log("Successfully compressed file").save();
+            Logger.log("Successfully compressed file", LogType.FINISH).save();
         } catch (Exception exception) {
             exception.printStackTrace();
             Logger.log("Can't compress a log file", LogType.WARN).save();

@@ -26,12 +26,12 @@ public class SendMessageCommand extends Command {
     @SneakyThrows
     @Override
     protected void execute(CommandEvent event) {
-        if (!Utilities.isPermission(event.getMember(), event.getChannel(), Permission.MANAGE_CHANNEL, true)) return;
+        if (!Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.MANAGE_CHANNEL, true)) return;
 
         if (!event.getMessage().getAttachments().isEmpty()) {
             Message.Attachment attachment = event.getMessage().getAttachments().get(0);
             try {
-                File file = Utilities.getAttachment(attachment);
+                File file = Utilities.INSTANCE.getAttachment(attachment);
 
                 if (file != null) event.getChannel().sendMessage("@everyone").addFile(file)
                         .queue(m -> event.getMessage().delete().queueAfter(3, TimeUnit.SECONDS, m2 -> file.delete()));

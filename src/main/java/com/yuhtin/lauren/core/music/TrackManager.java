@@ -41,7 +41,7 @@ public class TrackManager extends AudioEventAdapter {
                 if (player.isPaused()) player.setPaused(false);
                 if (message) {
                     EmbedBuilder embed = new EmbedBuilder()
-                            .setTitle("💿 " + Utilities.getFullName(member.getUser()) + " adicionou 1 música a fila")
+                            .setTitle("💿 " + Utilities.INSTANCE.getFullName(member.getUser()) + " adicionou 1 música a fila")
                             .setDescription(
                                     "\ud83d\udcc0 Nome: `" + track.getInfo().title + "`\n" +
                                             "\uD83D\uDCB0 Autor: `" + track.getInfo().author + "`\n" +
@@ -50,7 +50,7 @@ public class TrackManager extends AudioEventAdapter {
                                                     "Podcast" : "Música") + "`\n" +
                                             "\uD83D\uDCCC Link: [Clique aqui](" + track.getInfo().uri + ")");
 
-                    Logger.log("The player " + Utilities.getFullName(member.getUser()) + " added a music").save();
+                    Logger.log("The player " + Utilities.INSTANCE.getFullName(member.getUser()) + " added a music").save();
                     channel.sendMessage(embed.build()).queue();
                 }
 
@@ -66,17 +66,17 @@ public class TrackManager extends AudioEventAdapter {
                 } else {
                     if (player.isPaused()) player.setPaused(false);
 
-                    int limit = Utilities.isBooster(member) || Utilities.isDJ(member, null, false) ? 100 : 25;
+                    int limit = Utilities.INSTANCE.isBooster(member) || Utilities.INSTANCE.isDJ(member, null, false) ? 100 : 25;
                     int maxMusics = Math.min(playlist.getTracks().size(), limit);
 
                     EmbedBuilder embed = new EmbedBuilder()
-                            .setTitle("💿 " + Utilities.getFullName(member.getUser()) + " adicionou " + maxMusics + " músicas a fila")
+                            .setTitle("💿 " + Utilities.INSTANCE.getFullName(member.getUser()) + " adicionou " + maxMusics + " músicas a fila")
                             .setDescription("\uD83D\uDCBD Informações da playlist:\n" +
                                     "\ud83d\udcc0 Nome: `" + playlist.getName() + "`\n" +
                                     "\uD83C\uDFB6 Músicas: `" + maxMusics + "`\n\n" +
                                     "\uD83D\uDCCC Link: [Clique aqui](" + trackUrl + ")");
 
-                    Logger.log("The player " + Utilities.getFullName(member.getUser()) + " added a playlist with " + maxMusics + " musics").save();
+                    Logger.log("The player " + Utilities.INSTANCE.getFullName(member.getUser()) + " added a playlist with " + maxMusics + " musics").save();
                     for (int i = 0; i < maxMusics; i++) {
                         play(playlist.getTracks().get(i), member);
                     }

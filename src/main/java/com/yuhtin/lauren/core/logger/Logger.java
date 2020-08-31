@@ -3,6 +3,7 @@ package com.yuhtin.lauren.core.logger;
 import com.yuhtin.lauren.application.Lauren;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
 import com.yuhtin.lauren.models.enums.LogType;
+import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -22,7 +23,7 @@ public class Logger {
     }
 
     public static Logger log(Object message) {
-        return log(message, LogType.LOG);
+        return log("[" + Utilities.INSTANCE.getStackTrace()[2].getFileName().replace(".java", "") + "] " + message, LogType.LOG);
     }
 
     public void save() {

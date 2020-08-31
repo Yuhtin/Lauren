@@ -29,7 +29,7 @@ public class Match {
     public Match(Game game) {
         this.game = game;
 
-        id = Utilities.randomString();
+        id = Utilities.INSTANCE.randomString();
     }
 
     public void createChannel() {

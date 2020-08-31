@@ -31,7 +31,9 @@ public class ChatMessage extends ListenerAdapter {
             }
         }
 
-        if (!isMusicCommand(event.getMessage().getContentRaw()) && event.getMessage().getContentRaw().contains("https://") && !Utilities.isPermission(event.getMember(), event.getChannel(), Permission.MESSAGE_MANAGE, false)) {
+        if (!isMusicCommand(event.getMessage().getContentRaw())
+                && event.getMessage().getContentRaw().contains("https://")
+                && !Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.MESSAGE_MANAGE, false)) {
             event.getChannel().sendMessage("<:chorano:726207542413230142> Poxa, não divulga aqui amigo, temos nosso sistema de parceria, fale com o <@272879983326658570> no privado.")
                     .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             event.getMessage().delete().queue();

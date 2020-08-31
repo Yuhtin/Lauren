@@ -24,7 +24,7 @@ public class MatchEmbedMessage extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        if (!Utilities.isPermission(event.getMember(), event.getChannel(), Permission.MANAGE_CHANNEL, true)) return;
+        if (!Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.MANAGE_CHANNEL, true)) return;
 
         String[] arguments = event.getArgs().split(" ");
         if (arguments.length < 2) {

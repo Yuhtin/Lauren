@@ -11,7 +11,6 @@ import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.List;
@@ -24,7 +23,9 @@ import java.util.zip.ZipOutputStream;
 
 public class Utilities {
 
-    public static boolean isPermission(Member member, MessageChannel channel, Permission permission, boolean showMessage) {
+    public static final Utilities INSTANCE = new Utilities();
+
+    public boolean isPermission(Member member, MessageChannel channel, Permission permission, boolean showMessage) {
         if (!member.hasPermission(permission)) {
             if (!showMessage) return false;
 
@@ -36,7 +37,14 @@ public class Utilities {
         return true;
     }
 
-    public static boolean isOwner(MessageChannel channel, User user, boolean showMessage) {
+    public StackTraceElement[] getStackTrace() {
+        Throwable throwable = new Throwable();
+        throwable.fillInStackTrace();
+
+        return throwable.getStackTrace();
+    }
+
+    public boolean isOwner(MessageChannel channel, User user, boolean showMessage) {
         if (Lauren.config.ownerID != user.getIdLong()) {
             Logger.log("Failed to check owner permission for user " + getFullName(user));
             if (!showMessage) return false;
@@ -48,7 +56,7 @@ public class Utilities {
         return true;
     }
 
-    public static void updateNickByLevel(Long userID, int level) {
+    public void updateNickByLevel(Long userID, int level) {
         Member member = Lauren.bot.getGuilds().get(0).getMemberById(userID);
         if (member == null) return;
 
@@ -65,16 +73,16 @@ public class Utilities {
         }
     }
 
-    public static String format(double valor) {
+    public String format(double valor) {
         DecimalFormat decimalFormat = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US));
         return decimalFormat.format(valor);
     }
 
-    public static String getFullName(User user) {
+    public String getFullName(User user) {
         return user.getName() + "#" + user.getDiscriminator();
     }
 
-    public static String rolesToString(List<Role> roles) {
+    public String rolesToString(List<Role> roles) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < roles.size(); i++) {
             if (i != 0) builder.append(", ");
@@ -84,7 +92,7 @@ public class Utilities {
         return builder.toString();
     }
 
-    public static String randomString() {
+    public String randomString() {
         StringBuilder sb = new StringBuilder();
         String a = "1234567890";
         int i;
@@ -96,7 +104,7 @@ public class Utilities {
         return sb.toString();
     }
 
-    public static void writeToZip(File file, ZipOutputStream zipStream) throws IOException {
+    public void writeToZip(File file, ZipOutputStream zipStream) throws IOException {
         FileInputStream fis = new FileInputStream(file);
         ZipEntry zipEntry = new ZipEntry(file.getName());
 
@@ -111,7 +119,7 @@ public class Utilities {
         fis.close();
     }
 
-    public static File getAttachment(Message.Attachment attachment) {
+    public File getAttachment(Message.Attachment attachment) {
         File file = new File("temporary/" + attachment.getFileName());
         try {
             file.createNewFile();
@@ -121,7 +129,7 @@ public class Utilities {
         }
     }
 
-    public static boolean isDJ(Member member, MessageChannel channel, boolean message) {
+    public boolean isDJ(Member member, MessageChannel channel, boolean message) {
         boolean isDJ = member.getRoles().stream().anyMatch(r -> r.getIdLong() == 722957999949348935L);
 
         if (!isDJ && message)
@@ -129,17 +137,17 @@ public class Utilities {
         return isDJ;
     }
 
-    public static boolean isBooster(Member member) {
+    public boolean isBooster(Member member) {
         return member.getRoles().stream().anyMatch(role -> role.getIdLong() == 722116789055782912L);
     }
 
-    public static  void foundVersion() {
+    public void foundVersion() {
         Properties properties = new Properties();
 
         try {
             properties.load(Lauren.class.getClassLoader().getResourceAsStream("project.properties"));
             Lauren.version = properties.getProperty("version");
-        }catch (Exception exception) {
+        } catch (Exception exception) {
             Logger.log("An exception was caught while searching for my client version", LogType.ERROR);
             Logger.error(exception);
         }

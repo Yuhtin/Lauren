@@ -28,16 +28,16 @@ public class PlayerInfoCommand extends Command {
         Member target = event.getMessage().getMentionedMembers().size() < 1 ? event.getMember() : event.getMessage().getMentionedMembers().get(0);
         Player controller = PlayerService.INSTANCE.get(target.getIdLong());
 
-        String roles = Utilities.rolesToString(target.getRoles());
+        String roles = Utilities.INSTANCE.rolesToString(target.getRoles());
         String name = target.getNickname() == null ? target.getUser().getName() : target.getNickname();
 
         EmbedBuilder embedBuilder = new EmbedBuilder()
                 .setColor(target.getColor())
                 .setAuthor("Informações do jogador " + name, "https://google.com", target.getUser().getAvatarUrl())
                 .setThumbnail(controller.ludoRank.position > controller.poolRank.position ? controller.ludoRank.url : controller.poolRank.url)
-                .addField("⚗️ Experiência", "`Nível " + controller.level + " (" + Utilities.format(controller.experience) + " XP)`", false)
+                .addField("⚗️ Experiência", "`Nível " + controller.level + " (" + Utilities.INSTANCE.format(controller.experience) + " XP)`", false)
                 .addField("🧶 Cargos", "`" + (roles.equalsIgnoreCase("") ? "Nenhum" : roles) + "`", false)
-                .addField("\uD83D\uDCB0 Dinheiro", "`$" + (Utilities.format(controller.money)) + "`", false)
+                .addField("\uD83D\uDCB0 Dinheiro", "`$" + (Utilities.INSTANCE.format(controller.money)) + "`", false)
                 .addField("\uD83D\uDC7E Partidas totais", "`" + (controller.ludoMatches + controller.poolMatches) + "`", false)
                 .addField("\uD83C\uDFB1 8BallPool",
                         "  \uD83D\uDD25 Partidas: " + controller.poolMatches + " \n" +

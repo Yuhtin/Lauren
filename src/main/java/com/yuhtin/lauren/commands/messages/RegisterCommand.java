@@ -21,7 +21,7 @@ public class RegisterCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
         event.getMessage().delete().queue();
-        if (!Utilities.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true)) return;
+        if (!Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true)) return;
 
         MessageAction action = event.getChannel().sendMessage(":flag_br: - Portuguese\n" +
                 "Olá jogadores, para realizar seu cadastro reaja abaixo desta mensagem qual o seu sexo respectivamente\n" +

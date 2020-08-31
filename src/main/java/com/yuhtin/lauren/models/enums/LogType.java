@@ -4,5 +4,6 @@ public enum LogType {
     LOG,
     WARN,
     ERROR,
-    STARTUP
+    STARTUP,
+    FINISH
 }

@@ -2,6 +2,7 @@ package com.yuhtin.lauren.commands.music;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.utils.helper.Utilities;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.wrapper.spotify.model_objects.specification.Playlist;
 import com.wrapper.spotify.model_objects.specification.Track;
@@ -14,7 +15,6 @@ import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.service.ConnectionFactory;
 import com.yuhtin.lauren.utils.helper.MathUtils;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
-import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -64,7 +64,7 @@ public class MusicCommand extends Command {
             return;
         }
 
-        if (!Utilities.isOwner(event.getChannel(), event.getAuthor(), false)
+        if (!Utilities.INSTANCE.isOwner(event.getChannel(), event.getAuthor(), false)
                 && (event.getMember().getVoiceState() == null
                 || event.getMember().getVoiceState().getChannel() == null
                 || event.getMember().getVoiceState().getChannel().getIdLong() != 722935562155196506L)) {
@@ -80,7 +80,7 @@ public class MusicCommand extends Command {
                 case "pause":
                 case "pausar": {
                     if (isIdle(event.getTextChannel())) return;
-                    if (!Utilities.isDJ(event.getMember(), event.getTextChannel(), true)) return;
+                    if (!Utilities.INSTANCE.isDJ(event.getMember(), event.getTextChannel(), true)) return;
 
                     trackManager.player.setPaused(!trackManager.player.isPaused());
                     if (trackManager.player.isPaused())
@@ -194,7 +194,7 @@ public class MusicCommand extends Command {
                     }
 
                     event.getMessage().delete().queue();
-                    String name = event.getMember().getNickname() == null ? Utilities.getFullName(event.getAuthor()) : event.getMember().getNickname();
+                    String name = event.getMember().getNickname() == null ? Utilities.INSTANCE.getFullName(event.getAuthor()) : event.getMember().getNickname();
                     event.getChannel().sendMessage("\uD83E\uDDEC **" + name + "** votou para pular a música **(" + info.getSkips() + "/" + (audio.getMembers().size() - 2) + ")**").queue();
                     return;
                 }
@@ -203,7 +203,7 @@ public class MusicCommand extends Command {
                 case "fpular":
                 case "fp": {
                     if (isIdle(event.getTextChannel())) return;
-                    if (!Utilities.isDJ(event.getMember(), event.getTextChannel(), true)) return;
+                    if (!Utilities.INSTANCE.isDJ(event.getMember(), event.getTextChannel(), true)) return;
 
                     forceSkipTrack();
                     event.getChannel().sendMessage("\u23e9 Pulei a música pra você <3").queue();
@@ -214,7 +214,7 @@ public class MusicCommand extends Command {
                 case "limpar":
                 case "sair":
                 case "leave": {
-                    if (!Utilities.isDJ(event.getMember(), event.getTextChannel(), true)) return;
+                    if (!Utilities.INSTANCE.isDJ(event.getMember(), event.getTextChannel(), true)) return;
 
                     trackManager.purgeQueue();
                     trackManager.player.stopTrack();
@@ -227,7 +227,7 @@ public class MusicCommand extends Command {
                 case "misturar":
                 case "m": {
                     if (isIdle(event.getTextChannel())) return;
-                    if (!Utilities.isDJ(event.getMember(), event.getTextChannel(), true)) return;
+                    if (!Utilities.INSTANCE.isDJ(event.getMember(), event.getTextChannel(), true)) return;
 
                     trackManager.shuffleQueue();
                     event.getChannel().sendMessage("<a:infinito:703187274912759899> Misturando a lista de músicas").queue();
@@ -257,7 +257,7 @@ public class MusicCommand extends Command {
                 try {
                     Playlist playlist = Lauren.spotifyApi.getPlaylist(url).build().execute();
 
-                    int limit = Utilities.isBooster(event.getMember()) || Utilities.isDJ(event.getMember(), null, false) ? 100 : 25;
+                    int limit = Utilities.INSTANCE.isBooster(event.getMember()) || Utilities.INSTANCE.isDJ(event.getMember(), null, false) ? 100 : 25;
                     int maxMusics = Math.min(playlist.getTracks().getItems().length, limit);
 
                     for (int i = 0; i < maxMusics; i++) {
@@ -269,13 +269,13 @@ public class MusicCommand extends Command {
                     }
 
                     EmbedBuilder embed = new EmbedBuilder()
-                            .setTitle("💿 " + Utilities.getFullName(event.getMember().getUser()) + " adicionou " + maxMusics + " músicas a fila")
+                            .setTitle("💿 " + Utilities.INSTANCE.getFullName(event.getMember().getUser()) + " adicionou " + maxMusics + " músicas a fila")
                             .setDescription("\uD83D\uDCBD Informações da playlist:\n" +
                                     "\ud83d\udcc0 Nome: `" + playlist.getName() + "`\n" +
                                     "\uD83C\uDFB6 Músicas: `" + maxMusics + "`\n\n" +
                                     "\uD83D\uDCCC Link: [Clique aqui](" + input + ")");
 
-                    Logger.log("The player " + Utilities.getFullName(event.getMember().getUser()) + " added a playlist with " + maxMusics + " musics").save();
+                    Logger.log("The player " + Utilities.INSTANCE.getFullName(event.getMember().getUser()) + " added a playlist with " + maxMusics + " musics").save();
                     event.getChannel().sendMessage(embed.build()).queue();
                     return;
                 } catch (Exception exception) {
