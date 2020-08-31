@@ -73,7 +73,7 @@ public class Match {
         this.urlPrint = urlPrint;
         this.finishTime = System.currentTimeMillis();
 
-        new Thread(() -> players.forEach(id -> PlayerService.INSTANCE.get(id).computMatch(this).save())).start();
+        new Thread(() -> players.forEach(id -> PlayerService.INSTANCE.get(id).computMatch(this))).start();
 
         MatchController.finishMatch(this);
     }

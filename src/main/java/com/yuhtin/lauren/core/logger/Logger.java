@@ -10,7 +10,7 @@ public class Logger {
 
     public final String message;
 
-    public Logger error(Exception exception) {
+    public static Logger error(Exception exception) {
         return log(exception.getMessage(), LogType.ERROR);
     }
 
@@ -26,7 +26,6 @@ public class Logger {
     }
 
     public void save() {
-        if (Lauren.config.log)
-            LoggerController.get().toFile(message);
+        if (Lauren.config.log) LoggerController.get().toFile(message);
     }
 }

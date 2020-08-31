@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.core.logger.controller;
 
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.enums.LogType;
+import com.yuhtin.lauren.core.logger.Logger;
 import lombok.Getter;
 
 import java.io.BufferedWriter;
@@ -13,12 +13,14 @@ import java.time.LocalDateTime;
 @Getter
 public class LoggerController {
 
-    private static final LoggerController INSTANCE = new LoggerController();
+    private static LoggerController INSTANCE;
 
     private final File file;
-    private BufferedWriter bufferedWriter;
+    private final BufferedWriter bufferedWriter;
 
-    public LoggerController() {
+    public LoggerController() throws IOException {
+        INSTANCE = this;
+
         // create a infinite log archives
         String prefix = "logs/log-";
         int i = 1;
@@ -31,20 +33,12 @@ public class LoggerController {
         this.file = file;
 
         // try to create log file
-        try {
-            file.createNewFile();
-        } catch (Exception exception) {
-            Logger.log("Cannot create a log file");
-        }
+        file.createNewFile();
 
         // starting log
         LocalDateTime now = LocalDateTime.now();
 
-        try {
-            bufferedWriter = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
-        } catch (Exception exception) {
-            Logger.log("Cannot instantiate BufferedWriter");
-        }
+        bufferedWriter = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
 
         Logger.log("Registering logs to " + file.getName(), LogType.STARTUP);
         Logger.log("Lauren is now registering logs", LogType.STARTUP).save();

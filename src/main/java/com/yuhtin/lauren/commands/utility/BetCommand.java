@@ -89,13 +89,13 @@ public class BetCommand extends Command {
         }
 
         if (new Random().nextInt(100) > chance) {
-            data.removeMoney(money).save();
+            data.removeMoney(money);
             event.getChannel().sendMessage("<:chorano:726207542413230142> <@" + event.getAuthor().getId() + ">, você perdeu `$" + money + "` tentando apostar na cor " + color).queue();
             return;
         }
 
         int total = (int) (money * multiplier - (money));
-        data.addMoney(total).save();
+        data.addMoney(total);
         event.getChannel().sendMessage("<:felizpakas:742373250037710918> <@" + event.getAuthor().getId() + ">, você ganhou `+ $" + total + "` apostando na cor " + color).queue();
     }
 

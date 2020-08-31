@@ -34,7 +34,7 @@ public class DailyCommand extends Command {
 
         double bonus = Utilities.isBooster(event.getMember()) ? 1.5 : 1;
 
-        data.setDelay(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1)).addMoney(15 * bonus).gainXP(100 * bonus).save();
+        data.setDelay(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1)).addMoney(15 * bonus).gainXP(100 * bonus);
         event.getChannel().sendMessage("🌟 Aaaaa, eu to muito feliz por ter lembrado de mim e pego seu daily 💙 Veja suas informações atualizadas usando `$perfil` ").queue();
     }
 }

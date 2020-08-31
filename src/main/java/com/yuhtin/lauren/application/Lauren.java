@@ -14,6 +14,7 @@ import com.yuhtin.lauren.database.types.SQLite;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.manager.CommandManager;
 import com.yuhtin.lauren.models.manager.EventsManager;
+import com.yuhtin.lauren.service.PlayerService;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import com.yuhtin.lauren.utils.messages.AsciiBox;
@@ -121,6 +122,13 @@ public class Lauren {
             }
         }, 7, TimeUnit.SECONDS);
 
+        TaskHelper.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                PlayerService.INSTANCE.savePlayers();
+            }
+        }, 5, TimeUnit.MINUTES);
+
         TaskHelper.timer(new TimerTask() {
             @Override
             public void run() {
@@ -144,7 +152,11 @@ public class Lauren {
 
     private static Data selectDatabase(String databaseType) {
         if (databaseType.equalsIgnoreCase("MySQL"))
-            return new MySQL(config.mySqlHost, config.mySqlUser, config.mySqlPassword, config.mySqlDatabase);
+            return new MySQL(config.mySqlHost,
+                    config.mySqlUser,
+                    config.mySqlPassword,
+                    config.mySqlDatabase);
+
         return new SQLite();
     }
 

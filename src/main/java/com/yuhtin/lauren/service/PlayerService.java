@@ -11,6 +11,8 @@ public class PlayerService {
     public static final PlayerService INSTANCE = new PlayerService();
     private final Map<Long, Player> cache = new HashMap<>();
 
+    public void savePlayers() {cache.forEach((id, user) -> Lauren.data.save(id, user));}
+
     public Player get(long userID) {
         Player player = cache.getOrDefault(userID, null);
 

@@ -38,7 +38,7 @@ public class ChatMessage extends ListenerAdapter {
             return;
         }
 
-        PlayerService.INSTANCE.get(event.getMember().getIdLong()).gainXP(3).updateLevel().save();
+        PlayerService.INSTANCE.get(event.getMember().getIdLong()).gainXP(3).updateLevel();
     }
 
     private boolean isMusicCommand(String contentRaw) {
