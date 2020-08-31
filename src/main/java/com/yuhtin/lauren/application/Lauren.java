@@ -116,19 +116,15 @@ public class Lauren {
 
         TaskHelper.schedule(new TimerTask() {
             @Override
-            public void run() {
-                guild = bot.getGuildCache().iterator().next();
-                Logger.log("Loaded main guild");
+            public void run() { guild = bot.getGuildCache().iterator().next();
             }
         }, 7, TimeUnit.SECONDS);
-
-        TaskHelper.schedule(new TimerTask() {
+        TaskHelper.timer(new TimerTask() {
             @Override
             public void run() {
                 PlayerService.INSTANCE.savePlayers();
             }
-        }, 5, TimeUnit.MINUTES);
-
+        }, 5, 5, TimeUnit.MINUTES);
         TaskHelper.timer(new TimerTask() {
             @Override
             public void run() {
