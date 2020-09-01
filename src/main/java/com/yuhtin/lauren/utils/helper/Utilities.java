@@ -130,15 +130,19 @@ public class Utilities {
     }
 
     public boolean isDJ(Member member, MessageChannel channel, boolean message) {
-        boolean isDJ = member.getRoles().stream().anyMatch(r -> r.getIdLong() == 722957999949348935L);
+        boolean isDJ = member.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("DJ \uD83C\uDFB6"));
 
         if (!isDJ && message)
             channel.sendMessage("Ahhh, que pena \uD83D\uDC94 você não pode realizar essa operação").queue();
         return isDJ;
     }
 
+    public boolean isPrime(Member member) {
+        return member.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("PRIME \uD83D\uDE80"));
+    }
+
     public boolean isBooster(Member member) {
-        return member.getRoles().stream().anyMatch(role -> role.getIdLong() == 722116789055782912L);
+        return member.getRoles().stream().anyMatch(role -> role.getIdLong() == 750365511430307931L);
     }
 
     public void foundVersion() {

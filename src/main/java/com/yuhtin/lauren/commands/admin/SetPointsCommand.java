@@ -50,10 +50,8 @@ public class SetPointsCommand extends Command {
         else if (arguments[2].equalsIgnoreCase("Ball")) data.poolPoints = xp;
 
         else {
-            event.getChannel().sendMessage("Este jogo é invalido. Jogos válidos:")
-                    .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-            event.getChannel().sendMessage("Ball ou Ludo")
-                    .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+            event.getChannel().sendMessage("Este jogo é invalido. Jogos válidos:").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+            event.getChannel().sendMessage("Ball ou Ludo").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             return;
         }
 

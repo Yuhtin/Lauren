@@ -1,6 +1,7 @@
 package com.yuhtin.lauren.core.player;
 
 import com.yuhtin.lauren.application.Lauren;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.match.Match;
 import com.yuhtin.lauren.models.enums.GameMode;
 import com.yuhtin.lauren.models.enums.GameType;
@@ -8,6 +9,7 @@ import com.yuhtin.lauren.models.enums.Rank;
 import com.yuhtin.lauren.utils.helper.Utilities;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Player {
@@ -33,9 +35,9 @@ public class Player {
             level = result;
             new Thread(() -> Utilities.INSTANCE.updateNickByLevel(userID, level)).start();
             if (level == 21) {
-                Lauren.guild.addRoleToMember(userID, Lauren.guild.getRoleById(722091214400258068L)).queue();
-                Lauren.guild.getTextChannelById(700683423429165096L)
-                        .sendMessage("<:prime:722115525232296056> O jogador " + Utilities.INSTANCE.getFullName(Lauren.bot.getUserById(userID)) + " se tornou prime").queue();
+                Lauren.guild.addRoleToMember(userID, Lauren.guild.getRoleById(722116789055782912L)).queue();
+                Lauren.guild.getTextChannelById(700683423429165096L).sendMessage(
+                        "<:prime:722115525232296056> O jogador <@" + userID + "> tornou-se prime").queue();
             }
         }
 
@@ -68,9 +70,16 @@ public class Player {
     }
 
     public Player gainXP(double quantity) {
-        experience += (quantity * (poolRank.multiplier + ludoRank.multiplier));
+        List<Double> multipliers = Arrays.asList(primeMultiplier(), poolRank.multiplier, ludoRank.multiplier);
+
+        for (Double multiplier : multipliers) quantity *= multiplier;
+        experience += quantity;
 
         return this;
+    }
+
+    private double primeMultiplier() {
+        return Utilities.INSTANCE.isPrime(Lauren.guild.getMemberById(userID)) ? 1.5 : 1;
     }
 
     public Player computMatch(Match match) {

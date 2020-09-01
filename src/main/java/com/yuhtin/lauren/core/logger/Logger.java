@@ -22,6 +22,15 @@ public class Logger {
         return new Logger(message.toString());
     }
 
+    public static Logger log(String... message) {
+        StringBuilder builder = new StringBuilder();
+        for (String line : message) {
+            builder.append(line).append("\n");
+        }
+
+        return log(builder.toString());
+    }
+
     public static Logger log(Object message) {
         return log("[" + Utilities.INSTANCE.getStackTrace()[2].getFileName().replace(".java", "") + "] " + message, LogType.LOG);
     }

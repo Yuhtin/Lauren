@@ -124,7 +124,7 @@ public class Lauren {
                             .sendMessage("<:online:703089222021808170> Online\n\n" +
                                     ":flag_br: Estou online atualmente, talvez ocorra algumas interferências com a <@702518526753243156>\n" +
                                     ":flag_us: I am currently online, there may be some interference with <@702518526753243156>\n\n" +
-                                    "@everyone").queue();
+                                    bot.getRoleById("701285199081766973").getAsMention()).queue();
                 } else guild = bot.getGuildCache().iterator().next();
             }
         }, 7, TimeUnit.SECONDS);

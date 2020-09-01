@@ -15,8 +15,9 @@ public class ChatMessage extends ListenerAdapter {
     /* Earn 3 XP for every message sent */
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        if (!event.getChannelType().isGuild() || event.getMember() == null ||
-                event.getAuthor().isBot())
+        if (!event.getChannelType().isGuild()
+                || event.getMember() == null
+                || event.getAuthor().isBot())
             return;
 
         if (event.getMessage().getContentRaw().startsWith("$")) {
@@ -34,7 +35,9 @@ public class ChatMessage extends ListenerAdapter {
         if (!isMusicCommand(event.getMessage().getContentRaw())
                 && event.getMessage().getContentRaw().contains("https://")
                 && !Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.MESSAGE_MANAGE, false)) {
-            event.getChannel().sendMessage("<:chorano:726207542413230142> Poxa, não divulga aqui amigo, temos nosso sistema de parceria, fale com o <@272879983326658570> no privado.")
+
+            event.getChannel()
+                    .sendMessage("<:chorano:726207542413230142> Poxa, não divulga aqui amigo, temos nosso sistema de parceria, fale com o <@272879983326658570> no privado.")
                     .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             event.getMessage().delete().queue();
             return;
