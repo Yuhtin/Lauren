@@ -23,6 +23,8 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 
 import javax.security.auth.login.LoginException;
 import java.io.File;
@@ -128,6 +130,33 @@ public class Lauren {
                 } else guild = bot.getGuildCache().iterator().next();
             }
         }, 7, TimeUnit.SECONDS);
+
+        TaskHelper.timer(new TimerTask() {
+            @Override
+            public void run() {
+                String music = "<#" + guild.getTextChannelsByName("\uD83E\uDDEC┇comandos", true).get(0).getId() + ">";
+
+                for (Member member : guild.getMembers()) {
+                    User user = member.getUser();
+                    boolean listening = false;
+
+                    for (Activity activity : member.getActivities()) {
+                        if (activity.getType() == Activity.ActivityType.LISTENING) {
+                            listening = true;
+                            break;
+                        }
+                    }
+
+                    if (!listening) continue;
+
+                    user.openPrivateChannel()
+                            .queue(channel -> channel
+                                    .sendMessage("<@" + user.getId() + "> porque não usa meu sistema de música? Use `$musica` em " + music)
+                                    .queue());
+                }
+            }
+        }, 10, 10, TimeUnit.MINUTES);
+
         TaskHelper.timer(new TimerTask() {
             @Override
             public void run() {

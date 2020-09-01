@@ -1,7 +1,6 @@
 package com.yuhtin.lauren.core.player;
 
 import com.yuhtin.lauren.application.Lauren;
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.match.Match;
 import com.yuhtin.lauren.models.enums.GameMode;
 import com.yuhtin.lauren.models.enums.GameType;
@@ -78,9 +77,7 @@ public class Player {
         return this;
     }
 
-    private double primeMultiplier() {
-        return Utilities.INSTANCE.isPrime(Lauren.guild.getMemberById(userID)) ? 1.5 : 1;
-    }
+    private double primeMultiplier() { return Utilities.INSTANCE.isPrime(Lauren.guild.getMemberById(userID)) ? 1.5 : 1; }
 
     public Player computMatch(Match match) {
         int points = -1;
