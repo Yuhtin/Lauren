@@ -2,7 +2,7 @@ package com.yuhtin.lauren.commands.help;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.application.Lauren;
+import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.MathUtils;
 import lombok.SneakyThrows;
@@ -21,10 +21,6 @@ import java.util.Locale;
         description = "Veja um pouco mais sobre mim",
         alias = {"info", "binfo"})
 public class InfoCommand extends Command {
-    public InfoCommand() {
-        this.name = "botinfo";
-        this.aliases = new String[]{"info", "binfo"};
-    }
 
     @SneakyThrows
     @Override

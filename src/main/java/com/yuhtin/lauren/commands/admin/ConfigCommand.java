@@ -2,10 +2,9 @@ package com.yuhtin.lauren.commands.admin;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.application.Lauren;
+import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.SneakyThrows;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -20,12 +19,6 @@ import java.util.concurrent.TimeUnit;
         description = "Configurar algumas informações minha",
         alias = {"configurar", "cfg", "editar", "edit"})
 public class ConfigCommand extends Command {
-
-    public ConfigCommand() {
-        this.name = "config";
-        this.aliases = new String[]{"configurar", "cfg", "editar", "edit"};
-        this.help = "Configurações do bot.";
-    }
 
     @SneakyThrows
     @Override

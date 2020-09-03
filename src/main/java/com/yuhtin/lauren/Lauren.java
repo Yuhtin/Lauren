@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.application;
+package com.yuhtin.lauren;
 
 import com.wrapper.spotify.SpotifyApi;
 import com.yuhtin.lauren.core.entities.Config;
@@ -18,7 +18,6 @@ import com.yuhtin.lauren.service.PlayerService;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import com.yuhtin.lauren.utils.messages.AsciiBox;
-import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -71,8 +70,7 @@ public class Lauren {
             try {
                 Utilities.INSTANCE.foundVersion();
                 TrackManager.constructFields();
-                bot = new JDABuilder(AccountType.BOT)
-                        .setToken(config.token)
+                bot = JDABuilder.createDefault(config.token)
                         .setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"))
                         .setAutoReconnect(true)
                         .build();
@@ -197,6 +195,7 @@ public class Lauren {
 
     public static void finish() {
         try {
+            TrackManager.get().destroy();
             PlayerService.INSTANCE.savePlayers();
             data.close();
             LocalDateTime now = LocalDateTime.now();

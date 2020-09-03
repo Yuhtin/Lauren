@@ -1,6 +1,6 @@
 package com.yuhtin.lauren.service;
 
-import com.yuhtin.lauren.application.Lauren;
+import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 

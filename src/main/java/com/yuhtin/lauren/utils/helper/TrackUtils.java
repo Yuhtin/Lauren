@@ -46,7 +46,7 @@ public class TrackUtils {
     public boolean isInVoiceChannel(Member member) {
         return member.getVoiceState() != null
                 && member.getVoiceState().getChannel() != null
-                && (member.getVoiceState().getChannel().getName().equalsIgnoreCase("\uD83C\uDFB6┇Batidões")
+                && (member.getVoiceState().getChannel().getName().contains("Batidões")
                 || Utilities.INSTANCE.isDJ(member, null, false));
     }
 

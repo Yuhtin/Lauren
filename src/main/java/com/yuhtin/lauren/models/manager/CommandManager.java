@@ -3,7 +3,7 @@ package com.yuhtin.lauren.models.manager;
 import com.google.common.reflect.ClassPath;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
-import com.yuhtin.lauren.application.Lauren;
+import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.entities.RawCommand;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
@@ -43,7 +43,7 @@ public class CommandManager {
                     CommandHandler handler = (CommandHandler) aClass.getAnnotation(CommandHandler.class);
                     CommandCache.insert(handler.type(), new RawCommand(handler.name(), handler.description(), handler.type(), handler.alias()));
 
-                    Field[] fields = command.getClass().getDeclaredFields();
+                    Field[] fields = command.getClass().getSuperclass().getDeclaredFields();
                     for (Field field : fields) {
                         field.setAccessible(true);
 

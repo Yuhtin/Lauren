@@ -18,11 +18,6 @@ import java.time.Instant;
         alias = {"pinfo", "jogador", "playerinfo", "player"})
 public class PlayerInfoCommand extends Command {
 
-    public PlayerInfoCommand() {
-        this.name = "perfil";
-        this.aliases = new String[]{"pinfo", "jogador", "playerinfo", "player"};
-    }
-
     @Override
     protected void execute(CommandEvent event) {
         Member target = event.getMessage().getMentionedMembers().size() < 1 ? event.getMember() : event.getMessage().getMentionedMembers().get(0);

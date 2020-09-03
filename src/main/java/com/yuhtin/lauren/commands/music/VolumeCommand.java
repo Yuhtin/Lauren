@@ -14,7 +14,6 @@ import com.yuhtin.lauren.utils.helper.Utilities;
 )
 public class VolumeCommand extends Command {
 
-
     @Override
     protected void execute(CommandEvent event) {
         if (!Utilities.INSTANCE.isDJ(event.getMember(), event.getChannel(), false)) {

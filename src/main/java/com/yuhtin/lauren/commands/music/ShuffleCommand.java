@@ -14,10 +14,6 @@ import com.yuhtin.lauren.utils.helper.Utilities;
         alias = {"misture"}
 )
 public class ShuffleCommand extends Command {
-    public ShuffleCommand() {
-        this.name = "misturar";
-        this.aliases= new String[] { "misture" };
-    }
 
     @Override
     protected void execute(CommandEvent event) {

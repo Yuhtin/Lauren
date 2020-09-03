@@ -1,7 +1,6 @@
 package com.yuhtin.lauren.core.entities;
 
 import com.wrapper.spotify.SpotifyApi;
-import com.yuhtin.lauren.application.Lauren;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.utils.helper.SpotifyConnector;

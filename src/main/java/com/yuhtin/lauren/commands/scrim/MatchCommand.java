@@ -11,12 +11,6 @@ import com.yuhtin.lauren.models.annotations.CommandHandler;
         alias = {"partida", "partidas", "matches"})
 public class MatchCommand extends Command {
 
-    public MatchCommand() {
-        this.name = "match";
-        this.aliases = new String[]{"partida", "partidas", "matches"};
-        this.help = "Comando de partidas";
-    }
-
     @Override
     protected void execute(CommandEvent event) {
     }

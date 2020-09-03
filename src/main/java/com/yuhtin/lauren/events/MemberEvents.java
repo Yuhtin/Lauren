@@ -1,6 +1,6 @@
 package com.yuhtin.lauren.events;
 
-import com.yuhtin.lauren.application.Lauren;
+import com.yuhtin.lauren.Lauren;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 

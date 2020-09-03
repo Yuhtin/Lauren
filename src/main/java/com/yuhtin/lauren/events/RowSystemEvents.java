@@ -1,6 +1,6 @@
 package com.yuhtin.lauren.events;
 
-import com.yuhtin.lauren.application.Lauren;
+import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.match.controller.MatchController;
 import com.yuhtin.lauren.models.enums.GameMode;
 import com.yuhtin.lauren.models.enums.GameType;

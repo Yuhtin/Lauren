@@ -20,10 +20,6 @@ import java.util.concurrent.TimeUnit;
         description = "Limpar algumas mensagens do canal atual",
         alias = {"clearchat", "cc"})
 public class ClearCommand extends Command {
-    public ClearCommand() {
-        this.name = "clear";
-        this.aliases = new String[]{"clearchat", "cc"};
-    }
 
     @Override
     protected void execute(CommandEvent event) {

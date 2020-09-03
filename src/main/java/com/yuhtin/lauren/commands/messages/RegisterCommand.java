@@ -2,7 +2,7 @@ package com.yuhtin.lauren.commands.messages;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.application.Lauren;
+import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.Permission;
@@ -14,9 +14,6 @@ import net.dv8tion.jda.api.requests.restaction.MessageAction;
         description = "Criar a mensagem de registro de cargos",
         alias = {})
 public class RegisterCommand extends Command {
-    public RegisterCommand() {
-        this.name = "createregister";
-    }
 
     @Override
     protected void execute(CommandEvent event) {

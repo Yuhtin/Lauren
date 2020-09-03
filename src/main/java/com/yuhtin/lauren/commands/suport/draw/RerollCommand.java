@@ -14,11 +14,6 @@ import net.dv8tion.jda.api.Permission;
         alias = {"resortear", "redraw"})
 public class RerollCommand extends Command {
 
-    public RerollCommand() {
-        this.name = "reroll";
-        this.aliases = new String[]{"resortear", "redraw"};
-    }
-
     @Override
     protected void execute(CommandEvent event) {
         if (!Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true)) return;

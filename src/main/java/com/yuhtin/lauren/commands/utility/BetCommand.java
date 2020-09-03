@@ -2,7 +2,7 @@ package com.yuhtin.lauren.commands.utility;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.application.Lauren;
+import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.service.PlayerService;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
@@ -18,11 +18,6 @@ import java.util.Random;
         description = "Apostar uma quantidade de dinheiro",
         alias = {"bet", "aposta"})
 public class BetCommand extends Command {
-
-    public BetCommand() {
-        this.name = "apostar";
-        this.aliases = new String[]{"bet", "aposta"};
-    }
 
     @Override
     protected void execute(CommandEvent event) {

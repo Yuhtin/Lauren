@@ -2,7 +2,7 @@ package com.yuhtin.lauren.commands.messages;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.application.Lauren;
+import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -17,10 +17,6 @@ import java.time.Instant;
         description = "Criar um embed para entrar na fila de uma partida",
         alias = {})
 public class MatchEmbedMessage extends Command {
-
-    public MatchEmbedMessage() {
-        this.name = "matchembed";
-    }
 
     @Override
     protected void execute(CommandEvent event) {

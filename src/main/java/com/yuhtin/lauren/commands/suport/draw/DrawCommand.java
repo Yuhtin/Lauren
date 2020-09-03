@@ -23,12 +23,6 @@ import java.util.concurrent.TimeUnit;
         alias = {"sortear", "draw"})
 public class DrawCommand extends Command {
 
-    public DrawCommand() {
-        this.name = "sorteio";
-        this.aliases = new String[]{"sortear", "draw"};
-    }
-
-
     @Override
     protected void execute(CommandEvent event) {
         if (!Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true)) return;

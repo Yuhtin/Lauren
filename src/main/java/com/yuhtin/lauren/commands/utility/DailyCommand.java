@@ -17,11 +17,6 @@ import java.util.concurrent.TimeUnit;
         alias = {"diario", "d", "dly", "diaria"})
 public class DailyCommand extends Command {
 
-    public DailyCommand() {
-        this.name = "daily";
-        this.aliases = new String[]{"diario", "d", "dly", "diaria"};
-    }
-
     @Override
     protected void execute(CommandEvent event) {
         Player data = PlayerService.INSTANCE.get(event.getMember().getIdLong());

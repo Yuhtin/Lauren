@@ -18,11 +18,6 @@ import java.util.concurrent.TimeUnit;
         alias = {"setpoints"})
 public class SetPointsCommand extends Command {
 
-    public SetPointsCommand() {
-        this.name = "setpoints";
-        this.aliases = new String[]{"setarpontos"};
-    }
-
     @Override
     protected void execute(CommandEvent event) {
         if (!Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true))

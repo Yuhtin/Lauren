@@ -14,11 +14,6 @@ import net.dv8tion.jda.api.Permission;
         alias = {"finalizar"})
 public class FinishDrawCommand extends Command {
 
-    public FinishDrawCommand() {
-        this.name = "finishdraw";
-        this.aliases = new String[]{"finalizar"};
-    }
-
     @Override
     protected void execute(CommandEvent event) {
         if (!Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true)) return;

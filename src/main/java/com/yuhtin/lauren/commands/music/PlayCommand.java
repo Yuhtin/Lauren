@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.wrapper.spotify.model_objects.specification.Playlist;
 import com.wrapper.spotify.model_objects.specification.Track;
-import com.yuhtin.lauren.application.Lauren;
+import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
@@ -19,21 +19,17 @@ import java.util.Arrays;
         name = "tocar",
         type = CommandHandler.CommandType.MUSIC,
         description = "Tocar algum somzinho ai",
-        alias = {"play", "p"}
+        alias = {"play"}
 )
 public class PlayCommand extends Command {
 
-    public PlayCommand() {
-        this.name = "tocar";
-        this.aliases = new String[]{"play", "p"};
-    }
-
-    final String trackIndentifier = "/track/", playlistIndentifier = "/playlist/";
+    final String trackIndentifier = "/track/",
+            playlistIndentifier = "/playlist/";
 
     @SneakyThrows
     @Override
     protected void execute(CommandEvent event) {
-        if (TrackUtils.get().isInVoiceChannel(event.getMember())) {
+        if (!TrackUtils.get().isInVoiceChannel(event.getMember())) {
             event.getChannel().sendMessage("\uD83C\uDFB6 Amiguinho, entre no canal `\uD83C\uDFB6┇Batidões` para poder usar comandos de música").queue();
             return;
         }
@@ -49,7 +45,7 @@ public class PlayCommand extends Command {
             return;
         }
 
-        String input = String.join(" ", Arrays.copyOfRange(arguments, 1, arguments.length));
+        String input = String.join(" ", Arrays.copyOfRange(arguments, 0, arguments.length));
         input = input.contains("http") ? input : "ytsearch: " + input;
 
         if (input.contains("spotify.com") && Lauren.spotifyApi != null) {

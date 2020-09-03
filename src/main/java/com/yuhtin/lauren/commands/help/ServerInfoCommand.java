@@ -18,10 +18,6 @@ import java.util.Locale;
         description = "Visualizar as informações deste servidor",
         alias = {"sinfo", "server", "servidor"})
 public class ServerInfoCommand extends Command {
-    public ServerInfoCommand() {
-        this.name = "serverinfo";
-        this.aliases = new String[]{"sinfo", "server", "servidor"};
-    }
 
     @Override
     protected void execute(CommandEvent event) {

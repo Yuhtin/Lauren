@@ -9,7 +9,7 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.yuhtin.lauren.application.Lauren;
+import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -59,6 +59,8 @@ public class TrackManager extends AudioEventAdapter {
     }
 
     public void destroy() {
+        if (audio == null) return;
+
         audio.getGuild().getAudioManager().closeAudioConnection();
         player.stopTrack();
         musicManager.player.destroy();
@@ -66,8 +68,8 @@ public class TrackManager extends AudioEventAdapter {
     }
 
     public void loadTrack(String trackUrl, Member member, TextChannel channel, boolean message) {
-        String emoji = trackUrl.contains("spotify.com") ? ":spotify:" : ":youtube:";
-        channel.sendMessage(emoji + " **Procurando** 🔎 `" + trackUrl + "`").queue();
+        String emoji = trackUrl.contains("spotify.com") ? "<:spotify:751049445592006707>" : "<:youtube:751031330057486366>";
+        channel.sendMessage(emoji + " **Procurando** 🔎 `" + trackUrl.replace("ytsearch:", "") + "`").queue();
 
         channel.sendTyping().queue();
         audioManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
@@ -125,7 +127,7 @@ public class TrackManager extends AudioEventAdapter {
 
             @Override
             public void noMatches() {
-                channel.sendMessage("**Erro** \uD83D\uDCCC `Não encontrei nada relacionado na busca`").queue();
+                channel.sendMessage("**Erro** \uD83D\uDCCC `Não encontrei nada relacionado a busca`").queue();
             }
 
             @Override

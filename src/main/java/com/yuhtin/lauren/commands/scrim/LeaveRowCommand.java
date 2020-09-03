@@ -12,13 +12,8 @@ import java.util.concurrent.TimeUnit;
         name = "sairfila",
         type = CommandHandler.CommandType.SCRIM,
         description = "Serve para sair da fila de partida atual",
-        alias = {"filasair", "leave"})
+        alias = {"filasair"})
 public class LeaveRowCommand extends Command {
-
-    public LeaveRowCommand() {
-        this.name = "sair";
-        this.aliases = new String[]{"filasair", "leave"};
-    }
 
     @Override
     protected void execute(CommandEvent event) {

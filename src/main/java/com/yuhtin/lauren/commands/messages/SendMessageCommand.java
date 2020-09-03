@@ -18,11 +18,6 @@ import java.util.concurrent.TimeUnit;
         alias = {"say"})
 public class SendMessageCommand extends Command {
 
-    public SendMessageCommand() {
-        this.name = "sendmessage";
-        this.aliases = new String[]{"say"};
-    }
-
     @SneakyThrows
     @Override
     protected void execute(CommandEvent event) {

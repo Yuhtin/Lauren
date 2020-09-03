@@ -1,6 +1,6 @@
 package com.yuhtin.lauren.utils.helper;
 
-import com.yuhtin.lauren.application.Lauren;
+import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.enums.LogType;
 import net.dv8tion.jda.api.Permission;
@@ -132,8 +132,7 @@ public class Utilities {
     public boolean isDJ(Member member, MessageChannel channel, boolean message) {
         boolean isDJ = member.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("DJ \uD83C\uDFB6"));
 
-        if (!isDJ && message)
-            channel.sendMessage("Ahhh, que pena \uD83D\uDC94 você não pode realizar essa operação").queue();
+        if (!isDJ && message) channel.sendMessage("Ahhh, que pena \uD83D\uDC94 você não pode realizar essa operação").queue();
         return isDJ;
     }
 

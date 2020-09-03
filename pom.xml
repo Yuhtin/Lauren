@@ -6,7 +6,7 @@
 
     <groupId>com.yuhtin</groupId>
     <artifactId>lauren</artifactId>
-    <version>1.4.6.1-SNAPSHOT</version>
+    <version>1.4.7-SNAPSHOT</version>
 
     <build>
         <resources>
@@ -22,7 +22,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.yuhtin.lauren.application.Lauren</mainClass>
+                            <mainClass>com.yuhtin.lauren.Lauren</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

@@ -18,11 +18,6 @@ import java.util.concurrent.TimeUnit;
         alias = {"setxp"})
 public class SetExpCommand extends Command {
 
-    public SetExpCommand() {
-        this.name = "setarxp";
-        this.aliases = new String[]{"setxp"};
-    }
-
     @Override
     protected void execute(CommandEvent event) {
         if (!Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true)) return;

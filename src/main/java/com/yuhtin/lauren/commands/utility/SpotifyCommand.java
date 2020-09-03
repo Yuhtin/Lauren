@@ -21,10 +21,6 @@ import java.util.concurrent.TimeUnit;
 )
 public class SpotifyCommand extends Command {
 
-    public SpotifyCommand() {
-        this.name = "spotify";
-    }
-
     @Override
     protected void execute(CommandEvent event) {
         if (event.getMessage().getMentionedMembers().size() < 1) {

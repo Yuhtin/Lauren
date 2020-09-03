@@ -15,10 +15,6 @@ import java.util.concurrent.TimeUnit;
         description = "Espiar a imagem de outro usuário OjO",
         alias = {"image", "imagem"})
 public class AvatarCommand extends Command {
-    public AvatarCommand() {
-        this.name = "avatar";
-        this.aliases = new String[]{"image", "imagem"};
-    }
 
     @Override
     protected void execute(CommandEvent event) {

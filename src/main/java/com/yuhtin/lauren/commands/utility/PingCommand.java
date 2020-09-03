@@ -18,10 +18,6 @@ import java.time.Instant;
         description = "Verificar as informações da minha hospedagem",
         alias = {"pong", "delay"})
 public class PingCommand extends Command {
-    public PingCommand() {
-        this.name = "ping";
-        this.aliases = new String[]{"pong", "delay"};
-    }
 
     @SneakyThrows
     @Override

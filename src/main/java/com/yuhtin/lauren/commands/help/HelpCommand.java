@@ -16,11 +16,6 @@ import java.util.concurrent.TimeUnit;
         alias = {"help"})
 public class HelpCommand extends Command {
 
-    public HelpCommand() {
-        this.name = "ajuda";
-        this.aliases = new String[]{"help"};
-    }
-
     @Override
     protected void execute(CommandEvent event) {
         String[] args = event.getMessage().getContentRaw().split(" ");
