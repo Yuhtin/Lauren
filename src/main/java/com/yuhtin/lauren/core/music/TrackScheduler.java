@@ -24,14 +24,12 @@ public class TrackScheduler extends AudioEventAdapter {
     public void queue(AudioTrack track, Member author) {
         AudioInfo info = new AudioInfo(track, author);
         queue.add(info);
-        if (this.player.getPlayingTrack() == null) {
-            this.player.playTrack(track);
-        }
+        if (this.player.getPlayingTrack() == null) this.player.playTrack(track);
     }
 
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
-        VoiceChannel voice = MusicCommand.audio;
+        VoiceChannel voice = TrackManager.get().audio;
         voice.getGuild().getAudioManager().openAudioConnection(voice);
     }
 

@@ -9,19 +9,25 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.yuhtin.lauren.application.Lauren;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.VoiceChannel;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class TrackManager extends AudioEventAdapter {
+
+    public static final Map<String, String> fields = new HashMap<>();
+    private static TrackManager INSTANCE;
+
     public final GuildMusicManager musicManager;
     public final AudioPlayerManager audioManager;
     public final AudioPlayer player;
+    public VoiceChannel audio;
 
     public TrackManager() {
         this.audioManager = new DefaultAudioPlayerManager();
@@ -30,9 +36,39 @@ public class TrackManager extends AudioEventAdapter {
         musicManager = new GuildMusicManager(player);
         AudioSourceManagers.registerRemoteSources(audioManager);
         AudioSourceManagers.registerLocalSource(audioManager);
+
+        player.addListener(this);
+        Lauren.guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(player));
+    }
+
+    public static TrackManager get() {
+        if (INSTANCE == null) INSTANCE = new TrackManager();
+
+        return INSTANCE;
+    }
+
+    public static void constructFields() {
+        fields.put("api_dev_key", Lauren.config.pastebinDevKey);
+        fields.put("api_user_key", Lauren.config.pastebinUserKey);
+        fields.put("api_paste_private", "1");
+        fields.put("api_paste_expire_date", "10M");
+        fields.put("api_paste_format", "yaml");
+        fields.put("api_option", "paste");
+        fields.put("api_paste_code", "");
+        fields.put("api_paste_name", "");
+    }
+
+    public void destroy() {
+        audio.getGuild().getAudioManager().closeAudioConnection();
+        player.stopTrack();
+        musicManager.player.destroy();
+        purgeQueue();
     }
 
     public void loadTrack(String trackUrl, Member member, TextChannel channel, boolean message) {
+        String emoji = trackUrl.contains("spotify.com") ? ":spotify:" : ":youtube:";
+        channel.sendMessage(emoji + " **Procurando** 🔎 `" + trackUrl + "`").queue();
+
         channel.sendTyping().queue();
         audioManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
 
@@ -54,6 +90,7 @@ public class TrackManager extends AudioEventAdapter {
                     channel.sendMessage(embed.build()).queue();
                 }
 
+                audio = member.getVoiceState().getChannel();
                 play(track, member);
             }
 
@@ -77,6 +114,7 @@ public class TrackManager extends AudioEventAdapter {
                                     "\uD83D\uDCCC Link: [Clique aqui](" + trackUrl + ")");
 
                     Logger.log("The player " + Utilities.INSTANCE.getFullName(member.getUser()) + " added a playlist with " + maxMusics + " musics").save();
+                    audio = member.getVoiceState().getChannel();
                     for (int i = 0; i < maxMusics; i++) {
                         play(playlist.getTracks().get(i), member);
                     }
@@ -87,18 +125,12 @@ public class TrackManager extends AudioEventAdapter {
 
             @Override
             public void noMatches() {
-                channel.sendMessage("\uD83D\uDC94 Como assim??? Você quer quebrar meus sistemas? \uD83D\uDE2D")
-                        .queue(message -> message.delete().queueAfter(5, TimeUnit.SECONDS));
-                channel.sendMessage("\uD83D\uDCCC Não consegui encontrar nada relacionado ao que me enviou :p")
-                        .queue(message -> message.delete().queueAfter(5, TimeUnit.SECONDS));
+                channel.sendMessage("**Erro** \uD83D\uDCCC `Não encontrei nada relacionado na busca`").queue();
             }
 
             @Override
             public void loadFailed(FriendlyException exception) {
-                channel.sendMessage("\uD83D\uDC94 Como assim??? Você quer quebrar meus sistemas? \uD83D\uDE2D")
-                        .queue(message -> message.delete().queueAfter(5, TimeUnit.SECONDS));
-                channel.sendMessage("\uD83D\uDCCC Este link não é suportado ou a playlist é privada \uD83D\uDEE9")
-                        .queue(message -> message.delete().queueAfter(5, TimeUnit.SECONDS));
+                channel.sendMessage("**Erro** \uD83D\uDCCC `O vídeo ou playlist está privado`").queue();
             }
         });
     }
@@ -132,7 +164,11 @@ public class TrackManager extends AudioEventAdapter {
         musicManager.scheduler.queue.remove(entry);
     }
 
-    public AudioInfo getTrackInfo(AudioTrack track) {
-        return musicManager.scheduler.queue.stream().filter(audioInfo -> audioInfo.getTrack().equals(track)).findFirst().orElse(null);
+    public AudioInfo getTrackInfo() {
+        return musicManager.scheduler.queue
+                .stream()
+                .filter(audioInfo -> audioInfo.getTrack().equals(player.getPlayingTrack()))
+                .findFirst()
+                .orElse(null);
     }
 }

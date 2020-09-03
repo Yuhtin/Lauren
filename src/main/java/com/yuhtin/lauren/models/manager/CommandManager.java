@@ -1,18 +1,19 @@
 package com.yuhtin.lauren.models.manager;
 
-import com.yuhtin.lauren.application.Lauren;
 import com.google.common.reflect.ClassPath;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
+import com.yuhtin.lauren.application.Lauren;
 import com.yuhtin.lauren.core.entities.RawCommand;
-import com.yuhtin.lauren.models.enums.LogType;
-import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.service.CommandCache;
 import com.yuhtin.lauren.core.logger.Logger;
+import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.models.enums.LogType;
+import com.yuhtin.lauren.service.CommandCache;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 public class CommandManager {
     public CommandManager(JDA bot, String folder) {
@@ -37,13 +38,20 @@ public class CommandManager {
                 Class aClass = Class.forName(classInfo.getName());
                 Object object = aClass.newInstance();
 
-                if (object instanceof Command) {
-                    if (aClass.isAnnotationPresent(CommandHandler.class)) {
-                        CommandHandler handler = (CommandHandler) aClass.getAnnotation(CommandHandler.class);
-                        CommandCache.insert(handler.type(), new RawCommand(handler.name(), handler.description(), handler.type(), handler.alias()));
+                if (object instanceof Command && aClass.isAnnotationPresent(CommandHandler.class)) {
+                    Command command = (Command) object;
+                    CommandHandler handler = (CommandHandler) aClass.getAnnotation(CommandHandler.class);
+                    CommandCache.insert(handler.type(), new RawCommand(handler.name(), handler.description(), handler.type(), handler.alias()));
+
+                    Field[] fields = command.getClass().getDeclaredFields();
+                    for (Field field : fields) {
+                        field.setAccessible(true);
+
+                        if (field.getName().equalsIgnoreCase("name")) field.set(command, handler.name());
+                        else if (field.getName().equalsIgnoreCase("aliases")) field.set(command, handler.alias());
                     }
 
-                    clientBuilder.addCommand((Command) object);
+                    clientBuilder.addCommand(command);
                 } else
                     throw new InstantiationException();
 

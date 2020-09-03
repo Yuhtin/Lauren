@@ -1,12 +1,12 @@
 package com.yuhtin.lauren.application;
 
 import com.wrapper.spotify.SpotifyApi;
-import com.yuhtin.lauren.commands.music.MusicCommand;
 import com.yuhtin.lauren.core.entities.Config;
 import com.yuhtin.lauren.core.entities.SpotifyConfig;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
 import com.yuhtin.lauren.core.match.controller.MatchController;
+import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.database.Data;
 import com.yuhtin.lauren.database.Database;
 import com.yuhtin.lauren.database.types.MySQL;
@@ -70,7 +70,7 @@ public class Lauren {
         Thread buildThread = new Thread(() -> {
             try {
                 Utilities.INSTANCE.foundVersion();
-                MusicCommand.constructFields();
+                TrackManager.constructFields();
                 bot = new JDABuilder(AccountType.BOT)
                         .setToken(config.token)
                         .setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"))
@@ -155,7 +155,7 @@ public class Lauren {
                                     .queue());
                 }
             }
-        }, 10, 10, TimeUnit.MINUTES);
+        }, 1, 1, TimeUnit.HOURS);
 
         TaskHelper.timer(new TimerTask() {
             @Override
@@ -163,6 +163,7 @@ public class Lauren {
                 PlayerService.INSTANCE.savePlayers();
             }
         }, 5, 5, TimeUnit.MINUTES);
+        
         TaskHelper.timer(new TimerTask() {
             @Override
             public void run() {
