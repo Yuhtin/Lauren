@@ -4,7 +4,6 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
-import com.yuhtin.lauren.commands.music.MusicCommand;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.VoiceChannel;
@@ -37,6 +36,13 @@ public class TrackScheduler extends AudioEventAdapter {
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         AudioInfo poll = queue.poll();
         if (poll == null) return;
+        if (TrackManager.get().repeat) {
+            if (!TrackManager.get().repeatedMusics.contains(poll.getTrack().getIdentifier())) {
+                player.playTrack(poll.getTrack());
+                TrackManager.get().repeatedMusics.add(poll.getTrack().getIdentifier());
+                return;
+            } else TrackManager.get().repeatedMusics.remove(poll.getTrack().getIdentifier());
+        }
 
         Guild guild = poll.getAuthor().getGuild();
 

@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.Set;
 
 @CommandHandler(
-        name = "queue",
+        name = "playlist",
         type = CommandHandler.CommandType.MUSIC,
         description = "Ver as músicas que eu ainda vou tocar",
-        alias = {"playlist", "pl"}
+        alias = {"queue", "pl"}
 )
 public class QueueCommand extends Command {
 

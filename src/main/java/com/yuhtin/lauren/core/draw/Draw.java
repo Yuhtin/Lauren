@@ -59,8 +59,7 @@ public class Draw {
                 + "\nTempo restante: " + time
                 + "\nSorteador: <@" + user + ">");
 
-        if (prize != null) eb.setAuthor("<a:sino:731450603619745792> " + prize, null, null);
-        if (close) eb.setTitle("Última chance para entrar", null);
+        if (prize != null) eb.setTitle("<a:sino:731450603619745792> " + prize, null);
 
         mb.setEmbed(eb.build());
         mb.append(" @everyone");

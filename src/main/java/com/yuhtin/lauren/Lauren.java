@@ -1,8 +1,6 @@
 package com.yuhtin.lauren;
 
-import com.wrapper.spotify.SpotifyApi;
 import com.yuhtin.lauren.core.entities.Config;
-import com.yuhtin.lauren.core.entities.SpotifyConfig;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
 import com.yuhtin.lauren.core.match.controller.MatchController;
@@ -39,7 +37,6 @@ public class Lauren {
 
     public static JDA bot;
     public static Guild guild;
-    public static SpotifyApi spotifyApi;
     public static long startTime;
     public static Config config;
     public static Database data;
@@ -53,8 +50,6 @@ public class Lauren {
             Logger.log("There was an error loading the config", LogType.ERROR);
             return;
         }
-
-        spotifyApi = SpotifyConfig.construct();
 
         if (config.log) {
             try {

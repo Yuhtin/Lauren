@@ -23,9 +23,6 @@ import java.util.Arrays;
 )
 public class PlayCommand extends Command {
 
-    final String trackIndentifier = "/track/",
-            playlistIndentifier = "/playlist/";
-
     @SneakyThrows
     @Override
     protected void execute(CommandEvent event) {
@@ -47,44 +44,6 @@ public class PlayCommand extends Command {
 
         String input = String.join(" ", Arrays.copyOfRange(arguments, 0, arguments.length));
         input = input.contains("http") ? input : "ytsearch: " + input;
-
-        if (input.contains("spotify.com") && Lauren.spotifyApi != null) {
-            String url = input.contains(trackIndentifier) ?
-                    input.split(trackIndentifier)[1].replace("?si", "").split("=")[0]
-                    : input.split(playlistIndentifier)[1].replace("?si", "").split("=")[0];
-
-            if (input.contains(trackIndentifier)) {
-                Track track = Lauren.spotifyApi.getTrack(url).build().execute();
-                input = "ytsearch: " + track.getName() + " " + track.getArtists()[0].getName();
-
-            } else if (input.contains(playlistIndentifier)) {
-                try {
-                    Playlist playlist = Lauren.spotifyApi.getPlaylist(url).build().execute();
-
-                    int limit = Utilities.INSTANCE.isBooster(event.getMember()) || Utilities.INSTANCE.isDJ(event.getMember(), null, false) ? 100 : 25;
-                    int maxMusics = Math.min(playlist.getTracks().getItems().length, limit);
-
-                    for (int i = 0; i < maxMusics; i++) {
-                        Track track = (Track) playlist.getTracks().getItems()[i].getTrack();
-                        TrackManager.get().loadTrack("ytsearch: " + track.getName() + " " + track.getArtists()[0].getName(),
-                                event.getMember(),
-                                event.getTextChannel(),
-                                false);
-                    }
-
-                    EmbedBuilder embed = new EmbedBuilder()
-                            .setTitle("💿 " + Utilities.INSTANCE.getFullName(event.getMember().getUser()) + " adicionou " + maxMusics + " músicas a fila")
-                            .setDescription("\uD83D\uDCBD Informações da playlist:\n" +
-                                    "\ud83d\udcc0 Nome: `" + playlist.getName() + "`\n" +
-                                    "\uD83C\uDFB6 Músicas: `" + maxMusics + "`\n\n" +
-                                    "\uD83D\uDCCC Link: [Clique aqui](" + input + ")");
-
-                    Logger.log("The player " + Utilities.INSTANCE.getFullName(event.getMember().getUser()) + " added a playlist with " + maxMusics + " musics").save();
-                    event.getChannel().sendMessage(embed.build()).queue();
-                    return;
-                } catch (Exception ignored) { }
-            }
-        }
 
         TrackManager.get().loadTrack(input, event.getMember(), event.getTextChannel(), true);
     }

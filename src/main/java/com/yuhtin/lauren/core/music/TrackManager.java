@@ -22,11 +22,13 @@ import java.util.*;
 public class TrackManager extends AudioEventAdapter {
 
     public static final Map<String, String> fields = new HashMap<>();
+    public final List<String> repeatedMusics = new ArrayList<>();
     private static TrackManager INSTANCE;
 
     public final GuildMusicManager musicManager;
     public final AudioPlayerManager audioManager;
     public final AudioPlayer player;
+    public boolean repeat;
     public VoiceChannel audio;
 
     public TrackManager() {
@@ -160,10 +162,6 @@ public class TrackManager extends AudioEventAdapter {
 
     public void purgeQueue() {
         musicManager.scheduler.queue.clear();
-    }
-
-    public void remove(AudioInfo entry) {
-        musicManager.scheduler.queue.remove(entry);
     }
 
     public AudioInfo getTrackInfo() {
