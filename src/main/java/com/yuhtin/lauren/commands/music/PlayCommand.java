@@ -2,18 +2,10 @@ package com.yuhtin.lauren.commands.music;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.wrapper.spotify.model_objects.specification.Playlist;
-import com.wrapper.spotify.model_objects.specification.Track;
-import com.yuhtin.lauren.Lauren;
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
-import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.SneakyThrows;
-import net.dv8tion.jda.api.EmbedBuilder;
-
-import java.util.Arrays;
 
 @CommandHandler(
         name = "tocar",
@@ -42,9 +34,15 @@ public class PlayCommand extends Command {
             return;
         }
 
-        String input = String.join(" ", Arrays.copyOfRange(arguments, 0, arguments.length));
+        String input = String.join(" ", arguments);
         input = input.contains("http") ? input : "ytsearch: " + input;
+
+        if (input.toLowerCase().contains("som de") || input.toLowerCase().contains("som do")) {
+            event.getChannel().sendMessage("<a:nao:704295026036834375> Nem fodendo, hoje não vai rolar").queue();
+            return;
+        }
 
         TrackManager.get().loadTrack(input, event.getMember(), event.getTextChannel(), true);
     }
+
 }

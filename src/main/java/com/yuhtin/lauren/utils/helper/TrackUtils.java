@@ -66,7 +66,7 @@ public class TrackUtils {
         return false;
     }
 
-    public void forceSkipTrack() { TrackManager.get().player.stopTrack(); }
+    public void forceSkipTrack() { TrackManager.get().musicManager.scheduler.onTrackEnd(true); }
 
     public String getTimeStamp(long milis) {
         long seconds = milis / 1000L;

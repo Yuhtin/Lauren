@@ -18,6 +18,11 @@ public class SkipCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
+        if (!TrackUtils.get().isInVoiceChannel(event.getMember())) {
+            event.getChannel().sendMessage("\uD83C\uDFB6 Amiguinho, entre no canal `\uD83C\uDFB6┇Batidões` para poder usar comandos de música").queue();
+            return;
+        }
+
         if (TrackUtils.get().isIdle(event.getTextChannel())) return;
         if (TrackUtils.get().isCurrentDj(event.getMember())) {
             TrackUtils.get().forceSkipTrack();
@@ -38,13 +43,16 @@ public class SkipCommand extends Command {
             return;
         }
 
-        String name = event.getMember().getNickname() == null ?
-                Utilities.INSTANCE.getFullName(event.getAuthor())
+        String name = event.getMember().getNickname() == null
+                ? Utilities.INSTANCE.getFullName(event.getAuthor())
                 : event.getMember().getNickname();
 
-        event.getChannel()
-                .sendMessage("\uD83E\uDDEC **" + name + "** votou para pular a música **(" + info.getSkips()
-                        + "/" + (TrackManager.get().audio.getMembers().size() - 2) + ")**")
-                .queue();
+        String message = "\uD83E\uDDEC **"
+                + name +
+                "** votou para pular a música **("
+                + info.getSkips() + "/" + (TrackManager.get().audio.getMembers().size() - 2)
+                + ")**";
+
+        event.getChannel().sendMessage(message).queue();
     }
 }

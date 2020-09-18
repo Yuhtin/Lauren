@@ -22,13 +22,11 @@ import java.util.*;
 public class TrackManager extends AudioEventAdapter {
 
     public static final Map<String, String> fields = new HashMap<>();
-    public final List<String> repeatedMusics = new ArrayList<>();
     private static TrackManager INSTANCE;
 
     public final GuildMusicManager musicManager;
     public final AudioPlayerManager audioManager;
     public final AudioPlayer player;
-    public boolean repeat;
     public VoiceChannel audio;
 
     public TrackManager() {
@@ -64,20 +62,25 @@ public class TrackManager extends AudioEventAdapter {
         if (audio == null) return;
 
         audio.getGuild().getAudioManager().closeAudioConnection();
+        purgeQueue();
         player.stopTrack();
         musicManager.player.destroy();
-        purgeQueue();
     }
 
     public void loadTrack(String trackUrl, Member member, TextChannel channel, boolean message) {
         String emoji = trackUrl.contains("spotify.com") ? "<:spotify:751049445592006707>" : "<:youtube:751031330057486366>";
-        channel.sendMessage(emoji + " **Procurando** 🔎 `" + trackUrl.replace("ytsearch:", "") + "`").queue();
+        channel.sendMessage(emoji + " **Procurando** 🔎 `" + trackUrl.replace("ytsearch: ", "") + "`").queue();
 
         channel.sendTyping().queue();
         audioManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
 
             @Override
             public void trackLoaded(AudioTrack track) {
+                if (track.getInfo().title.toLowerCase().contains("som do") || track.getInfo().title.toLowerCase().contains("som de")) {
+                    channel.sendMessage("<a:nao:704295026036834375> Nem fodendo, hoje não vai rolar").queue();
+                    return;
+                }
+
                 if (player.isPaused()) player.setPaused(false);
                 if (message) {
                     EmbedBuilder embed = new EmbedBuilder()
@@ -120,7 +123,13 @@ public class TrackManager extends AudioEventAdapter {
                     Logger.log("The player " + Utilities.INSTANCE.getFullName(member.getUser()) + " added a playlist with " + maxMusics + " musics").save();
                     audio = member.getVoiceState().getChannel();
                     for (int i = 0; i < maxMusics; i++) {
-                        play(playlist.getTracks().get(i), member);
+                        AudioTrack track = playlist.getTracks().get(i);
+                        if (track.getInfo().title.contains("som do") || track.getInfo().title.contains("som de")) {
+                            channel.sendMessage("<a:nao:704295026036834375> Nem fodendo, hoje não vai rolar `" + track.getInfo().title + "`").queue();
+                            return;
+                        }
+
+                        play(track, member);
                     }
 
                     channel.sendMessage(embed.build()).queue();

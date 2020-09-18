@@ -59,7 +59,7 @@ public class Draw {
                 + "\nTempo restante: " + time
                 + "\nSorteador: <@" + user + ">");
 
-        if (prize != null) eb.setTitle("<a:sino:731450603619745792> " + prize, null);
+        if (prize != null) eb.setTitle("<a:sino:731450603619745792> " + prize);
 
         mb.setEmbed(eb.build());
         mb.append(" @everyone");
@@ -86,7 +86,7 @@ public class Draw {
         eb.setColor(Color.DARK_GRAY);
         eb.setFooter((winners == 1 ? "" : winners + " Winners | ") + "Finalizado no dia", null);
         eb.setTimestamp(end);
-        if (prize != null) eb.setAuthor(prize, null, null);
+        if (prize != null) eb.setTitle(prize);
 
         try {
             rollWinners(mb, eb);

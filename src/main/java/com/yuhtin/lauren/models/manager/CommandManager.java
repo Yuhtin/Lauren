@@ -60,7 +60,6 @@ public class CommandManager {
             }
         }
         bot.addEventListener(clientBuilder.build());
-
         CommandCache.construct();
     }
 
