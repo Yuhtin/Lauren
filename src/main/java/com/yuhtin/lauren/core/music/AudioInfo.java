@@ -12,8 +12,7 @@ import java.util.Set;
 public class AudioInfo {
 
     private final Set<String> skips = new HashSet<>();
-    @Getter @Setter private int repeats;
-    @Getter @Setter private boolean repeatAlways;
+    @Getter @Setter private boolean repeat, repeated;
     @Getter @Setter private AudioTrack track;
     @Getter private final Member author;
 

@@ -77,12 +77,12 @@ public class Lauren {
         buildThread.start();
         buildThread.join();
 
-        new Thread(() -> {
+        TaskHelper.runAsync(() -> {
             new EventsManager(bot, "com.yuhtin.lauren.events");
             new CommandManager(bot, "com.yuhtin.lauren.commands");
             MatchController.startup();
             new Thread(Lauren::loadTasks).start();
-        }).start();
+        });
 
 
         String[] loadNonFormated = new String[]{

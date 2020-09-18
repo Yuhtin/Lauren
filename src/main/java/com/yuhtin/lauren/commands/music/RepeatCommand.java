@@ -19,19 +19,12 @@ public class RepeatCommand extends Command {
     protected void execute(CommandEvent event) {
         if (!Utilities.INSTANCE.isDJ(event.getMember(), event.getTextChannel(), true)) return;
 
-        String[] arguments = this.arguments.split(" ");
         AudioInfo audio = TrackManager.get().getTrackInfo();
-        audio.setRepeatAlways(!audio.isRepeatAlways());
+        audio.setRepeat(!audio.isRepeat());
+        audio.setRepeated(false);
 
-        if (arguments.length > 0) {
-            int repeat = Integer.parseInt(arguments[0]);
-            audio.setRepeats(repeat);
-        }
-
-        String message = audio.isRepeatAlways()
-                ? "<:felizpakas:742373250037710918> Parece que gosta dessa música né, vou tocar ela "
-                + (audio.getRepeats() > 0 ? "mais " + audio.getRepeats() + " vezes quando" : "denovo sempre que") +
-                " acabar"
+        String message = audio.isRepeat()
+                ? "<:felizpakas:742373250037710918> Parece que gosta dessa música né, vou tocar ela denovo quando acabar"
                 : "<a:tchau:751941650728747140> Deixa pra lá, vou repetir a música mais não";
         event.getTextChannel().sendMessage(message).queue();
     }

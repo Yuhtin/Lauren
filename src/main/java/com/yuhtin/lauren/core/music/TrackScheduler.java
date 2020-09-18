@@ -40,11 +40,8 @@ public class TrackScheduler extends AudioEventAdapter {
     public void onTrackEnd(boolean force) {
         AudioInfo poll = queue.poll();
         if (poll == null) return;
-        if (!force && poll.isRepeatAlways()) {
-            if (poll.getRepeats() > 0) {
-                poll.setRepeats(poll.getRepeats() - 1);
-                if (poll.getRepeats() == 0) poll.setRepeatAlways(false);
-            }
+        if (!force && poll.isRepeat() && !poll.isRepeated()) {
+            poll.setRepeated(true);
 
             AudioTrack audioTrack = poll.getTrack().makeClone();
             poll.setTrack(audioTrack);
