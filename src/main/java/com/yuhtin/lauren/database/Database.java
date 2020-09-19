@@ -29,7 +29,7 @@ public class Database {
         PreparedStatement statement;
         try {
             statement = connection.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS " + tablePlayers + " (`id` LONG NOT NULL, `data` TEXT);");
+                    "CREATE TABLE IF NOT EXISTS " + tablePlayers + " (`id` LONG PRIMARY KEY NOT NULL, `data` TEXT);");
             statement.executeUpdate();
             statement.close();
 

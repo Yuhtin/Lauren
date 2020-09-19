@@ -12,7 +12,7 @@ public class Config {
     public String prefix, token, formatNickname,
             databaseType, mySqlUser, mySqlHost,
             mySqlPassword, mySqlDatabase, pastebinDevKey,
-            pastebinUserKey = "";
+            pteroKey, pastebinUserKey = "";
 
     public long ownerID, resgistrationId, ludoCasual, ludoRanked, poolCasual, poolRanked = 0;
     public boolean log = false, laurenTest = false;
@@ -40,8 +40,14 @@ public class Config {
                 Logger.log("Put a valid token in the bot's config", LogType.WARN).save();
                 return null;
             }
+
+            String line;
             BufferedReader reader = new BufferedReader(new FileReader(file.getAbsolutePath()));
-            return Serializer.config.deserialize(reader.readLine());
+            StringBuilder responseContent = new StringBuilder();
+            while ((line = reader.readLine()) != null) responseContent.append(line);
+            reader.close();
+
+            return Serializer.config.deserialize(responseContent.toString());
         } catch (Exception exception) {
             return null;
         }

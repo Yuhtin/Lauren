@@ -5,7 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.music.AudioInfo;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.service.ConnectionFactory;
+import com.yuhtin.lauren.service.PostConnectionFactory;
 import com.yuhtin.lauren.utils.helper.MathUtils;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -62,7 +62,7 @@ public class QueueCommand extends Command {
             TrackManager.fields.replace("api_paste_code", content);
             TrackManager.fields.replace("api_paste_name", "Lauren playlist (" + queue.size() + " musicas)");
 
-            ConnectionFactory factory = new ConnectionFactory(TrackManager.fields, "https://pastebin.com/api/api_post.php");
+            PostConnectionFactory factory = new PostConnectionFactory(TrackManager.fields, "https://pastebin.com/api/api_post.php");
             builder.setLength(1924);
             embed.setDescription("\ud83d\udcc0 " + MathUtils.plural(queue.size(), "música", "músicas") + "\n\n" + builder.toString()
                     + "\n[Clique aqui para ver o resto das músicas](" + factory.buildConnection() + ")");

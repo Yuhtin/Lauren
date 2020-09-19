@@ -1,6 +1,6 @@
 package com.yuhtin.lauren;
 
-import com.yuhtin.lauren.service.ConnectionFactory;
+import com.yuhtin.lauren.service.PostConnectionFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +15,7 @@ public class GetPastebinUser {
         fields.put("api_user_name", "Yuhtin");
         fields.put("api_user_password", "");
 
-        ConnectionFactory factory = new ConnectionFactory(fields, "https://pastebin.com/api/api_login.php");
+        PostConnectionFactory factory = new PostConnectionFactory(fields, "https://pastebin.com/api/api_login.php");
         String response = factory.buildConnection();
 
         System.out.println(factory.getData());

@@ -1,6 +1,6 @@
 package com.yuhtin.lauren;
 
-import com.yuhtin.lauren.service.ConnectionFactory;
+import com.yuhtin.lauren.service.PostConnectionFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +20,7 @@ public class Example {
         fields.put("api_paste_format", "java");
         fields.put("api_option", "paste");
 
-        ConnectionFactory factory = new ConnectionFactory(fields, "https://pastebin.com/api/api_post.php");
+        PostConnectionFactory factory = new PostConnectionFactory(fields, "https://pastebin.com/api/api_post.php");
         String response = factory.buildConnection();
 
         System.out.println(factory.getData());

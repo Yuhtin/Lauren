@@ -14,20 +14,20 @@ import java.util.Map;
 
 @Setter
 @Getter
-public class ConnectionFactory {
+public class PostConnectionFactory {
 
-    private String API;
+    private String api;
 
     private HttpURLConnection finalConnection;
-    private String METHOD = "POST";
-    private String TYPE = "application/x-www-form-urlencoded";
-    private String USER_AGENT = "Mozila/5.0";
+    private String method = "POST";
+    private String type = "application/x-www-form-urlencoded";
+    private String userAgent = "Mozila/5.0";
     private String data = "";
 
     private Map<String, String> fields;
 
-    public ConnectionFactory(Map<String, String> fields, String url) {
-        this.API = url;
+    public PostConnectionFactory(Map<String, String> fields, String url) {
+        this.api = url;
         this.fields = fields;
     }
 
@@ -40,7 +40,7 @@ public class ConnectionFactory {
                     data += ("&" + entry.getKey() + "=" + entry.getValue());
                 data = data.replaceFirst("&", "");
 
-                BufferedReader reader = new BufferedReader(new InputStreamReader(readWithAccess(new URL(API))));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(readWithAccess(new URL(api))));
                 while ((line = reader.readLine()) != null) {
                     content.append(line).append("\n");
                 }
@@ -58,21 +58,23 @@ public class ConnectionFactory {
         try {
             byte[] out = data.getBytes();
             finalConnection = (HttpURLConnection) url.openConnection();
-            finalConnection.setRequestMethod(METHOD);
+            finalConnection.setRequestMethod(method);
             finalConnection.setDoOutput(true);
-            finalConnection.addRequestProperty("User-Agent", USER_AGENT);
-            finalConnection.addRequestProperty("Content-Type", TYPE);
+            finalConnection.addRequestProperty("User-Agent", userAgent);
+            finalConnection.addRequestProperty("Content-Type", type);
             finalConnection.connect();
             try {
                 OutputStream outputStream = finalConnection.getOutputStream();
                 outputStream.write(out);
             } catch (Exception exception) {
                 Logger.log("Failed to get outputstream from post");
+                Logger.error(exception);
             }
 
             return finalConnection.getInputStream();
         } catch (Exception exception) {
             Logger.log("Failed to build finalConnection");
+            Logger.error(exception);
             return null;
         }
     }

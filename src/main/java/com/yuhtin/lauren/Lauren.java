@@ -13,6 +13,7 @@ import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.manager.CommandManager;
 import com.yuhtin.lauren.models.manager.EventsManager;
 import com.yuhtin.lauren.service.PlayerService;
+import com.yuhtin.lauren.service.PterodactylConnection;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import com.yuhtin.lauren.utils.messages.AsciiBox;
@@ -80,6 +81,7 @@ public class Lauren {
         TaskHelper.runAsync(() -> {
             new EventsManager(bot, "com.yuhtin.lauren.events");
             new CommandManager(bot, "com.yuhtin.lauren.commands");
+            new PterodactylConnection(config.pteroKey);
             MatchController.startup();
             new Thread(Lauren::loadTasks).start();
         });

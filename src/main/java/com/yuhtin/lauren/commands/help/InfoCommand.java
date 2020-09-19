@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.service.PterodactylConnection;
 import com.yuhtin.lauren.utils.helper.MathUtils;
 import lombok.SneakyThrows;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -51,7 +52,10 @@ public class InfoCommand extends Command {
 
                 .addField("⚙️ Núcleos", "`" + Runtime.getRuntime().availableProcessors() + " cores`", true)
                 .addField("\uD83D\uDEE2 Banco de Dados", "`" + Lauren.config.databaseType + "`", true)
-                .addField("\uD83C\uDF9E RAM", "`" + MathUtils.bytesToLegibleValue(usedMemory) + "/" + MathUtils.bytesToLegibleValue(maxMemory) + "`", true)
+                .addField("\uD83C\uDF9E RAM", "`"
+                        + PterodactylConnection.get().getServer().getServerUsage().getMemoryUsage() +
+                        "M/"
+                        + PterodactylConnection.get().getServer().getLimits().getMemory() + "M`", true)
 
                 .setFooter("Mais informações em $ping", event.getAuthor().getAvatarUrl())
                 .setColor(event.getMember().getColor())

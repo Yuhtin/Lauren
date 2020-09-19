@@ -12,10 +12,12 @@ public class Logger {
     public final String message;
 
     public static Logger error(Exception exception) {
-        return log(exception.getMessage(), LogType.ERROR);
+        return log(exception.getLocalizedMessage(), LogType.ERROR);
     }
 
     public static Logger log(Object message, LogType logType) {
+        if (message == null) return new Logger("Generated a null content");
+
         message = logType.toString() + "> " + message.toString();
 
         System.out.println(message.toString());
