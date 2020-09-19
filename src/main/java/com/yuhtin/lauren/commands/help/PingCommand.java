@@ -13,10 +13,10 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import java.time.Instant;
 
 @CommandHandler(
-        name = "ping",
+        name = "host",
         type = CommandHandler.CommandType.HELP,
         description = "Verificar as informações da minha hospedagem",
-        alias = {"pong", "delay"})
+        alias = {"pong", "delay", "ping"})
 public class PingCommand extends Command {
 
     @SneakyThrows
@@ -29,7 +29,7 @@ public class PingCommand extends Command {
     private MessageEmbed createEmbed(long toEpochMilli, Member member, JDA jda) {
 
         EmbedBuilder builder = new EmbedBuilder()
-                .setAuthor("Informações sobre minha VPS", null, jda.getSelfUser().getAvatarUrl())
+                .setAuthor("Informações sobre minha hospedagem", null, jda.getSelfUser().getAvatarUrl())
                 .setColor(member.getColor())
                 .setTimestamp(Instant.now())
                 .addField("", "\uD83D\uDDA5 Informações do Host", false)
