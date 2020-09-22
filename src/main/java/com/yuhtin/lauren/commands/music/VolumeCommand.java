@@ -30,7 +30,7 @@ public class VolumeCommand extends Command {
         int volume;
         try {
             volume = Integer.parseInt(event.getArgs());
-            if (volume < 1 || volume > 100) volume = 25;
+            if (volume < 1 || (volume > 100 && !Utilities.INSTANCE.isOwner(null, event.getAuthor(), false))) volume = 25;
         } catch (Exception exception) {
             event.getChannel().sendMessage("\uD83D\uDCA2 Eita calma ai, insira um valor de `1 a 100` para ser o volume").queue();
             return;

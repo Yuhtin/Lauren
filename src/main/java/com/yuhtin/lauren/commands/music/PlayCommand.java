@@ -37,7 +37,9 @@ public class PlayCommand extends Command {
         String input = String.join(" ", arguments);
         input = input.contains("http") ? input : "ytsearch: " + input;
 
-        if (input.toLowerCase().contains("som de") || input.toLowerCase().contains("som do")) {
+        if (input.toLowerCase().contains("som de")
+                || input.toLowerCase().contains("som do")
+                || input.toLowerCase().contains("som da")) {
             event.getChannel().sendMessage("<a:nao:704295026036834375> Nem fodendo, hoje não vai rolar").queue();
             return;
         }

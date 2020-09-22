@@ -34,10 +34,15 @@ public class TrackScheduler extends AudioEventAdapter {
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        onTrackEnd(false);
+        AudioInfo poll = queue.poll();
+        if (poll == null) return;
+
+        Guild guild = poll.getAuthor().getGuild();
+        if (queue.isEmpty()) guild.getAudioManager().closeAudioConnection();
+        else player.playTrack(queue.element().getTrack());
     }
 
-    public void onTrackEnd(boolean force) {
+    /*public void onTrackEnd(boolean force) {
         AudioInfo poll = queue.poll();
         if (poll == null) return;
         if (!force && poll.isRepeat() && !poll.isRepeated()) {
@@ -52,5 +57,5 @@ public class TrackScheduler extends AudioEventAdapter {
         Guild guild = poll.getAuthor().getGuild();
         if (queue.isEmpty()) guild.getAudioManager().closeAudioConnection();
         else player.playTrack(queue.element().getTrack());
-    }
+    }*/
 }

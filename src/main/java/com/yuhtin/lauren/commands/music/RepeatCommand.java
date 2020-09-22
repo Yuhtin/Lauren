@@ -18,6 +18,9 @@ public class RepeatCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
+        event.getChannel().sendMessage("<a:tchau:751941650728747140> Este comando está em manutenção até o <@272879983326658570> me consertar esse fdp").queue();
+        /*
+
         if (TrackUtils.get().isIdle(event.getTextChannel())) return;
         if (!Utilities.INSTANCE.isDJ(event.getMember(), event.getTextChannel(), true)) return;
 
@@ -28,6 +31,6 @@ public class RepeatCommand extends Command {
         String message = audio.isRepeat()
                 ? "<:felizpakas:742373250037710918> Parece que gosta dessa música né, vou tocar ela denovo quando acabar"
                 : "<a:tchau:751941650728747140> Deixa pra lá, vou repetir a música mais não";
-        event.getTextChannel().sendMessage(message).queue();
+        event.getTextChannel().sendMessage(message).queue();*/
     }
 }

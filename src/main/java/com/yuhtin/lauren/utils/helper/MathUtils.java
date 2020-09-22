@@ -23,7 +23,7 @@ public class MathUtils {
                     int restDays = days - (30 * months);
                     daysAndMonth = plural(months, "mês", "meses") + (restDays > 0 ? ", " + plural(restDays, "dia", "dias") : "");
                 } else daysAndMonth = plural(days, "dia", "dias");
-                format = daysAndMonth + ", " + plural(hours, "hora", "horas");
+                format = daysAndMonth + " e " + plural(hours, "hora", "horas");
                 return format;
             } else {
                 format = plural(hours, "hora", "horas");

@@ -50,7 +50,7 @@ public class TrackUtils {
                 || Utilities.INSTANCE.isDJ(member, null, false));
     }
 
-    public boolean isCurrentDj(Member member) {
+    public boolean isMusicOwner(Member member) {
         return TrackManager.get()
                 .getTrackInfo()
                 .getAuthor()
@@ -66,7 +66,7 @@ public class TrackUtils {
         return false;
     }
 
-    public void forceSkipTrack() { TrackManager.get().musicManager.scheduler.onTrackEnd(true); }
+    //public void forceSkipTrack() { TrackManager.get().musicManager.scheduler.onTrackEnd(true); }
 
     public String getTimeStamp(long milis) {
         long seconds = milis / 1000L;

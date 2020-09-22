@@ -3,6 +3,7 @@ package com.yuhtin.lauren.service;
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
+import com.yuhtin.lauren.utils.helper.TaskHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +15,7 @@ public class PlayerService {
 
     public void savePlayers() {
         Logger.log("Saving all players, the bot may lag for a bit").save();
-        new Thread(() -> cache.forEach((id, user) -> Lauren.data.save(id, user))).start();
+        TaskHelper.runAsync(new Thread(() -> cache.forEach((id, user) -> Lauren.data.save(id, user))));
         Logger.log("Saved all players").save();
     }
 

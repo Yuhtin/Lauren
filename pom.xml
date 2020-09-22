@@ -6,7 +6,7 @@
 
     <groupId>com.yuhtin</groupId>
     <artifactId>lauren</artifactId>
-    <version>1.4.8.7-SNAPSHOT</version>
+    <version>1.4.9.5-SNAPSHOT</version>
 
     <build>
         <resources>
@@ -46,6 +46,11 @@
             <groupId>com.github.stanjg</groupId>
             <artifactId>Ptero4J</artifactId>
             <version>master-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sachinhandiekar</groupId>
+            <artifactId>jMusixMatch</artifactId>
+            <version>1.1.4</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>

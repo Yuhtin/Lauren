@@ -76,7 +76,9 @@ public class TrackManager extends AudioEventAdapter {
 
             @Override
             public void trackLoaded(AudioTrack track) {
-                if (track.getInfo().title.toLowerCase().contains("som do") || track.getInfo().title.toLowerCase().contains("som de")) {
+                if (track.getInfo().title.toLowerCase().contains("som do")
+                        || track.getInfo().title.toLowerCase().contains("som de")
+                        || track.getInfo().title.toLowerCase().contains("som da")) {
                     channel.sendMessage("<a:nao:704295026036834375> Nem fodendo, hoje não vai rolar").queue();
                     return;
                 }

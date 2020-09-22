@@ -12,7 +12,7 @@ public class Config {
     public String prefix, token, formatNickname,
             databaseType, mySqlUser, mySqlHost,
             mySqlPassword, mySqlDatabase, pastebinDevKey,
-            pteroKey, pastebinUserKey = "";
+            pteroKey, pastebinUserKey, vagalumeKey = "";
 
     public long ownerID, resgistrationId, ludoCasual, ludoRanked, poolCasual, poolRanked = 0;
     public boolean log = false, laurenTest = false;
@@ -53,7 +53,9 @@ public class Config {
         }
     }
 
-    public void updateConfig() {
+    public void updateConfig() {}
+
+    /*public void updateConfig() {
         File file = new File("config/config.json");
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
@@ -64,5 +66,5 @@ public class Config {
             Logger.error(exception).save();
             Logger.log("An error occurred on save config", LogType.ERROR).save();
         }
-    }
+    }*/
 }

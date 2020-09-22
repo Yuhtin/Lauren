@@ -24,8 +24,8 @@ public class SkipCommand extends Command {
         }
 
         if (TrackUtils.get().isIdle(event.getTextChannel())) return;
-        if (TrackUtils.get().isCurrentDj(event.getMember())) {
-            TrackUtils.get().forceSkipTrack();
+        if (TrackUtils.get().isMusicOwner(event.getMember())) {
+            TrackManager.get().player.stopTrack();
             event.getChannel().sendMessage("\u23e9 Pulei a música pra você <3").queue();
             return;
         }
@@ -38,7 +38,7 @@ public class SkipCommand extends Command {
 
         info.addSkip(event.getAuthor());
         if (info.getSkips() >= TrackManager.get().audio.getMembers().size() - 2) {
-            TrackUtils.get().forceSkipTrack();
+            TrackManager.get().player.stopTrack();
             event.getChannel().sendMessage("\uD83E\uDDF6 Amo quando todos concordam entre si, pulando a música").queue();
             return;
         }

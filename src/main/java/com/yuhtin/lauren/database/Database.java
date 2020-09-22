@@ -99,6 +99,7 @@ public class Database {
             statement.executeUpdate();
             statement.close();
         } catch (SQLException exception) {
+            exception.printStackTrace();
             Logger.log("Could not save data to database", LogType.ERROR).save();
         }
     }

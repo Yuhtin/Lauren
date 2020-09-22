@@ -40,10 +40,16 @@ public class Match {
         textChannel.queue(createdChannel -> channel = createdChannel.getIdLong());
 
         TextChannel channel = Lauren.bot.getTextChannelById(this.channel);
-        channel.sendMessage("Confirme sua presença, clique no <a:sim:704295025374265387>").queue(message -> message.addReaction("a:sim:704295025374265387"));
+        TaskHelper.runTaskLater(new TimerTask() {
+            @Override
+            public void run() {
+                channel.sendMessage("Confirme sua presença, clique no <a:sim:704295025374265387>")
+                        .queue(message -> message.addReaction("a:sim:704295025374265387"));
+            }
+        }, 6, TimeUnit.SECONDS);
 
         if (game.mode == GameMode.RANKED)
-            TaskHelper.schedule(new TimerTask() {
+            TaskHelper.runTaskLater(new TimerTask() {
                 @Override
                 public void run() {
                     if (startTime == null) {

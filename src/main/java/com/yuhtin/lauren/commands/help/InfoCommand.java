@@ -30,12 +30,9 @@ public class InfoCommand extends Command {
         User user = event.getJDA().getUserById(272879983326658570L);
         String authorBot = user == null ? bot.getName() + "#" + bot.getDiscriminator() : user.getName() + "#" + user.getDiscriminator();
         OffsetDateTime timeCreated = bot.getTimeCreated();
-        long maxMemory = Runtime.getRuntime().maxMemory();
-        long freeMemory = Runtime.getRuntime().freeMemory();
-        long usedMemory = maxMemory - freeMemory;
 
         EmbedBuilder builder = new EmbedBuilder()
-                .setAuthor("Informações sobre a bot mais linda do mundo", "https://google.com", bot.getAvatarUrl())
+                .setAuthor("Informações sobre a bot mais linda do mundo", null, bot.getAvatarUrl())
 
                 .addField("📆 Criado em", "`" + timeCreated.getDayOfMonth() + " de " + timeCreated.getMonth().getDisplayName(TextStyle.SHORT, Locale.US) + ", "
                         + timeCreated.getYear() + " às " + timeCreated.getHour() + ":" + timeCreated.getMinute() + "`", true)

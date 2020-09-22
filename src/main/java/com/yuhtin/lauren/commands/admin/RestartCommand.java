@@ -25,7 +25,7 @@ public class RestartCommand extends Command {
         event.getChannel().sendMessage("Reiniciando meus sistemas :satisfied:").queue();
         Logger.log("The player " + event.getMember().getUser().getName() + " restarting my systems").save();
 
-        TaskHelper.schedule(new TimerTask() {
+        TaskHelper.runTaskLater(new TimerTask() {
             @Override
             public void run() {
                 Lauren.finish();

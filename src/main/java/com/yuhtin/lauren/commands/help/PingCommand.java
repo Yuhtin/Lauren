@@ -43,7 +43,7 @@ public class PingCommand extends Command {
                 .addField("\uD83D\uDD2E Sistema Operacional", "`" + System.getProperty("os.name") + "`", true)
                 .addField("\uD83D\uDED2 Empresa fornecedora:", "[HypeHost - Hospedagem Minecraft e VPS](https://hypehost.com.br)", true)
                 .addField("\uD83E\uDDEA Local do Host", "`Lenoir, North Carolina, USA`", true)
-                .addField("<a:infinito:703187274912759899> Node", "`In test`", true)
+                .addField("<a:infinito:703187274912759899> Node", "`Gabriela`", true)
                 .addField("", "\uD83D\uDCE1 Informações de conexão", false)
                 .addField("<:discord:723587554422816889> Discord Ping", "`" + toEpochMilli + "ms`", false)
                 .addField("\uD83E\uDDEC Discord API", "`" + jda.getGatewayPing() + "ms`", false)

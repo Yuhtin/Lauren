@@ -111,7 +111,7 @@ public class Lauren {
     private static void loadTasks() {
         /* Wait 7 seconds for the bot to connect completely before asking for a value */
 
-        TaskHelper.schedule(new TimerTask() {
+        TaskHelper.runTaskLater(new TimerTask() {
             @Override
             public void run() {
                 if (config.laurenTest) {
@@ -121,12 +121,12 @@ public class Lauren {
                             .sendMessage("<:online:703089222021808170> Online\n\n" +
                                     ":flag_br: Estou online atualmente, talvez ocorra algumas interferências com a <@702518526753243156>\n" +
                                     ":flag_us: I am currently online, there may be some interference with <@702518526753243156>\n\n" +
-                                    bot.getRoleById("701285199081766973").getAsMention()).queue();
+                                    "<@272879983326658570>").queue();
                 } else guild = bot.getGuildCache().iterator().next();
             }
         }, 7, TimeUnit.SECONDS);
 
-        TaskHelper.timer(new TimerTask() {
+        TaskHelper.runTaskTimerAsync(new TimerTask() {
             @Override
             public void run() {
                 String music = "<#" + guild.getTextChannelsByName("\uD83E\uDDEC┇comandos", true).get(0).getId() + ">";
@@ -152,14 +152,13 @@ public class Lauren {
             }
         }, 1, 1, TimeUnit.HOURS);
 
-        TaskHelper.timer(new TimerTask() {
+        TaskHelper.runTaskTimerAsync(new TimerTask() {
             @Override
-            public void run() {
-                PlayerService.INSTANCE.savePlayers();
+            public void run() { PlayerService.INSTANCE.savePlayers();
             }
         }, 5, 5, TimeUnit.MINUTES);
         
-        TaskHelper.timer(new TimerTask() {
+        TaskHelper.runTaskTimerAsync(new TimerTask() {
             @Override
             public void run() {
                 MatchController.findMatch();
