@@ -17,6 +17,6 @@ public class DatabaseController {
     }
 
     /* SQLite Connection */
-    public void constructDatabase(String url) { database = Provider.getInstance().submit(url); }
+    public void constructDatabase(Database database) { this.database = database; }
 
 }

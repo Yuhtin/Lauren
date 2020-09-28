@@ -11,8 +11,8 @@ import lombok.Getter;
 @Table(name = "lauren_players", primary = "id")
 public class PlayerORM extends ORM {
 
-    @Field(type = "long", size = 18, nullable = false)
-    private final long id;
+    @Field(size = 18, nullable = false)
+    private final String id;
 
     @Field(type = "text", nullable = false)
     private final String data;

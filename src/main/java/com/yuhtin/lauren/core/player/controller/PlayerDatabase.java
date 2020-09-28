@@ -1,33 +1,27 @@
 package com.yuhtin.lauren.core.player.controller;
 
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.database.DatabaseController;
 import com.yuhtin.lauren.utils.serialization.Serializer;
 import io.github.eikefs.sql.provider.query.Query;
-import io.github.eikefs.sql.provider.query.TableQuery;
-import io.github.eikefs.sql.provider.query.field.TableField;
 
 public class PlayerDatabase {
 
     public static void createTable() {
-        DatabaseController.getDatabase().updateSync(new TableQuery()
-                .name("lauren_players", true)
-                .fields(new TableField()
-                                .name("id")
-                                .type("long")
-                                .size(18),
-                        new TableField()
-                                .name("data")
-                                .type("text"))
-                .primary("id"));
+        DatabaseController.getDatabase().updateSync("create table if not exists `lauren_players` (`id` varchar(18) primary key not null, `data` text);");
     }
 
     public static Player loadPlayer(long userID) {
-        PlayerORM playerORM = DatabaseController.getDatabase().buildSync(PlayerORM.class, new Query()
+        String raw = new Query()
                 .selectAll()
                 .from("lauren_players")
                 .where("id", userID)
-                .raw());
+                .raw();
+
+        Logger.log(raw);
+
+        PlayerORM playerORM = DatabaseController.getDatabase().buildSync(PlayerORM.class, raw);
 
         if (playerORM == null) {
             create(userID);

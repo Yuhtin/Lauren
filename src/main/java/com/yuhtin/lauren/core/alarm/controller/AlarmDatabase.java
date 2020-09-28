@@ -3,8 +3,6 @@ package com.yuhtin.lauren.core.alarm.controller;
 import com.yuhtin.lauren.core.alarm.Alarm;
 import com.yuhtin.lauren.database.DatabaseController;
 import io.github.eikefs.sql.provider.query.Query;
-import io.github.eikefs.sql.provider.query.TableQuery;
-import io.github.eikefs.sql.provider.query.field.TableField;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,16 +10,8 @@ import java.util.List;
 public class AlarmDatabase {
 
     public static void createTable() {
-        DatabaseController.getDatabase().updateSync(new TableQuery()
-                .name("lauren_alarms", true)
-                .fields(new TableField()
-                                .name("name")
-                                .type("varchar")
-                                .size(30),
-                        new TableField()
-                                .name("time")
-                                .type("text"))
-                .primary("name"));
+        DatabaseController.getDatabase().updateSync("create table if not exists `lauren_alarms" +
+                "` (`name` varchar(30) primary key not null, `time` text);");
     }
 
     public static void load() {
