@@ -2,7 +2,6 @@ package com.yuhtin.lauren.commands.utility;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.service.GetConnectionFactory;
 import lombok.AllArgsConstructor;
@@ -30,7 +29,6 @@ public class MinecraftServerCommand extends Command {
 
         GetConnectionFactory connection = new GetConnectionFactory("https://api.mcsrvstat.us/ping/" + arguments[0]);
         String response = connection.buildConnection();
-        Logger.log(response);
         if (response == null || response.equals("") || response.contains("getaddrinfo")) {
             event.getChannel().sendMessage("<:chorano:726207542413230142> Este servidor não foi encontrado ou a api está offline").queue();
             return;
@@ -62,9 +60,7 @@ public class MinecraftServerCommand extends Command {
 
     @AllArgsConstructor
     static class ServerInfo {
-        @Getter
-        private final String version;
-        @Getter
-        private final int max, online;
+        @Getter private final String version;
+        @Getter private final int max, online;
     }
 }

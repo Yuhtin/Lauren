@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.service.PlayerService;
+import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -37,7 +37,7 @@ public class SetExpCommand extends Command {
             return;
         }
 
-        Player player = PlayerService.INSTANCE.get(member.getIdLong());
+        Player player = PlayerController.INSTANCE.get(member.getIdLong());
         player.experience = Integer.parseInt(arguments[2]);
         event.getChannel().sendMessage("Consegui setar com sucesso o XP do usuário inserido")
                 .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));

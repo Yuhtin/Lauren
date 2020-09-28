@@ -1,6 +1,6 @@
 package com.yuhtin.lauren.events;
 
-import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.core.player.controller.PlayerDatabase;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -22,6 +22,6 @@ public class MemberEvents extends ListenerAdapter {
             return;
         }
 
-        Lauren.data.create(event.getUser().getIdLong());
+        PlayerDatabase.create(event.getUser().getIdLong());
     }
 }

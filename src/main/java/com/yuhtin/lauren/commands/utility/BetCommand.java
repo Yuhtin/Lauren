@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.player.Player;
-import com.yuhtin.lauren.service.PlayerService;
+import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -77,7 +77,7 @@ public class BetCommand extends Command {
             return;
         }
 
-        Player data = PlayerService.INSTANCE.get(event.getAuthor().getIdLong());
+        Player data = PlayerController.INSTANCE.get(event.getAuthor().getIdLong());
         if (data.money < money) {
             event.getChannel().sendMessage("<:chorano:726207542413230142> <@" + event.getAuthor().getId() + ">, você não tem dinheiro suficiente para realizar esta aposta.").queue();
             return;

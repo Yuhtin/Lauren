@@ -1,18 +1,18 @@
 package com.yuhtin.lauren;
 
+import com.yuhtin.lauren.core.alarm.controller.AlarmDatabase;
 import com.yuhtin.lauren.core.entities.Config;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
 import com.yuhtin.lauren.core.match.controller.MatchController;
+import com.yuhtin.lauren.core.match.controller.MatchDatabase;
 import com.yuhtin.lauren.core.music.TrackManager;
-import com.yuhtin.lauren.database.Data;
-import com.yuhtin.lauren.database.Database;
-import com.yuhtin.lauren.database.types.MySQL;
-import com.yuhtin.lauren.database.types.SQLite;
+import com.yuhtin.lauren.core.player.controller.PlayerController;
+import com.yuhtin.lauren.core.player.controller.PlayerDatabase;
+import com.yuhtin.lauren.database.DatabaseController;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.manager.CommandManager;
 import com.yuhtin.lauren.models.manager.EventsManager;
-import com.yuhtin.lauren.service.PlayerService;
 import com.yuhtin.lauren.service.PterodactylConnection;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
@@ -40,7 +40,6 @@ public class Lauren {
     public static Guild guild;
     public static long startTime;
     public static Config config;
-    public static Database data;
     public static String version;
 
     public static void main(String[] args) throws InterruptedException {
@@ -61,9 +60,9 @@ public class Lauren {
             }
         }
 
-        if (!startDatabase()) return;
         Thread buildThread = new Thread(() -> {
             try {
+                processDatabase(config.databaseType);
                 Utilities.INSTANCE.foundVersion();
                 TrackManager.constructFields();
                 bot = JDABuilder.createDefault(config.token)
@@ -154,46 +153,26 @@ public class Lauren {
 
         TaskHelper.runTaskTimerAsync(new TimerTask() {
             @Override
-            public void run() { PlayerService.INSTANCE.savePlayers();
+            public void run() {
+                PlayerController.INSTANCE.savePlayers();
             }
         }, 5, 5, TimeUnit.MINUTES);
-        
+
         TaskHelper.runTaskTimerAsync(new TimerTask() {
             @Override
             public void run() {
+
+
                 MatchController.findMatch();
             }
         }, 1, 1, TimeUnit.MINUTES);
     }
 
-    public static boolean startDatabase() {
-        data = new Database(selectDatabase(config.databaseType), "lauren");
-
-        if (data.isNull() || !data.createTable() || !data.loadData()) {
-            Logger.log("Database initialization error occurred", LogType.ERROR).save();
-            Logger.log("Shutting down the system", LogType.ERROR);
-            return false;
-        }
-
-        Logger.log("Connection to database successful", LogType.STARTUP).save();
-        return true;
-    }
-
-    private static Data selectDatabase(String databaseType) {
-        if (databaseType.equalsIgnoreCase("MySQL"))
-            return new MySQL(config.mySqlHost,
-                    config.mySqlUser,
-                    config.mySqlPassword,
-                    config.mySqlDatabase);
-
-        return new SQLite();
-    }
-
     public static void finish() {
         try {
             TrackManager.get().destroy();
-            PlayerService.INSTANCE.savePlayers();
-            data.close();
+            PlayerController.INSTANCE.savePlayers();
+            DatabaseController.getDatabase().shutdown();
             LocalDateTime now = LocalDateTime.now();
 
             File file = LoggerController.get().getFile();
@@ -221,5 +200,23 @@ public class Lauren {
 
         Lauren.config.updateConfig();
         System.exit(0);
+    }
+
+    private static void processDatabase(String databaseType) {
+        if (databaseType.equalsIgnoreCase("MySQL"))
+            DatabaseController.get()
+                    .constructDatabase(config.mySqlHost + ":3306/" + config.mySqlDatabase + "?autoReconnect=true",
+                            config.mySqlUser,
+                            config.mySqlPassword);
+
+        else DatabaseController.get().constructDatabase(new File("config/lauren.db").toString());
+
+        PlayerDatabase.createTable();
+        MatchDatabase.createTable();
+        MatchDatabase.loadData();
+        AlarmDatabase.createTable();
+        AlarmDatabase.load();
+
+        Logger.log("Connection to database successful", LogType.STARTUP).save();
     }
 }

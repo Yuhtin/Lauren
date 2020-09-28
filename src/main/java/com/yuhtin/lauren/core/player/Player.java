@@ -1,7 +1,9 @@
 package com.yuhtin.lauren.core.player;
 
 import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.core.alarm.Alarm;
 import com.yuhtin.lauren.core.match.Match;
+import com.yuhtin.lauren.core.player.controller.PlayerDatabase;
 import com.yuhtin.lauren.models.enums.GameMode;
 import com.yuhtin.lauren.models.enums.GameType;
 import com.yuhtin.lauren.models.enums.Rank;
@@ -13,6 +15,8 @@ import java.util.List;
 
 public class Player {
 
+    public transient final List<Alarm> alarms = new ArrayList<>();
+    public final List<String> alarmsName;
     public final List<String> winMatches;
     // Geral
     public long userID, dailyDelay;
@@ -26,6 +30,7 @@ public class Player {
     public Player(long userID) {
         this.userID = userID;
         winMatches = new ArrayList<>();
+        alarmsName = new ArrayList<>();
     }
 
     public Player updateLevel() {
@@ -69,7 +74,7 @@ public class Player {
     }
 
     public Player gainXP(double quantity) {
-        List<Double> multipliers = Arrays.asList(primeMultiplier(), poolRank.multiplier, ludoRank.multiplier);
+        List<Double> multipliers = Arrays.asList(boosterMultiplier(), poolRank.multiplier, ludoRank.multiplier);
 
         for (Double multiplier : multipliers) quantity *= multiplier;
         experience += quantity;
@@ -77,7 +82,7 @@ public class Player {
         return this;
     }
 
-    private double primeMultiplier() { return Utilities.INSTANCE.isPrime(Lauren.guild.getMemberById(userID)) ? 1.5 : 1; }
+    private double boosterMultiplier() { return Utilities.INSTANCE.isBooster(Lauren.guild.getMemberById(userID)) ? 1.15 : 1; }
 
     public Player computMatch(Match match) {
         int points = -1;
@@ -121,6 +126,6 @@ public class Player {
         if (ludoPoints < 0) ludoPoints = 0;
         if (poolPoints < 0) poolPoints = 0;
 
-        Lauren.data.save(userID, this);
+        PlayerDatabase.save(userID, this);
     }
 }

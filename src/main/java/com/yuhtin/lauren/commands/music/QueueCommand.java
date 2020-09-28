@@ -56,8 +56,7 @@ public class QueueCommand extends Command {
             String content = builder.toString();
 
             content = content.replace("`", "");
-            for (int i = 0; i < users.size(); i++)
-                content = content.replace("(<@" + users.get(i) + ">)", "");
+            for (String user : users) content = content.replace("(<@" + user + ">)", "");
 
             TrackManager.fields.replace("api_paste_code", content);
             TrackManager.fields.replace("api_paste_name", "Lauren playlist (" + queue.size() + " musicas)");

@@ -3,7 +3,7 @@ package com.yuhtin.lauren.commands.admin;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.player.Player;
-import com.yuhtin.lauren.service.PlayerService;
+import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.Permission;
@@ -39,7 +39,7 @@ public class SetPointsCommand extends Command {
         }
 
         int xp = Integer.parseInt(arguments[3]);
-        Player data = PlayerService.INSTANCE.get(member.getIdLong());
+        Player data = PlayerController.INSTANCE.get(member.getIdLong());
 
         if (arguments[2].equalsIgnoreCase("Ludo")) data.ludoPoints = xp;
         else if (arguments[2].equalsIgnoreCase("Ball")) data.poolPoints = xp;

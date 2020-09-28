@@ -2,6 +2,7 @@ package com.yuhtin.lauren.commands.utility;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -24,7 +25,7 @@ public class SpotifyCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
         if (event.getMessage().getMentionedMembers().size() < 1) {
-            event.getChannel().sendMessage("Ops, você precisa mencionar um jogador para receber os pontos")
+            event.getChannel().sendMessage("<:felizpakas:742373250037710918> Ops, você precisa mencionar um jogador para ver")
                     .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             return;
         }
@@ -34,9 +35,17 @@ public class SpotifyCommand extends Command {
         embed.setFooter("Comando usado por " + Utilities.INSTANCE.getFullName(event.getMember().getUser()), event.getMember().getUser().getAvatarUrl());
 
         Member member = event.getMessage().getMentionedMembers().get(0);
-        if (member.getActivities().size() < 1
-                || member.getActivities().get(0).getType() != Activity.ActivityType.LISTENING
-                || !member.getActivities().get(0).getName().equalsIgnoreCase("Spotify")) {
+        Activity activity = null;
+        for (Activity target : member.getActivities()) {
+            Logger.log(target.getName());
+            if (target.getType() == Activity.ActivityType.LISTENING
+                    && target.getName().equalsIgnoreCase("Spotify")) {
+                activity = target;
+                break;
+            }
+        }
+
+        if (activity == null) {
             embed.setColor(member.getColor());
 
             if (member.getVoiceState() != null
@@ -52,7 +61,6 @@ public class SpotifyCommand extends Command {
                 embed.addField("Este usuário não está ouvindo nada", "Chame ele pra escutar algo :D", true);
             }
         } else {
-            Activity activity = member.getActivities().get(0);
             RichPresence richPresence = activity.asRichPresence();
 
             embed.setAuthor("\uD83C\uDFA7 Informações do Spotify de " + member.getUser().getName());

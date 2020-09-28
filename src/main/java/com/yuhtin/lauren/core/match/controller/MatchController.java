@@ -3,7 +3,7 @@ package com.yuhtin.lauren.core.match.controller;
 import com.yuhtin.lauren.core.match.Game;
 import com.yuhtin.lauren.core.match.Match;
 import com.yuhtin.lauren.core.player.Player;
-import com.yuhtin.lauren.service.PlayerService;
+import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.enums.GameMode;
 import com.yuhtin.lauren.models.enums.GameType;
 import net.dv8tion.jda.api.entities.Member;
@@ -77,7 +77,7 @@ public class MatchController {
                     Long userID = users.get(i);
 
                     if (game.mode == GameMode.RANKED) {
-                        Player data = PlayerService.INSTANCE.get(userID);
+                        Player data = PlayerController.INSTANCE.get(userID);
                         int pessoalPosition = game.type == GameType.LUDO ? data.ludoRank.position : data.poolRank.position;
 
                         if (rankPosition == 99) rankPosition = pessoalPosition;

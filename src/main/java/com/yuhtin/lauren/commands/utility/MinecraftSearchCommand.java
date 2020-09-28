@@ -8,6 +8,8 @@ import com.yuhtin.lauren.service.GetConnectionFactory;
 import net.dv8tion.jda.api.EmbedBuilder;
 import org.json.JSONObject;
 
+import javax.imageio.ImageIO;
+
 @CommandHandler(
         name = "mcname",
         type = CommandHandler.CommandType.UTILITY,

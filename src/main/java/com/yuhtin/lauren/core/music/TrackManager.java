@@ -51,7 +51,7 @@ public class TrackManager extends AudioEventAdapter {
         fields.put("api_dev_key", Lauren.config.pastebinDevKey);
         fields.put("api_user_key", Lauren.config.pastebinUserKey);
         fields.put("api_paste_private", "1");
-        fields.put("api_paste_expire_date", "10M");
+        fields.put("api_paste_expire_date", "2M");
         fields.put("api_paste_format", "yaml");
         fields.put("api_option", "paste");
         fields.put("api_paste_code", "");

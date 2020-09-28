@@ -4,7 +4,7 @@ import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.match.controller.MatchController;
-import com.yuhtin.lauren.service.PlayerService;
+import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.enums.GameMode;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
@@ -79,7 +79,7 @@ public class Match {
         this.urlPrint = urlPrint;
         this.finishTime = System.currentTimeMillis();
 
-        new Thread(() -> players.forEach(id -> PlayerService.INSTANCE.get(id).computMatch(this))).start();
+        new Thread(() -> players.forEach(id -> PlayerController.INSTANCE.get(id).computMatch(this))).start();
 
         MatchController.finishMatch(this);
     }
