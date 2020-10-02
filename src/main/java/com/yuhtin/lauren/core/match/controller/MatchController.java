@@ -78,7 +78,7 @@ public class MatchController {
 
                     if (game.mode == GameMode.RANKED) {
                         Player data = PlayerController.INSTANCE.get(userID);
-                        int pessoalPosition = game.type == GameType.LUDO ? data.ludoRank.position : data.poolRank.position;
+                        int pessoalPosition = game.type == GameType.VALORANT ? data.valorantRank.position : data.poolRank.position;
 
                         if (rankPosition == 99) rankPosition = pessoalPosition;
                         for (i = pessoalPosition - 1; i < pessoalPosition + 1; i++) {

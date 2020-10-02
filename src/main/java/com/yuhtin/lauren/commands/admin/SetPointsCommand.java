@@ -41,7 +41,7 @@ public class SetPointsCommand extends Command {
         int xp = Integer.parseInt(arguments[3]);
         Player data = PlayerController.INSTANCE.get(member.getIdLong());
 
-        if (arguments[2].equalsIgnoreCase("Ludo")) data.ludoPoints = xp;
+        if (arguments[2].equalsIgnoreCase("Ludo")) data.valorantPoints = xp;
         else if (arguments[2].equalsIgnoreCase("Ball")) data.poolPoints = xp;
 
         else {

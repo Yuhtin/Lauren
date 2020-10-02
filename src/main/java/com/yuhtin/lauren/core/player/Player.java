@@ -4,6 +4,7 @@ import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.alarm.Alarm;
 import com.yuhtin.lauren.core.match.Match;
 import com.yuhtin.lauren.core.player.controller.PlayerDatabase;
+import com.yuhtin.lauren.core.statistics.controller.StatsController;
 import com.yuhtin.lauren.models.enums.GameMode;
 import com.yuhtin.lauren.models.enums.GameType;
 import com.yuhtin.lauren.models.enums.Rank;
@@ -18,13 +19,15 @@ public class Player {
     public transient final List<Alarm> alarms = new ArrayList<>();
     public final List<String> alarmsName;
     public final List<String> winMatches;
+
     // Geral
     public long userID, dailyDelay;
     public int level = 0, money = 100, experience = 0;
-    // LudoKing and 8ballpool variables
-    public Rank ludoRank = Rank.NOTHING,
+
+    // Valorant and 8ballpool variables
+    public Rank valorantRank = Rank.NOTHING,
             poolRank = Rank.NOTHING;
-    public int ludoPoints, ludoWins, ludoMatches,
+    public int valorantPoints, valorantWins, valorantMatches,
             poolPoints, poolWins, poolMatches = 0;
 
     public Player(long userID) {
@@ -43,6 +46,8 @@ public class Player {
                 Lauren.guild.getTextChannelById(700683423429165096L).sendMessage(
                         "<:prime:722115525232296056> O jogador <@" + userID + "> tornou-se prime").queue();
             }
+
+            StatsController.get().getStats("Evoluir Nível").suplyStats(1);
         }
 
         return this;
@@ -50,7 +55,7 @@ public class Player {
 
     public Player updateRank() {
         this.poolRank = Rank.getByPoints(poolPoints);
-        this.ludoRank = Rank.getByPoints(ludoPoints);
+        this.valorantRank = Rank.getByPoints(valorantPoints);
 
         return this;
     }
@@ -74,11 +79,12 @@ public class Player {
     }
 
     public Player gainXP(double quantity) {
-        List<Double> multipliers = Arrays.asList(boosterMultiplier(), poolRank.multiplier, ludoRank.multiplier);
+        List<Double> multipliers = Arrays.asList(boosterMultiplier(), poolRank.multiplier, valorantRank.multiplier);
 
         for (Double multiplier : multipliers) quantity *= multiplier;
         experience += quantity;
 
+        StatsController.get().getStats("Ganhar XP").suplyStats(1);
         return this;
     }
 
@@ -106,10 +112,10 @@ public class Player {
             poolPoints += points;
             if (win) ++poolWins;
         } else {
-            multiplier = ludoRank.multiplier;
-            ++ludoMatches;
-            ludoPoints += points;
-            if (win) ++ludoWins;
+            multiplier = valorantRank.multiplier;
+            ++valorantMatches;
+            valorantPoints += points;
+            if (win) ++valorantWins;
         }
 
         experience *= multiplier;
@@ -123,7 +129,7 @@ public class Player {
 
     public void save() {
         if (money < 0) money = 0;
-        if (ludoPoints < 0) ludoPoints = 0;
+        if (valorantPoints < 0) valorantPoints = 0;
         if (poolPoints < 0) poolPoints = 0;
 
         PlayerDatabase.save(userID, this);

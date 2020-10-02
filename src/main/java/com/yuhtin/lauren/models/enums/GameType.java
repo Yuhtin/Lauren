@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 public enum GameType {
 
     POOL("8BallPool", 2),
-    LUDO("LudoKing", 4);
+    VALORANT("Valorant", 4);
 
     public final String name;
     public final int minPlayers;

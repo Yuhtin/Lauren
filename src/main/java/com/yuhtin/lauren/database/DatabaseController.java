@@ -23,6 +23,7 @@ public class DatabaseController {
     /* SQLite Connection */
     public void constructDatabase(Connection connection) {
         this.connection = connection;
-        this.database = new Database(connection); }
+        this.database = new Database(connection);
+    }
 
 }

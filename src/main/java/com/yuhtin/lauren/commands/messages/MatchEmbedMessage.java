@@ -40,14 +40,14 @@ public class MatchEmbedMessage extends Command {
                                 "\uD83C\uDFC6 Para entrar na fila clique no \uD83C\uDFAE\n\n" +
                                 "⚙️ Jogo: Ludo King\n" +
                                 "⚔️ Modo de Jogo: Casual");
-                Lauren.config.setLudoCasual(event.getChannel().getIdLong());
+                Lauren.config.setValorantCasual(event.getChannel().getIdLong());
             } else {
                 embed.setAuthor("\uD83C\uDFB2 LUDO | RANKED")
                         .setDescription("Opa \uD83D\uDE06 Se você está aqui para entrar na fila de partida, primeiro cheque se está no local certo\n\n" +
                                 "\uD83C\uDFC6 Para entrar na fila clique no \uD83C\uDFAE\n\n" +
                                 "⚙️ Jogo: Ludo King\n" +
                                 "⚔️ Modo de Jogo: Ranked");
-                Lauren.config.setLudoRanked(event.getChannel().getIdLong());
+                Lauren.config.setValorantRanked(event.getChannel().getIdLong());
             }
         } else {
             if (type.equalsIgnoreCase("casual")) {

@@ -33,6 +33,8 @@ public class SendMessageCommand extends Command {
             } catch (Exception exception) {
             }
         }
+
         event.getChannel().sendMessage(event.getArgs()).queue();
+        event.getMessage().delete().queueAfter(3, TimeUnit.SECONDS);
     }
 }

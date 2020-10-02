@@ -20,12 +20,12 @@ public class RowSystemEvents extends ListenerAdapter {
         GameMode mode = null;
         long id = event.getChannel().getIdLong();
 
-        if (id == Lauren.config.ludoCasual) {
-            type = GameType.LUDO;
+        if (id == Lauren.config.valorantCasual) {
+            type = GameType.VALORANT;
             mode = GameMode.CASUAL;
         }
-        if (id == Lauren.config.ludoRanked) {
-            type = GameType.LUDO;
+        if (id == Lauren.config.valorantRanked) {
+            type = GameType.VALORANT;
             mode = GameMode.RANKED;
         }
         if (id == Lauren.config.poolCasual) {

@@ -1,6 +1,5 @@
 package com.yuhtin.lauren.core.player.controller;
 
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.database.DatabaseController;
 import com.yuhtin.lauren.utils.serialization.Serializer;
@@ -19,10 +18,7 @@ public class PlayerDatabase {
                 .where("id", userID)
                 .raw();
 
-        Logger.log(raw);
-
         PlayerORM playerORM = DatabaseController.getDatabase().buildSync(PlayerORM.class, raw);
-
         if (playerORM == null) {
             create(userID);
             return new Player(userID);

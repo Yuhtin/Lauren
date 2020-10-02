@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.MathUtils;
+import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 
@@ -28,7 +29,7 @@ public class ServerInfoCommand extends Command {
         String userDate = event.getMessage().getMember() == null ? "Erro" : subtractTime(event.getMessage().getMember().getTimeJoined());
 
         Member owner = event.getGuild().getOwner();
-        String ownerName = (owner == null ? "Ningúem" : owner.getUser().getName() + "#" + owner.getUser().getDiscriminator());
+        String ownerName = (owner == null ? "Ningúem" : Utilities.INSTANCE.getFullName(owner.getUser()));
         String ownerId = (owner == null ? "0" : owner.getId());
 
         int textChannels = event.getGuild().getTextChannels().size();

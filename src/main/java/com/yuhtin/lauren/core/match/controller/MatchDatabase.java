@@ -53,6 +53,6 @@ public class MatchDatabase {
 
     public static void create(String id) {
         DatabaseController.getDatabase()
-                .querySync(new Query().insert("lauren_matches", id, new Match(new Game(GameType.LUDO, GameMode.CASUAL))));
+                .querySync(new Query().insert("lauren_matches", id, new Match(new Game(GameType.VALORANT, GameMode.CASUAL))));
     }
 }
