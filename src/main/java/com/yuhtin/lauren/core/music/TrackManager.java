@@ -11,6 +11,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.logger.Logger;
+import com.yuhtin.lauren.core.statistics.controller.StatsController;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -67,7 +68,7 @@ public class TrackManager extends AudioEventAdapter {
         musicManager.player.destroy();
     }
 
-    public void loadTrack(String trackUrl, Member member, TextChannel channel, boolean message) {
+    public void loadTrack(String trackUrl, Member member, TextChannel channel) {
         String emoji = trackUrl.contains("spotify.com") ? "<:spotify:751049445592006707>" : "<:youtube:751031330057486366>";
         channel.sendMessage(emoji + " **Procurando** 🔎 `" + trackUrl.replace("ytsearch: ", "") + "`").queue();
 
@@ -84,23 +85,24 @@ public class TrackManager extends AudioEventAdapter {
                 }
 
                 if (player.isPaused()) player.setPaused(false);
-                if (message) {
-                    EmbedBuilder embed = new EmbedBuilder()
-                            .setTitle("💿 " + Utilities.INSTANCE.getFullName(member.getUser()) + " adicionou 1 música a fila")
-                            .setDescription(
-                                    "\ud83d\udcc0 Nome: `" + track.getInfo().title + "`\n" +
-                                            "\uD83D\uDCB0 Autor: `" + track.getInfo().author + "`\n" +
-                                            "\uD83D\uDCE2 Tipo de vídeo: `" +
-                                            (track.getInfo().isStream ? "Stream" : track.getInfo().title.contains("Podcast") ?
-                                                    "Podcast" : "Música") + "`\n" +
-                                            "\uD83D\uDCCC Link: [Clique aqui](" + track.getInfo().uri + ")");
 
-                    Logger.log("The player " + Utilities.INSTANCE.getFullName(member.getUser()) + " added a music").save();
-                    channel.sendMessage(embed.build()).queue();
-                }
+                EmbedBuilder embed = new EmbedBuilder()
+                        .setTitle("💿 " + Utilities.INSTANCE.getFullName(member.getUser()) + " adicionou 1 música a fila")
+                        .setDescription(
+                                "\ud83d\udcc0 Nome: `" + track.getInfo().title + "`\n" +
+                                        "\uD83D\uDCB0 Autor: `" + track.getInfo().author + "`\n" +
+                                        "\uD83D\uDCE2 Tipo de vídeo: `" +
+                                        (track.getInfo().isStream ? "Stream" : track.getInfo().title.contains("Podcast") ?
+                                                "Podcast" : "Música") + "`\n" +
+                                        "\uD83D\uDCCC Link: [Clique aqui](" + track.getInfo().uri + ")");
+
+                Logger.log("The player " + Utilities.INSTANCE.getFullName(member.getUser()) + " added a music").save();
+                channel.sendMessage(embed.build()).queue();
 
                 audio = member.getVoiceState().getChannel();
                 play(track, member);
+                StatsController.get().getStats("Tocar Música").suplyStats(1);
+                StatsController.get().getStats("Requests Externos").suplyStats(1);
             }
 
             @Override
@@ -134,6 +136,8 @@ public class TrackManager extends AudioEventAdapter {
                         play(track, member);
                     }
 
+                    StatsController.get().getStats("Tocar Música").suplyStats(maxMusics);
+                    StatsController.get().getStats("Requests Externos").suplyStats(maxMusics);
                     channel.sendMessage(embed.build()).queue();
                 }
             }

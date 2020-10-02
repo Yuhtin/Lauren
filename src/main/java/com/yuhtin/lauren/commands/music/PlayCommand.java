@@ -44,7 +44,7 @@ public class PlayCommand extends Command {
             return;
         }
 
-        TrackManager.get().loadTrack(input, event.getMember(), event.getTextChannel(), true);
+        TrackManager.get().loadTrack(input, event.getMember(), event.getTextChannel());
     }
 
 }

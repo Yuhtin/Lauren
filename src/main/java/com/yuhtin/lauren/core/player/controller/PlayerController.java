@@ -7,6 +7,8 @@ import com.yuhtin.lauren.utils.helper.TaskHelper;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 public class PlayerController {
 
@@ -16,6 +18,12 @@ public class PlayerController {
     public void savePlayers() {
         Logger.log("Saving all players, the bot may lag for a bit").save();
         TaskHelper.runAsync(new Thread(() -> cache.forEach(PlayerDatabase::save)));
+        TaskHelper.runTaskLater(new TimerTask() {
+            @Override
+            public void run() {
+                cache.clear();
+            }
+        }, 5, TimeUnit.SECONDS);
         Logger.log("Saved all players").save();
     }
 

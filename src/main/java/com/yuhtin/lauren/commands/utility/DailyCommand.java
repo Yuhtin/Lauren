@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
+import com.yuhtin.lauren.core.statistics.controller.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.MathUtils;
 import com.yuhtin.lauren.utils.helper.Utilities;
@@ -31,5 +32,6 @@ public class DailyCommand extends Command {
 
         data.setDelay(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1)).addMoney(15 * bonus).gainXP(100 * bonus);
         event.getChannel().sendMessage("🌟 Aaaaa, eu to muito feliz por ter lembrado de mim e pego seu daily 💙 Veja suas informações atualizadas usando `$perfil`").queue();
+        StatsController.get().getStats("Daily Command").suplyStats(1);
     }
 }

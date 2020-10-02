@@ -2,9 +2,13 @@ package com.yuhtin.lauren.database;
 
 import io.github.eikefs.sql.provider.Provider;
 import io.github.eikefs.sql.provider.database.Database;
+import lombok.Getter;
+
+import java.sql.Connection;
 
 public class DatabaseController {
 
+    @Getter private Connection connection;
     private static final DatabaseController INSTANCE = new DatabaseController();
     public static DatabaseController get() { return INSTANCE; }
     public static Database getDatabase() { return get().database; }
@@ -17,6 +21,8 @@ public class DatabaseController {
     }
 
     /* SQLite Connection */
-    public void constructDatabase(Database database) { this.database = database; }
+    public void constructDatabase(Connection connection) {
+        this.connection = connection;
+        this.database = new Database(connection); }
 
 }

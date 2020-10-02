@@ -1,6 +1,7 @@
 package com.yuhtin.lauren.service;
 
 import com.yuhtin.lauren.core.logger.Logger;
+import com.yuhtin.lauren.core.statistics.controller.StatsController;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,6 +33,8 @@ public class GetConnectionFactory {
             reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             while ((line = reader.readLine()) != null) responseContent.append(line);
             reader.close();
+
+            StatsController.get().getStats("Requests Externos").suplyStats(1);
         } catch (IOException exception) {
             Logger.error(exception);
             return "";

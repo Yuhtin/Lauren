@@ -3,6 +3,7 @@ package com.yuhtin.lauren.commands.scrim;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.player.Player;
+import com.yuhtin.lauren.core.statistics.controller.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.utils.helper.MathUtils;
@@ -52,6 +53,8 @@ public class PlayerInfoCommand extends Command {
                 .setTimestamp(Instant.now());
 
         event.getChannel().sendMessage(embedBuilder.build()).queue();
+
+        StatsController.get().getStats("Player Command").suplyStats(1);
     }
 
     private String subtractTime(OffsetDateTime before) {

@@ -9,6 +9,7 @@ import com.yuhtin.lauren.core.match.controller.MatchDatabase;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.player.controller.PlayerDatabase;
+import com.yuhtin.lauren.core.statistics.controller.StatsDatabase;
 import com.yuhtin.lauren.database.Data;
 import com.yuhtin.lauren.database.DatabaseController;
 import com.yuhtin.lauren.database.types.MySQL;
@@ -20,7 +21,6 @@ import com.yuhtin.lauren.service.PterodactylConnection;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import com.yuhtin.lauren.utils.messages.AsciiBox;
-import io.github.eikefs.sql.provider.database.Database;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -157,7 +157,9 @@ public class Lauren {
 
         TaskHelper.runTaskTimerAsync(new TimerTask() {
             @Override
-            public void run() { PlayerController.INSTANCE.savePlayers();
+            public void run() {
+                StatsDatabase.save();
+                PlayerController.INSTANCE.savePlayers();
             }
         }, 5, 5, TimeUnit.MINUTES);
 
@@ -171,14 +173,14 @@ public class Lauren {
 
     public static void finish() {
         PlayerController.INSTANCE.savePlayers();
+        StatsDatabase.save();
         TrackManager.get().destroy();
-
         TaskHelper.runTaskLater(new TimerTask() {
             @Override
             public void run() {
                 saveLog();
             }
-        }, 10, TimeUnit.SECONDS);
+        }, 6, TimeUnit.SECONDS);
     }
 
     private static void saveLog() {
@@ -223,13 +225,15 @@ public class Lauren {
                     config.mySqlPassword,
                     config.mySqlDatabase);
 
-        DatabaseController.get().constructDatabase(new Database(dataType.openConnection()));
+        DatabaseController.get().constructDatabase(dataType.openConnection());
 
         PlayerDatabase.createTable();
         MatchDatabase.createTable();
         MatchDatabase.loadData();
         AlarmDatabase.createTable();
         AlarmDatabase.load();
+        StatsDatabase.createTable();
+        StatsDatabase.load();
 
         Logger.log("Connection to database successful", LogType.STARTUP).save();
     }

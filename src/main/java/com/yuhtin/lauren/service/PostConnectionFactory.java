@@ -1,6 +1,7 @@
 package com.yuhtin.lauren.service;
 
 import com.yuhtin.lauren.core.logger.Logger;
+import com.yuhtin.lauren.core.statistics.controller.StatsController;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -45,6 +46,7 @@ public class PostConnectionFactory {
                     content.append(line).append("\n");
                 }
 
+                StatsController.get().getStats("Requests Externos").suplyStats(1);
                 return content.toString();
             } catch (Exception exception) {
                 Logger.error(exception);
