@@ -34,6 +34,7 @@ public class ChatMessage extends ListenerAdapter {
 
         if (!isMusicCommand(event.getMessage().getContentRaw())
                 && event.getMessage().getContentRaw().contains("https://")
+                && event.getChannel().getIdLong() != 753628118161424384L
                 && !Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.MESSAGE_MANAGE, false)) {
 
             event.getChannel()
@@ -47,7 +48,10 @@ public class ChatMessage extends ListenerAdapter {
     }
 
     private boolean isMusicCommand(String contentRaw) {
-        return contentRaw.startsWith("$m ") || contentRaw.startsWith("$music") || contentRaw.startsWith("$play ") || contentRaw.startsWith("$tocar ");
+        return contentRaw.startsWith("$m ")
+                || contentRaw.startsWith("$music")
+                || contentRaw.startsWith("$play ")
+                || contentRaw.startsWith("$tocar ");
     }
 
 

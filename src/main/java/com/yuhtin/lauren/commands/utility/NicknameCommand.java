@@ -15,6 +15,11 @@ public class NicknameCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
+        if (event.getArgs().equalsIgnoreCase("")) {
+            event.getChannel().sendMessage("<:oi:762303876732420176> Acho que ta faltando inserir o nick nekkkkkk").queue();
+            return;
+        }
+
         String nick = event.getArgs().replace("[", "").replace("]", "");
         nick = "[" + PlayerController.INSTANCE.get(event.getAuthor().getIdLong()).level + "] " + nick;
 

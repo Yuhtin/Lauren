@@ -51,6 +51,6 @@ public class StatsDatabase {
     public static void create(String name) {
         DatabaseController.getDatabase()
                 .updateSync(new Query().insert("lauren_stats", name,
-                        Serializer.stats.serialize(new StatsInfo(name, 0))));
+                        Serializer.stats.serialize(new StatsInfo(name))));
     }
 }

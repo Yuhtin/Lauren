@@ -24,11 +24,8 @@ public class EventsManager {
                 Class event = Class.forName(classInfo.getName());
                 Object object = event.newInstance();
 
-                if (object instanceof ListenerAdapter)
-                    bot.addEventListener(object);
-                else
-                    throw new InstantiationException();
-
+                if (object instanceof ListenerAdapter) bot.addEventListener(object);
+                else throw new InstantiationException();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException exception) {
                 Logger.log("The " + classInfo.getName() + " class could not be instantiated", LogType.WARN);
             }
