@@ -19,7 +19,7 @@ public class PlayCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
         if (!TrackUtils.get().isInVoiceChannel(event.getMember())) {
-            event.getChannel().sendMessage("\uD83C\uDFB6 Amiguinho, entre no canal `\uD83C\uDFB6┇Batidões` para poder usar comandos de música").queue();
+            event.getChannel().sendMessage("\uD83C\uDFB6 Amiguinho, entre no canal `\uD83C\uDFB6┇Batidões` para poder usar comando de música").queue();
             return;
         }
 
@@ -30,7 +30,7 @@ public class PlayCommand extends Command {
 
         String[] arguments = event.getArgs().split(" ");
         if (arguments.length == 0) {
-            event.getChannel().sendMessage("<a:nao:704295026036834375> Utilize :clock9: `$p <link ou nome>`").queue();
+            event.getChannel().sendMessage("<a:nao:704295026036834375> Utilize :clock9: `$tocar <link ou nome>`").queue();
             return;
         }
 

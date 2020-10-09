@@ -11,7 +11,7 @@ public class SQLite implements Data {
     @Override
     public Connection openConnection() {
         File file = new File("config/lauren.db");
-        String URL = "jdbc:sqlite:" + file;
+        String URL = "jdbc:sqlite:" + file + "?autoReconnect=true";
         try {
             Class.forName("org.sqlite.JDBC");
             return DriverManager.getConnection(URL);

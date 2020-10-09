@@ -12,11 +12,11 @@ import net.dv8tion.jda.api.entities.Member;
 import java.util.concurrent.TimeUnit;
 
 @CommandHandler(
-        name = "setarpontos",
+        name = "addpontos",
         type = CommandHandler.CommandType.SUPORT,
-        description = "Setar os pontos de ranked para um jogador",
-        alias = {"setpoints"})
-public class SetPointsCommand extends Command {
+        description = "Adicionar pontos de ranked para um jogador",
+        alias = {"adicionarpontos"})
+public class AddPointsCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
@@ -41,8 +41,8 @@ public class SetPointsCommand extends Command {
         int xp = Integer.parseInt(arguments[3]);
         Player data = PlayerController.INSTANCE.get(member.getIdLong());
 
-        if (arguments[2].equalsIgnoreCase("Valorant")) data.valorantPoints = xp;
-        else if (arguments[2].equalsIgnoreCase("Ball")) data.poolPoints = xp;
+        if (arguments[2].equalsIgnoreCase("Valorant")) data.valorantPoints += xp;
+        else if (arguments[2].equalsIgnoreCase("Ball")) data.poolPoints += xp;
 
         else {
             event.getChannel().sendMessage("Este jogo é invalido. Jogos válidos:").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));

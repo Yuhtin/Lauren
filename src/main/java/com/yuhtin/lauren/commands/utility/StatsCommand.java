@@ -43,7 +43,6 @@ public class StatsCommand extends Command {
             return;
         }
 
-
         Date date = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
