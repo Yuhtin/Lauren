@@ -28,7 +28,7 @@ public class NicknameCommand extends Command {
             return;
         }
 
-        event.getChannel().sendMessage("<:feliz_pra_caralho:760202116504485948> Você modificou seu nick com sucesso").queue();
+        event.getChannel().sendMessage("<:feliz_pra_caralho:760202116504485948> Você modificou seu nick com sucesso (os parênteses fazem parte do sistema de nível).").queue();
         event.getMember().modifyNickname(nick).queue();
     }
 }

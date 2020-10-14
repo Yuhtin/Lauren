@@ -22,8 +22,8 @@ public class MinecraftSearchCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
         String[] arguments = event.getArgs().split(" ");
-        if (arguments.length < 1) {
-            event.getChannel().sendMessage("<a:tchau:751941650728747140> Você precisa inserir um nome de jogador para pesquisar.").queue();
+        if (event.getArgs().equalsIgnoreCase("")) {
+            event.getChannel().sendMessage("<a:tchau:751941650728747140> Você precisa inserir um nome de jogador para pesquisar, exemplo `$mcname Yuhtin`.").queue();
             return;
         }
 
