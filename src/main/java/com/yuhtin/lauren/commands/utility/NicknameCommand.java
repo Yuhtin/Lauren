@@ -23,7 +23,12 @@ public class NicknameCommand extends Command {
         String nick = event.getArgs().replace("[", "").replace("]", "");
         nick = "[" + PlayerController.INSTANCE.get(event.getAuthor().getIdLong()).level + "] " + nick;
 
-        event.getChannel().sendMessage("<:feliz_pra_caralho:760202116504485948> Você modificou seu nick com sucesso").queue();
+        if (nick.length() > 32) {
+            event.getChannel().sendMessage("<:chorano:726207542413230142> O nick escolhido é muito grande").queue();
+            return;
+        }
+
+        event.getChannel().sendMessage("<:feliz_pra_caralho:760202116504485948> Você modificou seu nick com sucesso (os parênteses fazem parte do sistema de nível).").queue();
         event.getMember().modifyNickname(nick).queue();
     }
 }

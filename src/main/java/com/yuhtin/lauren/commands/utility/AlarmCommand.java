@@ -23,7 +23,7 @@ public class AlarmCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
         String[] arguments = event.getArgs().split(" ");
-        if (arguments.length == 0) {
+        if (event.getArgs().equalsIgnoreCase("")) {
             EmbedBuilder embed = new EmbedBuilder();
             embed.setAuthor("| Alarmes Registrados", null, event.getGuild().getIconUrl());
             embed.setTimestamp(Instant.now());

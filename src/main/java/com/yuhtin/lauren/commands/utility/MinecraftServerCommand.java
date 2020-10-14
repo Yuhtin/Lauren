@@ -24,7 +24,7 @@ public class MinecraftServerCommand extends Command {
     protected void execute(CommandEvent event) {
         String[] arguments = event.getArgs().split(" ");
         if (arguments.length < 1) {
-            event.getChannel().sendMessage("<a:tchau:751941650728747140> Você precisa inserir um nome de jogador para pesquisar.").queue();
+            event.getChannel().sendMessage("<a:tchau:751941650728747140> Você precisa inserir um nome de jogador para pesquisar, exemplo `$mcserver hypixel.net`.").queue();
             return;
         }
 
