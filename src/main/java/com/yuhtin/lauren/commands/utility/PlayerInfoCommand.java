@@ -36,6 +36,7 @@ public class PlayerInfoCommand extends Command {
                 .setColor(target.getColor())
                 .setAuthor("Informações do jogador " + name, null, target.getUser().getAvatarUrl())
                 .setThumbnail(controller.valorantRank.position > controller.poolRank.position ? controller.valorantRank.url : controller.poolRank.url)
+
                 .addField("⚗️ Experiência", "`Nível " + controller.level + " (" + Utilities.INSTANCE.format(controller.experience) + " XP)`", false)
                 .addField("🧶 Cargos", "`" + (roles.equalsIgnoreCase("") ? "Nenhum" : roles) + "`", false)
                 .addField("✨ Entrou em", userDate, false)
