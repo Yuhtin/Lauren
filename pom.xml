@@ -6,7 +6,7 @@
 
     <groupId>com.yuhtin</groupId>
     <artifactId>lauren</artifactId>
-    <version>1.5.3-SNAPSHOT</version>
+    <version>1.6-SNAPSHOT</version>
 
     <build>
         <resources>
@@ -123,11 +123,13 @@
             <id>jitpack</id>
             <url>https://jitpack.io</url>
         </repository>
+
         <repository>
             <id>central</id>
             <name>bintray</name>
             <url>http://jcenter.bintray.com</url>
         </repository>
+
         <repository>
             <id>jcenter</id>
             <name>jcenter-bintray</name>
