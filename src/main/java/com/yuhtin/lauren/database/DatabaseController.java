@@ -1,5 +1,9 @@
 package com.yuhtin.lauren.database;
 
+import com.yuhtin.lauren.core.alarm.controller.AlarmDatabase;
+import com.yuhtin.lauren.core.match.controller.MatchDatabase;
+import com.yuhtin.lauren.core.player.controller.PlayerDatabase;
+import com.yuhtin.lauren.core.statistics.controller.StatsDatabase;
 import io.github.eikefs.sql.provider.Provider;
 import io.github.eikefs.sql.provider.database.Database;
 import lombok.Getter;
@@ -26,4 +30,13 @@ public class DatabaseController {
         this.database = new Database(connection);
     }
 
+    public void loadAll() {
+        PlayerDatabase.createTable();
+        MatchDatabase.createTable();
+        MatchDatabase.loadData();
+        AlarmDatabase.createTable();
+        AlarmDatabase.load();
+        StatsDatabase.createTable();
+        StatsDatabase.load();
+    }
 }
