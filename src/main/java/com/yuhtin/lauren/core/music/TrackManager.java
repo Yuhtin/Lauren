@@ -54,7 +54,6 @@ public class TrackManager extends AudioEventAdapter {
         fields.put("api_user_key", Lauren.config.pastebinUserKey);
         fields.put("api_paste_private", "1");
         fields.put("api_paste_expire_date", "10M");
-        fields.put("api_paste_format", "yaml");
         fields.put("api_option", "paste");
         fields.put("api_paste_code", "");
         fields.put("api_paste_name", "");
@@ -100,14 +99,16 @@ public class TrackManager extends AudioEventAdapter {
                                                 "Podcast" : "Música") + "`\n" +
                                         "\uD83D\uDCCC Link: [Clique aqui](" + track.getInfo().uri + ")");
 
-                Logger.log("The player " + Utilities.INSTANCE.getFullName(member.getUser()) + " added a music").save();
-                if (type == SearchType.SIMPLE_SEARCH) channel.sendMessage(embed.build()).queue();
+                if (type == SearchType.SIMPLE_SEARCH) {
+                    Logger.log("The player " + Utilities.INSTANCE.getFullName(member.getUser()) + " added a music").save();
+                    channel.sendMessage(embed.build()).queue();
+
+                    StatsController.get().getStats("Tocar Música").suplyStats(1);
+                    StatsController.get().getStats("Requests Externos").suplyStats(1);
+                }
 
                 audio = member.getVoiceState().getChannel();
                 play(track, member);
-
-                StatsController.get().getStats("Tocar Música").suplyStats(1);
-                StatsController.get().getStats("Requests Externos").suplyStats(1);
             }
 
             @Override
@@ -140,6 +141,8 @@ public class TrackManager extends AudioEventAdapter {
                         }
                     });
 
+                    StatsController.get().getStats("Tocar Música").suplyStats(maxMusics);
+                    StatsController.get().getStats("Requests Externos").suplyStats(maxMusics);
                     channel.sendMessage(embed.build()).queue();
                 }
             }
@@ -152,7 +155,6 @@ public class TrackManager extends AudioEventAdapter {
 
             @Override
             public void loadFailed(FriendlyException exception) {
-                exception.printStackTrace();
                 if (type == SearchType.SIMPLE_SEARCH)
                     channel.sendMessage("**Erro** \uD83D\uDCCC `O vídeo ou playlist está privado`").queue();
             }

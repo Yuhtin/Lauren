@@ -73,7 +73,6 @@ public class Lauren {
                         .setAutoReconnect(true)
                         .enableIntents(GatewayIntent.GUILD_MEMBERS)
                         .build();
-                Logger.log("Lauren has connected to DiscordAPI", LogType.STARTUP).save();
             } catch (LoginException exception) {
                 Logger.log("The bot token is wrong", LogType.ERROR).save();
             }
@@ -117,10 +116,9 @@ public class Lauren {
         TaskHelper.runTaskLater(new TimerTask() {
             @Override
             public void run() {
-                if (config.laurenTest) guild = bot.getGuildById(723625569111113740L);
-                else guild = bot.getGuildCache().iterator().next();
+                if (Lauren.guild == null) finish();
             }
-        }, 7, TimeUnit.SECONDS);
+        }, 10, TimeUnit.SECONDS);
 
         TaskHelper.runTaskTimerAsync(new TimerTask() {
             @Override
