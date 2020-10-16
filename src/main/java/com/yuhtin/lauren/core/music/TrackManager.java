@@ -119,7 +119,7 @@ public class TrackManager extends AudioEventAdapter {
                 else {
                     if (player.isPaused()) player.setPaused(false);
 
-                    int limit = Utilities.INSTANCE.isBooster(member) || Utilities.INSTANCE.isDJ(member, null, false) ? 100 : 25;
+                    int limit = Utilities.INSTANCE.isPrime(member) || Utilities.INSTANCE.isDJ(member, null, false) ? 100 : 25;
                     int maxMusics = Math.min(playlist.getTracks().size(), limit);
 
                     EmbedBuilder embed = new EmbedBuilder()
