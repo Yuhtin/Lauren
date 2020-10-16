@@ -29,7 +29,7 @@ public class PlayCommand extends Command {
         }
 
         String[] arguments = event.getArgs().split(" ");
-        if (arguments.length == 0) {
+        if (event.getArgs().equalsIgnoreCase("")) {
             event.getChannel().sendMessage("<a:nao:704295026036834375> Utilize :clock9: `$tocar <link ou nome>`").queue();
             return;
         }
@@ -44,7 +44,7 @@ public class PlayCommand extends Command {
             return;
         }
 
-        TrackManager.get().loadTrack(input, event.getMember(), event.getTextChannel());
+        TrackManager.get().loadTrack(input, event.getMember(), event.getTextChannel(), TrackManager.SearchType.SIMPLE_SEARCH);
     }
 
 }
