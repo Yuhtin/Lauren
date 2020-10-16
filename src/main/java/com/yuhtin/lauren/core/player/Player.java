@@ -9,6 +9,7 @@ import com.yuhtin.lauren.models.enums.GameMode;
 import com.yuhtin.lauren.models.enums.GameType;
 import com.yuhtin.lauren.models.enums.Rank;
 import com.yuhtin.lauren.utils.helper.Utilities;
+import net.dv8tion.jda.api.entities.Member;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -88,7 +89,11 @@ public class Player {
         return this;
     }
 
-    private double boosterMultiplier() { return Utilities.INSTANCE.isBooster(Lauren.guild.getMemberById(userID)) ? 1.15 : 1; }
+    private double boosterMultiplier() {
+        Member member = Lauren.guild.getMemberById(userID);
+
+        return Utilities.INSTANCE.isBooster(member) ? 1.25 : Utilities.INSTANCE.isPrime(member) ? 1.15 : 1;
+    }
 
     public Player computMatch(Match match) {
         int points = -1;

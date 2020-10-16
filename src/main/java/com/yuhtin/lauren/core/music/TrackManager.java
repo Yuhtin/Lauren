@@ -12,6 +12,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.statistics.controller.StatsController;
+import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -52,8 +53,7 @@ public class TrackManager extends AudioEventAdapter {
         fields.put("api_dev_key", Lauren.config.pastebinDevKey);
         fields.put("api_user_key", Lauren.config.pastebinUserKey);
         fields.put("api_paste_private", "1");
-        fields.put("api_paste_expire_date", "2M");
-        fields.put("api_paste_format", "yaml");
+        fields.put("api_paste_expire_date", "10M");
         fields.put("api_option", "paste");
         fields.put("api_paste_code", "");
         fields.put("api_paste_name", "");
@@ -68,11 +68,13 @@ public class TrackManager extends AudioEventAdapter {
         musicManager.player.destroy();
     }
 
-    public void loadTrack(String trackUrl, Member member, TextChannel channel) {
+    public void loadTrack(String trackUrl, Member member, TextChannel channel, SearchType type) {
         String emoji = trackUrl.contains("spotify.com") ? "<:spotify:751049445592006707>" : "<:youtube:751031330057486366>";
-        channel.sendMessage(emoji + " **Procurando** 🔎 `" + trackUrl.replace("ytsearch: ", "") + "`").queue();
+        if (type == SearchType.SIMPLE_SEARCH) {
+            channel.sendMessage(emoji + " **Procurando** 🔎 `" + trackUrl.replace("ytsearch: ", "") + "`").queue();
+            channel.sendTyping().queue();
+        }
 
-        channel.sendTyping().queue();
         audioManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
 
             @Override
@@ -80,7 +82,8 @@ public class TrackManager extends AudioEventAdapter {
                 if (track.getInfo().title.toLowerCase().contains("som do")
                         || track.getInfo().title.toLowerCase().contains("som de")
                         || track.getInfo().title.toLowerCase().contains("som da")) {
-                    channel.sendMessage("<a:nao:704295026036834375> Nem fodendo, hoje não vai rolar").queue();
+                    if (type == SearchType.SIMPLE_SEARCH)
+                        channel.sendMessage("<a:nao:704295026036834375> Nem fodendo, hoje não vai rolar").queue();
                     return;
                 }
 
@@ -96,45 +99,47 @@ public class TrackManager extends AudioEventAdapter {
                                                 "Podcast" : "Música") + "`\n" +
                                         "\uD83D\uDCCC Link: [Clique aqui](" + track.getInfo().uri + ")");
 
-                Logger.log("The player " + Utilities.INSTANCE.getFullName(member.getUser()) + " added a music").save();
-                channel.sendMessage(embed.build()).queue();
+                if (type == SearchType.SIMPLE_SEARCH) {
+                    Logger.log("The player " + Utilities.INSTANCE.getFullName(member.getUser()) + " added a music").save();
+                    channel.sendMessage(embed.build()).queue();
+
+                    StatsController.get().getStats("Tocar Música").suplyStats(1);
+                    StatsController.get().getStats("Requests Externos").suplyStats(1);
+                }
 
                 audio = member.getVoiceState().getChannel();
                 play(track, member);
-                StatsController.get().getStats("Tocar Música").suplyStats(1);
-                StatsController.get().getStats("Requests Externos").suplyStats(1);
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
-                if (playlist.getSelectedTrack() != null) {
-                    trackLoaded(playlist.getSelectedTrack());
-                } else if (playlist.isSearchResult()) {
-                    trackLoaded(playlist.getTracks().get(0));
-                } else {
+                if (playlist.getSelectedTrack() != null) trackLoaded(playlist.getSelectedTrack());
+                else if (playlist.isSearchResult()) trackLoaded(playlist.getTracks().get(0));
+
+                else {
                     if (player.isPaused()) player.setPaused(false);
 
-                    int limit = Utilities.INSTANCE.isBooster(member) || Utilities.INSTANCE.isDJ(member, null, false) ? 100 : 25;
+                    int limit = Utilities.INSTANCE.isPrime(member) || Utilities.INSTANCE.isDJ(member, null, false) ? 100 : 25;
                     int maxMusics = Math.min(playlist.getTracks().size(), limit);
 
                     EmbedBuilder embed = new EmbedBuilder()
                             .setTitle("💿 " + Utilities.INSTANCE.getFullName(member.getUser()) + " adicionou " + maxMusics + " músicas a fila")
-                            .setDescription("\uD83D\uDCBD Informações da playlist:\n" +
+                            .setDescription("\uD83D\uDCBD Informações da playlist:\n\n" +
                                     "\ud83d\udcc0 Nome: `" + playlist.getName() + "`\n" +
-                                    "\uD83C\uDFB6 Músicas: `" + maxMusics + "`\n\n" +
+                                    "\uD83C\uDFB6 Músicas: `" + maxMusics + "`\n" +
                                     "\uD83D\uDCCC Link: [Clique aqui](" + trackUrl + ")");
 
                     Logger.log("The player " + Utilities.INSTANCE.getFullName(member.getUser()) + " added a playlist with " + maxMusics + " musics").save();
-                    audio = member.getVoiceState().getChannel();
-                    for (int i = 0; i < maxMusics; i++) {
-                        AudioTrack track = playlist.getTracks().get(i);
-                        if (track.getInfo().title.contains("som do") || track.getInfo().title.contains("som de")) {
-                            channel.sendMessage("<a:nao:704295026036834375> Nem fodendo, hoje não vai rolar `" + track.getInfo().title + "`").queue();
-                            return;
-                        }
 
-                        play(track, member);
-                    }
+                    audio = member.getVoiceState().getChannel();
+                    TaskHelper.runAsync(() -> {
+                        for (int i = 0; i < maxMusics; i++) {
+                            AudioTrack track = playlist.getTracks().get(i);
+                            String link = "https://youtube.com/watch?v=" + track.getIdentifier();
+
+                            loadTrack(link, member, channel, SearchType.LOOKING_PLAYLIST);
+                        }
+                    });
 
                     StatsController.get().getStats("Tocar Música").suplyStats(maxMusics);
                     StatsController.get().getStats("Requests Externos").suplyStats(maxMusics);
@@ -144,12 +149,14 @@ public class TrackManager extends AudioEventAdapter {
 
             @Override
             public void noMatches() {
-                channel.sendMessage("**Erro** \uD83D\uDCCC `Não encontrei nada relacionado a busca`").queue();
+                if (type == SearchType.SIMPLE_SEARCH)
+                    channel.sendMessage("**Erro** \uD83D\uDCCC `Não encontrei nada relacionado a busca`").queue();
             }
 
             @Override
             public void loadFailed(FriendlyException exception) {
-                channel.sendMessage("**Erro** \uD83D\uDCCC `O vídeo ou playlist está privado`").queue();
+                if (type == SearchType.SIMPLE_SEARCH)
+                    channel.sendMessage("**Erro** \uD83D\uDCCC `O vídeo ou playlist está privado`").queue();
             }
         });
     }
@@ -185,5 +192,10 @@ public class TrackManager extends AudioEventAdapter {
                 .filter(audioInfo -> audioInfo.getTrack().equals(player.getPlayingTrack()))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public enum SearchType {
+        LOOKING_PLAYLIST,
+        SIMPLE_SEARCH
     }
 }

@@ -8,7 +8,7 @@ import io.github.eikefs.sql.provider.query.Query;
 public class PlayerDatabase {
 
     public static void createTable() {
-        DatabaseController.getDatabase().updateSync("create table if not exists `lauren_players` (`id` varchar(18) primary key not null, `data` text);");
+        DatabaseController.getDatabase().updateSync("create table if not exists `lauren_players` (`id` varchar(18) primary key not null, `data` text, `xp` int(11));");
     }
 
     public static Player loadPlayer(long userID) {
@@ -29,14 +29,13 @@ public class PlayerDatabase {
 
     public static void save(long userID, Player player) {
         DatabaseController.getDatabase()
-                .updateSync("update `lauren_players` set `data`= '"
-                        + Serializer.player.serialize(player) +
-                        "' where `id` = '" + userID + "'");
+                .updateSync("update `lauren_players` set `data`= '" + Serializer.player.serialize(player)
+                        + "', `xp`='" + player.experience + "' where `id` = '" + userID + "'");
     }
 
     public static void create(long userID) {
         DatabaseController.getDatabase()
                 .updateSync(new Query().insert("lauren_players", userID,
-                        Serializer.player.serialize(new Player(userID))));
+                        Serializer.player.serialize(new Player(userID)), 0));
     }
 }

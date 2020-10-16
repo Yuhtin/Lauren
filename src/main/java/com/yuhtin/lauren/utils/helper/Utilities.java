@@ -13,10 +13,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.List;
-import java.util.Locale;
-import java.util.Properties;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -138,11 +135,13 @@ public class Utilities {
     }
 
     public boolean isPrime(Member member) {
-        return member.getRoles().stream().anyMatch(role -> role.getIdLong() == 722116789055782912L);
+        if (member == null) return false;
+        return member.getRoles().stream().filter(Objects::nonNull).anyMatch(role -> role.getIdLong() == 722116789055782912L);
     }
 
     public boolean isBooster(Member member) {
-        return member.getRoles().stream().anyMatch(role -> role.getIdLong() == 750365511430307931L);
+        if (member == null) return false;
+        return member.getRoles().stream().filter(Objects::nonNull).anyMatch(role -> role.getIdLong() == 750365511430307931L);
     }
 
     public void foundVersion() {

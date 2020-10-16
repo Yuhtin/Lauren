@@ -18,6 +18,7 @@ import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.manager.CommandManager;
 import com.yuhtin.lauren.models.manager.EventsManager;
 import com.yuhtin.lauren.service.PterodactylConnection;
+import com.yuhtin.lauren.tasks.TopXpUpdater;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import com.yuhtin.lauren.utils.messages.AsciiBox;
@@ -73,7 +74,6 @@ public class Lauren {
                         .setAutoReconnect(true)
                         .enableIntents(GatewayIntent.GUILD_MEMBERS)
                         .build();
-                Logger.log("Lauren has connected to DiscordAPI", LogType.STARTUP).save();
             } catch (LoginException exception) {
                 Logger.log("The bot token is wrong", LogType.ERROR).save();
             }
@@ -112,16 +112,13 @@ public class Lauren {
     }
 
     private static void loadTasks() {
-        /* Wait 7 seconds for the bot to connect completely before asking for a value */
 
         TaskHelper.runTaskLater(new TimerTask() {
             @Override
             public void run() {
-                if (config.laurenTest) guild = bot.getGuildById(723625569111113740L);
-                else guild = bot.getGuildCache().iterator().next();
+                if (Lauren.guild == null) finish();
             }
-        }, 7, TimeUnit.SECONDS);
-
+        }, 10, TimeUnit.SECONDS);
         TaskHelper.runTaskTimerAsync(new TimerTask() {
             @Override
             public void run() {
@@ -186,14 +183,7 @@ public class Lauren {
                     config.mySqlDatabase);
 
         DatabaseController.get().constructDatabase(dataType.openConnection());
-
-        PlayerDatabase.createTable();
-        MatchDatabase.createTable();
-        MatchDatabase.loadData();
-        AlarmDatabase.createTable();
-        AlarmDatabase.load();
-        StatsDatabase.createTable();
-        StatsDatabase.load();
+        DatabaseController.get().loadAll();
 
         Logger.log("Connection to database successful", LogType.STARTUP).save();
     }

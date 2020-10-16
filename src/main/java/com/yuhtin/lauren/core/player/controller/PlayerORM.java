@@ -17,6 +17,9 @@ public class PlayerORM extends ORM {
     @Field(type = "text", nullable = false)
     private final String data;
 
+    @Field(type = "xp", nullable = false)
+    private final int xp;
+
     public static String create() {
         return create(PlayerORM.class);
     }
