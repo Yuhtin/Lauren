@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 @CommandHandler(
         name = "clear",
-        type = CommandHandler.CommandType.SUPORT,
+        type = CommandHandler.CommandType.ADMIN,
         description = "Limpar algumas mensagens do canal atual",
         alias = {"clearchat", "cc"})
 public class ClearCommand extends Command {

@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.Permission;
 
 @CommandHandler(
         name = "reroll",
-        type = CommandHandler.CommandType.SUPORT,
+        type = CommandHandler.CommandType.ADMIN,
         description = "Sortear um ganhador novamente",
         alias = {"resortear", "redraw"})
 public class RerollCommand extends Command {

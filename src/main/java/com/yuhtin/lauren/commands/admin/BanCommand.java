@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.entities.Member;
 
 @CommandHandler(
         name = "ban",
-        type = CommandHandler.CommandType.SUPORT,
+        type = CommandHandler.CommandType.ADMIN,
         description = "Lançar o machado do ban",
         alias = {}
 )

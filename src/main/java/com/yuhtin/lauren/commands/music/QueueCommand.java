@@ -2,18 +2,14 @@ package com.yuhtin.lauren.commands.music;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.core.logger.Logger;
+import com.jagrosh.jdautilities.menu.Paginator;
 import com.yuhtin.lauren.core.music.AudioInfo;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.service.PostConnectionFactory;
-import com.yuhtin.lauren.utils.helper.MathUtils;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
-import net.dv8tion.jda.api.EmbedBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 @CommandHandler(
         name = "playlist",
@@ -23,54 +19,71 @@ import java.util.Set;
 )
 public class QueueCommand extends Command {
 
+    public static final Paginator.Builder builder = new Paginator.Builder()
+            .setColumns(1)
+            .setFinalAction(message -> message.clearReactions().queue())
+            .setItemsPerPage(10)
+            .waitOnSinglePage(false)
+            .useNumberedItems(true)
+            .showPageNumbers(true)
+            .wrapPageEnds(true)
+            .setTimeout(1, TimeUnit.MINUTES);
+
     @Override
     protected void execute(CommandEvent event) {
-        if (TrackManager.get().getQueuedTracks().isEmpty()) {
+        TrackManager trackManager = TrackManager.get();
+        if (trackManager.getQueuedTracks().isEmpty()) {
             event.getChannel().sendMessage("\uD83D\uDCCC Eita, não tem nenhum batidão pra tocar, adiciona uns ai <3").queue();
             return;
         }
 
-        StringBuilder builder = new StringBuilder();
-        Set<AudioInfo> queue = TrackManager.get().getQueuedTracks();
+        int page = 1;
+        try {
+            page = Integer.parseInt(event.getArgs());
+        } catch (NumberFormatException ignore) {
+        }
+
+        Set<AudioInfo> queue = trackManager.getQueuedTracks();
+        String[] songs = new String[queue.size()];
         long totalTime = 0;
 
-        List<String> users = new ArrayList<>();
+        int i = 0;
         for (AudioInfo audioInfo : queue) {
-            builder.append(TrackUtils.get().buildQueueMessage(audioInfo));
             totalTime += audioInfo.getTrack().getInfo().length;
+            songs[i] = audioInfo.toString();
 
-            String userId = audioInfo.getAuthor().getId();
-            if (!users.contains(userId)) users.add(userId);
+            ++i;
         }
 
-        EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle("\ud83d\udcbf Informações da fila [" + TrackUtils.get().getTimeStamp(totalTime) + "]");
+        String timeInLetter = TrackUtils.get().getTimeStamp(totalTime);
+        builder.setText((number, number2) -> {
+            StringBuilder stringBuilder = new StringBuilder();
+            if (trackManager.player.getPlayingTrack() != null) {
 
-        if (builder.length() <= 2001) {
-            users.clear();
-            embed.setDescription("\ud83d\udcc0 " + MathUtils.plural(queue.size(), "música", "músicas") + "\n\n" + builder.toString());
-            event.getChannel().sendMessage(embed.build()).queue();
-            return;
-        }
+                stringBuilder.append(trackManager.player.isPaused() ? "\u23F8" : "\u25B6")
+                        .append(" **")
+                        .append(trackManager.player.getPlayingTrack().getInfo().title)
+                        .append("**")
+                        .append(" - ")
+                        .append("`")
+                        .append(TrackUtils.get().getTimeStamp(trackManager.player.getPlayingTrack().getPosition()))
+                        .append(" / ")
+                        .append(TrackUtils.get().getTimeStamp(trackManager.player.getPlayingTrack().getInfo().length))
+                        .append("`")
+                        .append("\n");
 
-        try {
-            String content = builder.toString();
+            }
 
-            content = content.replace("`", "");
-            for (String user : users) content = content.replace("(<@" + user + ">)", "");
+            return stringBuilder.append("\uD83D\uDCBF Informações da Fila | ")
+                    .append(queue.size())
+                    .append(" músicas | `")
+                    .append(timeInLetter)
+                    .append("`")
+                    .toString();
+        }).setItems(songs)
+                .setUsers(event.getAuthor())
+                .setColor(event.getSelfMember().getColor());
 
-            TrackManager.fields.replace("api_paste_code", content);
-            TrackManager.fields.replace("api_paste_name", "Lauren playlist (" + queue.size() + " musicas)");
-
-            PostConnectionFactory factory = new PostConnectionFactory(TrackManager.fields, "https://pastebin.com/api/api_post.php");
-            builder.setLength(1924);
-            embed.setDescription("\ud83d\udcc0 " + MathUtils.plural(queue.size(), "música", "músicas") + "\n\n" + builder.toString()
-                    + "\n[Clique aqui para ver o resto das músicas](" + factory.buildConnection() + ")");
-
-            event.getChannel().sendMessage(embed.build()).queue();
-        } catch (Exception exception) {
-            event.getChannel().sendMessage(exception.getMessage()).queue();
-            event.getChannel().sendMessage("❌ Eita, algo de errado não está certo, tentei criar um linkzin com as músicas da playlist pra você, mas o hastebin ta off \uD83D\uDE2D").queue();
-        }
+        builder.build().paginate(event.getChannel(), page);
     }
 }
