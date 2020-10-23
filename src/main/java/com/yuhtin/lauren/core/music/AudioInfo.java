@@ -1,6 +1,7 @@
 package com.yuhtin.lauren.core.music;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.yuhtin.lauren.utils.helper.TrackUtils;
 import lombok.Getter;
 import lombok.Setter;
 import net.dv8tion.jda.api.entities.Member;
@@ -21,12 +22,26 @@ public class AudioInfo {
         this.author = author;
     }
 
-    public int getSkips() { return skips.size(); }
+    public int getSkips() {
+        return skips.size();
+    }
+
     public void addSkip(User user) {
         skips.add(user.getId());
     }
+
     public boolean hasVoted(User user) {
         return skips.contains(user.getId());
     }
 
+    @Override
+    public String toString() {
+        return "`["
+                + TrackUtils.get().getTimeStamp(track.getDuration()) +
+                "]` **"
+                + track.getInfo().title +
+                "** - <@"
+                + author.getIdLong() +
+                ">";
+    }
 }

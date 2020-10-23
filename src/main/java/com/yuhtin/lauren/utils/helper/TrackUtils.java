@@ -35,14 +35,6 @@ public class TrackUtils {
         return builder.toString();
     }
 
-    public String buildQueueMessage(AudioInfo info) {
-        AudioTrackInfo trackInfo = info.getTrack().getInfo();
-        String title = trackInfo.title;
-        long length = trackInfo.length;
-
-        return "`[" + getTimeStamp(length) + "]` " + title + " (<@" + info.getAuthor().getIdLong() + ">)\n";
-    }
-
     public boolean isInVoiceChannel(Member member) {
         return member.getVoiceState() != null
                 && member.getVoiceState().getChannel() != null

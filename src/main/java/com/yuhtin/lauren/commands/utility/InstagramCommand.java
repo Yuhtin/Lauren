@@ -28,31 +28,28 @@ public class InstagramCommand extends Command {
 
         event.getChannel().sendTyping().queue();
         instagram = event.getArgs().replace(" ", "_");
-        GetConnectionFactory connection = new GetConnectionFactory("https://apis.duncte123.me/insta/" + instagram);
+
+        GetConnectionFactory connection = new GetConnectionFactory("https://www.instagram.com/" + instagram + "/?__a=1");
+
         String response = connection.buildConnection();
-
-        if (!response.contains("{")) {
-            event.getChannel().sendMessage("<:eita:764084277226373120> Minha api deu uma travadinha, segura um pouco ai").queue();
-            return;
-        }
-
-        JSONObject object = new JSONObject(response);
-        boolean success = object.getBoolean("success");
-        if (!success) {
+        if (response == null || response.equalsIgnoreCase("") || response.equalsIgnoreCase("{}")) {
             event.getChannel().sendMessage("<:eita:764084277226373120> Esse perfil ai não tem no meu livro não, tenta outro").queue();
             return;
         }
 
-        JSONObject data = object.getJSONObject("user");
+        JSONObject object = new JSONObject(response);
+        JSONObject data = object.getJSONObject("graphql").getJSONObject("user");
 
         String username = data.getString("username"),
                 name = data.getString("full_name"),
                 biography = data.getString("biography"),
-                picture = data.getString("profile_pic_url");
+                picture = data.getString("profile_pic_url_hd");
 
-        int followers = data.getJSONObject("followers").getInt("count"),
-                following = data.getJSONObject("following").getInt("count"),
-                uploads = data.getJSONObject("uploads").getInt("count");
+        JSONObject pictures = data.getJSONObject("edge_owner_to_timeline_media");
+
+        int followers = data.getJSONObject("edge_followed_by").getInt("count"),
+                following = data.getJSONObject("edge_follow").getInt("count"),
+                uploads = pictures.getInt("count");
 
         boolean isPrivate = data.getBoolean("is_private");
 
@@ -66,7 +63,7 @@ public class InstagramCommand extends Command {
                 "**Seguindo**: " + following + "\n" +
                 "**Uploads**: " + uploads);
 
-        embed.setImage(getLatestImage(object.getJSONArray("images")));
+        embed.setImage(getLatestImage(pictures.getJSONArray("edges")));
 
         event.getChannel().sendMessage(embed.build()).queue();
     }
@@ -74,7 +71,7 @@ public class InstagramCommand extends Command {
     private String getLatestImage(JSONArray images) {
         if (images.length() == 0) return null;
 
-        JSONObject object = new JSONObject(images.get(0).toString());
-        return object.getString("url");
+        JSONObject object = new JSONObject(images.get(0).toString()).getJSONObject("node");
+        return object.getString("thumbnail_src");
     }
 }

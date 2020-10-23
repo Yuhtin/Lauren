@@ -61,7 +61,7 @@ public class CommandCache {
                 .addField("**Mensagens Customizadas** \uD83D\uDD79 - _Este módulo possui algumas de minhas mensagens customizadas._",
                         getCommands(CommandHandler.CommandType.CUSTOM_MESSAGES), false)
                 .addField("**Suporte** \uD83E\uDDF0 - _Comandos para dar suporte aos moderadores do servidor._",
-                        getCommands(CommandHandler.CommandType.SUPORT), false);
+                        getCommands(CommandHandler.CommandType.ADMIN), false);
 
         commandsType.clear();
     }

@@ -1,8 +1,8 @@
 package com.yuhtin.lauren.service;
 
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.statistics.controller.StatsController;
 
+import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,6 +17,7 @@ public class GetConnectionFactory {
         this.url = url;
     }
 
+    @Nullable
     public String buildConnection() {
         String line;
         BufferedReader reader;
@@ -36,8 +37,7 @@ public class GetConnectionFactory {
 
             StatsController.get().getStats("Requests Externos").suplyStats(1);
         } catch (IOException exception) {
-            Logger.error(exception);
-            return "";
+            return null;
         }
 
         return responseContent.toString();

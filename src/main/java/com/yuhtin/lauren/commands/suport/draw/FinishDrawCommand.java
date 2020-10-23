@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.Permission;
 
 @CommandHandler(
         name = "finishdraw",
-        type = CommandHandler.CommandType.SUPORT,
+        type = CommandHandler.CommandType.ADMIN,
         description = "Finalizar um sorteio",
         alias = {"finalizar"})
 public class FinishDrawCommand extends Command {

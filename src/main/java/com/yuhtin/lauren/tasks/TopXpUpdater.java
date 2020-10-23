@@ -6,6 +6,7 @@ import com.yuhtin.lauren.core.player.SimplePlayer;
 import com.yuhtin.lauren.database.DatabaseController;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.serialization.Serializer;
+import lombok.Getter;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,27 +18,25 @@ import java.util.concurrent.TimeUnit;
 
 public class TopXpUpdater {
     private static final TopXpUpdater INSTANCE = new TopXpUpdater();
-    public String topPlayers;
-
-    public TopXpUpdater() {
-        startRunnable();
-    }
+    @Getter private String topPlayers;
 
     public static TopXpUpdater getInstance() {
         return INSTANCE;
     }
 
-    private void startRunnable() {
-        Logger.log("Started TopXpUpdater task");
+    public void startRunnable() {
+        Logger.log("Registered TopXpUpdater task");
+
+        Connection connection = DatabaseController.get().getConnection();
         TaskHelper.runTaskTimerAsync(new TimerTask() {
             @Override
             public void run() {
-                Connection connection = DatabaseController.get().getConnection();
+                topPlayers = "";
+
+                Logger.log("Started TopXpUpdater task");
                 try {
                     PreparedStatement statement = connection.prepareStatement("SELECT * FROM `lauren_players` ORDER BY `xp` DESC LIMIT 10");
                     ResultSet resultSet = statement.executeQuery();
-
-                    topPlayers = "";
 
                     List<SimplePlayer> players = new ArrayList<>();
                     while (resultSet.next()) {
@@ -68,9 +67,10 @@ public class TopXpUpdater {
                     Logger.error(exception);
                     Logger.log("Cannot update top xp");
                 }
-            }
-        }, 0, 30, TimeUnit.MINUTES);
 
-        Logger.log("Finished TopXpUpdater task successfully");
+                Logger.log("Finished TopXpUpdater task successfully");
+            }
+        }, 1, 30, TimeUnit.MINUTES);
+
     }
 }

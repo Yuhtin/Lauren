@@ -6,7 +6,6 @@ import com.yuhtin.lauren.core.draw.controller.DrawController;
 import com.yuhtin.lauren.core.draw.controller.DrawEditting;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -18,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 @CommandHandler(
         name = "sorteio",
-        type = CommandHandler.CommandType.SUPORT,
+        type = CommandHandler.CommandType.ADMIN,
         description = "Iniciar um sorteio sobre algum conteúdo",
         alias = {"sortear", "draw"})
 public class DrawCommand extends Command {

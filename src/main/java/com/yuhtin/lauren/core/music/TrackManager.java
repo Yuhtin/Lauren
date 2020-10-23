@@ -135,9 +135,14 @@ public class TrackManager extends AudioEventAdapter {
                     TaskHelper.runAsync(() -> {
                         for (int i = 0; i < maxMusics; i++) {
                             AudioTrack track = playlist.getTracks().get(i);
-                            String link = "https://youtube.com/watch?v=" + track.getIdentifier();
 
-                            loadTrack(link, member, channel, SearchType.LOOKING_PLAYLIST);
+                            if (track.getInfo().title != null) play(track, member);
+                            else {
+
+                                String link = "https://youtube.com/watch?v=" + track.getIdentifier();
+                                loadTrack(link, member, channel, SearchType.LOOKING_PLAYLIST);
+
+                            }
                         }
                     });
 
@@ -155,8 +160,10 @@ public class TrackManager extends AudioEventAdapter {
 
             @Override
             public void loadFailed(FriendlyException exception) {
-                if (type == SearchType.SIMPLE_SEARCH)
+                if (type == SearchType.SIMPLE_SEARCH) {
                     channel.sendMessage("**Erro** \uD83D\uDCCC `O vídeo ou playlist está privado`").queue();
+                    Logger.error(exception);
+                }
             }
         });
     }

@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 @CommandHandler(
         name = "setarpontos",
-        type = CommandHandler.CommandType.SUPORT,
+        type = CommandHandler.CommandType.ADMIN,
         description = "Setar os pontos de ranked para um jogador",
         alias = {"setpoints"})
 public class SetPointsCommand extends Command {
