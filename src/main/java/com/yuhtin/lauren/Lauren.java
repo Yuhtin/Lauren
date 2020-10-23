@@ -1,5 +1,7 @@
 package com.yuhtin.lauren;
 
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import com.yuhtin.lauren.commands.music.QueueCommand;
 import com.yuhtin.lauren.core.entities.Config;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
@@ -61,6 +63,7 @@ public class Lauren {
             }
         }
 
+        EventWaiter eventWaiter = new EventWaiter();
         Thread buildThread = new Thread(() -> {
             try {
                 processDatabase(config.databaseType);
@@ -69,8 +72,9 @@ public class Lauren {
                 bot = JDABuilder.createDefault(config.token)
                         .setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"))
                         .setAutoReconnect(true)
-                        .enableIntents(GatewayIntent.GUILD_MEMBERS)
+                        .enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGE_REACTIONS)
                         .build();
+
             } catch (LoginException exception) {
                 Logger.log("The bot token is wrong", LogType.ERROR).save();
             }
@@ -84,6 +88,9 @@ public class Lauren {
             new PterodactylConnection(config.pteroKey);
             MatchController.startup();
             new Thread(Lauren::loadTasks).start();
+
+            bot.addEventListener(eventWaiter);
+            QueueCommand.builder.setEventWaiter(eventWaiter);
         });
 
 
