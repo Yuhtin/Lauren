@@ -6,7 +6,7 @@
 
     <groupId>com.yuhtin</groupId>
     <artifactId>lauren</artifactId>
-    <version>1.6.1.1-SNAPSHOT</version>
+    <version>1.6.1.2-SNAPSHOT</version>
 
     <build>
         <resources>
@@ -73,9 +73,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.sedmelluq</groupId>
+            <groupId>com.sedmelluq</groupId>
             <artifactId>lavaplayer</artifactId>
-            <version>bec39953a0</version>
+            <version>1.3.50</version>
         </dependency>
 
         <dependency>

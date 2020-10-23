@@ -24,7 +24,7 @@ public class TopXpCommand extends Command {
         EmbedBuilder builder = new EmbedBuilder();
         builder.setAuthor("Jogadores mais viciados", null, event.getGuild().getIconUrl());
         builder.setFooter("Comando usado às", event.getAuthor().getAvatarUrl());
-        builder.setDescription(TopXpUpdater.getInstance().topPlayers);
+        builder.setDescription(TopXpUpdater.getInstance().getTopPlayers());
         builder.setTimestamp(Instant.now());
 
         event.getChannel().sendMessage(builder.build()).queue();

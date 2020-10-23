@@ -1,14 +1,11 @@
 package com.yuhtin.lauren;
 
-import com.yuhtin.lauren.core.alarm.controller.AlarmDatabase;
 import com.yuhtin.lauren.core.entities.Config;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
 import com.yuhtin.lauren.core.match.controller.MatchController;
-import com.yuhtin.lauren.core.match.controller.MatchDatabase;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.core.player.controller.PlayerDatabase;
 import com.yuhtin.lauren.core.statistics.controller.StatsDatabase;
 import com.yuhtin.lauren.database.Data;
 import com.yuhtin.lauren.database.DatabaseController;
@@ -119,6 +116,7 @@ public class Lauren {
                 if (Lauren.guild == null) finish();
             }
         }, 10, TimeUnit.SECONDS);
+
         TaskHelper.runTaskTimerAsync(new TimerTask() {
             @Override
             public void run() {
@@ -126,6 +124,9 @@ public class Lauren {
                 PlayerController.INSTANCE.savePlayers();
             }
         }, 5, 5, TimeUnit.MINUTES);
+
+        TopXpUpdater.getInstance().startRunnable();
+
     }
 
     public static void finish() {

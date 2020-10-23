@@ -155,8 +155,10 @@ public class TrackManager extends AudioEventAdapter {
 
             @Override
             public void loadFailed(FriendlyException exception) {
-                if (type == SearchType.SIMPLE_SEARCH)
+                if (type == SearchType.SIMPLE_SEARCH) {
                     channel.sendMessage("**Erro** \uD83D\uDCCC `O vídeo ou playlist está privado`").queue();
+                    Logger.error(exception);
+                }
             }
         });
     }
