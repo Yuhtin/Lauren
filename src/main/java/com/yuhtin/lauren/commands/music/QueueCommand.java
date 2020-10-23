@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
         name = "playlist",
         type = CommandHandler.CommandType.MUSIC,
         description = "Ver as músicas que eu ainda vou tocar",
-        alias = {"queue", "pl"}
+        alias = {"queue", "pl", "fila"}
 )
 public class QueueCommand extends Command {
 

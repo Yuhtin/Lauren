@@ -13,7 +13,7 @@ import java.util.Set;
 public class AudioInfo {
 
     private final Set<String> skips = new HashSet<>();
-    @Getter @Setter private boolean repeat, repeated;
+    @Getter @Setter private boolean repeat;
     @Getter @Setter private AudioTrack track;
     @Getter private final Member author;
 
@@ -44,4 +44,5 @@ public class AudioInfo {
                 + author.getIdLong() +
                 ">";
     }
+
 }

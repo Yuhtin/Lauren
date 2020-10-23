@@ -34,28 +34,30 @@ public class TrackScheduler extends AudioEventAdapter {
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        AudioInfo poll = queue.poll();
-        if (poll == null) return;
+        AudioInfo head = queue.peek();
+        if (head == null) return;
 
-        Guild guild = poll.getAuthor().getGuild();
-        if (queue.isEmpty()) guild.getAudioManager().closeAudioConnection();
-        else player.playTrack(queue.element().getTrack());
-    }
+        // repeat music system
+        if (endReason == AudioTrackEndReason.FINISHED && head.isRepeat()) {
+            head.setRepeat(false);
 
-    /*public void onTrackEnd(boolean force) {
-        AudioInfo poll = queue.poll();
-        if (poll == null) return;
-        if (!force && poll.isRepeat() && !poll.isRepeated()) {
-            poll.setRepeated(true);
-
-            AudioTrack audioTrack = poll.getTrack().makeClone();
-            poll.setTrack(audioTrack);
+            AudioTrack audioTrack = head.getTrack().makeClone();
+            head.setTrack(audioTrack);
             player.playTrack(audioTrack);
             return;
         }
 
-        Guild guild = poll.getAuthor().getGuild();
-        if (queue.isEmpty()) guild.getAudioManager().closeAudioConnection();
-        else player.playTrack(queue.element().getTrack());
-    }*/
+        // remove head
+        queue.remove();
+
+        Guild guild = head.getAuthor().getGuild();
+        if (queue.isEmpty()) {
+            guild.getAudioManager().closeAudioConnection();
+            return;
+        }
+
+        // play next track (actual head)
+        player.playTrack(queue.element().getTrack());
+    }
+
 }
