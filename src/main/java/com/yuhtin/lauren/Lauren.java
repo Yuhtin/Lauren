@@ -2,6 +2,7 @@ package com.yuhtin.lauren;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.yuhtin.lauren.commands.music.QueueCommand;
+import com.yuhtin.lauren.commands.utility.SugestionCommand;
 import com.yuhtin.lauren.core.entities.Config;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
@@ -90,7 +91,8 @@ public class Lauren {
             new Thread(Lauren::loadTasks).start();
 
             bot.addEventListener(eventWaiter);
-            QueueCommand.builder.setEventWaiter(eventWaiter);
+            QueueCommand.getBuilder().setEventWaiter(eventWaiter);
+            SugestionCommand.setWaiter(eventWaiter);
         });
 
 

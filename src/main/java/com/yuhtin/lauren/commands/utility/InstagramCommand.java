@@ -20,7 +20,9 @@ public class InstagramCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        String instagram;
+        event.getChannel().sendMessage("<:chorano:726207542413230142> Comando em manutenção :(").queue();
+
+        /*String instagram;
         if (event.getArgs().equalsIgnoreCase("")) {
             event.getChannel().sendMessage("<:fodane:764085078187442176> Utiliza o comando direito amigo, assim ó `$instagram <perfil>`").queue();
             return;
@@ -65,7 +67,7 @@ public class InstagramCommand extends Command {
 
         embed.setImage(getLatestImage(pictures.getJSONArray("edges")));
 
-        event.getChannel().sendMessage(embed.build()).queue();
+        event.getChannel().sendMessage(embed.build()).queue();*/
     }
 
     private String getLatestImage(JSONArray images) {

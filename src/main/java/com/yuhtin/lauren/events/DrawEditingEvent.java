@@ -20,10 +20,8 @@ public class DrawEditingEvent extends ListenerAdapter {
     public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
         if (event.getAuthor().isBot()) return;
 
-        if (DrawController.editing == null || !DrawController.editing.userID.equals(event.getAuthor().getIdLong())) {
-            event.getChannel().sendMessage("\uD83D\uDC94 Você só pode brincar comigo no servidor `" + Lauren.guild.getName() + "`").queue();
-            return;
-        }
+        if (DrawController.editing == null
+                || !DrawController.editing.userID.equals(event.getAuthor().getIdLong())) return;
 
         DrawEditting editting = DrawController.editing;
         String message = event.getMessage().getContentRaw();
