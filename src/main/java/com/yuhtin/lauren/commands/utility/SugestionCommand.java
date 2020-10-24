@@ -4,20 +4,16 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.yuhtin.lauren.Lauren;
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.models.enums.SugestionStage;
 import com.yuhtin.lauren.models.objects.Sugestion;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Setter;
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.priv.react.PrivateMessageReactionAddEvent;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -80,7 +76,7 @@ public class SugestionCommand extends Command {
         event.getChannel().sendMessage("<a:sim:704295025374265387> Continue a operação em sua DM").complete();
 
         builder.setStage(SugestionStage.SUGESTION);
-        updateMessage(builder);
+        builder.updateMessage();
         sugestionMap.put(event.getAuthor().getIdLong(), builder);
 
         fillForm(builder, runnable);
@@ -113,7 +109,7 @@ public class SugestionCommand extends Command {
 
                     }
 
-                    updateMessage(sugestion);
+                    sugestion.updateMessage();
                 }, 5, TimeUnit.MINUTES, cancelRunnable);
     }
 
@@ -125,7 +121,6 @@ public class SugestionCommand extends Command {
                         || privateMessage.getReactionEmote().getIdLong() == 704295026036834375L),
 
                 (privateMessage) -> {
-                    Logger.log("pass");
 
                     if (privateMessage.getReactionEmote().getIdLong() == 704295026036834375L) {
                         sugestionMap.remove(privateMessage.getUserIdLong());
@@ -150,23 +145,7 @@ public class SugestionCommand extends Command {
 
                     }
 
-                    EmbedBuilder embed = new EmbedBuilder();
-
-                    embed.setAuthor("| Sugestão de " + Utilities.INSTANCE.getFullName(sugestion.getUser()),
-                            null, sugestion.getUser().getAvatarUrl());
-
-                    embed.setFooter("© Todos os direitos reservados", Lauren.guild.getIconUrl());
-                    embed.setColor(Color.GRAY);
-
-                    embed.addField("<a:confete:769423543044800512> Sugestão para o servidor",
-                            "`" + protectedString(sugestion.getSugestion()) + "`",
-                            false);
-
-                    embed.addField("<:procurando:769423542126247956> Motivo pela qual deve ser aceita",
-                            "`" + protectedString(sugestion.getReason()) + "`",
-                            false);
-
-                    channel.sendMessage(embed.build()).queue(message -> {
+                    channel.sendMessage(sugestion.createSugestionEmbed().build()).queue(message -> {
                         message.addReaction("a:sim:704295025374265387").queue();
                         message.addReaction("a:nao:704295026036834375").queue();
                     });
@@ -176,30 +155,5 @@ public class SugestionCommand extends Command {
                 }, 5, TimeUnit.MINUTES, cancelRunnable);
     }
 
-    private void updateMessage(Sugestion sugestion) {
-        EmbedBuilder embed = new EmbedBuilder();
 
-        embed.setAuthor("| Enviando uma sugestão", null, Lauren.guild.getIconUrl());
-        embed.setFooter("© Todos os direitos reservados", Lauren.guild.getIconUrl());
-        embed.setColor(Color.GREEN);
-
-        embed.setDescription("<:errado:756770088639791234> O mal uso deste comando irá causar punição para o mesmo");
-
-        embed.addField("<a:confete:769423543044800512> Qual sua sugestão para o servidor?",
-                "`" + protectedString(sugestion.getSugestion()) + "`",
-                false);
-
-        embed.addField("<:procurando:769423542126247956> Motivo pela qual deve ser aceita?",
-                "`" + protectedString(sugestion.getReason()) + "`",
-                false);
-
-        MessageBuilder builder = new MessageBuilder().setContent("Preencha na ordem abaixo").setEmbed(embed.build());
-
-        sugestion.getMessage().editMessage(builder.build()).queue();
-    }
-
-
-    private String protectedString(String value) {
-        return value == null ? "Não informado" : value;
-    }
 }
