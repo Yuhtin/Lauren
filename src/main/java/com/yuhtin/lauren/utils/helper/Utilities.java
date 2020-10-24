@@ -76,6 +76,8 @@ public class Utilities {
     }
 
     public String getFullName(User user) {
+
+
         return user.getName() + "#" + user.getDiscriminator();
     }
 

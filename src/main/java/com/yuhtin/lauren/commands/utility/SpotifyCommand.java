@@ -36,6 +36,10 @@ public class SpotifyCommand extends Command {
 
         Member member = event.getMessage().getMentionedMembers().get(0);
         Activity activity = null;
+
+        if (member == null) {
+            Logger.log("sadasdads");
+        }
         for (Activity target : member.getActivities()) {
             Logger.log(target.getName());
             if (target.getType() == Activity.ActivityType.LISTENING
