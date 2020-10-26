@@ -1,6 +1,8 @@
 package com.yuhtin.lauren.models.objects;
 
 import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.core.logger.Logger;
+import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.enums.SugestionStage;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Builder;
@@ -42,6 +44,13 @@ public class Sugestion {
     }
 
     public void updateMessage() {
+        if (this.message == null) {
+
+            Logger.log("An error occured on suggestion ticket (message is null)", LogType.ERROR);
+            return;
+
+        }
+
         EmbedBuilder embed = new EmbedBuilder();
 
         embed.setAuthor("| Enviando uma sugestão", null, Lauren.guild.getIconUrl());

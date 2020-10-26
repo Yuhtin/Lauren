@@ -2,11 +2,10 @@ package com.yuhtin.lauren.commands.utility;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.service.GetConnectionFactory;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -20,9 +19,14 @@ public class InstagramCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        event.getChannel().sendMessage("<:chorano:726207542413230142> Comando em manutenção :(").queue();
+        if (!event.getMember().hasPermission(Permission.MESSAGE_TTS)) {
 
-        /*String instagram;
+            event.getChannel().sendMessage("<:chorano:726207542413230142> Comando em manutenção :(").queue();
+            return;
+
+        }
+
+        String instagram;
         if (event.getArgs().equalsIgnoreCase("")) {
             event.getChannel().sendMessage("<:fodane:764085078187442176> Utiliza o comando direito amigo, assim ó `$instagram <perfil>`").queue();
             return;
@@ -67,7 +71,7 @@ public class InstagramCommand extends Command {
 
         embed.setImage(getLatestImage(pictures.getJSONArray("edges")));
 
-        event.getChannel().sendMessage(embed.build()).queue();*/
+        event.getChannel().sendMessage(embed.build()).queue();
     }
 
     private String getLatestImage(JSONArray images) {

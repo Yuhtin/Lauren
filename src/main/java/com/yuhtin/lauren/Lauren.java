@@ -10,6 +10,7 @@ import com.yuhtin.lauren.core.match.controller.MatchController;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.controller.StatsDatabase;
+import com.yuhtin.lauren.core.xp.XpController;
 import com.yuhtin.lauren.database.Data;
 import com.yuhtin.lauren.database.DatabaseController;
 import com.yuhtin.lauren.database.types.MySQL;
@@ -93,6 +94,7 @@ public class Lauren {
             bot.addEventListener(eventWaiter);
             QueueCommand.getBuilder().setEventWaiter(eventWaiter);
             SugestionCommand.setWaiter(eventWaiter);
+            XpController.getInstance();
         });
 
 

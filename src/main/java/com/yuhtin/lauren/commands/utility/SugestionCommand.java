@@ -76,11 +76,12 @@ public class SugestionCommand extends Command {
         event.getChannel().sendMessage("<a:sim:704295025374265387> Continue a operação em sua DM").complete();
 
         builder.setStage(SugestionStage.SUGESTION);
-        builder.updateMessage();
         sugestionMap.put(event.getAuthor().getIdLong(), builder);
 
         fillForm(builder, runnable);
         checkReactions(builder, runnable);
+        builder.updateMessage();
+
     }
 
     private void fillForm(Sugestion sugestion, Runnable cancelRunnable) {

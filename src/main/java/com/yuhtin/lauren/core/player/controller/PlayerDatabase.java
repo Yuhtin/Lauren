@@ -29,8 +29,10 @@ public class PlayerDatabase {
 
     public static void save(long userID, Player player) {
         DatabaseController.getDatabase()
-                .updateSync("update `lauren_players` set `data`= '" + Serializer.player.serialize(player)
-                        + "', `xp`='" + player.experience + "' where `id` = '" + userID + "'");
+                .updateSync("update `lauren_players`" +
+                        " set `data`= '" + Serializer.player.serialize(player) + "'," +
+                        " `xp`='" + player.experience + "' " +
+                        "where `id` = '" + userID + "'");
     }
 
     public static void create(long userID) {

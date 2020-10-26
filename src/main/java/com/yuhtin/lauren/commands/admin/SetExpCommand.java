@@ -3,8 +3,8 @@ package com.yuhtin.lauren.commands.admin;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.player.Player;
-import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
+import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -20,7 +20,8 @@ public class SetExpCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        if (!Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true)) return;
+        if (!Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true))
+            return;
 
         if (event.getMessage().getMentionedMembers().size() < 1) {
             event.getChannel().sendMessage("Ops, você precisa mencionar um jogador para receber o xp")
@@ -38,7 +39,7 @@ public class SetExpCommand extends Command {
         }
 
         Player player = PlayerController.INSTANCE.get(member.getIdLong());
-        player.experience = Integer.parseInt(arguments[2]);
+        player.gainXP(Integer.parseInt(arguments[2]));
         event.getChannel().sendMessage("Consegui setar com sucesso o XP do usuário inserido")
                 .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
     }
