@@ -2,14 +2,19 @@ package com.yuhtin.lauren.core.player;
 
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.alarm.Alarm;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.match.Match;
 import com.yuhtin.lauren.core.player.controller.PlayerDatabase;
 import com.yuhtin.lauren.core.statistics.controller.StatsController;
+import com.yuhtin.lauren.core.xp.XpController;
 import com.yuhtin.lauren.models.enums.GameMode;
 import com.yuhtin.lauren.models.enums.GameType;
 import com.yuhtin.lauren.models.enums.Rank;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.PrivateChannel;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,21 +42,42 @@ public class Player {
         alarmsName = new ArrayList<>();
     }
 
-    public Player updateLevel() {
-        int result = experience / 1000;
-        if (result != level) {
-            level = result;
-            new Thread(() -> Utilities.INSTANCE.updateNickByLevel(userID, level)).start();
-            if (level == 21) {
-                Lauren.guild.addRoleToMember(userID, Lauren.guild.getRoleById(722116789055782912L)).queue();
-                Lauren.guild.getTextChannelById(700683423429165096L).sendMessage(
-                        "<:prime:722115525232296056> O jogador <@" + userID + "> tornou-se prime").queue();
-            }
+    public void updateLevel(int level) {
+        this.level = level;
+        new Thread(() -> Utilities.INSTANCE.updateNickByLevel(userID, level)).start();
 
-            StatsController.get().getStats("Evoluir Nível").suplyStats(1);
+        List<Long> rolesToGive = XpController.getInstance()
+                .getLevelByXp()
+                .get(level)
+                .getRolesToGive();
+
+        if (rolesToGive != null && !rolesToGive.isEmpty()) {
+
+            rolesToGive.forEach(roleID -> {
+                Role role = Lauren.guild.getRoleById(roleID);
+                Member member = Lauren.guild.getMemberById(userID);
+
+                if (role == null || member == null) return;
+
+                PrivateChannel channel = member.getUser().openPrivateChannel().complete();
+                if (channel != null) {
+                    channel.sendMessage("<:feliz_pra_caralho:760202116504485948>" +
+                            " Você recebeu o cargo **" + role.getName() + "** por alcançar o nível **" + level + "**")
+                            .queue();
+                    return;
+                }
+
+                Lauren.guild.addRoleToMember(member, role).queue();
+            });
+
         }
 
-        return this;
+        if (level == 20)
+            Lauren.bot.getTextChannelById(700683423429165096L)
+                    .sendMessage("<:prime:722115525232296056> O jogador <@" + userID + "> tornou-se prime")
+                    .queue();
+
+        StatsController.get().getStats("Evoluir Nível").suplyStats(1);
     }
 
     public Player updateRank() {
@@ -83,7 +109,10 @@ public class Player {
         List<Double> multipliers = Arrays.asList(boosterMultiplier(), poolRank.multiplier, valorantRank.multiplier);
 
         for (Double multiplier : multipliers) quantity *= multiplier;
-        experience += quantity;
+        experience += (int) quantity;
+
+        int nextLevel = level + 1;
+        if (XpController.getInstance().canUpgrade(nextLevel, experience)) updateLevel(nextLevel);
 
         StatsController.get().getStats("Ganhar XP").suplyStats(1);
         return this;
@@ -128,7 +157,6 @@ public class Player {
         this.money += money;
 
         updateRank();
-        updateLevel();
         return this;
     }
 

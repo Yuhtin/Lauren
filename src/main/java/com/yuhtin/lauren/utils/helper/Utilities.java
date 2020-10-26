@@ -76,8 +76,6 @@ public class Utilities {
     }
 
     public String getFullName(User user) {
-
-
         return user.getName() + "#" + user.getDiscriminator();
     }
 
@@ -138,12 +136,18 @@ public class Utilities {
 
     public boolean isPrime(Member member) {
         if (member == null) return false;
+
         return member.getRoles().stream().filter(Objects::nonNull).anyMatch(role -> role.getIdLong() == 722116789055782912L);
     }
 
     public boolean isBooster(Member member) {
         if (member == null) return false;
+
         return member.getRoles().stream().filter(Objects::nonNull).anyMatch(role -> role.getIdLong() == 750365511430307931L);
+    }
+
+    public String protectedString(String value) {
+        return value == null ? "Não informado" : value;
     }
 
     public void foundVersion() {

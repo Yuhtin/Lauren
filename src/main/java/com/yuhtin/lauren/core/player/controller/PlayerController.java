@@ -17,13 +17,15 @@ public class PlayerController {
 
     public void savePlayers() {
         Logger.log("Saving all players, the bot may lag for a bit").save();
+
         TaskHelper.runAsync(new Thread(() -> cache.forEach(PlayerDatabase::save)));
         TaskHelper.runTaskLater(new TimerTask() {
             @Override
             public void run() {
                 cache.clear();
             }
-        }, 5, TimeUnit.SECONDS);
+        }, 10, TimeUnit.SECONDS);
+
         Logger.log("Saved all players").save();
     }
 
@@ -33,15 +35,7 @@ public class PlayerController {
         if (player == null) {
             player = PlayerDatabase.loadPlayer(userID);
             cache.put(userID, player);
-        } else {
-            for (String name : AlarmController.get().getAlarms().keySet()) {
-                for (String alarmName : player.alarmsName) {
-                    if (!alarmName.equals(name)) continue;
 
-                    player.alarms.add(AlarmController.get().getAlarms().get(name));
-                    player.alarmsName.remove(alarmName);
-                }
-            }
         }
 
         return player;
