@@ -2,6 +2,7 @@ package com.yuhtin.lauren.core.player;
 
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.alarm.Alarm;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.match.Match;
 import com.yuhtin.lauren.core.player.controller.PlayerDatabase;
 import com.yuhtin.lauren.core.statistics.controller.StatsController;
@@ -9,6 +10,7 @@ import com.yuhtin.lauren.core.xp.Level;
 import com.yuhtin.lauren.core.xp.XpController;
 import com.yuhtin.lauren.models.enums.GameMode;
 import com.yuhtin.lauren.models.enums.GameType;
+import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.enums.Rank;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.entities.Member;
@@ -66,38 +68,34 @@ public class Player {
 
         if (rolesToGive != null && !rolesToGive.isEmpty()) {
 
-            Member member = Lauren.guild.getMemberById(userID);
-            if (member == null) return;
-
             for (long roleID : rolesToGive) {
 
                 Role role = Lauren.guild.getRoleById(roleID);
-                if (role == null) return;
-
-                PrivateChannel channel = member.getUser().openPrivateChannel().complete();
-                if (channel != null) {
-                    channel.sendMessage("<:feliz_pra_caralho:760202116504485948>" +
-                            " Você recebeu o cargo **" + role.getName() + "** por alcançar o nível **" + level + "**")
-                            .queue();
+                if (role == null) {
+                    Logger.log("Role is null", LogType.ERROR);
+                    continue;
                 }
 
-                Lauren.guild.addRoleToMember(member, role).queue();
+                Lauren.guild.addRoleToMember(userID, role).queue();
 
             }
 
             for (long roleID : rolesToRemove) {
 
                 Role role = Lauren.guild.getRoleById(roleID);
-                if (role == null) return;
+                if (role == null) {
+                    Logger.log("Role is null", LogType.ERROR);
+                    continue;
+                }
 
-                Lauren.guild.removeRoleFromMember(member, role).queue();
+                Lauren.guild.removeRoleFromMember(userID, role).queue();
 
             }
         }
 
         String message = "Parabéns <@" + userID + "> você alcançou o nível **__" + level + "__** <a:tutut:770408915300384798>";
 
-        if (level == 20) message = "<:prime:722115525232296056> O jogador <@" + userID + "> tornou-se prime";
+        if (level == 20) message = "<:prime:722115525232296056> O jogador <@" + userID + "> tornou-se Prime";
         if (level == 30) message = "<:oi:762303876732420176> O jogador <@" + userID + "> tornou-se DJ";
 
         TextChannel channel = Lauren.bot.getTextChannelById(770393139516932158L);
