@@ -61,10 +61,10 @@ public class XpController {
     private void createTable() {
         DatabaseController.getDatabase()
                 .updateSync(
-                        "create table if not exists `lauren_levelrewards`" +
-                                " (" +
-                                "`level` int(3) primary key not null," +
-                                " `rewards` text" +
+                        "create table if not exists `lauren_levelrewards` " +
+                                "(" +
+                                "`level` int(3) primary key not null, " +
+                                "`rewards` text" +
                                 ");");
     }
 

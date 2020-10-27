@@ -2,10 +2,10 @@ package com.yuhtin.lauren.core.player;
 
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.alarm.Alarm;
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.match.Match;
 import com.yuhtin.lauren.core.player.controller.PlayerDatabase;
 import com.yuhtin.lauren.core.statistics.controller.StatsController;
+import com.yuhtin.lauren.core.xp.Level;
 import com.yuhtin.lauren.core.xp.XpController;
 import com.yuhtin.lauren.models.enums.GameMode;
 import com.yuhtin.lauren.models.enums.GameType;
@@ -14,7 +14,7 @@ import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,31 +51,57 @@ public class Player {
                 .get(level)
                 .getRolesToGive();
 
+        List<Long> rolesToRemove = new ArrayList<>();
+        if (level >= 10) {
+            for (Integer integer : XpController.getInstance().getLevelByXp().keySet()) {
+                if (integer >= level) break;
+
+                Level tempLevel = XpController.getInstance().getLevelByXp().get(integer);
+                if (tempLevel.getRolesToGive().isEmpty()) continue;
+
+                rolesToRemove.addAll(tempLevel.getRolesToGive());
+            }
+
+        }
+
         if (rolesToGive != null && !rolesToGive.isEmpty()) {
 
-            rolesToGive.forEach(roleID -> {
-                Role role = Lauren.guild.getRoleById(roleID);
-                Member member = Lauren.guild.getMemberById(userID);
+            Member member = Lauren.guild.getMemberById(userID);
+            if (member == null) return;
 
-                if (role == null || member == null) return;
+            for (long roleID : rolesToGive) {
+
+                Role role = Lauren.guild.getRoleById(roleID);
+                if (role == null) return;
 
                 PrivateChannel channel = member.getUser().openPrivateChannel().complete();
                 if (channel != null) {
                     channel.sendMessage("<:feliz_pra_caralho:760202116504485948>" +
                             " Você recebeu o cargo **" + role.getName() + "** por alcançar o nível **" + level + "**")
                             .queue();
-                    return;
                 }
 
                 Lauren.guild.addRoleToMember(member, role).queue();
-            });
 
+            }
+
+            for (long roleID : rolesToRemove) {
+
+                Role role = Lauren.guild.getRoleById(roleID);
+                if (role == null) return;
+
+                Lauren.guild.removeRoleFromMember(member, role).queue();
+
+            }
         }
 
-        if (level == 20)
-            Lauren.bot.getTextChannelById(700683423429165096L)
-                    .sendMessage("<:prime:722115525232296056> O jogador <@" + userID + "> tornou-se prime")
-                    .queue();
+        String message = "Parabéns <@" + userID + "> você alcançou o nível **__" + level + "__** <a:tutut:770408915300384798>";
+
+        if (level == 20) message = "<:prime:722115525232296056> O jogador <@" + userID + "> tornou-se prime";
+        if (level == 30) message = "<:oi:762303876732420176> O jogador <@" + userID + "> tornou-se DJ";
+
+        TextChannel channel = Lauren.bot.getTextChannelById(770393139516932158L);
+        if (channel != null) channel.sendMessage(message).queue();
 
         StatsController.get().getStats("Evoluir Nível").suplyStats(1);
     }
