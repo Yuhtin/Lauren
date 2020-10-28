@@ -1,7 +1,5 @@
 package com.yuhtin.lauren.connectiontest;
 
-import com.yuhtin.lauren.core.logger.Logger;
-
 public class CalcTest {
 
     public static void main(String[] args) {
@@ -13,7 +11,7 @@ public class CalcTest {
             acumulated = acumulated + (level - 1) * experiencePerLevel;
             int experience = experienceBase + acumulated;
 
-            Logger.log("Caching level " + level + " with " + experience + "xp");
+            System.out.println(level + "> " + experience + "xp");
         }
     }
 }

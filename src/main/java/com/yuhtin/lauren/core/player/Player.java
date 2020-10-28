@@ -101,6 +101,8 @@ public class Player {
         TextChannel channel = Lauren.bot.getTextChannelById(770393139516932158L);
         if (channel != null) channel.sendMessage(message).queue();
 
+        Utilities.INSTANCE.updateNickByLevel(userID, level);
+
         StatsController.get().getStats("Evoluir Nível").suplyStats(1);
     }
 
