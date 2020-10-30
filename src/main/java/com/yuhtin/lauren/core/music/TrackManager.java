@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 
 public class TrackManager extends AudioEventAdapter {
 
-    public static final Map<String, String> fields = new HashMap<>();
     private static TrackManager INSTANCE;
 
     public final GuildMusicManager musicManager;
@@ -33,23 +32,13 @@ public class TrackManager extends AudioEventAdapter {
         AudioSourceManagers.registerLocalSource(audioManager);
 
         player.addListener(this);
-        Lauren.guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(player));
+        Lauren.getInstance().getGuild().getAudioManager().setSendingHandler(new AudioPlayerSendHandler(player));
     }
 
     public static TrackManager get() {
         if (INSTANCE == null) INSTANCE = new TrackManager();
 
         return INSTANCE;
-    }
-
-    public static void constructFields() {
-        fields.put("api_dev_key", Lauren.config.pastebinDevKey);
-        fields.put("api_user_key", Lauren.config.pastebinUserKey);
-        fields.put("api_paste_private", "1");
-        fields.put("api_paste_expire_date", "10M");
-        fields.put("api_option", "paste");
-        fields.put("api_paste_code", "");
-        fields.put("api_paste_name", "");
     }
 
     public void destroy() {

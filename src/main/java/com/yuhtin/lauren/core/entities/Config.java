@@ -1,9 +1,9 @@
 package com.yuhtin.lauren.core.entities;
 
-import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
-import lombok.Setter;
+import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.utils.serialization.Serializer;
+import lombok.Setter;
 
 import java.io.*;
 
@@ -32,39 +32,26 @@ public class Config {
                 config.setDatabaseType("SQLite");
                 config.setLog(true);
 
-                BufferedWriter writer = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
-                writer.write(Serializer.config.serialize(config));
-                writer.newLine();
-                writer.flush();
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(file.getAbsolutePath()))) {
+                    writer.write(Serializer.getConfig().serialize(config));
+                    writer.newLine();
+                    writer.flush();
+                }
 
                 Logger.log("Put a valid token in the bot's config", LogType.WARN).save();
                 return null;
             }
 
             String line;
-            BufferedReader reader = new BufferedReader(new FileReader(file.getAbsolutePath()));
             StringBuilder responseContent = new StringBuilder();
-            while ((line = reader.readLine()) != null) responseContent.append(line);
-            reader.close();
+            try (BufferedReader reader = new BufferedReader(new FileReader(file.getAbsolutePath()))) {
+                while ((line = reader.readLine()) != null) responseContent.append(line);
+            }
 
-            return Serializer.config.deserialize(responseContent.toString());
+            return Serializer.getConfig().deserialize(responseContent.toString());
         } catch (Exception exception) {
             return null;
         }
     }
 
-    public void updateConfig() {}
-
-    /*public void updateConfig() {
-        File file = new File("config/config.json");
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
-            writer.write(Serializer.config.serialize(this));
-            writer.newLine();
-            writer.close();
-        } catch (Exception exception) {
-            Logger.error(exception).save();
-            Logger.log("An error occurred on save config", LogType.ERROR).save();
-        }
-    }*/
 }

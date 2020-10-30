@@ -6,7 +6,6 @@ import com.yuhtin.lauren.commands.utility.SugestionCommand;
 import com.yuhtin.lauren.core.entities.Config;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
-import com.yuhtin.lauren.core.match.controller.MatchController;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.controller.StatsDatabase;
@@ -19,10 +18,12 @@ import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.manager.CommandManager;
 import com.yuhtin.lauren.models.manager.EventsManager;
 import com.yuhtin.lauren.service.PterodactylConnection;
+import com.yuhtin.lauren.tasks.LootGeneratorTask;
 import com.yuhtin.lauren.tasks.TopXpUpdater;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import com.yuhtin.lauren.utils.messages.AsciiBox;
+import lombok.Getter;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -32,50 +33,53 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipOutputStream;
 
+@lombok.Data
 public class Lauren {
 
-    public static JDA bot;
-    public static Guild guild;
-    public static long startTime;
-    public static Config config;
-    public static String version;
+    @Getter
+    private static Lauren instance = new Lauren();
+
+    private JDA bot;
+    private Guild guild;
+    private long startTime;
+    private Config config;
+    private String version;
 
     public static void main(String[] args) throws InterruptedException {
-        startTime = System.currentTimeMillis();
+        instance.setStartTime(System.currentTimeMillis());
 
-        config = Config.startup();
-        if (config == null) {
+        instance.setConfig(Config.startup());
+        if (instance.getConfig() == null) {
             Logger.log("There was an error loading the config", LogType.ERROR);
             return;
         }
 
-        if (config.log) {
+        if (instance.getConfig().log) {
             try {
                 new LoggerController();
             } catch (Exception exception) {
-                config.setLog(false);
-                Logger.log("I founded a error on load LoggerController, logs turned off", LogType.ERROR);
+                instance.getConfig().setLog(false);
+                Logger.log("I founded an error on load LoggerController, logs turned off", LogType.ERROR);
             }
         }
 
         EventWaiter eventWaiter = new EventWaiter();
         Thread buildThread = new Thread(() -> {
             try {
-                processDatabase(config.databaseType);
+                processDatabase(instance.getConfig().databaseType);
                 Utilities.INSTANCE.foundVersion();
-                TrackManager.constructFields();
-                bot = JDABuilder.createDefault(config.token)
+                instance.setBot(JDABuilder.createDefault(instance.getConfig().token)
                         .setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"))
                         .setAutoReconnect(true)
                         .enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGE_REACTIONS)
-                        .build();
+                        .build());
 
             } catch (LoginException exception) {
                 Logger.log("The bot token is wrong", LogType.ERROR).save();
@@ -85,13 +89,12 @@ public class Lauren {
         buildThread.join();
 
         TaskHelper.runAsync(() -> {
-            new EventsManager(bot, "com.yuhtin.lauren.events");
-            new CommandManager(bot, "com.yuhtin.lauren.commands");
-            new PterodactylConnection(config.pteroKey);
-            MatchController.startup();
+            new EventsManager(instance.getBot(), "com.yuhtin.lauren.events");
+            new CommandManager(instance.getBot(), "com.yuhtin.lauren.commands");
+            new PterodactylConnection(instance.getConfig().pteroKey);
             new Thread(Lauren::loadTasks).start();
 
-            bot.addEventListener(eventWaiter);
+            instance.getBot().addEventListener(eventWaiter);
             QueueCommand.getBuilder().setEventWaiter(eventWaiter);
             SugestionCommand.setWaiter(eventWaiter);
             XpController.getInstance();
@@ -100,7 +103,7 @@ public class Lauren {
 
         String[] loadNonFormated = new String[]{
                 "",
-                "Lauren v" + version,
+                "Lauren v" + instance.getVersion(),
                 "Author: Yuhtin#9147",
                 "",
                 "All systems has loaded",
@@ -124,7 +127,7 @@ public class Lauren {
         TaskHelper.runTaskLater(new TimerTask() {
             @Override
             public void run() {
-                if (Lauren.guild == null) finish();
+                if (instance.getGuild() == null) finish();
             }
         }, 10, TimeUnit.SECONDS);
 
@@ -137,6 +140,9 @@ public class Lauren {
         }, 5, 5, TimeUnit.MINUTES);
 
         TopXpUpdater.getInstance().startRunnable();
+
+        LootGeneratorTask.getInstance().startRunnable();
+        Lauren.getInstance().getBot().addEventListener(LootGeneratorTask.getInstance().getEventWaiter());
 
     }
 
@@ -164,13 +170,9 @@ public class Lauren {
             FileOutputStream outputStream = new FileOutputStream(file.getPath().split("\\.")[0] + ".zip");
             ZipOutputStream zipFileOutput = new ZipOutputStream(outputStream);
 
-            try {
-                Utilities.INSTANCE.writeToZip(file, zipFileOutput);
-            } catch (IOException exception) {
-                Logger.log("Can't write log file to zip file", LogType.ERROR).save();
-            }
+            Utilities.INSTANCE.writeToZip(file, zipFileOutput);
+            Utilities.INSTANCE.cleanUp(Paths.get(file.getPath()));
 
-            if (!file.delete()) Logger.log("Can't delete a log file", LogType.WARN).save();
             zipFileOutput.close();
             outputStream.close();
 
@@ -182,17 +184,16 @@ public class Lauren {
             Logger.log("Can't compress a log file", LogType.WARN).save();
         }
 
-        Lauren.config.updateConfig();
         System.exit(0);
     }
 
     private static void processDatabase(String databaseType) {
         Data dataType = new SQLite();
         if (databaseType.equalsIgnoreCase("MySQL"))
-            dataType = new MySQL(config.mySqlHost,
-                    config.mySqlUser,
-                    config.mySqlPassword,
-                    config.mySqlDatabase);
+            dataType = new MySQL(instance.getConfig().mySqlHost,
+                    instance.getConfig().mySqlUser,
+                    instance.getConfig().mySqlPassword,
+                    instance.getConfig().mySqlDatabase);
 
         DatabaseController.get().constructDatabase(dataType.openConnection());
         DatabaseController.get().loadAll();

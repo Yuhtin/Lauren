@@ -32,43 +32,45 @@ public class TopXpUpdater {
             @Override
             public void run() {
                 topPlayers = "";
+                long lastMillis = System.currentTimeMillis();
 
                 Logger.log("Started TopXpUpdater task");
-                try {
-                    PreparedStatement statement = connection.prepareStatement("SELECT * FROM `lauren_players` ORDER BY `xp` DESC LIMIT 10");
+                List<SimplePlayer> players = new ArrayList<>();
+                String sql = "SELECT * FROM `lauren_players` ORDER BY `xp` DESC LIMIT 10";
+                try (PreparedStatement statement = connection.prepareStatement(sql)) {
                     ResultSet resultSet = statement.executeQuery();
 
-                    List<SimplePlayer> players = new ArrayList<>();
                     while (resultSet.next()) {
-                        Player data = Serializer.player.deserialize(resultSet.getString("data"));
+                        Player data = Serializer.getPlayer().deserialize(resultSet.getString("data"));
                         players.add(new SimplePlayer(resultSet.getLong("id"), data.level, data.experience));
                     }
 
-                    StringBuilder builder = new StringBuilder();
-                    builder.append("<:version:756767328334512179> Top 10 jogadores mais viciados\n\n");
-
-                    for (int i = 1; i <= 10; i++) {
-                        SimplePlayer simplePlayer = players.get(i - 1);
-                        builder.append(i)
-                                .append("º - <@")
-                                .append(simplePlayer.getUserID())
-                                .append("> Nível ")
-                                .append(simplePlayer.getLevel())
-                                .append(" (")
-                                .append(simplePlayer.getXp())
-                                .append(" XP)\n");
-                    }
-
-                    topPlayers = builder.toString();
-                    players.clear();
                     resultSet.close();
-                    statement.close();
                 } catch (Exception exception) {
-                    Logger.error(exception);
-                    Logger.log("Cannot update top xp");
+                    Logger.log("Can't update top xp");
+                    return;
                 }
 
-                Logger.log("Finished TopXpUpdater task successfully");
+                StringBuilder builder = new StringBuilder();
+                builder.append("<:version:756767328334512179> Top 10 jogadores mais viciados\n\n");
+
+                for (int i = 1; i <= 10; i++) {
+                    SimplePlayer simplePlayer = players.get(i - 1);
+                    builder.append(i)
+                            .append("º - <@")
+                            .append(simplePlayer.getUserID())
+                            .append("> Nível ")
+                            .append(simplePlayer.getLevel())
+                            .append(" (")
+                            .append(simplePlayer.getXp())
+                            .append(" XP)\n");
+                }
+
+                topPlayers = builder.toString();
+                players.clear();
+
+                long ms = System.currentTimeMillis() - lastMillis;
+                Logger.log("Finished TopXpUpdater task successfully in " + ms + " ms");
             }
         }, 1, 30, TimeUnit.MINUTES);
 

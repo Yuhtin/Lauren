@@ -50,10 +50,8 @@ public class LoggerController {
     }
 
     public void toFile(String log) {
-        LocalDateTime now = LocalDateTime.now();
-        String result = "[" + now.getHour() + ":" + now.getMinute() + ":" + now.getSecond() + "] " + log;
         try {
-            bufferedWriter.write(result);
+            bufferedWriter.write(log);
             bufferedWriter.newLine();
             bufferedWriter.flush();
         } catch (IOException exception) {

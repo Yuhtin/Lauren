@@ -5,14 +5,15 @@ import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.enums.LogType;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.jetbrains.annotations.NotNull;
 
 public class BotReadyEvent extends ListenerAdapter {
 
     @Override
-    public void onReady(ReadyEvent event) {
+    public void onReady(@NotNull ReadyEvent event) {
         Logger.log("Lauren has connected to DiscordAPI", LogType.STARTUP).save();
 
-        if (Lauren.config.laurenTest) Lauren.guild = event.getJDA().getGuildById(723625569111113740L);
-        else Lauren.guild = event.getJDA().getGuildCache().iterator().next();
+        if (Lauren.getInstance().getConfig().laurenTest) Lauren.getInstance().setGuild(event.getJDA().getGuildById(723625569111113740L));
+        else Lauren.getInstance().setGuild(event.getJDA().getGuildCache().iterator().next());
     }
 }

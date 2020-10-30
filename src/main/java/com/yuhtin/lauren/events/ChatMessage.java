@@ -22,8 +22,8 @@ public class ChatMessage extends ListenerAdapter {
 
         if (event.getMessage().getContentRaw().startsWith("$")) {
             String command = event.getMessage().getContentRaw().split(" ")[0].replace("$", "").toLowerCase();
-            if (!CommandCache.aliases.contains(command)) {
-                for (String alias : CommandCache.aliases) {
+            if (!CommandCache.getAliases().contains(command)) {
+                for (String alias : CommandCache.getAliases()) {
                     if (LevenshteinCalculator.eval(command, alias) < 4) {
                         event.getChannel().sendMessage("<:chorano:726207542413230142> Esse comandinho não existe porém encontrei um parecido: `$" + alias + "`").queue();
                         break;
@@ -33,7 +33,7 @@ public class ChatMessage extends ListenerAdapter {
         }
 
         if (!isMusicCommand(event.getMessage().getContentRaw())
-                && event.getMessage().getContentRaw().contains("https://")
+                && event.getMessage().getContentRaw().contains("://")
                 && event.getChannel().getIdLong() != 753628118161424384L
                 && !Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.MESSAGE_MANAGE, false)) {
 

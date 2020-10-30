@@ -1,8 +1,15 @@
 package com.yuhtin.lauren.utils.helper;
 
+import com.yuhtin.lauren.core.logger.Logger;
+
 import java.util.concurrent.TimeUnit;
 
 public class MathUtils {
+
+    private MathUtils() {
+        Logger.log("Unable to instantiate a utility class");
+    }
+
     public static String format(long time) {
         String format = "";
         if (time < 0) return format;
@@ -13,7 +20,8 @@ public class MathUtils {
         long minutesInMillis = TimeUnit.MINUTES.toMillis(minutes);
         long seconds = TimeUnit.MILLISECONDS.toSeconds(time - (hoursInMillis + minutesInMillis));
         int days = (int) (time / (1000 * 60 * 60 * 24));
-        if (hours > 0)
+
+        if (hours > 0) {
             if (days > 0) {
                 time = time - TimeUnit.DAYS.toMillis(days);
                 hours = TimeUnit.MILLISECONDS.toHours(time - minutesInMillis);
@@ -25,9 +33,9 @@ public class MathUtils {
                 } else daysAndMonth = plural(days, "dia", "dias");
                 format = daysAndMonth + " e " + plural(hours, "hora", "horas");
                 return format;
-            } else {
-                format = plural(hours, "hora", "horas");
-            }
+            } else format = plural(hours, "hora", "horas");
+        }
+
         if (minutes > 0) {
             if ((seconds > 0) && (hours > 0))
                 format += ", ";
@@ -35,34 +43,24 @@ public class MathUtils {
                 format += " e ";
             format += plural(minutes, "minuto", "minutos");
         }
+
         if (seconds > 0) {
             if ((hours > 0) || (minutes > 0))
                 format += " e ";
             format += plural(seconds, "segundo", "segundos");
         }
+
         if (format.equals("")) {
             long rest = time / 100;
             if (rest == 0)
                 rest = 1;
             format = "0." + rest + "segundo";
         }
+
         if (days > 0) {
             format = plural(days, "dia", "dias");
         }
         return format;
-    }
-
-    public static String bytesToLegibleValue(double bytes) {
-        if (bytes < 1024 * 1024)
-            return String.format("%.2f KB", bytes);
-        else if (bytes < Math.pow(2, 20) * 1024)
-            return String.format("%.2f MB", bytes / Math.pow(2, 20));
-        else if (bytes < Math.pow(2, 30) * 1024)
-            return String.format("%.2f GB", bytes / Math.pow(2, 30));
-        else if (bytes < Math.pow(2, 40) * 1024)
-            return String.format("%.2f TB", bytes / Math.pow(2, 40));
-        else
-            return "N/A (1TB?)";
     }
 
     public static int parseTime(String minutes) {

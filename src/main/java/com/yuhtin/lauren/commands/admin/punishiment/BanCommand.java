@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.commands.admin;
+package com.yuhtin.lauren.commands.admin.punishiment;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -20,7 +20,7 @@ public class BanCommand extends Command {
         if (!Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true))
             return;
 
-        if (event.getMessage().getMentionedMembers().size() == 0) {
+        if (event.getMessage().getMentionedMembers().isEmpty()) {
             event.getChannel().sendMessage("<a:nao:704295026036834375> Você precisa mencionar um jogador para banir, exemplo `$ban @Yuhtin`").queue();
             return;
         }
@@ -28,6 +28,9 @@ public class BanCommand extends Command {
         Member target = event.getMessage().getMentionedMembers().get(0);
         target.ban(7, "Banned from " + Utilities.INSTANCE.getFullName(event.getAuthor())).queue();
 
-        event.getChannel().sendMessage("<:feliz_pra_caralho:760202116504485948> Você baniu o jogador `" + Utilities.INSTANCE.getFullName(target.getUser()) + "` com sucesso.").queue();
+        event.getChannel()
+                .sendMessage("<:feliz_pra_caralho:760202116504485948> " +
+                        "Você baniu o jogador `" + Utilities.INSTANCE.getFullName(target.getUser()) + "` com sucesso.")
+                .queue();
     }
 }

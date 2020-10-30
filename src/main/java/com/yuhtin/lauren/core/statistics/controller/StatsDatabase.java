@@ -17,22 +17,21 @@ public class StatsDatabase {
     }
 
     public static void load() {
-        PreparedStatement statement;
-        try {
-            statement = DatabaseController.get().getConnection().prepareStatement("select * from `lauren_stats`");
+        try (PreparedStatement statement = DatabaseController.get().getConnection().prepareStatement("select * from `lauren_stats`")) {
 
             ResultSet query = statement.executeQuery();
             while (query.next()) {
                 StatsController.get().getStats().put(query.getString("tipo"),
-                        Serializer.stats.deserialize(query.getString("data")));
+                        Serializer.getStats().deserialize(query.getString("data")));
             }
 
             query.close();
-            statement.close();
-        } catch (SQLException exception) {
+        } catch (
+                SQLException exception) {
             Logger.log("Could not load stats from database");
             exception.printStackTrace();
         }
+
     }
 
     public static void save() {
@@ -41,7 +40,7 @@ public class StatsDatabase {
         for (String name : StatsController.get().getStats().keySet()) {
             DatabaseController.getDatabase()
                     .updateSync("update `lauren_stats` set `data`= '"
-                            + Serializer.stats.serialize(StatsController.get().getStats().get(name)) +
+                            + Serializer.getStats().serialize(StatsController.get().getStats().get(name)) +
                             "' where `tipo` = '" + name + "'");
         }
 
@@ -51,6 +50,6 @@ public class StatsDatabase {
     public static void create(String name) {
         DatabaseController.getDatabase()
                 .updateSync(new Query().insert("lauren_stats", name,
-                        Serializer.stats.serialize(new StatsInfo(name))));
+                        Serializer.getStats().serialize(new StatsInfo(name))));
     }
 }

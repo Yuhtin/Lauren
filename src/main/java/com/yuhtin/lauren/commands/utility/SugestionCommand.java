@@ -116,7 +116,7 @@ public class SugestionCommand extends Command {
 
     private void checkReactions(Sugestion sugestion, Runnable cancelRunnable) {
         waiter.waitForEvent(PrivateMessageReactionAddEvent.class,
-                (privateMessage) -> privateMessage.getUserIdLong() != Lauren.bot.getSelfUser().getIdLong()
+                (privateMessage) -> privateMessage.getUserIdLong() != Lauren.getInstance().getBot().getSelfUser().getIdLong()
                         && sugestion.getMessage().getIdLong() == privateMessage.getReaction().getMessageIdLong()
                         && (privateMessage.getReactionEmote().getIdLong() == 704295025374265387L
                         || privateMessage.getReactionEmote().getIdLong() == 704295026036834375L),
@@ -139,10 +139,10 @@ public class SugestionCommand extends Command {
                         return;
                     }
 
-                    TextChannel channel = Lauren.guild.getTextChannelsByName("sugestões", true).get(0);
-                    if (Utilities.INSTANCE.isPrime(Lauren.guild.getMemberById(privateMessage.getUserIdLong()))) {
+                    TextChannel channel = Lauren.getInstance().getGuild().getTextChannelsByName("sugestões", true).get(0);
+                    if (Utilities.INSTANCE.isPrime(Lauren.getInstance().getGuild().getMemberById(privateMessage.getUserIdLong()))) {
 
-                        channel = Lauren.guild.getTextChannelsByName("sugestões-premium", true).get(0);
+                        channel = Lauren.getInstance().getGuild().getTextChannelsByName("sugestões-premium", true).get(0);
 
                     }
 

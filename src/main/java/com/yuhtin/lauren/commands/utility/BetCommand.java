@@ -104,7 +104,7 @@ public class BetCommand extends Command {
                         "- <:online:703089222021808170> Verde (**5x**)")
                 .setColor(color)
                 .setTimestamp(Instant.now())
-                .setFooter("Sistema de apostas", Lauren.bot.getSelfUser().getAvatarUrl());
+                .setFooter("Sistema de apostas", Lauren.getInstance().getBot().getSelfUser().getAvatarUrl());
     }
 
 }

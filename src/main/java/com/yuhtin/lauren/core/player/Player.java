@@ -3,38 +3,41 @@ package com.yuhtin.lauren.core.player;
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.alarm.Alarm;
 import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.core.match.Match;
 import com.yuhtin.lauren.core.player.controller.PlayerDatabase;
+import com.yuhtin.lauren.core.punish.PunishmentType;
 import com.yuhtin.lauren.core.statistics.controller.StatsController;
+import com.yuhtin.lauren.core.xp.Level;
 import com.yuhtin.lauren.core.xp.XpController;
-import com.yuhtin.lauren.models.enums.GameMode;
-import com.yuhtin.lauren.models.enums.GameType;
+import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.enums.Rank;
 import com.yuhtin.lauren.utils.helper.Utilities;
+import lombok.Data;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.TextChannel;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.Serializable;
+import java.util.*;
 
-public class Player {
+@Data
+public class Player implements Serializable {
 
-    public transient final List<Alarm> alarms = new ArrayList<>();
+    public final transient List<Alarm> alarms = new ArrayList<>();
+
     public final List<String> alarmsName;
     public final List<String> winMatches;
+    public final Map<PunishmentType, Long> punishs = new HashMap<>();
 
     // Geral
     public long userID, dailyDelay;
-    public int level = 0, money = 100, experience = 0;
+    public int level = 0,
+            money = 100,
+            experience = 0,
+            lootBoxes = 0,
+            rankedPoints = 0,
+            totalEvents = 0;
 
-    // Valorant and 8ballpool variables
-    public Rank valorantRank = Rank.NOTHING,
-            poolRank = Rank.NOTHING;
-    public int valorantPoints, valorantWins, valorantMatches,
-            poolPoints, poolWins, poolMatches = 0;
+    public Rank rank = Rank.NOTHING;
 
     public Player(long userID) {
         this.userID = userID;
@@ -51,38 +54,69 @@ public class Player {
                 .get(level)
                 .getRolesToGive();
 
-        if (rolesToGive != null && !rolesToGive.isEmpty()) {
+        List<Long> rolesToRemove = new ArrayList<>();
+        if (level >= 10) {
+            for (Integer integer : XpController.getInstance().getLevelByXp().keySet()) {
+                if (integer >= level) break;
 
-            rolesToGive.forEach(roleID -> {
-                Role role = Lauren.guild.getRoleById(roleID);
-                Member member = Lauren.guild.getMemberById(userID);
+                Level tempLevel = XpController.getInstance().getLevelByXp().get(integer);
+                if (tempLevel.getRolesToGive().isEmpty()) continue;
 
-                if (role == null || member == null) return;
+                for (Long roleID : tempLevel.getRolesToGive()) {
 
-                PrivateChannel channel = member.getUser().openPrivateChannel().complete();
-                if (channel != null) {
-                    channel.sendMessage("<:feliz_pra_caralho:760202116504485948>" +
-                            " Você recebeu o cargo **" + role.getName() + "** por alcançar o nível **" + level + "**")
-                            .queue();
-                    return;
+                    if (roleID.equals(722957999949348935L)
+                            || roleID.equals(722116789055782912L)
+                            || roleID.equals(770371418177011713L)) continue;
+
+                    rolesToRemove.add(roleID);
                 }
 
-                Lauren.guild.addRoleToMember(member, role).queue();
-            });
+            }
 
         }
 
-        if (level == 20)
-            Lauren.bot.getTextChannelById(700683423429165096L)
-                    .sendMessage("<:prime:722115525232296056> O jogador <@" + userID + "> tornou-se prime")
-                    .queue();
+        if (rolesToGive != null && !rolesToGive.isEmpty()) {
+
+            for (long roleID : rolesToGive) {
+
+                Role role = Lauren.getInstance().getGuild().getRoleById(roleID);
+                if (role == null) {
+                    Logger.log("Role is null", LogType.ERROR);
+                    continue;
+                }
+
+                Lauren.getInstance().getGuild().addRoleToMember(userID, role).queue();
+
+            }
+
+            for (long roleID : rolesToRemove) {
+
+                Role role = Lauren.getInstance().getGuild().getRoleById(roleID);
+                if (role == null) {
+                    Logger.log("Role is null", LogType.ERROR);
+                    continue;
+                }
+
+                Lauren.getInstance().getGuild().removeRoleFromMember(userID, role).queue();
+
+            }
+        }
+
+        String message = "Parabéns <@" + userID + "> você alcançou o nível **__" + level + "__** <a:tutut:770408915300384798>";
+
+        if (level == 20) message = "<:prime:722115525232296056> O jogador <@" + userID + "> tornou-se Prime";
+        if (level == 30) message = "<:oi:762303876732420176> O jogador <@" + userID + "> tornou-se DJ";
+
+        TextChannel channel = Lauren.getInstance().getBot().getTextChannelById(770393139516932158L);
+        if (channel != null) channel.sendMessage(message).queue();
+
+        Utilities.INSTANCE.updateNickByLevel(userID, level);
 
         StatsController.get().getStats("Evoluir Nível").suplyStats(1);
     }
 
     public Player updateRank() {
-        this.poolRank = Rank.getByPoints(poolPoints);
-        this.valorantRank = Rank.getByPoints(valorantPoints);
+        this.rank = Rank.getByPoints(rankedPoints);
 
         return this;
     }
@@ -106,7 +140,7 @@ public class Player {
     }
 
     public Player gainXP(double quantity) {
-        List<Double> multipliers = Arrays.asList(boosterMultiplier(), poolRank.multiplier, valorantRank.multiplier);
+        List<Double> multipliers = Arrays.asList(boosterMultiplier(), rank.getMultiplier());
 
         for (Double multiplier : multipliers) quantity *= multiplier;
         experience += (int) quantity;
@@ -119,51 +153,15 @@ public class Player {
     }
 
     private double boosterMultiplier() {
-        Member member = Lauren.guild.getMemberById(userID);
+        Member member = Lauren.getInstance().getGuild().getMemberById(userID);
 
-        return Utilities.INSTANCE.isBooster(member) ? 1.25 : Utilities.INSTANCE.isPrime(member) ? 1.15 : 1;
-    }
-
-    public Player computMatch(Match match) {
-        int points = -1;
-        double experience = 350;
-        double money = 0;
-        double multiplier;
-        boolean win = false;
-
-        if (match.winPlayer.equals(userID)) {
-            win = true;
-            winMatches.add(match.id);
-            points = 3;
-            experience += 200;
-            money += 35;
-        }
-        if (match.game.mode == GameMode.RANKED) points = 0;
-
-        if (match.game.type == GameType.POOL) {
-            multiplier = poolRank.multiplier;
-            ++poolMatches;
-            poolPoints += points;
-            if (win) ++poolWins;
-        } else {
-            multiplier = valorantRank.multiplier;
-            ++valorantMatches;
-            valorantPoints += points;
-            if (win) ++valorantWins;
-        }
-
-        experience *= multiplier;
-        this.experience += experience;
-        this.money += money;
-
-        updateRank();
-        return this;
+        double primeBooster = Utilities.INSTANCE.isPrime(member) ? 1.15 : 1;
+        return Utilities.INSTANCE.isBooster(member) ? 1.25 : primeBooster;
     }
 
     public void save() {
         if (money < 0) money = 0;
-        if (valorantPoints < 0) valorantPoints = 0;
-        if (poolPoints < 0) poolPoints = 0;
+        if (rankedPoints < 0) rankedPoints = 0;
 
         PlayerDatabase.save(userID, this);
     }

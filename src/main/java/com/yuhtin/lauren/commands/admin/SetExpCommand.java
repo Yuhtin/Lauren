@@ -23,7 +23,7 @@ public class SetExpCommand extends Command {
         if (!Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true))
             return;
 
-        if (event.getMessage().getMentionedMembers().size() < 1) {
+        if (event.getMessage().getMentionedMembers().isEmpty()) {
             event.getChannel().sendMessage("Ops, você precisa mencionar um jogador para receber o xp")
                     .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             return;
