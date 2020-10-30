@@ -140,6 +140,8 @@ public class Lauren {
         }, 5, 5, TimeUnit.MINUTES);
 
         TopXpUpdater.getInstance().startRunnable();
+
+        LootGeneratorTask.getInstance().startRunnable();
         Lauren.getInstance().getBot().addEventListener(LootGeneratorTask.getInstance().getEventWaiter());
 
     }

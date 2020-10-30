@@ -31,12 +31,15 @@ public class LootGeneratorTask {
     }
 
     public void startRunnable() {
+        Logger.log("Registered LootGeneratorTask");
+
         final List<Long> allowedChannels = Arrays.asList(
-                704342124732350645L,
-                765024746655318016L,
-                763757066103554069L,
-                721037764321345578L,
-                700673056414367825L
+                723625569396326475L,
+                //765024746655318016L,
+                //763757066103554069L,
+                //721037764321345578L,
+                //700673056414367825L
+                723625569396326473L
         );
 
         EmbedBuilder embed = new EmbedBuilder();
@@ -61,9 +64,12 @@ public class LootGeneratorTask {
         TaskHelper.runTaskTimerAsync(new TimerTask() {
             @Override
             public void run() {
-                if (new Random().nextInt(100) > 10) return;
+                Logger.log("Running LootGeneratorTask");
 
-                int value = new Random().nextInt(allowedChannels.size() - 1);
+                // tests
+                //if (new Random().nextInt(100) > 10) return;
+
+                int value = new Random().nextInt(allowedChannels.size());
                 long channelID = allowedChannels.get(value);
 
                 TextChannel channel = Lauren.getInstance().getGuild().getTextChannelById(channelID);
@@ -77,7 +83,7 @@ public class LootGeneratorTask {
                 Message message = channel.sendMessage(embed.build()).complete();
                 message.addReaction(":radiante:771541052590915585").queue();
 
-                eventWaiter.waitForEvent(MessageReactionAddEvent.class, event -> true,
+                eventWaiter.waitForEvent(MessageReactionAddEvent.class, event -> !event.getMember().getUser().isBot(),
                         event -> {
                             message.clearReactions().queue();
 
@@ -91,8 +97,13 @@ public class LootGeneratorTask {
 
                             Player player = PlayerController.INSTANCE.get(event.getUserIdLong());
                             ++player.lootBoxes;
+                        }, 10, TimeUnit.SECONDS,
+
+                        () -> {
+                            channel.sendMessage("Acabou o tempo.").queue();
+                            message.clearReactions().queue();
                         });
             }
-        }, 10, 15, TimeUnit.MINUTES);
+        }, 0, 1, TimeUnit.MINUTES);
     }
 }
