@@ -2,6 +2,7 @@ package com.yuhtin.lauren.commands.utility;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.statistics.controller.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
@@ -27,6 +28,7 @@ public class PlayerInfoCommand extends Command {
     protected void execute(CommandEvent event) {
         Member target = event.getMessage().getMentionedMembers().isEmpty() ? event.getMember() : event.getMessage().getMentionedMembers().get(0);
         Player controller = PlayerController.INSTANCE.get(target.getIdLong());
+        if (controller == null) Logger.log("abc");
 
         String roles = Utilities.INSTANCE.rolesToString(target.getRoles());
         String name = target.getNickname() == null ? target.getUser().getName() : target.getNickname();
@@ -35,14 +37,14 @@ public class PlayerInfoCommand extends Command {
         EmbedBuilder embedBuilder = new EmbedBuilder()
                 .setColor(target.getColor())
                 .setAuthor("Informações do jogador " + name, null, target.getUser().getAvatarUrl())
-                .setThumbnail(controller.rank.url)
+                .setThumbnail(controller.getRank().getUrl())
 
                 .addField("⚗️ Experiência", "`Nível " + controller.level + " (" + Utilities.INSTANCE.format(controller.experience) + " XP)`", false)
                 .addField("🧶 Cargos", "`" + (roles.equalsIgnoreCase("") ? "Nenhum" : roles) + "`", false)
                 .addField("✨ Entrou em", userDate, false)
                 .addField("\uD83D\uDCB0 Dinheiro", "`$" + (Utilities.INSTANCE.format(controller.money)) + "`", false)
-                .addField("\uD83D\uDC7E Eventos que participou", "`" + controller.totalEvents + "`", false)
-                .addField("<:beacon:771543538252120094> Patente", "`" + controller.rank.name + "`", false)
+                .addField("\uD83D\uDC7E Eventos", "`" + controller.totalEvents + "`", false)
+                .addField("<:beacon:771543538252120094> Patente", "`" + controller.getRank().getName() + "`", false)
                 .addField("<:lootbox:771545027829563402> LootBoxes", "`" + controller.lootBoxes + " caixas`", false)
 
                 .setFooter("Comando usado por " + event.getMember().getNickname(), event.getMember().getUser().getAvatarUrl())

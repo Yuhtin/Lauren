@@ -1,10 +1,13 @@
 package com.yuhtin.lauren.models.enums;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
 
 import java.util.Arrays;
 
 @AllArgsConstructor
+@Getter
 public enum Rank {
 
     NOTHING("Sem patente", 0, 0, 1, "https://i.imgur.com/m8KIawu.png"),
@@ -30,10 +33,10 @@ public enum Rank {
     SUPREME("Supremo", 17, 100, 2, "https://csgo-stats.com/custom/img/ranks/17.png"),
     GLOBAL("Global", 18, 120, 2.3, "https://csgo-stats.com/custom/img/ranks/18.png");
 
-    public final String name;
-    public final int position, minimumPoints;
-    public final double multiplier;
-    public final String url;
+    private final String name;
+    private final int position, minimumPoints;
+    private final double multiplier;
+    private final String url;
 
     public static Rank getByPosition(int position) {
         return Arrays.stream(Rank.values()).filter(rank -> rank.position == position).findFirst().orElse(Rank.NOTHING);

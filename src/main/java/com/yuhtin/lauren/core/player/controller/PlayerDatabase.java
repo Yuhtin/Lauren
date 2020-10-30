@@ -11,7 +11,7 @@ public class PlayerDatabase {
         DatabaseController.getDatabase().updateSync("create table if not exists `lauren_players` (`id` varchar(18) primary key not null, `data` text, `xp` int(11));");
     }
 
-    public static Player loadPlayer(long userID) {
+    public static String loadPlayer(long userID) {
         String raw = new Query()
                 .selectAll()
                 .from("lauren_players")
@@ -21,10 +21,10 @@ public class PlayerDatabase {
         PlayerORM playerORM = DatabaseController.getDatabase().buildSync(PlayerORM.class, raw);
         if (playerORM == null) {
             create(userID);
-            return new Player(userID);
+            return "";
         }
 
-        return Serializer.getPlayer().deserialize(playerORM.getData());
+        return playerORM.getData();
     }
 
     public static void save(long userID, Player player) {

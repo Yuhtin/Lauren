@@ -11,6 +11,7 @@ import com.yuhtin.lauren.core.xp.XpController;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.enums.Rank;
 import com.yuhtin.lauren.utils.helper.Utilities;
+import lombok.Data;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -18,6 +19,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import java.io.Serializable;
 import java.util.*;
 
+@Data
 public class Player implements Serializable {
 
     public final transient List<Alarm> alarms = new ArrayList<>();
@@ -138,7 +140,7 @@ public class Player implements Serializable {
     }
 
     public Player gainXP(double quantity) {
-        List<Double> multipliers = Arrays.asList(boosterMultiplier(), rank.multiplier);
+        List<Double> multipliers = Arrays.asList(boosterMultiplier(), rank.getMultiplier());
 
         for (Double multiplier : multipliers) quantity *= multiplier;
         experience += (int) quantity;
