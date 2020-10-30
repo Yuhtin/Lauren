@@ -7,6 +7,7 @@ import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.statistics.controller.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
+import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.utils.helper.MathUtils;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -28,7 +29,14 @@ public class PlayerInfoCommand extends Command {
     protected void execute(CommandEvent event) {
         Member target = event.getMessage().getMentionedMembers().isEmpty() ? event.getMember() : event.getMessage().getMentionedMembers().get(0);
         Player controller = PlayerController.INSTANCE.get(target.getIdLong());
-        if (controller == null) Logger.log("abc");
+        if (controller == null) {
+            Logger.log("Occured an error on try load player data of " + target.getIdLong(), LogType.ERROR).save();
+            event.getChannel().sendMessage("Ocorreu um erro em meus dados, defusa aqui <@272879983326658570>").queue();
+
+            event.getChannel().sendMessage("Player ID: " + target.getIdLong()).queue();
+
+            return;
+        }
 
         String roles = Utilities.INSTANCE.rolesToString(target.getRoles());
         String name = target.getNickname() == null ? target.getUser().getName() : target.getNickname();
