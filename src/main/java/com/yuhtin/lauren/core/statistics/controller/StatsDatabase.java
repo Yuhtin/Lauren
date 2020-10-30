@@ -17,9 +17,7 @@ public class StatsDatabase {
     }
 
     public static void load() {
-        PreparedStatement statement;
-        try {
-            statement = DatabaseController.get().getConnection().prepareStatement("select * from `lauren_stats`");
+        try (PreparedStatement statement = DatabaseController.get().getConnection().prepareStatement("select * from `lauren_stats`")) {
 
             ResultSet query = statement.executeQuery();
             while (query.next()) {
@@ -28,11 +26,12 @@ public class StatsDatabase {
             }
 
             query.close();
-            statement.close();
-        } catch (SQLException exception) {
+        } catch (
+                SQLException exception) {
             Logger.log("Could not load stats from database");
             exception.printStackTrace();
         }
+
     }
 
     public static void save() {

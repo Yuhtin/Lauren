@@ -34,12 +34,10 @@ public class LootGeneratorTask {
         Logger.log("Registered LootGeneratorTask");
 
         final List<Long> allowedChannels = Arrays.asList(
-                723625569396326475L,
-                //765024746655318016L,
-                //763757066103554069L,
-                //721037764321345578L,
-                //700673056414367825L
-                723625569396326473L
+                765024746655318016L,
+                763757066103554069L,
+                721037764321345578L,
+                700673056414367825L
         );
 
         EmbedBuilder embed = new EmbedBuilder();
@@ -66,8 +64,7 @@ public class LootGeneratorTask {
             public void run() {
                 Logger.log("Running LootGeneratorTask");
 
-                // tests
-                //if (new Random().nextInt(100) > 10) return;
+                if (new Random().nextInt(100) > 10) return;
 
                 int value = new Random().nextInt(allowedChannels.size());
                 long channelID = allowedChannels.get(value);
@@ -90,7 +87,7 @@ public class LootGeneratorTask {
                             String nickname = event.getMember().getNickname();
                             if (nickname == null) nickname = event.getMember().getEffectiveName();
 
-                            channel.sendMessage("<:felizpakas:742373250037710918>" +
+                            channel.sendMessage("<:felizpakas:742373250037710918> " +
                                     "Parabéns **" + nickname + "**, você capturou uma lootbox, você pode abrir ela mais tarde " +
                                     "usando `$openloot`")
                                     .queue();
@@ -100,7 +97,9 @@ public class LootGeneratorTask {
                         }, 10, TimeUnit.SECONDS,
 
                         () -> {
-                            channel.sendMessage("Acabou o tempo.").queue();
+                            message.editMessage("<a:tchau:751941650728747140> " +
+                                    "Infelizmente acabou o tempo e ninguém coletou o loot.")
+                                    .queue();
                             message.clearReactions().queue();
                         });
             }

@@ -28,6 +28,9 @@ public class BanCommand extends Command {
         Member target = event.getMessage().getMentionedMembers().get(0);
         target.ban(7, "Banned from " + Utilities.INSTANCE.getFullName(event.getAuthor())).queue();
 
-        event.getChannel().sendMessage("<:feliz_pra_caralho:760202116504485948> Você baniu o jogador `" + Utilities.INSTANCE.getFullName(target.getUser()) + "` com sucesso.").queue();
+        event.getChannel()
+                .sendMessage("<:feliz_pra_caralho:760202116504485948> " +
+                        "Você baniu o jogador `" + Utilities.INSTANCE.getFullName(target.getUser()) + "` com sucesso.")
+                .queue();
     }
 }
