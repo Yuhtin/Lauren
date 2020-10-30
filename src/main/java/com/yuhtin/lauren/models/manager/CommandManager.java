@@ -21,7 +21,7 @@ public class CommandManager {
 
         CommandClientBuilder clientBuilder = new CommandClientBuilder();
         clientBuilder.setOwnerId("702518526753243156");
-        clientBuilder.setPrefix(Lauren.config.prefix);
+        clientBuilder.setPrefix(Lauren.getInstance().getConfig().prefix);
         clientBuilder.setHelpWord("riphelpmessage");
         clientBuilder.setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"));
         ClassPath cp;

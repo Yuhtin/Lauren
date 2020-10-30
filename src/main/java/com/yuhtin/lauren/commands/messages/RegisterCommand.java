@@ -36,7 +36,7 @@ public class RegisterCommand extends Command {
         action.queue(message -> {
             message.addReaction(":nao_pertubar:703089222185386056").queue();
             message.addReaction(":live:704293077623504957").queue();
-            Lauren.config.setResgistrationId(message.getIdLong());
+            Lauren.getInstance().getConfig().setResgistrationId(message.getIdLong());
         });
     }
 }

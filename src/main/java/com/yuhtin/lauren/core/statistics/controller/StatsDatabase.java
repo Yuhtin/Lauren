@@ -24,7 +24,7 @@ public class StatsDatabase {
             ResultSet query = statement.executeQuery();
             while (query.next()) {
                 StatsController.get().getStats().put(query.getString("tipo"),
-                        Serializer.stats.deserialize(query.getString("data")));
+                        Serializer.getStats().deserialize(query.getString("data")));
             }
 
             query.close();
@@ -41,7 +41,7 @@ public class StatsDatabase {
         for (String name : StatsController.get().getStats().keySet()) {
             DatabaseController.getDatabase()
                     .updateSync("update `lauren_stats` set `data`= '"
-                            + Serializer.stats.serialize(StatsController.get().getStats().get(name)) +
+                            + Serializer.getStats().serialize(StatsController.get().getStats().get(name)) +
                             "' where `tipo` = '" + name + "'");
         }
 
@@ -51,6 +51,6 @@ public class StatsDatabase {
     public static void create(String name) {
         DatabaseController.getDatabase()
                 .updateSync(new Query().insert("lauren_stats", name,
-                        Serializer.stats.serialize(new StatsInfo(name))));
+                        Serializer.getStats().serialize(new StatsInfo(name))));
     }
 }

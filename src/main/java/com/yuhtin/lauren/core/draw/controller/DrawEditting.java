@@ -30,6 +30,12 @@ public class DrawEditting {
     }
 
     public Draw build() {
-        return new Draw(prize, winnersCount, Instant.now().plusSeconds(seconds), userID, Lauren.bot.getTextChannelsByName("\uD83C\uDF89┇sorteios", true).get(0), null, false);
+        return new Draw(prize,
+                winnersCount,
+                Instant.now().plusSeconds(seconds),
+                userID,
+                Lauren.getInstance()
+                        .getBot()
+                        .getTextChannelsByName("\uD83C\uDF89┇sorteios", true).get(0), null, false);
     }
 }

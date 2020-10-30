@@ -23,7 +23,7 @@ public class AddPointsCommand extends Command {
         if (!Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true))
             return;
 
-        if (event.getMessage().getMentionedMembers().size() < 1) {
+        if (event.getMessage().getMentionedMembers().isEmpty()) {
             event.getChannel().sendMessage("Ops, você precisa mencionar um jogador para receber os pontos")
                     .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             return;
@@ -32,25 +32,19 @@ public class AddPointsCommand extends Command {
         Member member = event.getMessage().getMentionedMembers().get(0);
         String[] arguments = event.getMessage().getContentRaw().split(" ");
 
-        if (arguments.length < 3) {
-            event.getChannel().sendMessage("Utilize desta forma: " + arguments[0] + " @Usuario <Ball ou Valorant> <quantidade>")
+        if (arguments.length < 2) {
+            event.getChannel().sendMessage("Utilize desta forma: " + arguments[0] + " @Usuario <quantidade>")
                     .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             return;
         }
 
-        int xp = Integer.parseInt(arguments[3]);
+        int xp = Integer.parseInt(arguments[2]);
         Player data = PlayerController.INSTANCE.get(member.getIdLong());
-
-        if (arguments[2].equalsIgnoreCase("Valorant")) data.valorantPoints += xp;
-        else if (arguments[2].equalsIgnoreCase("Ball")) data.poolPoints += xp;
-
-        else {
-            event.getChannel().sendMessage("Este jogo é invalido. Jogos válidos:").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-            event.getChannel().sendMessage("Ball ou Valorant").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-            return;
-        }
+        data.rankedPoints += xp;
 
         data.updateRank();
-        event.getChannel().sendMessage("Você adicionou **" + xp + "** pontos no jogo " + arguments[2] + " para o jogador " + member.getUser().getName()).queue();
+        event.getChannel().sendMessage("<:felizpakas:742373250037710918> " +
+                "Você adicionou **" + xp + "** pontos de patente ao jogador " + member.getUser().getName())
+                .queue();
     }
 }

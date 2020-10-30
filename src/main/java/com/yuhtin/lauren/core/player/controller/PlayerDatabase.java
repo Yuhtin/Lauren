@@ -24,13 +24,13 @@ public class PlayerDatabase {
             return new Player(userID);
         }
 
-        return Serializer.player.deserialize(playerORM.getData());
+        return Serializer.getPlayer().deserialize(playerORM.getData());
     }
 
     public static void save(long userID, Player player) {
         DatabaseController.getDatabase()
                 .updateSync("update `lauren_players`" +
-                        " set `data`= '" + Serializer.player.serialize(player) + "'," +
+                        " set `data`= '" + Serializer.getPlayer().serialize(player) + "'," +
                         " `xp`='" + player.experience + "' " +
                         "where `id` = '" + userID + "'");
     }
@@ -38,6 +38,6 @@ public class PlayerDatabase {
     public static void create(long userID) {
         DatabaseController.getDatabase()
                 .updateSync(new Query().insert("lauren_players", userID,
-                        Serializer.player.serialize(new Player(userID)), 0));
+                        Serializer.getPlayer().serialize(new Player(userID)), 0));
     }
 }

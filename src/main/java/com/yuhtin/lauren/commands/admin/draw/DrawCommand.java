@@ -49,16 +49,23 @@ public class DrawCommand extends Command {
                 .setFooter("Editando as informações do sorteio", event.getJDA().getSelfUser().getAvatarUrl());
 
         try {
-            event.getMember().getUser().openPrivateChannel().queue(channel -> channel.sendMessage(privateEmbed.build()).queue(m -> {
-                DrawController.editing = new DrawEditting(m, event.getMember().getIdLong(), event.getMember().getUser().openPrivateChannel());
-            }));
+            event.getMember()
+                    .getUser()
+                    .openPrivateChannel()
+                    .queue(channel -> channel.sendMessage(privateEmbed.build())
+                            .queue(m -> DrawController.editing = new DrawEditting(m, event.getMember().getIdLong(),
+                                    event.getMember().getUser().openPrivateChannel())));
 
             ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
             schedule.schedule(() -> {
                 if (DrawController.get() == null) {
 
                     try {
-                        event.getMember().getUser().openPrivateChannel().queue(channel -> channel.sendMessage("\uD83D\uDC94 Você demorou muito para criar o sorteio").queue());
+                        event.getMember()
+                                .getUser()
+                                .openPrivateChannel()
+                                .queue(channel -> channel.sendMessage("\uD83D\uDC94 Você demorou muito para criar o sorteio")
+                                        .queue());
                         DrawController.editing = null;
 
                     } catch (Exception exception) {

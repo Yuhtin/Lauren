@@ -29,14 +29,14 @@ public class ClearCommand extends Command {
         String[] args = event.getMessage().getContentRaw().split(" ");
         if (args.length < 2) {
             MessageAction message = event.getChannel().sendMessage("❌ Utilize $clear <numero> (mention).");
-            message.queue((m) -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+            message.queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             return;
         }
 
         int purge = Integer.parseInt(args[1]);
         if (purge > 100) {
             MessageAction message = event.getChannel().sendMessage("❌ O limite é de 100 mensagens por vez.");
-            message.queue((m) -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+            message.queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             return;
         }
 
@@ -51,14 +51,14 @@ public class ClearCommand extends Command {
         messages = messageHistory.retrievePast(purge).complete();
         int cleared = 0;
         for (Message message : messages) {
-            if (message == null) continue;
-            if (id != 0L && message.getAuthor().getIdLong() != id) continue;
+            if (message == null || (id != 0L && message.getAuthor().getIdLong() != id)) continue;
 
             event.getChannel().deleteMessageById(message.getId()).queue();
             ++cleared;
         }
+
         event.getChannel().sendMessage("<:online:703089222021808170> Foram apagadas **" + cleared + "** mensagens deste canal.")
-                .queue((m) -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+                .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
 
         Logger.log("The user " + event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator()
                 + " cleared " + cleared + " messages from channel #" + event.getChannel().getName()

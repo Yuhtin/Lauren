@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.commands.admin;
+package com.yuhtin.lauren.commands.admin.punishiment;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -20,7 +20,7 @@ public class BanCommand extends Command {
         if (!Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true))
             return;
 
-        if (event.getMessage().getMentionedMembers().size() == 0) {
+        if (event.getMessage().getMentionedMembers().isEmpty()) {
             event.getChannel().sendMessage("<a:nao:704295026036834375> Você precisa mencionar um jogador para banir, exemplo `$ban @Yuhtin`").queue();
             return;
         }

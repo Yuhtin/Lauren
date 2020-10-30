@@ -52,6 +52,6 @@ public class Logger {
     }
 
     public void save() {
-        if (Lauren.config.log) LoggerController.get().toFile(message);
+        if (Lauren.getInstance().getConfig().log) LoggerController.get().toFile(message);
     }
 }

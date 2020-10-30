@@ -36,10 +36,13 @@ public class InfoCommand extends Command {
 
                 .addField("📆 Criado em", "`" + timeCreated.getDayOfMonth() + " de " + timeCreated.getMonth().getDisplayName(TextStyle.SHORT, Locale.US) + ", "
                         + timeCreated.getYear() + " às " + timeCreated.getHour() + ":" + timeCreated.getMinute() + "`", true)
-                .addField("<a:feliz_2:726220815749611603> Versão atual", "`v" + Lauren.version + "`", true)
+                .addField("<a:feliz_2:726220815749611603> Versão atual", "`v" + Lauren.getInstance().getVersion() + "`", true)
                 .addField("🙍‍♂️ Dono", "`" + authorBot + "`", true)
 
-                .addField("<a:infinito:703187274912759899> Uptime", "`" + MathUtils.format(System.currentTimeMillis() - Lauren.startTime) + "`", true)
+                .addField("<a:infinito:703187274912759899> Uptime",
+                        "`" + MathUtils.format(System.currentTimeMillis() - Lauren.getInstance().getStartTime()) + "`",
+                        true)
+
                 .addField("💥 Servidores", "`Sou exclusiva deste servidor :d`", true)
                 .addField("🏓 Ping da API", "`" + event.getJDA().getGatewayPing() + "ms`", true)
 
@@ -48,7 +51,7 @@ public class InfoCommand extends Command {
                 .addField("<:discord:723587554422816889> Versão JDA", "`v4.2.0_186`", true)
 
                 .addField("⚙️ Núcleos", "`" + Runtime.getRuntime().availableProcessors() + " cores`", true)
-                .addField("\uD83D\uDEE2 Banco de Dados", "`" + Lauren.config.databaseType + "`", true)
+                .addField("\uD83D\uDEE2 Banco de Dados", "`" + Lauren.getInstance().getConfig().databaseType + "`", true)
                 .addField("\uD83C\uDF9E RAM", "`"
                         + PterodactylConnection.get().getServer().getServerUsage().getMemoryUsage() +
                         "M/"

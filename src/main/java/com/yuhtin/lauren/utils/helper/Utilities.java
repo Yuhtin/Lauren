@@ -11,6 +11,8 @@ import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
@@ -27,7 +29,7 @@ public class Utilities {
             if (!showMessage) return false;
 
             MessageAction message = channel.sendMessage("<a:nao:704295026036834375> Você não tem permissão para usar esta função");
-            message.queue((m) -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+            message.queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             Logger.log("Failed to check permissions for user " + getFullName(member.getUser()));
             return false;
         }
@@ -42,31 +44,36 @@ public class Utilities {
     }
 
     public boolean isOwner(MessageChannel channel, User user, boolean showMessage) {
-        if (Lauren.config.ownerID != user.getIdLong()) {
+        if (Lauren.getInstance().getConfig().ownerID != user.getIdLong()) {
             Logger.log("Failed to check owner permission for user " + getFullName(user));
             if (!showMessage) return false;
 
             MessageAction message = channel.sendMessage("<a:nao:704295026036834375> Você não tem permissão para usar esta função");
-            message.queue((m) -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+            message.queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             return false;
         }
         return true;
     }
 
+    public void cleanUp(Path path) throws IOException {
+        Files.delete(path);
+    }
+
     public void updateNickByLevel(Long userID, int level) {
-        Member member = Lauren.bot.getGuilds().get(0).getMemberById(userID);
+        Member member = Lauren.getInstance().getBot().getGuilds().get(0).getMemberById(userID);
         if (member == null) return;
 
         String nickname = member.getNickname();
         if (nickname == null) nickname = member.getEffectiveName();
         if (nickname.contains("] ")) nickname = nickname.split("] ")[1];
 
-        nickname = Lauren.config.formatNickname.replace("@level", "" + level) + nickname;
+        nickname = Lauren.getInstance().getConfig().formatNickname.replace("@level", "" + level) + nickname;
         if (nickname.length() > 32) nickname = nickname.substring(0, 32);
 
         try {
             member.modifyNickname(nickname).queue();
         } catch (HierarchyException ignored) {
+            Logger.log("Can't update member with role higher my self", LogType.ERROR);
         }
     }
 
@@ -102,24 +109,24 @@ public class Utilities {
     }
 
     public void writeToZip(File file, ZipOutputStream zipStream) throws IOException {
-        FileInputStream fis = new FileInputStream(file);
-        ZipEntry zipEntry = new ZipEntry(file.getName());
+        try (FileInputStream fis = new FileInputStream(file)) {
+            ZipEntry zipEntry = new ZipEntry(file.getName());
 
-        zipStream.putNextEntry(zipEntry);
-        byte[] bytes = new byte[1024];
-        int length;
-        while ((length = fis.read(bytes)) >= 0) {
-            zipStream.write(bytes, 0, length);
+            zipStream.putNextEntry(zipEntry);
+            byte[] bytes = new byte[1024];
+            int length;
+            while ((length = fis.read(bytes)) >= 0) {
+                zipStream.write(bytes, 0, length);
+            }
+
+            zipStream.closeEntry();
         }
-
-        zipStream.closeEntry();
-        fis.close();
     }
 
     public File getAttachment(Message.Attachment attachment) {
         File file = new File("temporary/" + attachment.getFileName());
         try {
-            file.createNewFile();
+            if (!file.createNewFile()) return null;
             return attachment.downloadToFile(file).get();
         } catch (Exception exception) {
             return null;
@@ -155,7 +162,7 @@ public class Utilities {
 
         try {
             properties.load(Lauren.class.getClassLoader().getResourceAsStream("project.properties"));
-            Lauren.version = properties.getProperty("version");
+            Lauren.getInstance().setVersion(properties.getProperty("version"));
         } catch (Exception exception) {
             Logger.log("An exception was caught while searching for my client version", LogType.ERROR);
             Logger.error(exception);

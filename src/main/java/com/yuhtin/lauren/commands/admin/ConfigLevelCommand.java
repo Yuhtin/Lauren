@@ -2,6 +2,7 @@ package com.yuhtin.lauren.commands.admin;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.mysql.cj.exceptions.NumberOutOfRange;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.xp.Level;
 import com.yuhtin.lauren.core.xp.XpController;
@@ -31,7 +32,7 @@ public class ConfigLevelCommand extends Command {
             identifier = Integer.parseInt(event.getArgs().split(" ")[0]);
 
             // invalid level
-            if (identifier > 35 || identifier < 1) throw new Exception();
+            if (identifier > 35 || identifier < 1) throw new NumberOutOfRange("");
         } catch (Exception exception) {
             event.getChannel()
                     .sendMessage("<:eita:764084277226373120>" +
@@ -43,7 +44,7 @@ public class ConfigLevelCommand extends Command {
         Level level = XpController.getInstance().getLevelByXp().get(identifier);
         level.getRolesToGive().clear();
 
-        if (event.getMessage().getMentionedRoles().size() == 0) {
+        if (event.getMessage().getMentionedRoles().isEmpty()) {
             event.getChannel().sendMessage("<:eita:764084277226373120> Você precisa mencionar pelo menos um cargo").queue();
             return;
         }

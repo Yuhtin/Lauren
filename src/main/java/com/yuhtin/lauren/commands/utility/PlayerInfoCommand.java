@@ -25,7 +25,7 @@ public class PlayerInfoCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        Member target = event.getMessage().getMentionedMembers().size() < 1 ? event.getMember() : event.getMessage().getMentionedMembers().get(0);
+        Member target = event.getMessage().getMentionedMembers().isEmpty() ? event.getMember() : event.getMessage().getMentionedMembers().get(0);
         Player controller = PlayerController.INSTANCE.get(target.getIdLong());
 
         String roles = Utilities.INSTANCE.rolesToString(target.getRoles());
@@ -35,21 +35,16 @@ public class PlayerInfoCommand extends Command {
         EmbedBuilder embedBuilder = new EmbedBuilder()
                 .setColor(target.getColor())
                 .setAuthor("Informações do jogador " + name, null, target.getUser().getAvatarUrl())
-                .setThumbnail(controller.valorantRank.position > controller.poolRank.position ? controller.valorantRank.url : controller.poolRank.url)
+                .setThumbnail(controller.rank.url)
 
                 .addField("⚗️ Experiência", "`Nível " + controller.level + " (" + Utilities.INSTANCE.format(controller.experience) + " XP)`", false)
                 .addField("🧶 Cargos", "`" + (roles.equalsIgnoreCase("") ? "Nenhum" : roles) + "`", false)
                 .addField("✨ Entrou em", userDate, false)
                 .addField("\uD83D\uDCB0 Dinheiro", "`$" + (Utilities.INSTANCE.format(controller.money)) + "`", false)
-                .addField("\uD83D\uDC7E Partidas totais", "`" + (controller.valorantMatches + controller.poolMatches) + "`", false)
-                .addField("\uD83C\uDFB1 8BallPool",
-                        "  \uD83D\uDD25 Partidas: " + controller.poolMatches + " \n" +
-                                "  \uD83E\uDD47 Vitórias: " + controller.poolWins + " \n\n" +
-                                "  \uD83C\uDFC6 Patente: " + controller.poolRank + "", true)
-                .addField("<:valorant:761444588006932491> Valorant",
-                        "  \uD83D\uDD25 Partidas: " + controller.valorantMatches + " \n" +
-                                "  \uD83E\uDD47 Vitórias: " + controller.valorantWins + " \n\n" +
-                                "  \uD83C\uDFC6 Patente: " + controller.valorantRank + "", true)
+                .addField("\uD83D\uDC7E Eventos que participou", "`" + controller.totalEvents + "`", false)
+                .addField("<:beacon:771543538252120094> Patente", "`" + controller.rank.name + "`", false)
+                .addField("<:lootbox:771545027829563402> LootBoxes", "`" + controller.lootBoxes + " caixas`", false)
+
                 .setFooter("Comando usado por " + event.getMember().getNickname(), event.getMember().getUser().getAvatarUrl())
                 .setTimestamp(Instant.now());
 
