@@ -1,7 +1,6 @@
 package com.yuhtin.lauren.core.player;
 
 import com.yuhtin.lauren.Lauren;
-import com.yuhtin.lauren.core.alarm.Alarm;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.controller.PlayerDatabase;
 import com.yuhtin.lauren.core.punish.PunishmentType;
@@ -21,8 +20,6 @@ import java.util.*;
 
 @Data
 public class Player implements Serializable {
-
-    public final transient List<Alarm> alarms = new ArrayList<>();
 
     public final List<String> alarmsName;
     public final List<String> winMatches;
