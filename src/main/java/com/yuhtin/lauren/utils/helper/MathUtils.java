@@ -72,6 +72,9 @@ public class MathUtils {
     }
 
     public static String plural(long x, String singular, String plural) {
-        return x + " " + (x == 1 ? singular : plural);
+        String date = String.valueOf(x);
+        if (date.length() == 1) date = "0" + date;
+
+        return date + " " + (x == 1 ? singular : plural);
     }
 }

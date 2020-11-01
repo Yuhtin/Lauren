@@ -13,7 +13,9 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.lang.reflect.Field;
+import java.text.NumberFormat;
 
 public class CommandManager {
     public CommandManager(JDA bot, String folder) {
@@ -25,7 +27,7 @@ public class CommandManager {
         clientBuilder.setHelpWord("riphelpmessage");
         clientBuilder.setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"));
         ClassPath cp;
-
+        
         try {
             cp = ClassPath.from(getClass().getClassLoader());
         } catch (IOException exception) {

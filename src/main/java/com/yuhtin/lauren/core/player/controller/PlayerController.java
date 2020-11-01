@@ -56,7 +56,7 @@ public class PlayerController {
                     player = tempPlayer;
                     Logger.log("Converted data of player " + userID + " to new Player class").save();
 
-                }else player = deserialize;
+                } else player = deserialize;
 
             }
 

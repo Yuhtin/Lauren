@@ -4,9 +4,9 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
+import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.controller.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.utils.helper.MathUtils;
 import com.yuhtin.lauren.utils.helper.Utilities;
@@ -22,43 +22,46 @@ import java.util.Locale;
         name = "perfil",
         type = CommandHandler.CommandType.SCRIM,
         description = "Visualizar o perfil de outro usuário",
-        alias = {"pinfo", "jogador", "playerinfo", "player"})
+        alias = {"pinfo", "jogador", "playerinfo", "player", "profile"})
 public class PlayerInfoCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
         Member target = event.getMessage().getMentionedMembers().isEmpty() ? event.getMember() : event.getMessage().getMentionedMembers().get(0);
-        Player controller = PlayerController.INSTANCE.get(target.getIdLong());
-        if (controller == null) {
-            Logger.log("Occured an error on try load player data of " + target.getIdLong(), LogType.ERROR).save();
-            event.getChannel().sendMessage("Ocorreu um erro em meus dados, defusa aqui <@272879983326658570>").queue();
+        Player player = PlayerController.INSTANCE.get(target.getIdLong());
+        if (player == null) {
 
+            Logger.log("Occured an error on try load player data of " + target.getIdLong(), LogType.ERROR).save();
+
+            event.getChannel().sendMessage("Ocorreu um erro em meus dados, defusa aqui <@272879983326658570>").queue();
             event.getChannel().sendMessage("Player ID: " + target.getIdLong()).queue();
 
             return;
+
         }
 
         String roles = Utilities.INSTANCE.rolesToString(target.getRoles());
         String name = target.getNickname() == null ? target.getUser().getName() : target.getNickname();
         String userDate = event.getMessage().getMember() == null ? "Erro" : subtractTime(target.getTimeJoined());
 
-        EmbedBuilder embedBuilder = new EmbedBuilder()
-                .setColor(target.getColor())
-                .setAuthor("Informações do jogador " + name, null, target.getUser().getAvatarUrl())
-                .setThumbnail(controller.getRank().getUrl())
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.setColor(target.getColor());
+        embed.setAuthor("Informações do jogador " + name, null, target.getUser().getAvatarUrl());
+        embed.setThumbnail(player.getRank().getUrl());
 
-                .addField("⚗️ Experiência", "`Nível " + controller.level + " (" + Utilities.INSTANCE.format(controller.experience) + " XP)`", false)
-                .addField("🧶 Cargos", "`" + (roles.equalsIgnoreCase("") ? "Nenhum" : roles) + "`", false)
-                .addField("✨ Entrou em", userDate, false)
-                .addField("\uD83D\uDCB0 Dinheiro", "`$" + (Utilities.INSTANCE.format(controller.money)) + "`", false)
-                .addField("\uD83D\uDC7E Eventos", "`" + controller.totalEvents + "`", false)
-                .addField("<:beacon:771543538252120094> Patente", "`" + controller.getRank().getName() + "`", false)
-                .addField("<:lootbox:771545027829563402> LootBoxes", "`" + controller.lootBoxes + " caixas`", false)
+        embed.addField("⚗️ Experiência", "`Nível " + player.level + " (" + Utilities.INSTANCE.format(player.experience) + " XP)`", false);
+        embed.addField("🧶 Cargos", "`" + (roles.equalsIgnoreCase("") ? "Nenhum" : roles) + "`", false);
+        embed.addField("✨ Entrou em", userDate, false);
+        embed.addField("<:boost_emoji:772285522852839445> Shards", "`$" + (Utilities.INSTANCE.format(player.money)) + " shards`", false);
+        embed.addField("\uD83D\uDC7E Eventos", "`" + player.totalEvents + "`", false);
+        embed.addField("<:beacon:771543538252120094> Patente", "`" + player.getRank().getName() + "`", false);
+        embed.addField("<:lootbox:771545027829563402> LootBoxes", "`" + player.lootBoxes + " caixas`", false);
+        embed.addField("\uD83D\uDD11 Chaves", "`" + player.keys + " keys`", false);
 
-                .setFooter("Comando usado por " + event.getMember().getNickname(), event.getMember().getUser().getAvatarUrl())
-                .setTimestamp(Instant.now());
+        embed.setFooter("Comando usado por " + event.getMember().getNickname(), event.getMember().getUser().getAvatarUrl());
+        embed.setTimestamp(Instant.now());
 
-        event.getChannel().sendMessage(embedBuilder.build()).queue();
+        event.getChannel().sendMessage(embed.build()).queue();
 
         StatsController.get().getStats("Player Command").suplyStats(1);
     }

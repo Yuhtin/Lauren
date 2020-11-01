@@ -35,7 +35,8 @@ public class Player implements Serializable {
             experience = 0,
             lootBoxes = 0,
             rankedPoints = 0,
-            totalEvents = 0;
+            totalEvents = 0,
+            keys = 0;
 
     public Rank rank = Rank.NOTHING;
 

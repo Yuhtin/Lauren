@@ -7,6 +7,7 @@ import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
+import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Getter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -64,7 +65,8 @@ public class LootGeneratorTask {
             public void run() {
                 Logger.log("Running LootGeneratorTask");
 
-                if (new Random().nextInt(100) > 2) return;
+                if (new Random().nextInt(100) > 7) return;
+
 
                 int value = new Random().nextInt(allowedChannels.size());
                 long channelID = allowedChannels.get(value);
@@ -76,6 +78,7 @@ public class LootGeneratorTask {
                     return;
                 }
 
+                Logger.log("Dropped loot on channel " + channel.getName());
 
                 Message message = channel.sendMessage(embed.build()).complete();
                 message.addReaction(":radiante:771541052590915585").queue();
@@ -94,6 +97,8 @@ public class LootGeneratorTask {
 
                             Player player = PlayerController.INSTANCE.get(event.getUserIdLong());
                             ++player.lootBoxes;
+
+                            Logger.log("The player " + Utilities.INSTANCE.getFullName(event.getUser()) + " getted the drop");
                         }, 10, TimeUnit.SECONDS,
 
                         () -> {

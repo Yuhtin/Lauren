@@ -35,6 +35,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.EnumSet;
 import java.util.Scanner;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -78,7 +79,7 @@ public class Lauren {
                 instance.setBot(JDABuilder.createDefault(instance.getConfig().token)
                         .setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"))
                         .setAutoReconnect(true)
-                        .enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGE_REACTIONS)
+                        .enableIntents(EnumSet.allOf(GatewayIntent.class))
                         .build());
 
             } catch (LoginException exception) {
