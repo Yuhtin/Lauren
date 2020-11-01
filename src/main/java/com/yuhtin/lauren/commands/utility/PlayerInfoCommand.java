@@ -22,7 +22,7 @@ import java.util.Locale;
         name = "perfil",
         type = CommandHandler.CommandType.SCRIM,
         description = "Visualizar o perfil de outro usuário",
-        alias = {"pinfo", "jogador", "playerinfo", "player", "profile"})
+        alias = {"pinfo", "jogador", "playerinfo", "player", "profile", "conta"})
 public class PlayerInfoCommand extends Command {
 
     @Override
