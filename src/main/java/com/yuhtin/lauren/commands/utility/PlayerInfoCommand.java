@@ -49,14 +49,14 @@ public class PlayerInfoCommand extends Command {
         embed.setAuthor("Informações do jogador " + name, null, target.getUser().getAvatarUrl());
         embed.setThumbnail(player.getRank().getUrl());
 
-        embed.addField("⚗️ Experiência", "`Nível " + player.level + " (" + Utilities.INSTANCE.format(player.experience) + " XP)`", false);
+        embed.addField("⚗️ Experiência", "`Nível " + player.getLevel() + " (" + Utilities.INSTANCE.format(player.getExperience()) + " XP)`", false);
         embed.addField("🧶 Cargos", "`" + (roles.equalsIgnoreCase("") ? "Nenhum" : roles) + "`", false);
         embed.addField("✨ Entrou em", userDate, false);
-        embed.addField("\uD83D\uDC7E Eventos", "`" + player.totalEvents + "`", false);
-        embed.addField("<:boost_emoji:772285522852839445> Shards", "`$" + (Utilities.INSTANCE.format(player.money)) + " shards`", true);
+        embed.addField("\uD83D\uDC7E Eventos", "`" + player.getTotalEvents() + "`", false);
+        embed.addField("<:boost_emoji:772285522852839445> Shards", "`$" + (Utilities.INSTANCE.format(player.getMoney())) + " shards`", true);
         embed.addField("<:beacon:771543538252120094> Patente", "`" + player.getRank().getName() + "`", true);
-        embed.addField("<:lootbox:771545027829563402> LootBoxes", "`" + player.lootBoxes + " caixas`", true);
-        embed.addField("\uD83D\uDD11 Chaves", "`" + player.keys + " keys`", true);
+        embed.addField("<:lootbox:771545027829563402> LootBoxes", "`" + player.getLootBoxes() + " caixas`", true);
+        embed.addField("\uD83D\uDD11 Chaves", "`" + player.getKeys() + " keys`", true);
 
         embed.setFooter("Comando usado por " + event.getMember().getNickname(), event.getMember().getUser().getAvatarUrl());
         embed.setTimestamp(Instant.now());

@@ -22,7 +22,7 @@ public class AbuseCommand extends Command {
             return;
 
         Player player = PlayerController.INSTANCE.get(event.getAuthor().getIdLong());
-        ++player.keys;
-        ++player.lootBoxes;
+        player.setKeys(player.getKeys() + 1);
+        player.setLootBoxes(player.getLootBoxes() + 1);
     }
 }

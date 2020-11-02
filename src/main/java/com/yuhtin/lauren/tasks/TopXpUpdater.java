@@ -32,20 +32,23 @@ public class TopXpUpdater {
             @Override
             public void run() {
                 topPlayers = "";
-                long lastMillis = System.currentTimeMillis();
 
                 Logger.log("Started TopXpUpdater task");
+                long lastMillis = System.currentTimeMillis();
+
                 List<SimplePlayer> players = new ArrayList<>();
+
                 String sql = "SELECT * FROM `lauren_players` ORDER BY `xp` DESC LIMIT 10";
                 try (PreparedStatement statement = connection.prepareStatement(sql)) {
                     ResultSet resultSet = statement.executeQuery();
 
                     while (resultSet.next()) {
                         Player data = Serializer.getPlayer().deserialize(resultSet.getString("data"));
-                        players.add(new SimplePlayer(resultSet.getLong("id"), data.level, data.experience));
+                        players.add(new SimplePlayer(resultSet.getLong("id"), data.getLevel(), data.getExperience()));
                     }
 
                     resultSet.close();
+
                 } catch (Exception exception) {
                     Logger.log("Can't update top xp");
                     return;
@@ -54,7 +57,7 @@ public class TopXpUpdater {
                 StringBuilder builder = new StringBuilder();
                 builder.append("<:version:756767328334512179> Top 10 jogadores mais viciados\n\n");
 
-                for (int i = 1; i <= 10; i++) {
+                for (int i = 1; i < players.size(); i++) {
                     SimplePlayer simplePlayer = players.get(i - 1);
                     builder.append(i)
                             .append("º - <@")
@@ -71,8 +74,9 @@ public class TopXpUpdater {
 
                 long ms = System.currentTimeMillis() - lastMillis;
                 Logger.log("Finished TopXpUpdater task successfully in " + ms + " ms");
+
             }
-        }, 1, 30, TimeUnit.MINUTES);
+        }, 0, 30, TimeUnit.MINUTES);
 
     }
 }

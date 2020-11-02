@@ -22,9 +22,9 @@ public class DailyCommand extends Command {
     protected void execute(CommandEvent event) {
         Player data = PlayerController.INSTANCE.get(event.getMember().getIdLong());
 
-        if (data.dailyDelay > System.currentTimeMillis()) {
+        if (data.getDailyDelay() > System.currentTimeMillis()) {
             event.getChannel().sendMessage("Poxa 😥 Você precisa aguardar mais `"
-                    + MathUtils.format(data.dailyDelay - System.currentTimeMillis()) + "` para usar este comando novamente").queue();
+                    + MathUtils.format(data.getDailyDelay() - System.currentTimeMillis()) + "` para usar este comando novamente").queue();
             return;
         }
 

@@ -177,7 +177,7 @@ public class LootBoxCommand extends Command {
         }
 
         public String randomReward() {
-            return Reward.values()[new Random().nextInt(Reward.values().length)].getEmoji();
+            return Reward.getRandomReward().getEmoji();
         }
     }
 }

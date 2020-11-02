@@ -96,7 +96,7 @@ public class LootGeneratorTask {
                                     .queue();
 
                             Player player = PlayerController.INSTANCE.get(event.getUserIdLong());
-                            ++player.lootBoxes;
+                            player.setLootBoxes(player.getLootBoxes() + 1);
 
                             Logger.log("The player " + Utilities.INSTANCE.getFullName(event.getUser()) + " getted the drop");
                         }, 10, TimeUnit.SECONDS,

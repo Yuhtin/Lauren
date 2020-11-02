@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.core.music;
 
+import com.sedmelluq.discord.lavaplayer.filter.equalizer.EqualizerFactory;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -7,25 +8,36 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.yuhtin.lauren.Lauren;
+import lombok.Getter;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
 
 public class TrackManager extends AudioEventAdapter {
 
-    private static TrackManager INSTANCE;
+    private static final float[] BASS_BOOST = {
+            0.2f, 0.15f, 0.1f,
+            0.05f, 0.0f, -0.05f,
+            -0.1f, -0.1f, -0.1f,
+            -0.1f, -0.1f, -0.1f,
+            -0.1f, -0.1f, -0.1f
+    };
+
+    private static TrackManager instance;
 
     public final GuildMusicManager musicManager;
     public final AudioPlayerManager audioManager;
+    @Getter private final EqualizerFactory equalizer;
     public final AudioPlayer player;
     public VoiceChannel audio;
 
     public TrackManager() {
         this.audioManager = new DefaultAudioPlayerManager();
         this.player = audioManager.createPlayer();
+        this.equalizer = new EqualizerFactory();
 
         musicManager = new GuildMusicManager(player);
         AudioSourceManagers.registerRemoteSources(audioManager);
@@ -33,12 +45,14 @@ public class TrackManager extends AudioEventAdapter {
 
         player.addListener(this);
         Lauren.getInstance().getGuild().getAudioManager().setSendingHandler(new AudioPlayerSendHandler(player));
+
+        player.setFilterFactory(this.equalizer);
     }
 
     public static TrackManager get() {
-        if (INSTANCE == null) INSTANCE = new TrackManager();
+        if (instance == null) instance = new TrackManager();
 
-        return INSTANCE;
+        return instance;
     }
 
     public void destroy() {
@@ -98,14 +112,29 @@ public class TrackManager extends AudioEventAdapter {
                 .orElse(null);
     }
 
-    private boolean permitedTrack(AudioTrack track) {
-        // duration limit
-        return Math.round(track.getDuration() / 1000.0) <= TimeUnit.MINUTES.toSeconds(20)
+    public void eqHighBass(float diff) {
+        player.setFilterFactory(equalizer);
+        for (int i = 0; i < BASS_BOOST.length; i++) {
+            equalizer.setGain(i, BASS_BOOST[i] + diff);
+        }
+    }
 
-                //block animal sounds '-'
-                && !track.getInfo().title.toLowerCase().contains("som do")
-                && !track.getInfo().title.toLowerCase().contains("som de")
-                && !track.getInfo().title.toLowerCase().contains("som da");
+    public void eqLowBass(float diff) {
+        player.setFilterFactory(equalizer);
+        for (int i = 0; i < BASS_BOOST.length; i++) {
+            equalizer.setGain(i, -BASS_BOOST[i] + diff);
+        }
+    }
+
+    public void bassBoost() {
+        player.setFilterFactory(equalizer);
+        for (int i = 0; i < BASS_BOOST.length; i++) {
+            equalizer.setGain(i, BASS_BOOST[i] + 2.35f);
+        }
+
+        for (int i = 0; i < BASS_BOOST.length; i++) {
+            equalizer.setGain(i, -BASS_BOOST[i] + 1.05f);
+        }
     }
 
     public enum SearchType {

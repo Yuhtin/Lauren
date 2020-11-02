@@ -40,7 +40,7 @@ public class SetPointsCommand extends Command {
 
         int xp = Integer.parseInt(arguments[2]);
         Player data = PlayerController.INSTANCE.get(member.getIdLong());
-        data.rankedPoints = xp;
+        data.setRankedPoints(xp);
 
         data.updateRank();
         event.getChannel().sendMessage("<:felizpakas:742373250037710918> " +

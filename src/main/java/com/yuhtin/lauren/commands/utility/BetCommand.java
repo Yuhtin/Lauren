@@ -78,7 +78,7 @@ public class BetCommand extends Command {
         }
 
         Player data = PlayerController.INSTANCE.get(event.getAuthor().getIdLong());
-        if (data.money < money) {
+        if (data.getMoney() < money) {
             event.getChannel().sendMessage("<:chorano:726207542413230142> <@" + event.getAuthor().getId() + ">, você não tem dinheiro suficiente para realizar esta aposta.").queue();
             return;
         }

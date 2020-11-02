@@ -14,6 +14,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
+import java.util.concurrent.TimeUnit;
+
 @Builder
 @Data
 public final class AudioResultHandler implements AudioLoadResultHandler {
@@ -26,6 +28,7 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
     @Override
     public void trackLoaded(AudioTrack track) {
 
+        if (!permitedTrack(track)) return;
         if (TrackManager.get().player.isPaused()) TrackManager.get().player.setPaused(false);
 
         EmbedBuilder embed = new EmbedBuilder()
@@ -75,8 +78,12 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
                 for (int i = 0; i < maxMusics; i++) {
                     AudioTrack track = playlist.getTracks().get(i);
 
-                    if (track.getInfo().title != null) TrackManager.get().play(track, member);
-                    else {
+                    if (track.getInfo().title != null) {
+
+                        if (!permitedTrack(track)) return;
+                        TrackManager.get().play(track, member);
+
+                    } else {
 
                         String link = "https://youtube.com/watch?v=" + track.getIdentifier();
                         TrackManager.get().loadTrack(link, member, channel, TrackManager.SearchType.LOOKING_PLAYLIST);
@@ -103,5 +110,15 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
             channel.sendMessage("**Erro** \uD83D\uDCCC `O vídeo ou playlist está privado`").queue();
             Logger.error(exception);
         }
+    }
+
+    private boolean permitedTrack(AudioTrack track) {
+        // duration limit
+        return Math.round(track.getDuration() / 1000.0) <= TimeUnit.MINUTES.toSeconds(20)
+
+                //block animal sounds '-'
+                && !track.getInfo().title.toLowerCase().contains("som do")
+                && !track.getInfo().title.toLowerCase().contains("som de")
+                && !track.getInfo().title.toLowerCase().contains("som da");
     }
 }

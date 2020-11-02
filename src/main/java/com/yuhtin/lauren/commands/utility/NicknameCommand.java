@@ -21,7 +21,7 @@ public class NicknameCommand extends Command {
         }
 
         String nick = event.getArgs().replace("[", "").replace("]", "");
-        nick = "[" + PlayerController.INSTANCE.get(event.getAuthor().getIdLong()).level + "] " + nick;
+        nick = "[" + PlayerController.INSTANCE.get(event.getAuthor().getIdLong()).getLevel() + "] " + nick;
 
         if (nick.length() > 32) {
             event.getChannel().sendMessage("<:chorano:726207542413230142> O nick escolhido é muito grande").queue();

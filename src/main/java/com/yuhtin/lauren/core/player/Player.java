@@ -21,26 +21,23 @@ import java.util.*;
 @Data
 public class Player implements Serializable {
 
-    public final List<String> alarmsName;
-    public final List<String> winMatches;
-    public final Map<PunishmentType, Long> punishs = new HashMap<>();
+    private Map<PunishmentType, Long> punishs = new HashMap<>();
 
     // Geral
-    public long userID, dailyDelay;
-    public int level = 0,
-            money = 100,
-            experience = 0,
-            lootBoxes = 0,
-            rankedPoints = 0,
-            totalEvents = 0,
-            keys = 0;
+    private long userID;
+    private long dailyDelay;
+    private int level = 0;
+    private int money = 100;
+    private int experience = 0;
+    private int lootBoxes = 0;
+    private int rankedPoints = 0;
+    private int totalEvents = 0;
+    private int keys = 0;
 
-    public Rank rank = Rank.NOTHING;
+    private Rank rank = Rank.NOTHING;
 
     public Player(long userID) {
         this.userID = userID;
-        winMatches = new ArrayList<>();
-        alarmsName = new ArrayList<>();
     }
 
     public void updateLevel(int level) {
