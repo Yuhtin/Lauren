@@ -129,11 +129,11 @@ public class TrackManager extends AudioEventAdapter {
     public void bassBoost() {
         player.setFilterFactory(equalizer);
         for (int i = 0; i < BASS_BOOST.length; i++) {
-            equalizer.setGain(i, BASS_BOOST[i] + 2.35f);
+            equalizer.setGain(i, BASS_BOOST[i] + 0.12f);
         }
 
         for (int i = 0; i < BASS_BOOST.length; i++) {
-            equalizer.setGain(i, -BASS_BOOST[i] + 1.05f);
+            equalizer.setGain(i, -BASS_BOOST[i] + 0.013f);
         }
     }
 

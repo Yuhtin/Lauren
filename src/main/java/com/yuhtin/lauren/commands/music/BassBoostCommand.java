@@ -39,7 +39,7 @@ public class BassBoostCommand extends Command {
 
             case "high": {
 
-                TrackManager.get().eqHighBass(.55f);
+                TrackManager.get().eqHighBass(.083f);
                 event.getChannel().sendMessage(":loud_sound: Equalizando o grave da música!").queue();
                 break;
 
