@@ -32,7 +32,7 @@ public class SetPointsCommand extends Command {
         Member member = event.getMessage().getMentionedMembers().get(0);
         String[] arguments = event.getMessage().getContentRaw().split(" ");
 
-        if (arguments.length < 2) {
+        if (arguments.length < 3) {
             event.getChannel().sendMessage("Utilize desta forma: " + arguments[0] + " @Usuario <quantidade>")
                     .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             return;
@@ -40,7 +40,7 @@ public class SetPointsCommand extends Command {
 
         int xp = Integer.parseInt(arguments[2]);
         Player data = PlayerController.INSTANCE.get(member.getIdLong());
-        data.rankedPoints = xp;
+        data.setRankedPoints(xp);
 
         data.updateRank();
         event.getChannel().sendMessage("<:felizpakas:742373250037710918> " +

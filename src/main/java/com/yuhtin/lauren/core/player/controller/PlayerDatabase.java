@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.core.player.controller;
 
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.database.DatabaseController;
 import com.yuhtin.lauren.utils.serialization.Serializer;
@@ -31,7 +32,7 @@ public class PlayerDatabase {
         DatabaseController.getDatabase()
                 .updateSync("update `lauren_players`" +
                         " set `data`= '" + Serializer.getPlayer().serialize(player) + "'," +
-                        " `xp`='" + player.experience + "' " +
+                        " `xp`='" + player.getExperience() + "' " +
                         "where `id` = '" + userID + "'");
     }
 

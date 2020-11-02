@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.database.types;
 
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.database.Data;
 
 import java.io.File;
@@ -11,12 +12,24 @@ public class SQLite implements Data {
     @Override
     public Connection openConnection() {
         File file = new File("config/lauren.db");
-        String URL = "jdbc:sqlite:" + file + "?autoReconnect=true";
+        if (!file.exists()) {
+
+            try {
+                file.createNewFile();
+            } catch (Exception exception) {
+                Logger.error(exception);
+            }
+
+        }
+
+        String url = "jdbc:sqlite:" + file;
         try {
             Class.forName("org.sqlite.JDBC");
-            return DriverManager.getConnection(URL);
+            return DriverManager.getConnection(url);
         } catch (Exception e) {
-            System.out.println("Conexao com o SQLite falhou");
+            Logger.log("Conexao com o SQLite falhou").save();
+            Logger.error(e);
+
             return null;
         }
     }

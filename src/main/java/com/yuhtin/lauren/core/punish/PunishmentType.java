@@ -1,11 +1,12 @@
 package com.yuhtin.lauren.core.punish;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @AllArgsConstructor
 public enum PunishmentType {
 
-    BAN("Ban"), MUTE("Mute"), CALLBLOCK("Sem call");
+    BAN("banido"), MUTE("silenciado"), CALLBLOCK("bloqueado de call's");
 
-    private final String formated;
+    @Getter private final String formated;
 }

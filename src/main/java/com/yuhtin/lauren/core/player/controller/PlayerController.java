@@ -3,9 +3,11 @@ package com.yuhtin.lauren.core.player.controller;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.OldPlayer;
 import com.yuhtin.lauren.core.player.Player;
+import com.yuhtin.lauren.core.punish.PunishmentType;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.serialization.Serializer;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimerTask;
@@ -42,7 +44,7 @@ public class PlayerController {
             else {
 
                 Player deserialize = Serializer.getPlayer().deserialize(data);
-                if (deserialize.rank == null) {
+                if (deserialize.getRank() == null) {
                     // execute conversion
 
                     Player tempPlayer = new Player(userID);
@@ -56,8 +58,9 @@ public class PlayerController {
                     player = tempPlayer;
                     Logger.log("Converted data of player " + userID + " to new Player class").save();
 
-                }else player = deserialize;
+                } else player = deserialize;
 
+                if (deserialize.getPunishs() == null) deserialize.setPunishs(new EnumMap<>(PunishmentType.class));
             }
 
             cache.put(userID, player);

@@ -34,7 +34,9 @@ import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Paths;
+import java.sql.Connection;
 import java.time.LocalDateTime;
+import java.util.EnumSet;
 import java.util.Scanner;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -78,7 +80,7 @@ public class Lauren {
                 instance.setBot(JDABuilder.createDefault(instance.getConfig().token)
                         .setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"))
                         .setAutoReconnect(true)
-                        .enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGE_REACTIONS)
+                        .enableIntents(EnumSet.allOf(GatewayIntent.class))
                         .build());
 
             } catch (LoginException exception) {
@@ -147,8 +149,14 @@ public class Lauren {
     }
 
     public static void finish() {
-        PlayerController.INSTANCE.savePlayers();
-        StatsDatabase.save();
+
+        if (DatabaseController.getDatabase() != null) {
+
+            PlayerController.INSTANCE.savePlayers();
+            StatsDatabase.save();
+
+        }
+
         TrackManager.get().destroy();
         TaskHelper.runTaskLater(new TimerTask() {
             @Override
@@ -195,7 +203,17 @@ public class Lauren {
                     instance.getConfig().mySqlPassword,
                     instance.getConfig().mySqlDatabase);
 
-        DatabaseController.get().constructDatabase(dataType.openConnection());
+        Connection connection = dataType.openConnection();
+        if (connection == null) {
+
+            Logger.log("Closing bot").save();
+            finish();
+
+            return;
+
+        }
+
+        DatabaseController.get().constructDatabase(connection);
         DatabaseController.get().loadAll();
 
         Logger.log("Connection to database successful", LogType.STARTUP).save();
