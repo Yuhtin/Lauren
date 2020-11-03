@@ -19,6 +19,7 @@ import com.yuhtin.lauren.models.manager.CommandManager;
 import com.yuhtin.lauren.models.manager.EventsManager;
 import com.yuhtin.lauren.service.PterodactylConnection;
 import com.yuhtin.lauren.tasks.LootGeneratorTask;
+import com.yuhtin.lauren.tasks.PunishmentCheckerTask;
 import com.yuhtin.lauren.tasks.TopXpUpdater;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
@@ -140,6 +141,8 @@ public class Lauren {
                 PlayerController.INSTANCE.savePlayers();
             }
         }, 5, 5, TimeUnit.MINUTES);
+
+        TaskHelper.runTaskTimerAsync(new PunishmentCheckerTask(), 1, 1, TimeUnit.MINUTES);
 
         TopXpUpdater.getInstance().startRunnable();
 

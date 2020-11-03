@@ -7,8 +7,6 @@ import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
 import com.yuhtin.lauren.utils.helper.Utilities;
 
-import javax.sound.midi.Track;
-
 @CommandHandler(
         name = "bass",
         type = CommandHandler.CommandType.MUSIC,
@@ -29,42 +27,39 @@ public class BassBoostCommand extends Command {
         }
 
         switch (event.getArgs().toLowerCase()) {
-            case "low": {
+
+            case "low":
 
                 TrackManager.get().eqLowBass(-.35f);
                 event.getChannel().sendMessage(":loud_sound: Equalizando o baixo da música!").queue();
                 break;
 
-            }
-
-            case "high": {
+            case "high":
 
                 TrackManager.get().eqHighBass(.083f);
                 event.getChannel().sendMessage(":loud_sound: Equalizando o grave da música!").queue();
                 break;
 
-            }
 
-            case "boost": {
+            case "boost":
 
                 TrackManager.get().bassBoost();
                 event.getChannel().sendMessage(":loud_sound: Equalizando tudão, cuidado rapaziada!").queue();
                 break;
 
-            }
 
-            case "normal": {
+            case "normal":
 
                 TrackManager.get().eqHighBass(0);
                 TrackManager.get().eqLowBass(0);
                 event.getChannel().sendMessage(":loud_sound: Tirando equalização").queue();
                 break;
 
-            }
 
-            default: {
-                event.getChannel().sendMessage(":grey_question: Não encontrei essa equalização, equalizações válidas: `low, high ou bass`").queue();
-            }
+            default:
+                event.getChannel()
+                        .sendMessage(":grey_question: Não encontrei essa equalização, equalizações válidas: `low, high ou bass`")
+                        .queue();
         }
     }
 
