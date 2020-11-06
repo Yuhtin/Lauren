@@ -41,7 +41,7 @@ public class CommandCache {
 
                 .addField("__Informações do comando:__", "", false)
                 .addField("**Nome** ❓ - _Identificador principal do comando_", rawCommand.name, false)
-                .addField("**Categoria** \uD83E\uDDE9 - _Categoria do comando_", rawCommand.type.name, false)
+                .addField("**Categoria** \uD83E\uDDE9 - _Categoria do comando_", rawCommand.type.getName(), false)
                 .addField("**Descrição** ⭐️ - _Pequena descrição do comando_", rawCommand.description, false));
 
         commandsType.get(type).add(rawCommand);

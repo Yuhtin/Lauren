@@ -46,8 +46,7 @@ import java.util.zip.ZipOutputStream;
 @lombok.Data
 public class Lauren {
 
-    @Getter
-    private static Lauren instance = new Lauren();
+    @Getter private static Lauren instance = new Lauren();
 
     private JDA bot;
     private Guild guild;
@@ -142,7 +141,7 @@ public class Lauren {
             }
         }, 5, 5, TimeUnit.MINUTES);
 
-        TaskHelper.runTaskTimerAsync(new PunishmentCheckerTask(), 1, 1, TimeUnit.MINUTES);
+        TaskHelper.runTaskTimerAsync(new PunishmentCheckerTask(), 5, 5, TimeUnit.MINUTES);
 
         TopXpUpdater.getInstance().startRunnable();
 
@@ -207,14 +206,6 @@ public class Lauren {
                     instance.getConfig().mySqlDatabase);
 
         Connection connection = dataType.openConnection();
-        if (connection == null) {
-
-            Logger.log("Closing bot").save();
-            finish();
-
-            return;
-
-        }
 
         DatabaseController.get().constructDatabase(connection);
         DatabaseController.get().loadAll();

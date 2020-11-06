@@ -58,7 +58,7 @@ public class BassBoostCommand extends Command {
 
             default:
                 event.getChannel()
-                        .sendMessage(":grey_question: Não encontrei essa equalização, equalizações válidas: `low, high ou bass`")
+                        .sendMessage(":grey_question: Não encontrei essa equalização, equalizações válidas: `low, high, boost ou normal`")
                         .queue();
         }
     }

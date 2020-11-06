@@ -28,7 +28,17 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
     @Override
     public void trackLoaded(AudioTrack track) {
 
-        if (!permitedTrack(track)) return;
+        if (!permitedTrack(track)) {
+
+            if (searchType == TrackManager.SearchType.SIMPLE_SEARCH)
+                channel.sendMessage("<:rindo_de_voce:751941649655136588>" +
+                        " Sua música foi bloqueada por ser muito grande ou ser 'som de' algo")
+                        .queue();
+            return;
+
+        }
+
+
         if (TrackManager.get().player.isPaused()) TrackManager.get().player.setPaused(false);
 
         EmbedBuilder embed = new EmbedBuilder()
@@ -80,7 +90,7 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
 
                     if (track.getInfo().title != null) {
 
-                        if (!permitedTrack(track)) return;
+                        if (!permitedTrack(track)) continue;
                         TrackManager.get().play(track, member);
 
                     } else {

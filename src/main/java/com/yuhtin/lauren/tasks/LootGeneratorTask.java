@@ -67,7 +67,6 @@ public class LootGeneratorTask {
 
                 if (new Random().nextInt(100) > 7) return;
 
-
                 int value = new Random().nextInt(allowedChannels.size());
                 long channelID = allowedChannels.get(value);
 

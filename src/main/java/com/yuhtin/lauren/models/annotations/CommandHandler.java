@@ -1,6 +1,7 @@
 package com.yuhtin.lauren.models.annotations;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -30,6 +31,6 @@ public @interface CommandHandler {
         ADMIN("Admin"),
         OTHER("Outros");
 
-        public String name;
+        @Getter private final String name;
     }
 }
