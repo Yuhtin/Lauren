@@ -99,6 +99,7 @@ public class Lauren {
             instance.getBot().addEventListener(eventWaiter);
             QueueCommand.getBuilder().setEventWaiter(eventWaiter);
             SugestionCommand.setWaiter(eventWaiter);
+            LootGeneratorTask.getInstance().setEventWaiter(eventWaiter);
             XpController.getInstance();
         });
 
@@ -144,9 +145,7 @@ public class Lauren {
         TaskHelper.runTaskTimerAsync(new PunishmentCheckerTask(), 5, 5, TimeUnit.MINUTES);
 
         TopXpUpdater.getInstance().startRunnable();
-
         LootGeneratorTask.getInstance().startRunnable();
-        Lauren.getInstance().getBot().addEventListener(LootGeneratorTask.getInstance().getEventWaiter());
 
     }
 
