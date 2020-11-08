@@ -17,7 +17,7 @@ import java.sql.PreparedStatement;
 @CommandHandler(
         name = "configlevel",
         type = CommandHandler.CommandType.ADMIN,
-        alias = {},
+        alias = {"levelreward"},
         description = "Configurar os rewards de um level"
 )
 public class ConfigLevelCommand extends Command {

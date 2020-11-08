@@ -1,11 +1,11 @@
 package com.yuhtin.lauren.commands.utility;
 
-import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.models.enums.SugestionStage;
+import com.yuhtin.lauren.models.objects.CommonCommand;
 import com.yuhtin.lauren.models.objects.Sugestion;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Setter;
@@ -24,13 +24,13 @@ import java.util.concurrent.TimeUnit;
         description = "Sugerir alterações no servidor",
         alias = {"sugestão", "sugerir"}
 )
-public class SugestionCommand extends Command {
+public class SugestionCommand extends CommonCommand {
 
     @Setter private static EventWaiter waiter;
     private final Map<Long, Sugestion> sugestionMap = new HashMap<>();
 
     @Override
-    protected void execute(CommandEvent event) {
+    protected void executeCommand(CommandEvent event) {
 
         if (sugestionMap.containsKey(event.getAuthor().getIdLong())) {
 

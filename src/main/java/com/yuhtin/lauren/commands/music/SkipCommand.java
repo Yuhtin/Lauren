@@ -1,10 +1,10 @@
 package com.yuhtin.lauren.commands.music;
 
-import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.music.AudioInfo;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.models.objects.CommonCommand;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
 import com.yuhtin.lauren.utils.helper.Utilities;
 
@@ -14,10 +14,10 @@ import com.yuhtin.lauren.utils.helper.Utilities;
         description = "Iniciar uma votação para pular a música atual",
         alias = {"votar", "skip"}
 )
-public class SkipCommand extends Command {
+public class SkipCommand extends CommonCommand {
 
     @Override
-    protected void execute(CommandEvent event) {
+    protected void executeCommand(CommandEvent event) {
         if (!TrackUtils.get().isInVoiceChannel(event.getMember())) {
             event.getChannel().sendMessage("\uD83C\uDFB6 Amiguinho, entre no canal `\uD83C\uDFB6┇Batidões` para poder usar comandos de música").queue();
             return;

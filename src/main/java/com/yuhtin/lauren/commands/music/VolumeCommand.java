@@ -1,21 +1,21 @@
 package com.yuhtin.lauren.commands.music;
 
-import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.models.objects.CommonCommand;
 import com.yuhtin.lauren.utils.helper.Utilities;
 
 @CommandHandler(
         name = "volume",
         type = CommandHandler.CommandType.MUSIC,
         description = "Definir um volume para meus batidões (não coloca menos de 30 se não deixa de ser batidão ;-;)",
-        alias = {}
+        alias = {"som"}
 )
-public class VolumeCommand extends Command {
+public class VolumeCommand extends CommonCommand {
 
     @Override
-    protected void execute(CommandEvent event) {
+    protected void executeCommand(CommandEvent event) {
         if (!Utilities.INSTANCE.isDJ(event.getMember(), event.getChannel(), false)) {
             event.getChannel().sendMessage("\uD83D\uDD0A Meu volume atual está em: `" + TrackManager.get().player.getVolume() + "%`").queue();
             return;

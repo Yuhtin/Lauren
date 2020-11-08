@@ -1,9 +1,10 @@
 package com.yuhtin.lauren.commands.help;
 
-import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.models.objects.CommonCommand;
 import com.yuhtin.lauren.service.PterodactylConnection;
+import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.SneakyThrows;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -16,16 +17,23 @@ import java.time.Instant;
         name = "host",
         type = CommandHandler.CommandType.HELP,
         description = "Verificar as informações da minha hospedagem",
-        alias = {"pong", "delay", "ping"})
-public class PingCommand extends Command {
+        alias = {"pong", "delay", "ping"}
+)
+public class PingCommand extends CommonCommand {
 
     @SneakyThrows
     @Override
-    protected void execute(CommandEvent event) {
+    protected void executeCommand(CommandEvent event) {
+
         long actual = System.currentTimeMillis();
-        event.getChannel().sendMessage("Carregando...").queue(m -> {
-            m.editMessage(createEmbed(m.getTimeCreated().toInstant().toEpochMilli() - actual,
-                    event.getMember(), event.getJDA())).queue();
+        event.getChannel().sendMessage("Carregando...").queue(message -> {
+            MessageEmbed embed = createEmbed(
+                    message.getTimeCreated().toInstant().toEpochMilli() - actual,
+                    event.getMember(),
+                    event.getJDA()
+            );
+
+            message.editMessage(embed).queue();
         });
     }
 

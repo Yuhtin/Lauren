@@ -1,11 +1,11 @@
 package com.yuhtin.lauren.commands.music;
 
-import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.menu.Paginator;
 import com.yuhtin.lauren.core.music.AudioInfo;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.models.objects.CommonCommand;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
 import lombok.Getter;
 
@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
         description = "Ver as músicas que eu ainda vou tocar",
         alias = {"queue", "pl", "fila"}
 )
-public class QueueCommand extends Command {
+public class QueueCommand extends CommonCommand {
 
     @Getter private static final Paginator.Builder builder = new Paginator.Builder()
             .setColumns(1)
@@ -31,7 +31,7 @@ public class QueueCommand extends Command {
             .setTimeout(1, TimeUnit.MINUTES);
 
     @Override
-    protected void execute(CommandEvent event) {
+    protected void executeCommand(CommandEvent event) {
         TrackManager trackManager = TrackManager.get();
         if (trackManager.getQueuedTracks().isEmpty()) {
             event.getChannel().sendMessage("\uD83D\uDCCC Eita, não tem nenhum batidão pra tocar, adiciona uns ai <3").queue();

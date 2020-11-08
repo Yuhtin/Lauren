@@ -1,8 +1,8 @@
 package com.yuhtin.lauren.commands.utility;
 
-import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.models.objects.CommonCommand;
 import com.yuhtin.lauren.tasks.TopXpUpdater;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -14,10 +14,10 @@ import java.time.Instant;
         description = "Ver os jogadores mais viciados no meu servidor",
         alias = {"xptop", "topplayers", "top"}
 )
-public class TopXpCommand extends Command {
+public class TopXpCommand extends CommonCommand {
 
     @Override
-    protected void execute(CommandEvent event) {
+    protected void executeCommand(CommandEvent event) {
         event.getChannel().sendMessage("<a:carregando:766649080003821609> Procurando uma resposta boa pra te dar").queue();
         event.getChannel().sendTyping().queue();
 

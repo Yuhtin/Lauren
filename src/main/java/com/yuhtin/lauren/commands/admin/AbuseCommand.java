@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.Permission;
         name = "machadodemadeira",
         type = CommandHandler.CommandType.ADMIN,
         description = "Abusadamente",
-        alias = {}
+        alias = {"abusartudao"}
 )
 public class AbuseCommand extends Command {
 

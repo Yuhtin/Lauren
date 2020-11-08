@@ -1,8 +1,8 @@
 package com.yuhtin.lauren.commands.utility;
 
-import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.models.objects.CommonCommand;
 import com.yuhtin.lauren.service.GetConnectionFactory;
 import net.dv8tion.jda.api.EmbedBuilder;
 import org.json.JSONObject;
@@ -11,16 +11,18 @@ import org.json.JSONObject;
         name = "meme",
         type = CommandHandler.CommandType.UTILITY,
         description = "Memes legais",
-        alias = {}
+        alias = {"piadas"}
 )
-public class MemeCommand extends Command {
+public class MemeCommand extends CommonCommand {
 
     @Override
-    protected void execute(CommandEvent event) {
+    protected void executeCommand(CommandEvent event) {
         event.getChannel().sendTyping().queue();
 
         GetConnectionFactory connection = new GetConnectionFactory("https://apis.duncte123.me/meme");
         String response = connection.buildConnection();
+
+        if (response == null) return;
 
         JSONObject object = new JSONObject(response);
         JSONObject data = object.getJSONObject("data");
