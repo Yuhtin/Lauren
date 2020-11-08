@@ -1,8 +1,8 @@
 package com.yuhtin.lauren.commands.help;
 
+import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.objects.CommonCommand;
 import com.yuhtin.lauren.service.CommandCache;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -14,12 +14,12 @@ import java.util.concurrent.TimeUnit;
         type = CommandHandler.CommandType.HELP,
         description = "Informações de comandos do bot",
         alias = {"help"})
-public class HelpCommand extends CommonCommand {
+public class HelpCommand extends Command {
 
     @Override
-    protected void executeCommand(CommandEvent event) {
-
+    protected void execute(CommandEvent event) {
         String[] args = event.getMessage().getContentRaw().split(" ");
+
         if (args.length > 1) {
 
             if (!CommandCache.getCommands().containsKey(args[1].toLowerCase())) {

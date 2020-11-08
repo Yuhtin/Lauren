@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.commands.utility;
 
+import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
@@ -7,7 +8,6 @@ import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.controller.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.models.enums.LogType;
-import com.yuhtin.lauren.models.objects.CommonCommand;
 import com.yuhtin.lauren.utils.helper.MathUtils;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -22,12 +22,11 @@ import java.util.Locale;
         name = "perfil",
         type = CommandHandler.CommandType.SCRIM,
         description = "Visualizar o perfil de outro usuário",
-        alias = {"pinfo", "jogador", "playerinfo", "player", "profile", "conta"}
-)
-public class PlayerInfoCommand extends CommonCommand {
+        alias = {"pinfo", "jogador", "playerinfo", "player", "profile", "conta"})
+public class PlayerInfoCommand extends Command {
 
     @Override
-    protected void executeCommand(CommandEvent event) {
+    protected void execute(CommandEvent event) {
         Member target = event.getMessage().getMentionedMembers().isEmpty() ? event.getMember() : event.getMessage().getMentionedMembers().get(0);
         Player player = PlayerController.INSTANCE.get(target.getIdLong());
         if (player == null) {

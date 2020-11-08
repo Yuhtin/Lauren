@@ -36,14 +36,6 @@ public class Utilities {
         return true;
     }
 
-    public boolean isCommandsChannel(Member member, MessageChannel channel) {
-        if (member.hasPermission(Permission.MESSAGE_MANAGE) || channel.getIdLong() == 704342124732350645L) return true;
-
-        channel.sendMessage("<:rindo_de_voce:751941649655136588> Meus comandos só estão liberados em <#704342124732350645>").queue();
-
-        return false;
-    }
-
     public StackTraceElement[] getStackTrace() {
         Throwable throwable = new Throwable();
         throwable.fillInStackTrace();

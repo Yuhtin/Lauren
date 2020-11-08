@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.commands.utility;
 
+import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.logger.Logger;
@@ -7,7 +8,6 @@ import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.models.enums.Reward;
-import com.yuhtin.lauren.models.objects.CommonCommand;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Getter;
@@ -15,10 +15,7 @@ import lombok.SneakyThrows;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @CommandHandler(
@@ -27,13 +24,13 @@ import java.util.concurrent.TimeUnit;
         description = "Abrir uma lootbox",
         alias = {"openloot", "abrircaixa", "caixa"}
 )
-public class LootBoxCommand extends CommonCommand {
+public class LootBoxCommand extends Command {
 
     boolean running = false;
 
     @SneakyThrows
     @Override
-    protected void executeCommand(CommandEvent event) {
+    protected void execute(CommandEvent event) {
 
         Player player = PlayerController.INSTANCE.get(event.getAuthor().getIdLong());
         if (player.getLootBoxes() == 0) {
@@ -96,7 +93,7 @@ public class LootBoxCommand extends CommonCommand {
                             Role role = Lauren.getInstance().getGuild().getRoleById(771541080634032149L);
                             if (role == null) {
 
-                                Logger.log("The player " + Utilities.INSTANCE.getFullName(event.getAuthor()) + " win the Lucky role but i can't give");
+                                Logger.log("The player " + Utilities.INSTANCE.getFullName(event.getAuthor()) + " gived the Lucky role but i can't give");
                                 break;
 
                             }

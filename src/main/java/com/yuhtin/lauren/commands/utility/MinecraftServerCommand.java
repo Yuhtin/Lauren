@@ -1,8 +1,9 @@
 package com.yuhtin.lauren.commands.utility;
 
+import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.core.statistics.controller.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.objects.CommonCommand;
 import com.yuhtin.lauren.service.GetConnectionFactory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,12 +16,12 @@ import java.time.Instant;
         name = "mcserver",
         type = CommandHandler.CommandType.UTILITY,
         description = "Ver as informações de um servidor",
-        alias = {"mineserver"}
+        alias = {}
 )
-public class MinecraftServerCommand extends CommonCommand {
+public class MinecraftServerCommand extends Command {
 
     @Override
-    protected void executeCommand(CommandEvent event) {
+    protected void execute(CommandEvent event) {
         String[] arguments = event.getArgs().split(" ");
         if (arguments.length < 1) {
             event.getChannel().sendMessage("<a:tchau:751941650728747140> Você precisa inserir um nome de jogador para pesquisar, exemplo `$mcserver hypixel.net`.").queue();

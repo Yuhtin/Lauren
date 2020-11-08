@@ -1,9 +1,9 @@
 package com.yuhtin.lauren.commands.utility;
 
+import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.objects.CommonCommand;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -18,18 +18,16 @@ import java.util.concurrent.TimeUnit;
         name = "spotify",
         type = CommandHandler.CommandType.UTILITY,
         description = "Veja as informações do spotify de um usuário",
-        alias = {"spot"}
+        alias = {}
 )
-public class SpotifyCommand extends CommonCommand {
+public class SpotifyCommand extends Command {
 
     @Override
-    protected void executeCommand(CommandEvent event) {
-        if (event.getMessage().getMentionedMembers().isEmpty()) {
-
+    protected void execute(CommandEvent event) {
+        if (event.getMessage().getMentionedMembers().size() < 1) {
             event.getChannel().sendMessage("<:felizpakas:742373250037710918> Ops, você precisa mencionar um jogador para ver")
                     .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             return;
-
         }
 
         EmbedBuilder embed = new EmbedBuilder();

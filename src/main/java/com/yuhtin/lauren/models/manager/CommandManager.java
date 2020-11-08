@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.text.NumberFormat;
-import java.util.Arrays;
 
 public class CommandManager {
     public CommandManager(JDA bot, String folder) {
@@ -27,16 +26,16 @@ public class CommandManager {
         clientBuilder.setPrefix(Lauren.getInstance().getConfig().prefix);
         clientBuilder.setHelpWord("riphelpmessage");
         clientBuilder.setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"));
-        ClassPath classPath;
+        ClassPath cp;
         
         try {
-            classPath = ClassPath.from(getClass().getClassLoader());
+            cp = ClassPath.from(getClass().getClassLoader());
         } catch (IOException exception) {
             Logger.log("ClassPath could not be instantiated", LogType.ERROR);
             return;
         }
 
-        for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive(folder)) {
+        for (ClassPath.ClassInfo classInfo : cp.getTopLevelClassesRecursive(folder)) {
             try {
                 Class aClass = Class.forName(classInfo.getName());
                 Object object = aClass.newInstance();
@@ -45,8 +44,6 @@ public class CommandManager {
                     Command command = (Command) object;
                     CommandHandler handler = (CommandHandler) aClass.getAnnotation(CommandHandler.class);
                     CommandCache.insert(handler.type(), new RawCommand(handler.name(), handler.description(), handler.type(), handler.alias()));
-
-                    Logger.log(handler.name() + ": " + Arrays.toString(handler.alias()));
 
                     Field[] fields = command.getClass().getSuperclass().getDeclaredFields();
                     for (Field field : fields) {
@@ -64,7 +61,6 @@ public class CommandManager {
                 Logger.log("The " + classInfo.getName() + " class could not be instantiated", LogType.WARN);
             }
         }
-
         bot.addEventListener(clientBuilder.build());
         CommandCache.construct();
     }

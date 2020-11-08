@@ -1,9 +1,9 @@
 package com.yuhtin.lauren.commands.music;
 
+import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.objects.CommonCommand;
 import com.yuhtin.lauren.utils.helper.Utilities;
 
 @CommandHandler(
@@ -12,10 +12,10 @@ import com.yuhtin.lauren.utils.helper.Utilities;
         description = "Sair do canal de voz e parar o batidão",
         alias = {"leave"}
 )
-public class LeaveCommand extends CommonCommand {
+public class LeaveCommand extends Command {
 
     @Override
-    protected void executeCommand(CommandEvent event) {
+    protected void execute(CommandEvent event) {
         if (!Utilities.INSTANCE.isDJ(event.getMember(), event.getTextChannel(), true)) return;
 
         TrackManager.get().destroy();

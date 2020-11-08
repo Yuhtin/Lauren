@@ -1,11 +1,11 @@
 package com.yuhtin.lauren.commands.music;
 
+import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.core.statistics.controller.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.objects.CommonCommand;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
 import org.jmusixmatch.MusixMatch;
 import org.jmusixmatch.entity.lyrics.Lyrics;
@@ -17,10 +17,10 @@ import org.jmusixmatch.entity.track.TrackData;
         description = "Ver a letra da música atual",
         alias = {"letter", "lyrics"}
 )
-public class LyricsCommand extends CommonCommand {
+public class LyricsCommand extends Command {
 
     @Override
-    protected void executeCommand(CommandEvent event) {
+    protected void execute(CommandEvent event) {
         StringBuilder builder = new StringBuilder();
         String[] arguments = event.getArgs().split(" ");
         String name, author;

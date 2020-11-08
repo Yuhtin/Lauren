@@ -1,11 +1,15 @@
 package com.yuhtin.lauren.commands.utility;
 
+import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.core.logger.Logger;
+import com.yuhtin.lauren.core.statistics.controller.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.objects.CommonCommand;
 import com.yuhtin.lauren.service.GetConnectionFactory;
 import net.dv8tion.jda.api.EmbedBuilder;
 import org.json.JSONObject;
+
+import javax.imageio.ImageIO;
 
 @CommandHandler(
         name = "mcname",
@@ -13,10 +17,10 @@ import org.json.JSONObject;
         description = "Procurar um jogador original de minecraft",
         alias = {"mcplayer", "mcskin"}
 )
-public class MinecraftSearchCommand extends CommonCommand {
+public class MinecraftSearchCommand extends Command {
 
     @Override
-    protected void executeCommand(CommandEvent event) {
+    protected void execute(CommandEvent event) {
         String[] arguments = event.getArgs().split(" ");
         if (event.getArgs().equalsIgnoreCase("")) {
             event.getChannel().sendMessage("<a:tchau:751941650728747140> Você precisa inserir um nome de jogador para pesquisar, exemplo `$mcname Yuhtin`.").queue();

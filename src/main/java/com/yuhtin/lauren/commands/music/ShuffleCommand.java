@@ -1,9 +1,9 @@
 package com.yuhtin.lauren.commands.music;
 
+import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.objects.CommonCommand;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
 import com.yuhtin.lauren.utils.helper.Utilities;
 
@@ -13,10 +13,10 @@ import com.yuhtin.lauren.utils.helper.Utilities;
         description = "Misturar as minhas musiquinhas",
         alias = {"misture"}
 )
-public class ShuffleCommand extends CommonCommand {
+public class ShuffleCommand extends Command {
 
     @Override
-    protected void executeCommand(CommandEvent event) {
+    protected void execute(CommandEvent event) {
         if (TrackUtils.get().isIdle(event.getTextChannel())) return;
         if (!Utilities.INSTANCE.isDJ(event.getMember(), event.getTextChannel(), true)) return;
 

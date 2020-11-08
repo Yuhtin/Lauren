@@ -1,10 +1,10 @@
 package com.yuhtin.lauren.commands.music;
 
+import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.objects.CommonCommand;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -14,10 +14,10 @@ import net.dv8tion.jda.api.EmbedBuilder;
         description = "Ver as informações da música atual",
         alias = {"music"}
 )
-public class MusicCommand extends CommonCommand {
+public class MusicCommand extends Command {
 
     @Override
-    protected void executeCommand(CommandEvent event) {
+    protected void execute(CommandEvent event) {
         if (TrackUtils.get().isIdle(event.getTextChannel())) return;
 
         AudioTrack track = TrackManager.get().player.getPlayingTrack();

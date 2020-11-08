@@ -1,12 +1,11 @@
 package com.yuhtin.lauren.commands.help;
 
+import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.objects.CommonCommand;
 import com.yuhtin.lauren.service.PterodactylConnection;
 import com.yuhtin.lauren.utils.helper.MathUtils;
-import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.SneakyThrows;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.SelfUser;
@@ -21,14 +20,12 @@ import java.util.Locale;
         name = "info",
         type = CommandHandler.CommandType.HELP,
         description = "Veja um pouco mais sobre mim",
-        alias = {"info", "binfo"}
-)
-public class InfoCommand extends CommonCommand {
+        alias = {"info", "binfo"})
+public class InfoCommand extends Command {
 
     @SneakyThrows
     @Override
-    protected void executeCommand(CommandEvent event) {
-
+    protected void execute(CommandEvent event) {
         SelfUser bot = event.getJDA().getSelfUser();
         User user = event.getJDA().getUserById(272879983326658570L);
         String authorBot = user == null ? bot.getName() + "#" + bot.getDiscriminator() : user.getName() + "#" + user.getDiscriminator();

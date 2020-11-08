@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.entities.Member;
         name = "punir",
         type = CommandHandler.CommandType.ADMIN,
         description = "Lançar o machado do ban",
-        alias = {"banir"}
+        alias = {}
 )
 public class PunishCommand extends Command {
 

@@ -1,6 +1,7 @@
 package com.yuhtin.lauren.models.enums;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 
 import java.util.Arrays;

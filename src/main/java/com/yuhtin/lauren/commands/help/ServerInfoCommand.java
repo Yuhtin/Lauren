@@ -1,8 +1,8 @@
 package com.yuhtin.lauren.commands.help;
 
+import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.objects.CommonCommand;
 import com.yuhtin.lauren.utils.helper.MathUtils;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -18,11 +18,10 @@ import java.util.Locale;
         type = CommandHandler.CommandType.HELP,
         description = "Visualizar as informações deste servidor",
         alias = {"sinfo", "server", "servidor"})
-public class ServerInfoCommand extends CommonCommand {
+public class ServerInfoCommand extends Command {
 
     @Override
-    protected void executeCommand(CommandEvent event) {
-
+    protected void execute(CommandEvent event) {
         String guildId = event.getGuild().getId();
         String roleSize = event.getGuild().getRoles().size() + "";
         String regionName = event.getGuild().getRegion().getName();

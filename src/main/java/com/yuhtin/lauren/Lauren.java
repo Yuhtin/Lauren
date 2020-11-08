@@ -2,7 +2,6 @@ package com.yuhtin.lauren;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.yuhtin.lauren.commands.music.QueueCommand;
-import com.yuhtin.lauren.commands.utility.ShopCommand;
 import com.yuhtin.lauren.commands.utility.SugestionCommand;
 import com.yuhtin.lauren.core.entities.Config;
 import com.yuhtin.lauren.core.logger.Logger;
@@ -15,7 +14,6 @@ import com.yuhtin.lauren.database.Data;
 import com.yuhtin.lauren.database.DatabaseController;
 import com.yuhtin.lauren.database.types.MySQL;
 import com.yuhtin.lauren.database.types.SQLite;
-import com.yuhtin.lauren.models.embeds.ShopEmbed;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.manager.CommandManager;
 import com.yuhtin.lauren.models.manager.EventsManager;
@@ -98,14 +96,10 @@ public class Lauren {
             new PterodactylConnection(instance.getConfig().pteroKey);
             new Thread(Lauren::loadTasks).start();
 
-            instance.getBot().addEventListener(ShopCommand.getEventWaiter());
-
             instance.getBot().addEventListener(eventWaiter);
             QueueCommand.getBuilder().setEventWaiter(eventWaiter);
             SugestionCommand.setWaiter(eventWaiter);
             LootGeneratorTask.getInstance().setEventWaiter(eventWaiter);
-            ShopEmbed.getInstance().build();
-
             XpController.getInstance();
         });
 

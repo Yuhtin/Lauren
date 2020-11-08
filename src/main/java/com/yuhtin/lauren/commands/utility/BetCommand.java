@@ -1,11 +1,11 @@
 package com.yuhtin.lauren.commands.utility;
 
+import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.objects.CommonCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.awt.*;
@@ -17,10 +17,10 @@ import java.util.Random;
         type = CommandHandler.CommandType.UTILITY,
         description = "Apostar uma quantidade de dinheiro",
         alias = {"bet", "aposta"})
-public class BetCommand extends CommonCommand {
+public class BetCommand extends Command {
 
     @Override
-    protected void executeCommand(CommandEvent event) {
+    protected void execute(CommandEvent event) {
         String[] arguments = event.getArgs().split(" ");
 
         if (arguments.length < 2) {

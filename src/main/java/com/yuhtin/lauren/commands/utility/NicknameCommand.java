@@ -1,9 +1,9 @@
 package com.yuhtin.lauren.commands.utility;
 
+import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.objects.CommonCommand;
 
 @CommandHandler(
         name = "apelido",
@@ -11,10 +11,10 @@ import com.yuhtin.lauren.models.objects.CommonCommand;
         description = "Comando para alterar seu apelido",
         alias = {"nick", "nickname"}
 )
-public class NicknameCommand extends CommonCommand {
+public class NicknameCommand extends Command {
 
     @Override
-    protected void executeCommand(CommandEvent event) {
+    protected void execute(CommandEvent event) {
         if (event.getArgs().equalsIgnoreCase("")) {
             event.getChannel().sendMessage("<:oi:762303876732420176> Acho que ta faltando inserir o nick nekkkkkk").queue();
             return;

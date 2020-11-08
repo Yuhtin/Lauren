@@ -1,11 +1,11 @@
 package com.yuhtin.lauren.commands.utility;
 
+import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.controller.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.objects.CommonCommand;
 import com.yuhtin.lauren.utils.helper.MathUtils;
 import com.yuhtin.lauren.utils.helper.Utilities;
 
@@ -15,12 +15,11 @@ import java.util.concurrent.TimeUnit;
         name = "daily",
         type = CommandHandler.CommandType.UTILITY,
         description = "Pegar uma pequena quantia de XP e dinheiro diariamente",
-        alias = {"diario", "d", "dly", "diaria"}
-)
-public class DailyCommand extends CommonCommand {
+        alias = {"diario", "d", "dly", "diaria"})
+public class DailyCommand extends Command {
 
     @Override
-    protected void executeCommand(CommandEvent event) {
+    protected void execute(CommandEvent event) {
         Player data = PlayerController.INSTANCE.get(event.getMember().getIdLong());
 
         if (data.getDailyDelay() > System.currentTimeMillis()) {
