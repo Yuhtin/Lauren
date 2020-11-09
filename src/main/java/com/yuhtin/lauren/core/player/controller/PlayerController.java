@@ -5,12 +5,10 @@ import com.yuhtin.lauren.core.player.OldPlayer;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.punish.PunishmentType;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
+import com.yuhtin.lauren.utils.serialization.PlayerSerializer;
 import com.yuhtin.lauren.utils.serialization.Serializer;
 
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class PlayerController {
@@ -43,7 +41,7 @@ public class PlayerController {
 
             else {
 
-                Player deserialize = Serializer.getPlayer().deserialize(data);
+                Player deserialize = PlayerSerializer.deserialize(data);
                 if (deserialize.getRank() == null) {
                     // execute conversion
 
@@ -60,7 +58,7 @@ public class PlayerController {
 
                 } else player = deserialize;
 
-                if (deserialize.getPunishs() == null) deserialize.setPunishs(new EnumMap<>(PunishmentType.class));
+                if (deserialize.getPunishs() == null) deserialize.setPunishs(new HashMap<>());
             }
 
             cache.put(userID, player);

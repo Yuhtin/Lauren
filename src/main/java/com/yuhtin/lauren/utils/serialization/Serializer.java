@@ -11,7 +11,6 @@ import lombok.Getter;
 public class Serializer<T> {
 
     @Getter private static final Serializer<Config> config = new Serializer<>(Config.class);
-    @Getter private static final Serializer<Player> player = new Serializer<>(Player.class);
     @Getter private static final Serializer<StatsInfo> stats = new Serializer<>(StatsInfo.class);
 
     private final Class<T> type;

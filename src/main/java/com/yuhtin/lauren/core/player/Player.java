@@ -9,6 +9,7 @@ import com.yuhtin.lauren.core.xp.Level;
 import com.yuhtin.lauren.core.xp.XpController;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.enums.Rank;
+import com.yuhtin.lauren.models.objects.Entity;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Data;
 import net.dv8tion.jda.api.entities.Member;
@@ -19,7 +20,9 @@ import java.io.Serializable;
 import java.util.*;
 
 @Data
-public class Player implements Serializable {
+public class Player
+        extends Entity
+        implements Serializable {
 
     private Map<PunishmentType, Long> punishs = new HashMap<>();
 
@@ -110,6 +113,7 @@ public class Player implements Serializable {
 
         StatsController.get().getStats("Evoluir Nível").suplyStats(1);
     }
+
 
     public Player updateRank() {
         this.rank = Rank.getByPoints(rankedPoints);
