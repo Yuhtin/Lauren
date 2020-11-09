@@ -1,6 +1,5 @@
 package com.yuhtin.lauren.events;
 
-import com.yuhtin.lauren.core.logger.Logger;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 

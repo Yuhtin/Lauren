@@ -180,13 +180,6 @@ public class Player
         return this;
     }
 
-    public void save() {
-        if (money < 0) money = 0;
-        if (rankedPoints < 0) rankedPoints = 0;
-
-        PlayerDatabase.save(userID, this);
-    }
-
     @Override
     public double multiply() {
         ArrayList<String> permissionsClonned = (ArrayList<String>) getPermissions().clone();
