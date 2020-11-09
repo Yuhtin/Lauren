@@ -39,6 +39,7 @@ public class AddPointsCommand extends Command {
         }
 
         int xp = Integer.parseInt(arguments[2]);
+
         Player data = PlayerController.INSTANCE.get(member.getIdLong());
         data.setRankedPoints(data.getRankedPoints() + xp);
 

@@ -1,12 +1,13 @@
 package com.yuhtin.lauren.models.objects;
 
+import lombok.Getter;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 public abstract class PermissionAttachment implements Serializable {
 
-    private List<String> permissions = new ArrayList<>();
+    @Getter private ArrayList<String> permissions = new ArrayList<>();
 
     public void addPermission(String permission) {
         if (permissions == null) permissions = new ArrayList<>();

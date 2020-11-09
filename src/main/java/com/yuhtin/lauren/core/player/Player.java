@@ -12,6 +12,7 @@ import com.yuhtin.lauren.models.enums.Rank;
 import com.yuhtin.lauren.models.objects.Entity;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -20,6 +21,7 @@ import java.io.Serializable;
 import java.util.*;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class Player
         extends Entity
         implements Serializable {
@@ -103,7 +105,13 @@ public class Player
 
         String message = "Parabéns <@" + userID + "> você alcançou o nível **__" + level + "__** <a:tutut:770408915300384798>";
 
-        if (level == 20) message = "<:prime:722115525232296056> O jogador <@" + userID + "> tornou-se Prime";
+        if (level == 20) {
+
+            message = "<:prime:722115525232296056> O jogador <@" + userID + "> tornou-se Prime";
+            addPermission("role.prime");
+
+        }
+
         if (level == 30) message = "<:oi:762303876732420176> O jogador <@" + userID + "> tornou-se DJ";
 
         TextChannel channel = Lauren.getInstance().getBot().getTextChannelById(770393139516932158L);
@@ -139,7 +147,7 @@ public class Player
         return this;
     }
 
-    public Player gainXP(double quantity) {
+    /*public Player gainXP(double quantity) {
         List<Double> multipliers = Arrays.asList(boosterMultiplier(), rank.getMultiplier());
 
         for (Double multiplier : multipliers) quantity *= multiplier;
@@ -157,6 +165,19 @@ public class Player
 
         double primeBooster = Utilities.INSTANCE.isPrime(member) ? 1.15 : 1;
         return Utilities.INSTANCE.isBooster(member) ? 1.25 : primeBooster;
+    }*/
+
+    public Player gainXP(double quantity) {
+        double multiplier = multiply();
+        quantity *= multiplier;
+        experience += quantity;
+
+        int nextLevel = level + 1;
+        if (XpController.getInstance().canUpgrade(nextLevel, experience)) updateLevel(nextLevel);
+
+        StatsController.get().getStats("Ganhar XP").suplyStats(1);
+
+        return this;
     }
 
     public void save() {
@@ -165,4 +186,18 @@ public class Player
 
         PlayerDatabase.save(userID, this);
     }
+
+    @Override
+    public double multiply() {
+        ArrayList<String> permissionsClonned = (ArrayList<String>) getPermissions().clone();
+        permissionsClonned.retainAll(multiplerList.keySet());
+
+        double multiplier = 1;
+        for (String permissions : permissionsClonned) {
+            multiplier += multiplerList.get(permissions);
+        }
+
+        return multiplier;
+    }
 }
+

@@ -19,7 +19,8 @@ public class NicknameCommand extends Command {
         Player player = PlayerController.INSTANCE.get(event.getAuthor().getIdLong());
         if (!player.hasPermission("commands.nickname")) {
 
-            event.getChannel().sendMessage("<:oi:762303876732420176> Você não tem permissão para usar este comando, compre-a em `$loja`.").queue();
+            event.getChannel().sendMessage("<:oi:762303876732420176> " +
+                    "Você não tem permissão para usar este comando, compre-a em `$loja`.").queue();
             return;
 
         }

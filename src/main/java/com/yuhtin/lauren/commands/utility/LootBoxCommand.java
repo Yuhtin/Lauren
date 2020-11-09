@@ -93,6 +93,7 @@ public class LootBoxCommand extends Command {
                     Reward gainReward = reward.getReward();
                     switch (gainReward) {
                         case ROLE:
+
                             Role role = Lauren.getInstance().getGuild().getRoleById(771541080634032149L);
                             if (role == null) {
 
@@ -105,17 +106,26 @@ public class LootBoxCommand extends Command {
                             break;
 
                         case MONEY:
+
                             player.addMoney(1500);
                             break;
 
                         case EXPERIENCE:
+
                             player.gainXP(3000);
                             break;
 
                         case RANKED_POINTS:
+
                             player.setRankedPoints(player.getRankedPoints() + 40);
                             player.updateRank();
                             break;
+
+                        case BOOST:
+
+                            player.addPermission("earnigns.boost");
+                            break;
+
                     }
 
                     givedReward = true;

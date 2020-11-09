@@ -8,6 +8,7 @@ public enum ItemType {
 
     KEY("Chave de Krypton"),
     RENAME_COMMAND("Comando $apelido"),
+    TRADE_COMMAND("Comando $trade"),
     PRIME("Prime");
 
 
