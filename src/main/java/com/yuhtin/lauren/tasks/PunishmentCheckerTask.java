@@ -6,7 +6,7 @@ import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerDatabase;
 import com.yuhtin.lauren.core.punish.PunishmentType;
 import com.yuhtin.lauren.database.DatabaseController;
-import com.yuhtin.lauren.utils.serialization.Serializer;
+import com.yuhtin.lauren.utils.serialization.PlayerSerializer;
 import net.dv8tion.jda.api.entities.Role;
 
 import java.sql.PreparedStatement;
@@ -33,7 +33,7 @@ public class PunishmentCheckerTask extends TimerTask {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                Player data = Serializer.getPlayer().deserialize(resultSet.getString("data"));
+                Player data = PlayerSerializer.deserialize(resultSet.getString("data"));
 
                 // purge player's data after 7 days
                 if (data.getLeaveTime() != 0 && data.getLeaveTime() + TimeUnit.DAYS.toMillis(7) < System.currentTimeMillis()) {

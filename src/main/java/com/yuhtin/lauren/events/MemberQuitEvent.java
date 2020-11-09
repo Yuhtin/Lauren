@@ -11,7 +11,10 @@ public class MemberQuitEvent extends ListenerAdapter {
 
     @Override
     public void onGuildMemberRemove(@NotNull GuildMemberRemoveEvent event) {
+
         Logger.log("Setted leavetime for user " + Utilities.INSTANCE.getFullName(event.getUser())).save();
         PlayerController.INSTANCE.get(event.getUser().getIdLong()).setLeaveTime(System.currentTimeMillis());
+
     }
+
 }

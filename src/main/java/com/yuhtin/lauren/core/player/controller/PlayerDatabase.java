@@ -3,10 +3,13 @@ package com.yuhtin.lauren.core.player.controller;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.database.DatabaseController;
+import com.yuhtin.lauren.utils.serialization.PlayerSerializer;
 import com.yuhtin.lauren.utils.serialization.Serializer;
 import io.github.eikefs.sql.provider.query.Query;
 
 public class PlayerDatabase {
+
+    private PlayerDatabase() throws InstantiationException { throw new InstantiationException("Utility class"); }
 
     public static void createTable() {
         DatabaseController.getDatabase().updateSync("create table if not exists `lauren_players` (`id` varchar(18) primary key not null, `data` text, `xp` int(11));");
@@ -31,7 +34,7 @@ public class PlayerDatabase {
     public static void save(long userID, Player player) {
         DatabaseController.getDatabase()
                 .updateSync("update `lauren_players`" +
-                        " set `data`= '" + Serializer.getPlayer().serialize(player) + "'," +
+                        " set `data`= '" + PlayerSerializer.serialize(player) + "'," +
                         " `xp`='" + player.getExperience() + "' " +
                         "where `id` = '" + userID + "'");
     }
@@ -39,7 +42,7 @@ public class PlayerDatabase {
     public static void create(long userID) {
         DatabaseController.getDatabase()
                 .updateSync(new Query().insert("lauren_players", userID,
-                        Serializer.getPlayer().serialize(new Player(userID)), 0));
+                        PlayerSerializer.serialize(new Player(userID)), 0));
     }
 
     public static void purge(long userID) {

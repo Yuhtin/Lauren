@@ -3,14 +3,18 @@ package com.yuhtin.lauren.commands.utility;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.models.embeds.ShopEmbed;
 import com.yuhtin.lauren.models.objects.ShopItem;
+import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Getter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 
 import java.util.HashMap;
@@ -26,8 +30,7 @@ import java.util.concurrent.TimeUnit;
 )
 public class ShopCommand extends Command {
 
-    @Getter
-    private static final EventWaiter eventWaiter = new EventWaiter();
+    @Getter private static final EventWaiter eventWaiter = new EventWaiter();
     final Map<Long, Integer> events = new HashMap<>();
 
     @Override
@@ -89,6 +92,30 @@ public class ShopCommand extends Command {
                             player.setKeys(player.getKeys() + 1);
                             break;
 
+                        case RENAME_COMMAND:
+
+                            player.addPermission("commands.nickname");
+                            break;
+
+                        case PRIME:
+
+                            Role role = Lauren.getInstance().getGuild().getRoleById(722116789055782912L);
+                            if (role == null) {
+
+                                Logger.log("The player "
+                                        + Utilities.INSTANCE.getFullName(event.getAuthor()) +
+                                        " buyed Prime role, but i can't give");
+                                break;
+
+                            }
+
+
+                            Lauren.getInstance()
+                                    .getGuild()
+                                    .addRoleToMember(event.getAuthor().getIdLong(), role)
+                                    .queue();
+                            break;
+
                         default:
                             break;
 
@@ -108,7 +135,8 @@ public class ShopCommand extends Command {
 
                 }, 1, TimeUnit.MINUTES, () -> {
 
-                    if (events.get(event.getAuthor().getIdLong()) == randomInt) events.remove(event.getAuthor().getIdLong());
+                    if (events.get(event.getAuthor().getIdLong()) == randomInt)
+                        events.remove(event.getAuthor().getIdLong());
                     message.clearReactions().queue();
                 });
     }

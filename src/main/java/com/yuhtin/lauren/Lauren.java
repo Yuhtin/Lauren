@@ -22,6 +22,7 @@ import com.yuhtin.lauren.models.manager.EventsManager;
 import com.yuhtin.lauren.service.PterodactylConnection;
 import com.yuhtin.lauren.tasks.LootGeneratorTask;
 import com.yuhtin.lauren.tasks.PunishmentCheckerTask;
+import com.yuhtin.lauren.tasks.ShardLootTask;
 import com.yuhtin.lauren.tasks.TopXpUpdater;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
@@ -103,9 +104,10 @@ public class Lauren {
             QueueCommand.getBuilder().setEventWaiter(eventWaiter);
             SugestionCommand.setWaiter(eventWaiter);
             LootGeneratorTask.getInstance().setEventWaiter(eventWaiter);
-            ShopEmbed.getInstance().build();
+            ShardLootTask.getInstance().setEventWaiter(eventWaiter);
 
             XpController.getInstance();
+            ShopEmbed.getInstance().build();
         });
 
 
@@ -151,6 +153,7 @@ public class Lauren {
 
         TopXpUpdater.getInstance().startRunnable();
         LootGeneratorTask.getInstance().startRunnable();
+        ShardLootTask.getInstance().startRunnable();
 
     }
 

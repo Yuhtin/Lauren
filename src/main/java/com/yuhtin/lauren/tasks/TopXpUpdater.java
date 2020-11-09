@@ -6,6 +6,7 @@ import com.yuhtin.lauren.core.player.SimplePlayer;
 import com.yuhtin.lauren.core.player.controller.PlayerDatabase;
 import com.yuhtin.lauren.database.DatabaseController;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
+import com.yuhtin.lauren.utils.serialization.PlayerSerializer;
 import com.yuhtin.lauren.utils.serialization.Serializer;
 import lombok.Getter;
 
@@ -44,7 +45,7 @@ public class TopXpUpdater {
                     ResultSet resultSet = statement.executeQuery();
 
                     while (resultSet.next()) {
-                        Player data = Serializer.getPlayer().deserialize(resultSet.getString("data"));
+                        Player data = PlayerSerializer.deserialize(resultSet.getString("data"));
                         players.add(new SimplePlayer(resultSet.getLong("id"), data.getLevel(), data.getExperience()));
                     }
 

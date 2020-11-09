@@ -9,8 +9,10 @@ import com.yuhtin.lauren.core.xp.Level;
 import com.yuhtin.lauren.core.xp.XpController;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.enums.Rank;
+import com.yuhtin.lauren.models.objects.Entity;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -19,7 +21,10 @@ import java.io.Serializable;
 import java.util.*;
 
 @Data
-public class Player implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+public class Player
+        extends Entity
+        implements Serializable {
 
     private Map<PunishmentType, Long> punishs = new HashMap<>();
 
@@ -100,7 +105,13 @@ public class Player implements Serializable {
 
         String message = "Parabéns <@" + userID + "> você alcançou o nível **__" + level + "__** <a:tutut:770408915300384798>";
 
-        if (level == 20) message = "<:prime:722115525232296056> O jogador <@" + userID + "> tornou-se Prime";
+        if (level == 20) {
+
+            message = "<:prime:722115525232296056> O jogador <@" + userID + "> tornou-se Prime";
+            addPermission("role.prime");
+
+        }
+
         if (level == 30) message = "<:oi:762303876732420176> O jogador <@" + userID + "> tornou-se DJ";
 
         TextChannel channel = Lauren.getInstance().getBot().getTextChannelById(770393139516932158L);
@@ -110,6 +121,7 @@ public class Player implements Serializable {
 
         StatsController.get().getStats("Evoluir Nível").suplyStats(1);
     }
+
 
     public Player updateRank() {
         this.rank = Rank.getByPoints(rankedPoints);
@@ -135,7 +147,7 @@ public class Player implements Serializable {
         return this;
     }
 
-    public Player gainXP(double quantity) {
+    /*public Player gainXP(double quantity) {
         List<Double> multipliers = Arrays.asList(boosterMultiplier(), rank.getMultiplier());
 
         for (Double multiplier : multipliers) quantity *= multiplier;
@@ -153,12 +165,32 @@ public class Player implements Serializable {
 
         double primeBooster = Utilities.INSTANCE.isPrime(member) ? 1.15 : 1;
         return Utilities.INSTANCE.isBooster(member) ? 1.25 : primeBooster;
+    }*/
+
+    public Player gainXP(double quantity) {
+        double multiplier = multiply();
+        quantity *= multiplier;
+        experience += quantity;
+
+        int nextLevel = level + 1;
+        if (XpController.getInstance().canUpgrade(nextLevel, experience)) updateLevel(nextLevel);
+
+        StatsController.get().getStats("Ganhar XP").suplyStats(1);
+
+        return this;
     }
 
-    public void save() {
-        if (money < 0) money = 0;
-        if (rankedPoints < 0) rankedPoints = 0;
+    @Override
+    public double multiply() {
+        ArrayList<String> permissionsClonned = (ArrayList<String>) getPermissions().clone();
+        permissionsClonned.retainAll(multiplerList.keySet());
 
-        PlayerDatabase.save(userID, this);
+        double multiplier = 1;
+        for (String permissions : permissionsClonned) {
+            multiplier += multiplerList.get(permissions);
+        }
+
+        return multiplier;
     }
 }
+
