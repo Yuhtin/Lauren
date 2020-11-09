@@ -2,6 +2,7 @@ package com.yuhtin.lauren;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.yuhtin.lauren.commands.music.QueueCommand;
+import com.yuhtin.lauren.commands.utility.ShopCommand;
 import com.yuhtin.lauren.commands.utility.SugestionCommand;
 import com.yuhtin.lauren.core.entities.Config;
 import com.yuhtin.lauren.core.logger.Logger;
@@ -14,11 +15,13 @@ import com.yuhtin.lauren.database.Data;
 import com.yuhtin.lauren.database.DatabaseController;
 import com.yuhtin.lauren.database.types.MySQL;
 import com.yuhtin.lauren.database.types.SQLite;
+import com.yuhtin.lauren.models.embeds.ShopEmbed;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.manager.CommandManager;
 import com.yuhtin.lauren.models.manager.EventsManager;
 import com.yuhtin.lauren.service.PterodactylConnection;
 import com.yuhtin.lauren.tasks.LootGeneratorTask;
+import com.yuhtin.lauren.tasks.PunishmentCheckerTask;
 import com.yuhtin.lauren.tasks.TopXpUpdater;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
@@ -45,8 +48,7 @@ import java.util.zip.ZipOutputStream;
 @lombok.Data
 public class Lauren {
 
-    @Getter
-    private static Lauren instance = new Lauren();
+    @Getter private static Lauren instance = new Lauren();
 
     private JDA bot;
     private Guild guild;
@@ -97,8 +99,12 @@ public class Lauren {
             new Thread(Lauren::loadTasks).start();
 
             instance.getBot().addEventListener(eventWaiter);
+            instance.getBot().addEventListener(ShopCommand.getEventWaiter());
             QueueCommand.getBuilder().setEventWaiter(eventWaiter);
             SugestionCommand.setWaiter(eventWaiter);
+            LootGeneratorTask.getInstance().setEventWaiter(eventWaiter);
+            ShopEmbed.getInstance().build();
+
             XpController.getInstance();
         });
 
@@ -141,10 +147,10 @@ public class Lauren {
             }
         }, 5, 5, TimeUnit.MINUTES);
 
-        TopXpUpdater.getInstance().startRunnable();
+        TaskHelper.runTaskTimerAsync(new PunishmentCheckerTask(), 5, 5, TimeUnit.MINUTES);
 
+        TopXpUpdater.getInstance().startRunnable();
         LootGeneratorTask.getInstance().startRunnable();
-        Lauren.getInstance().getBot().addEventListener(LootGeneratorTask.getInstance().getEventWaiter());
 
     }
 
@@ -204,14 +210,6 @@ public class Lauren {
                     instance.getConfig().mySqlDatabase);
 
         Connection connection = dataType.openConnection();
-        if (connection == null) {
-
-            Logger.log("Closing bot").save();
-            finish();
-
-            return;
-
-        }
 
         DatabaseController.get().constructDatabase(connection);
         DatabaseController.get().loadAll();

@@ -41,4 +41,8 @@ public class PlayerDatabase {
                 .updateSync(new Query().insert("lauren_players", userID,
                         Serializer.getPlayer().serialize(new Player(userID)), 0));
     }
+
+    public static void purge(long userID) {
+        DatabaseController.getDatabase().updateSync("delete from `lauren_players` where `id` = '"+ userID + "'");
+    }
 }

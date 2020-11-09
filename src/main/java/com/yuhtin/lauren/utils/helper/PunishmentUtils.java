@@ -1,11 +1,7 @@
 package com.yuhtin.lauren.utils.helper;
 
-import com.sedmelluq.discord.lavaplayer.filter.FloatPcmAudioFilter;
-import com.sedmelluq.discord.lavaplayer.filter.equalizer.Equalizer;
-import com.sedmelluq.discord.lavaplayer.format.AudioDataFormat;
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.punish.PunishmentRule;
@@ -21,6 +17,7 @@ public class PunishmentUtils {
     }
 
     public static void applyPunish(User author, Member user, PunishmentRule rule, String proof) {
+        Player player = PlayerController.INSTANCE.get(user.getIdLong());
         PunishmentType type = rule.getType();
 
         if (type == PunishmentType.BAN) {
@@ -38,10 +35,11 @@ public class PunishmentUtils {
             return;
         }
 
-        Player player = PlayerController.INSTANCE.get(user.getIdLong());
-
         long duration = System.currentTimeMillis() + rule.getPunishTime();
-        player.getPunishs().put(type, duration);
+
+        // accumulate punishments
+        if (player.getPunishs().containsKey(type)) player.getPunishs().replace(type, player.getPunishs().get(type) + duration);
+        else player.getPunishs().put(type, duration);
 
         Role role = Lauren.getInstance()
                 .getGuild()
@@ -59,7 +57,7 @@ public class PunishmentUtils {
     }
 
     private static void sendPunishMessage(User author, User user, PunishmentRule rule, String proof) {
-        TextChannel announcementChannel = Lauren.getInstance().getGuild().getTextChannelById(769433732221632532L);
+        TextChannel announcementChannel = Lauren.getInstance().getGuild().getTextChannelById(771384145027792986L);
         String ruleDescription = "Regra " + rule.toString() + ": " + rule.getMotive() + (proof.equalsIgnoreCase("") ? "" : ", " + proof);
 
         if (announcementChannel != null) {

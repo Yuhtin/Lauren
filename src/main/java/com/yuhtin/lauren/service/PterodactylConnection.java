@@ -7,14 +7,12 @@ import lombok.Getter;
 
 public class PterodactylConnection {
 
-    private static PterodactylConnection INSTANCE;
-    @Getter
-    private final PteroUserAPI connection;
-    @Getter
-    private final UserServer server;
+    private static PterodactylConnection instance;
+    @Getter private final PteroUserAPI connection;
+    @Getter private final UserServer server;
 
     public PterodactylConnection(String apiKey) {
-        INSTANCE = this;
+        instance = this;
         connection = new PteroUserAPI("https://minecraft.hypehost.com.br/", apiKey);
 
         server = connection.getServersController().getServer("bb59eaa0");
@@ -22,6 +20,6 @@ public class PterodactylConnection {
     }
 
     public static PterodactylConnection get() {
-        return INSTANCE;
+        return instance;
     }
 }

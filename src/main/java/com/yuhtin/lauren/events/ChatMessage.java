@@ -1,22 +1,13 @@
 package com.yuhtin.lauren.events;
 
-import com.yuhtin.lauren.Lauren;
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.service.CommandCache;
 import com.yuhtin.lauren.utils.helper.LevenshteinCalculator;
 import com.yuhtin.lauren.utils.helper.Utilities;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.jetbrains.annotations.NotNull;
 
-import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
 public class ChatMessage extends ListenerAdapter {
@@ -30,14 +21,24 @@ public class ChatMessage extends ListenerAdapter {
             return;
 
         if (event.getMessage().getContentRaw().startsWith("$")) {
+
             String command = event.getMessage().getContentRaw().split(" ")[0].replace("$", "").toLowerCase();
             if (!CommandCache.getAliases().contains(command)) {
+
                 for (String alias : CommandCache.getAliases()) {
+
                     if (LevenshteinCalculator.eval(command, alias) < 4) {
-                        event.getChannel().sendMessage("<:chorano:726207542413230142> Esse comandinho não existe porém encontrei um parecido: `$" + alias + "`").queue();
+
+                        event.getChannel().sendMessage("<:chorano:726207542413230142> " +
+                                "Esse comandinho não existe porém encontrei um parecido: `$"
+                                + alias +
+                                "`").queue();
                         break;
+
                     }
+
                 }
+
             }
         }
 

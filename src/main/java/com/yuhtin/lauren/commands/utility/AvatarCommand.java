@@ -18,7 +18,9 @@ public class AvatarCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        Member target = event.getMessage().getMentionedMembers().size() < 1 ? event.getMember() : event.getMessage().getMentionedMembers().get(0);
+        Member target = event.getMessage().getMentionedMembers().isEmpty()
+                ? event.getMember()
+                : event.getMessage().getMentionedMembers().get(0);
 
         String avatarUrl = target.getUser().getAvatarUrl();
         if (avatarUrl == null) {

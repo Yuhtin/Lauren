@@ -23,9 +23,14 @@ public class PingCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
         long actual = System.currentTimeMillis();
-        event.getChannel().sendMessage("Carregando...").queue(m -> {
-            m.editMessage(createEmbed(m.getTimeCreated().toInstant().toEpochMilli() - actual,
-                    event.getMember(), event.getJDA())).queue();
+        event.getChannel().sendMessage("Carregando...").queue(message -> {
+            MessageEmbed embed = createEmbed(
+                    message.getTimeCreated().toInstant().toEpochMilli() - actual,
+                    event.getMember(),
+                    event.getJDA()
+            );
+
+            message.editMessage(embed).queue();
         });
     }
 

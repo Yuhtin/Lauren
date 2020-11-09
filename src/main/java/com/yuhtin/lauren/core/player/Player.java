@@ -26,6 +26,7 @@ public class Player implements Serializable {
     // Geral
     private long userID;
     private long dailyDelay;
+    private long leaveTime;
     private int level = 0;
     private int money = 100;
     private int experience = 0;

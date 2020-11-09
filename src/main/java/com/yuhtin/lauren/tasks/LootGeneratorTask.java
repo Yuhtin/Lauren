@@ -8,7 +8,7 @@ import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
-import lombok.Getter;
+import lombok.Setter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -23,9 +23,8 @@ import java.util.concurrent.TimeUnit;
 
 public class LootGeneratorTask {
 
-    @Getter
-    private final EventWaiter eventWaiter = new EventWaiter();
     private static final LootGeneratorTask INSTANCE = new LootGeneratorTask();
+    @Setter private EventWaiter eventWaiter;
 
     public static LootGeneratorTask getInstance() {
         return INSTANCE;
@@ -66,7 +65,6 @@ public class LootGeneratorTask {
                 Logger.log("Running LootGeneratorTask");
 
                 if (new Random().nextInt(100) > 7) return;
-
 
                 int value = new Random().nextInt(allowedChannels.size());
                 long channelID = allowedChannels.get(value);

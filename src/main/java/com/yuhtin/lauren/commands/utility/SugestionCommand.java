@@ -26,8 +26,7 @@ import java.util.concurrent.TimeUnit;
 )
 public class SugestionCommand extends Command {
 
-    @Setter
-    private static EventWaiter waiter;
+    @Setter private static EventWaiter waiter;
     private final Map<Long, Sugestion> sugestionMap = new HashMap<>();
 
     @Override
