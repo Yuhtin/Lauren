@@ -28,9 +28,7 @@ public class DailyCommand extends Command {
             return;
         }
 
-        double bonus = Utilities.INSTANCE.isBooster(event.getMember()) ? 1.5 : 1;
-
-        data.setDelay(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1)).addMoney(30 * bonus).gainXP(100 * bonus);
+        data.setDelay(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1)).addMoney(30).gainXP(100);
         event.getChannel()
                 .sendMessage("🌟 Aaaaa, eu to muito feliz por ter lembrado de mim e pego seu daily " +
                         "💙 Veja suas informações atualizadas usando `$perfil`")

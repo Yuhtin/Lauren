@@ -136,6 +136,8 @@ public class Player
     }
 
     public Player addMoney(double quantity) {
+        double multiplier = multiply();
+        quantity *= multiplier;
         money += quantity;
 
         return this;
