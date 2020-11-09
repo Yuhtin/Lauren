@@ -48,6 +48,9 @@ public class LootBoxCommand extends Command {
             return;
         }
 
+        player.setLootBoxes(player.getLootBoxes() - 1);
+        player.setKeys(player.getKeys() - 1);
+
         running = true;
 
         List<LineRewardController> rewards = new ArrayList<>();
@@ -93,7 +96,7 @@ public class LootBoxCommand extends Command {
                             Role role = Lauren.getInstance().getGuild().getRoleById(771541080634032149L);
                             if (role == null) {
 
-                                Logger.log("The player " + Utilities.INSTANCE.getFullName(event.getAuthor()) + " gived the Lucky role but i can't give");
+                                Logger.log("The player " + Utilities.INSTANCE.getFullName(event.getAuthor()) + " win the Lucky role but i can't give");
                                 break;
 
                             }

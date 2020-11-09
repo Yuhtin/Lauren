@@ -24,7 +24,7 @@ public class SpotifyCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        if (event.getMessage().getMentionedMembers().size() < 1) {
+        if (event.getMessage().getMentionedMembers().isEmpty()) {
             event.getChannel().sendMessage("<:felizpakas:742373250037710918> Ops, você precisa mencionar um jogador para ver")
                     .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
             return;

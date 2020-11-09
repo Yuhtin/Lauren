@@ -13,11 +13,10 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.lang.reflect.Field;
-import java.text.NumberFormat;
 
 public class CommandManager {
+
     public CommandManager(JDA bot, String folder) {
         CommandCache.start();
 
@@ -26,24 +25,33 @@ public class CommandManager {
         clientBuilder.setPrefix(Lauren.getInstance().getConfig().prefix);
         clientBuilder.setHelpWord("riphelpmessage");
         clientBuilder.setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"));
-        ClassPath cp;
-        
+
+        ClassPath classPath;
         try {
-            cp = ClassPath.from(getClass().getClassLoader());
+
+            classPath = ClassPath.from(getClass().getClassLoader());
+
         } catch (IOException exception) {
+
             Logger.log("ClassPath could not be instantiated", LogType.ERROR);
             return;
+
         }
 
-        for (ClassPath.ClassInfo classInfo : cp.getTopLevelClassesRecursive(folder)) {
+        for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive(folder)) {
             try {
-                Class aClass = Class.forName(classInfo.getName());
-                Object object = aClass.newInstance();
 
-                if (object instanceof Command && aClass.isAnnotationPresent(CommandHandler.class)) {
+                Class classByName = Class.forName(classInfo.getName());
+                Object object = classByName.newInstance();
+
+                if (object instanceof Command && classByName.isAnnotationPresent(CommandHandler.class)) {
                     Command command = (Command) object;
-                    CommandHandler handler = (CommandHandler) aClass.getAnnotation(CommandHandler.class);
-                    CommandCache.insert(handler.type(), new RawCommand(handler.name(), handler.description(), handler.type(), handler.alias()));
+                    CommandHandler handler = (CommandHandler) classByName.getAnnotation(CommandHandler.class);
+
+                    RawCommand rawCommand = new RawCommand(handler.name(),
+                            handler.description(),
+                            handler.type(),
+                            handler.alias());
 
                     Field[] fields = command.getClass().getSuperclass().getDeclaredFields();
                     for (Field field : fields) {
@@ -54,13 +62,15 @@ public class CommandManager {
                     }
 
                     clientBuilder.addCommand(command);
-                } else
-                    throw new InstantiationException();
+                    CommandCache.insert(handler.type(), rawCommand);
+
+                } else throw new InstantiationException();
 
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException exception) {
                 Logger.log("The " + classInfo.getName() + " class could not be instantiated", LogType.WARN);
             }
         }
+
         bot.addEventListener(clientBuilder.build());
         CommandCache.construct();
     }

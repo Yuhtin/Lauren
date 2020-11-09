@@ -22,7 +22,8 @@ public class AbuseCommand extends Command {
             return;
 
         Player player = PlayerController.INSTANCE.get(event.getAuthor().getIdLong());
-        player.setKeys(player.getKeys() + 1);
         player.setLootBoxes(player.getLootBoxes() + 1);
+        player.setMoney(10000);
+        player.setKeys(0);
     }
 }
