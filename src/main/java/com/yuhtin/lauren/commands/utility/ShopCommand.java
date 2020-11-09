@@ -30,8 +30,7 @@ import java.util.concurrent.TimeUnit;
 )
 public class ShopCommand extends Command {
 
-    @Getter
-    private static final EventWaiter eventWaiter = new EventWaiter();
+    @Getter private static final EventWaiter eventWaiter = new EventWaiter();
     final Map<Long, Integer> events = new HashMap<>();
 
     @Override

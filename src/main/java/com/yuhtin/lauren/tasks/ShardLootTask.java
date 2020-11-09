@@ -24,8 +24,7 @@ import java.util.concurrent.TimeUnit;
 public class ShardLootTask {
 
     private static final ShardLootTask INSTANCE = new ShardLootTask();
-    @Setter
-    private EventWaiter eventWaiter;
+    @Setter private EventWaiter eventWaiter;
 
     public static ShardLootTask getInstance() {
         return INSTANCE;
