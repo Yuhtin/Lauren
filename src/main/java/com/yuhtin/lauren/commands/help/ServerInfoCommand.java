@@ -17,7 +17,8 @@ import java.util.Locale;
         name = "servidor",
         type = CommandHandler.CommandType.HELP,
         description = "Visualizar as informações deste servidor",
-        alias = {"sinfo", "server", "servidor"})
+        alias = {"sinfo", "server"}
+)
 public class ServerInfoCommand extends Command {
 
     @Override

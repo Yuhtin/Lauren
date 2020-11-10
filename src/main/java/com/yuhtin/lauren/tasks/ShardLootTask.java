@@ -31,7 +31,7 @@ public class ShardLootTask {
     }
 
     public void startRunnable() {
-        Logger.log("Registered MoneyLootTask");
+        Logger.log("Registered ShardLootTask");
 
         final List<Long> allowedChannels = Arrays.asList(
                 765024746655318016L,
@@ -45,7 +45,7 @@ public class ShardLootTask {
         embed.setFooter("© ^Aincrad™ servidor de jogos", Lauren.getInstance().getGuild().getIconUrl());
 
         embed.setThumbnail("https://www.pcguia.pt/wp-content/uploads/2019/11/lootbox.jpg");
-        embed.setColor(Color.getColor("ff69b4"));
+        embed.setColor(Color.MAGENTA);
 
         embed.setDescription("Você encontrou um **shardloot**, seja o primeiro a reajir\n" +
                 "no ícone abaixo para garantir seus **<:boost_emoji:772285522852839445> shards**\n"
@@ -54,9 +54,9 @@ public class ShardLootTask {
         TaskHelper.runTaskTimerAsync(new TimerTask() {
             @Override
             public void run() {
-                Logger.log("Running MoneyLootTask");
+                Logger.log("Running ShardLootTask");
 
-                if (new Random().nextInt(100) > 25) return;
+                if (new Random().nextInt(100) > 45) return;
 
                 int value = new Random().nextInt(allowedChannels.size());
                 long channelID = allowedChannels.get(value);
@@ -84,7 +84,7 @@ public class ShardLootTask {
 
                             channel.sendMessage("<:felizpakas:742373250037710918> " +
                                     "Parabéns **" + nickname + "**, você capturou um shardloot, " +
-                                    "você recebeu <:boost_emoji:772285522852839445> **$" + shard + " shards")
+                                    "você recebeu <:boost_emoji:772285522852839445> **$" + shard + " shards**")
                                     .queue();
 
                             Player player = PlayerController.INSTANCE.get(event.getUserIdLong());
@@ -102,7 +102,7 @@ public class ShardLootTask {
 
                         });
             }
-        }, 20, 10, TimeUnit.MINUTES);
+        }, 10, 20, TimeUnit.MINUTES);
 
     }
 }

@@ -149,26 +149,6 @@ public class Player
         return this;
     }
 
-    /*public Player gainXP(double quantity) {
-        List<Double> multipliers = Arrays.asList(boosterMultiplier(), rank.getMultiplier());
-
-        for (Double multiplier : multipliers) quantity *= multiplier;
-        experience += (int) quantity;
-
-        int nextLevel = level + 1;
-        if (XpController.getInstance().canUpgrade(nextLevel, experience)) updateLevel(nextLevel);
-
-        StatsController.get().getStats("Ganhar XP").suplyStats(1);
-        return this;
-    }
-
-    private double boosterMultiplier() {
-        Member member = Lauren.getInstance().getGuild().getMemberById(userID);
-
-        double primeBooster = Utilities.INSTANCE.isPrime(member) ? 1.15 : 1;
-        return Utilities.INSTANCE.isBooster(member) ? 1.25 : primeBooster;
-    }*/
-
     public Player gainXP(double quantity) {
         double multiplier = multiply();
         quantity *= multiplier;
@@ -184,7 +164,8 @@ public class Player
 
     @Override
     public double multiply() {
-        ArrayList<String> permissionsClonned = (ArrayList<String>) getPermissions().clone();
+        checkList();
+        ArrayList<String> permissionsClonned = new ArrayList<>(getPermissions());
         permissionsClonned.retainAll(multiplerList.keySet());
 
         double multiplier = 1;

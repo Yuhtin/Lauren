@@ -20,7 +20,8 @@ import java.util.Locale;
         name = "info",
         type = CommandHandler.CommandType.HELP,
         description = "Veja um pouco mais sobre mim",
-        alias = {"info", "binfo"})
+        alias = {"binfo"}
+)
 public class InfoCommand extends Command {
 
     @SneakyThrows
