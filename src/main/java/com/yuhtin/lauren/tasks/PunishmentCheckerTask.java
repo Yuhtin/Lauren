@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.entities.Role;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.HashMap;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
@@ -41,6 +42,7 @@ public class PunishmentCheckerTask extends TimerTask {
                     continue;
                 }
 
+                if (data.getPunishs() == null) data.setPunishs(new HashMap<>());
                 for (PunishmentType punishmentType : data.getPunishs().keySet()) {
 
                     // compare the punishment time and see if the player can be unpunished
@@ -59,7 +61,8 @@ public class PunishmentCheckerTask extends TimerTask {
             resultSet.close();
 
         } catch (Exception exception) {
-            Logger.log("Can't check punishment's'");
+            Logger.log("Can't check punishment's");
+            exception.printStackTrace();
         }
     }
 }

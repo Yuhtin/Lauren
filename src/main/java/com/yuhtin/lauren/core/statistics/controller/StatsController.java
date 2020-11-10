@@ -14,9 +14,12 @@ public class StatsController {
     public StatsInfo getStats(String name) {
         StatsInfo info = stats.getOrDefault(name, null);
         if (info == null) {
+
             info = new StatsInfo(name);
             stats.put(name, info);
+
             StatsDatabase.create(name);
+
         }
 
         return info;

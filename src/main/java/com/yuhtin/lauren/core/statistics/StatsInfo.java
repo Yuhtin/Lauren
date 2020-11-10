@@ -19,8 +19,8 @@ public class StatsInfo {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
 
-        int month = calendar.get(Calendar.MONTH),
-                year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int year = calendar.get(Calendar.YEAR);
 
         String field = month + "/" + year;
         if (monthStats.containsKey(field)) monthStats.replace(field, monthStats.get(field) + number);
@@ -29,6 +29,8 @@ public class StatsInfo {
         totalStats += number;
     }
 
-    public int getStats(String name) { return monthStats.getOrDefault(name, 0); }
+    public int getStats(String name) {
+        return monthStats.getOrDefault(name, 0);
+    }
 
 }

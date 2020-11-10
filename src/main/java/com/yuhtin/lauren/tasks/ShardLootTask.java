@@ -34,9 +34,7 @@ public class ShardLootTask {
         Logger.log("Registered ShardLootTask");
 
         final List<Long> allowedChannels = Arrays.asList(
-                765024746655318016L,
-                763757066103554069L,
-                721037764321345578L,
+                704342124732350645L,
                 700673056414367825L
         );
 
@@ -91,7 +89,7 @@ public class ShardLootTask {
                             player.addMoney(shard);
 
                             Logger.log("The player " + Utilities.INSTANCE.getFullName(event.getUser()) + " getted the sharddrop");
-                        }, 10, TimeUnit.SECONDS,
+                        }, 25, TimeUnit.SECONDS,
 
                         () -> {
 
@@ -102,7 +100,7 @@ public class ShardLootTask {
 
                         });
             }
-        }, 10, 20, TimeUnit.MINUTES);
+        }, 10, 30, TimeUnit.MINUTES);
 
     }
 }

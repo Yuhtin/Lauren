@@ -2,7 +2,6 @@ package com.yuhtin.lauren.core.player;
 
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.core.player.controller.PlayerDatabase;
 import com.yuhtin.lauren.core.punish.PunishmentType;
 import com.yuhtin.lauren.core.statistics.controller.StatsController;
 import com.yuhtin.lauren.core.xp.Level;
@@ -13,7 +12,6 @@ import com.yuhtin.lauren.models.objects.Entity;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 

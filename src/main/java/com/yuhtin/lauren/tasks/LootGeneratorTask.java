@@ -34,9 +34,7 @@ public class LootGeneratorTask {
         Logger.log("Registered LootGeneratorTask");
 
         final List<Long> allowedChannels = Arrays.asList(
-                765024746655318016L,
-                763757066103554069L,
-                721037764321345578L,
+                704342124732350645L,
                 700673056414367825L
         );
 
@@ -98,7 +96,7 @@ public class LootGeneratorTask {
                             player.setLootBoxes(player.getLootBoxes() + 1);
 
                             Logger.log("The player " + Utilities.INSTANCE.getFullName(event.getUser()) + " getted the drop");
-                        }, 10, TimeUnit.SECONDS,
+                        }, 25, TimeUnit.SECONDS,
 
                         () -> {
                             message.editMessage("<a:tchau:751941650728747140> " +
