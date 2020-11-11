@@ -82,9 +82,7 @@ public class Utilities {
 
         try {
             member.modifyNickname(nickname).queue();
-        } catch (HierarchyException ignored) {
-            Logger.log("Can't update member with role higher my self", LogType.ERROR);
-        }
+        } catch (HierarchyException ignored) { }
     }
 
     public String format(double valor) {
