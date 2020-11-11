@@ -3,12 +3,13 @@ package com.yuhtin.lauren.core.player.controller;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.OldPlayer;
 import com.yuhtin.lauren.core.player.Player;
-import com.yuhtin.lauren.core.punish.PunishmentType;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.serialization.PlayerSerializer;
 import com.yuhtin.lauren.utils.serialization.Serializer;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public class PlayerController {
@@ -36,7 +37,6 @@ public class PlayerController {
         if (player == null) {
 
             String data = PlayerDatabase.loadPlayer(userID);
-
             if (data.equalsIgnoreCase("")) player = new Player(userID);
 
             else {
@@ -66,6 +66,10 @@ public class PlayerController {
         }
 
         return player;
+    }
+
+    public int totalUsers() {
+        return cache.size();
     }
 
 }

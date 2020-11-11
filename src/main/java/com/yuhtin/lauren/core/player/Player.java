@@ -135,8 +135,15 @@ public class Player
 
     public Player addMoney(double quantity) {
         double multiplier = multiply();
+        Logger.log("Multiplicador: " + multiplier + "");
+
+        Logger.log("Quantidade: " + quantity + "");
         quantity *= multiplier;
+        Logger.log("Quantidade Multiplicada: " + quantity + "");
+
+        Logger.log("Money Antigo:" + money + "");
         money += quantity;
+        Logger.log("Money Atual: " + money + "");
 
         return this;
     }

@@ -34,8 +34,8 @@ public class ShardLootTask {
         Logger.log("Registered ShardLootTask");
 
         final List<Long> allowedChannels = Arrays.asList(
-                704342124732350645L,
-                700673056414367825L
+                700673056414367825L,
+                704342124732350645L
         );
 
         EmbedBuilder embed = new EmbedBuilder();
@@ -73,19 +73,19 @@ public class ShardLootTask {
 
                 eventWaiter.waitForEvent(MessageReactionAddEvent.class, event -> !event.getMember().getUser().isBot(),
                         event -> {
+                            Player player = PlayerController.INSTANCE.get(event.getUserIdLong());
                             message.clearReactions().queue();
 
                             String nickname = event.getMember().getNickname();
                             if (nickname == null) nickname = event.getMember().getEffectiveName();
 
-                            int shard = 20 + new Random().nextInt(30);
+                            int shard = 30 + new Random().nextInt(50);
 
                             channel.sendMessage("<:felizpakas:742373250037710918> " +
                                     "Parabéns **" + nickname + "**, você capturou um shardloot, " +
                                     "você recebeu <:boost_emoji:772285522852839445> **$" + shard + " shards**")
                                     .queue();
 
-                            Player player = PlayerController.INSTANCE.get(event.getUserIdLong());
                             player.addMoney(shard);
 
                             Logger.log("The player " + Utilities.INSTANCE.getFullName(event.getUser()) + " getted the sharddrop");
@@ -100,7 +100,7 @@ public class ShardLootTask {
 
                         });
             }
-        }, 10, 30, TimeUnit.MINUTES);
+        }, 10, 20, TimeUnit.MINUTES);
 
     }
 }

@@ -3,6 +3,9 @@ package com.yuhtin.lauren.commands.help;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.core.music.TrackManager;
+import com.yuhtin.lauren.core.player.controller.PlayerController;
+import com.yuhtin.lauren.core.statistics.controller.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.service.PterodactylConnection;
 import com.yuhtin.lauren.utils.helper.MathUtils;
@@ -28,9 +31,18 @@ public class InfoCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
         SelfUser bot = event.getJDA().getSelfUser();
+        OffsetDateTime timeCreated = bot.getTimeCreated();
+
         User user = event.getJDA().getUserById(272879983326658570L);
         String authorBot = user == null ? bot.getName() + "#" + bot.getDiscriminator() : user.getName() + "#" + user.getDiscriminator();
-        OffsetDateTime timeCreated = bot.getTimeCreated();
+
+        String cacheMessage = PlayerController.INSTANCE.totalUsers()
+                + " jogadores, "
+                + TrackManager.get().musicManager.scheduler.queue.size()
+                + " músicas e "
+                + StatsController.get().getStats().size()
+                + " estatísticas";
+
 
         EmbedBuilder builder = new EmbedBuilder()
                 .setAuthor("Informações sobre a bot mais linda do mundo", null, bot.getAvatarUrl())
@@ -44,7 +56,7 @@ public class InfoCommand extends Command {
                         "`" + MathUtils.format(System.currentTimeMillis() - Lauren.getInstance().getStartTime()) + "`",
                         true)
 
-                .addField("💥 Servidores", "`Sou exclusiva deste servidor :d`", true)
+                .addField("💥 Cache", "`" + cacheMessage + "`", true)
                 .addField("🏓 Ping da API", "`" + event.getJDA().getGatewayPing() + "ms`", true)
 
                 .addField("\uD83D\uDD8A Prefixo", "Padrão: `$`", true)
