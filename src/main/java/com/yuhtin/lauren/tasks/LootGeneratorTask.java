@@ -11,6 +11,7 @@ import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Setter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 
@@ -62,7 +63,7 @@ public class LootGeneratorTask {
             public void run() {
                 Logger.log("Running LootGeneratorTask");
 
-                //if (new Random().nextInt(100) > 15) return;
+                if (new Random().nextInt(100) > 15) return;
 
                 int value = new Random().nextInt(allowedChannels.size());
                 long channelID = allowedChannels.get(value);
@@ -87,24 +88,33 @@ public class LootGeneratorTask {
                             String nickname = event.getMember().getNickname();
                             if (nickname == null) nickname = event.getMember().getEffectiveName();
 
-                            channel.sendMessage("<:felizpakas:742373250037710918> " +
-                                    "Parabéns **" + nickname + "**, você capturou uma lootbox, você pode abrir ela mais tarde " +
-                                    "usando `$openloot`")
-                                    .queue();
+                            message.delete().queue();
+
+                            PrivateChannel privateChannel = event.getUser().openPrivateChannel().complete();
+                            if (privateChannel != null) {
+
+                                privateChannel.sendMessage("<:felizpakas:742373250037710918> " +
+                                        "Parabéns **" + nickname + "**, você capturou uma lootbox, você pode abrir ela mais tarde " +
+                                        "usando `$openloot`")
+                                        .queue();
+
+                            }
 
                             Player player = PlayerController.INSTANCE.get(event.getUserIdLong());
                             player.setLootBoxes(player.getLootBoxes() + 1);
 
                             Logger.log("The player " + Utilities.INSTANCE.getFullName(event.getUser()) + " getted the drop");
-                        }, 25, TimeUnit.SECONDS,
+                        }, 35, TimeUnit.SECONDS,
 
                         () -> {
-                            message.editMessage("<a:tchau:751941650728747140> " +
+
+                            message.delete().queue();
+                            channel.sendMessage("<a:tchau:751941650728747140> " +
                                     "Infelizmente acabou o tempo e ninguém coletou o loot.")
                                     .queue();
-                            message.clearReactions().queue();
+
                         });
             }
-        }, 1, 3, TimeUnit.MINUTES);
+        }, 25, 95, TimeUnit.MINUTES);
     }
 }
