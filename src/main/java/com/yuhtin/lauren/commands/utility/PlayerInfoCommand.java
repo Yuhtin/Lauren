@@ -31,7 +31,7 @@ public class PlayerInfoCommand extends Command {
         Player player = PlayerController.INSTANCE.get(target.getIdLong());
         if (player == null) {
 
-            Logger.log("Occured an error on try load player data of " + target.getIdLong(), LogType.ERROR).save();
+            Logger.log("Occured an error on try load player data of " + target.getIdLong(), LogType.ERROR);
 
             event.getChannel().sendMessage("Ocorreu um erro em meus dados, defusa aqui <@272879983326658570>").queue();
             event.getChannel().sendMessage("Player ID: " + target.getIdLong()).queue();

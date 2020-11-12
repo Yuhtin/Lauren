@@ -13,20 +13,21 @@ public class Logger {
 
     public final String message;
 
-    public static Logger error(Exception exception) {
-        return log(exception.getLocalizedMessage(), LogType.ERROR);
+    public static void error(Exception exception) {
+        log(exception.getLocalizedMessage(), LogType.ERROR);
     }
 
-    public static Logger log(Object message, LogType logType) {
-        if (message == null) return new Logger("Generated a null content");
+    public static void log(Object message, LogType logType) {
+        if (message == null) message = "Generated a null content";
 
         StackTraceElement[] stackTrace = Utilities.INSTANCE.getStackTrace();
         String className = stackTrace[stackTrace.length > 3 ? 3 : 2].getFileName().replace(".java", "");
 
         LocalDateTime now = LocalDateTime.now();
-        String hour = String.valueOf(now.getHour()),
-                minute = String.valueOf(now.getMinute()),
-                second = String.valueOf(now.getSecond());
+
+        String hour = String.valueOf(now.getHour());
+        String minute = String.valueOf(now.getMinute());
+        String second = String.valueOf(now.getSecond());
 
         // fix time
         if (hour.length() == 1) hour = 0 + hour;
@@ -38,17 +39,17 @@ public class Logger {
         message = time + logType.toString() + "> " + "[" + className + "] " + message.toString();
 
         System.out.println(message.toString());
-        return new Logger(message.toString());
+        new Logger(message.toString()).save();
     }
 
-    public static Logger log(String... message) {
+    public static void log(String... message) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < message.length; i++) {
             if (i + 1 == message.length) builder.append(message[i]);
             else builder.append(message[i]).append("\n");
         }
 
-        return log(builder.toString(), LogType.LOG);
+        log(builder.toString(), LogType.LOG);
     }
 
     public void save() {

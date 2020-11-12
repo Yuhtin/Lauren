@@ -87,7 +87,7 @@ public class Lauren {
                         .build());
 
             } catch (LoginException exception) {
-                Logger.log("The bot token is wrong", LogType.ERROR).save();
+                Logger.log("The bot token is wrong", LogType.ERROR);
             }
         });
         buildThread.start();
@@ -181,8 +181,8 @@ public class Lauren {
             LocalDateTime now = LocalDateTime.now();
 
             File file = LoggerController.get().getFile();
-            Logger.log("Compressing the log '" + file.getName() + "' to a zip file", LogType.FINISH).save();
-            Logger.log("Ending log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s", LogType.FINISH).save();
+            Logger.log("Compressing the log '" + file.getName() + "' to a zip file", LogType.FINISH);
+            Logger.log("Ending log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s", LogType.FINISH);
 
             FileOutputStream outputStream = new FileOutputStream(file.getPath().split("\\.")[0] + ".zip");
             ZipOutputStream zipFileOutput = new ZipOutputStream(outputStream);
@@ -195,10 +195,10 @@ public class Lauren {
 
             DatabaseController.getDatabase().shutdown();
 
-            Logger.log("Successfully compressed file", LogType.FINISH).save();
+            Logger.log("Successfully compressed file", LogType.FINISH);
         } catch (Exception exception) {
             exception.printStackTrace();
-            Logger.log("Can't compress a log file", LogType.WARN).save();
+            Logger.log("Can't compress a log file", LogType.WARN);
         }
 
         System.exit(0);
@@ -217,6 +217,6 @@ public class Lauren {
         DatabaseController.get().constructDatabase(connection);
         DatabaseController.get().loadAll();
 
-        Logger.log("Connection to database successful", LogType.STARTUP).save();
+        Logger.log("Connection to database successful", LogType.STARTUP);
     }
 }

@@ -38,7 +38,7 @@ public class Config {
                     writer.flush();
                 }
 
-                Logger.log("Put a valid token in the bot's config", LogType.WARN).save();
+                Logger.log("Put a valid token in the bot's config", LogType.WARN);
                 return null;
             }
 

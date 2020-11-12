@@ -34,8 +34,7 @@ public class LootGeneratorTask {
         Logger.log("Registered LootGeneratorTask");
 
         final List<Long> allowedChannels = Arrays.asList(
-                704342124732350645L,
-                700673056414367825L
+                723625569396326473L
         );
 
         EmbedBuilder embed = new EmbedBuilder();
@@ -63,7 +62,7 @@ public class LootGeneratorTask {
             public void run() {
                 Logger.log("Running LootGeneratorTask");
 
-                if (new Random().nextInt(100) > 7) return;
+                //if (new Random().nextInt(100) > 15) return;
 
                 int value = new Random().nextInt(allowedChannels.size());
                 long channelID = allowedChannels.get(value);
@@ -80,7 +79,8 @@ public class LootGeneratorTask {
                 Message message = channel.sendMessage(embed.build()).complete();
                 message.addReaction(":radiante:771541052590915585").queue();
 
-                eventWaiter.waitForEvent(MessageReactionAddEvent.class, event -> !event.getMember().getUser().isBot(),
+                eventWaiter.waitForEvent(MessageReactionAddEvent.class, event -> !event.getMember().getUser().isBot()
+                                && event.getMessageIdLong() == message.getIdLong(),
                         event -> {
                             message.clearReactions().queue();
 
@@ -105,6 +105,6 @@ public class LootGeneratorTask {
                             message.clearReactions().queue();
                         });
             }
-        }, 10, 30, TimeUnit.MINUTES);
+        }, 1, 3, TimeUnit.MINUTES);
     }
 }

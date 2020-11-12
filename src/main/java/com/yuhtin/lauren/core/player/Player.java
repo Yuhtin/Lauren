@@ -170,15 +170,32 @@ public class Player
     @Override
     public double multiply() {
         checkList();
-        ArrayList<String> permissionsClonned = new ArrayList<>(getPermissions());
-        permissionsClonned.retainAll(multiplerList.keySet());
 
         double multiplier = 1;
-        for (String permissions : permissionsClonned) {
-            multiplier += multiplerList.get(permissions);
+        for (String permission : getPermissions()) {
+            if (multiplierList.containsKey(permission))
+                multiplier += multiplierList.get(permission);
         }
 
         return multiplier;
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "punishs=" + punishs +
+                ", userID=" + userID +
+                ", dailyDelay=" + dailyDelay +
+                ", leaveTime=" + leaveTime +
+                ", level=" + level +
+                ", money=" + money +
+                ", experience=" + experience +
+                ", lootBoxes=" + lootBoxes +
+                ", rankedPoints=" + rankedPoints +
+                ", totalEvents=" + totalEvents +
+                ", keys=" + keys +
+                ", rank=" + rank +
+                "} " + super.toString();
     }
 }
 

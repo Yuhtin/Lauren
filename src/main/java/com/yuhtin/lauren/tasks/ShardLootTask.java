@@ -24,7 +24,8 @@ import java.util.concurrent.TimeUnit;
 public class ShardLootTask {
 
     private static final ShardLootTask INSTANCE = new ShardLootTask();
-    @Setter private EventWaiter eventWaiter;
+    @Setter
+    private EventWaiter eventWaiter;
 
     public static ShardLootTask getInstance() {
         return INSTANCE;
@@ -34,8 +35,7 @@ public class ShardLootTask {
         Logger.log("Registered ShardLootTask");
 
         final List<Long> allowedChannels = Arrays.asList(
-                700673056414367825L,
-                704342124732350645L
+                723625569396326473L
         );
 
         EmbedBuilder embed = new EmbedBuilder();
@@ -54,7 +54,7 @@ public class ShardLootTask {
             public void run() {
                 Logger.log("Running ShardLootTask");
 
-                if (new Random().nextInt(100) > 45) return;
+                //if (new Random().nextInt(100) > 25) return;
 
                 int value = new Random().nextInt(allowedChannels.size());
                 long channelID = allowedChannels.get(value);
@@ -71,7 +71,8 @@ public class ShardLootTask {
                 Message message = channel.sendMessage(embed.build()).complete();
                 message.addReaction(":boost_emoji:772285522852839445").queue();
 
-                eventWaiter.waitForEvent(MessageReactionAddEvent.class, event -> !event.getMember().getUser().isBot(),
+                eventWaiter.waitForEvent(MessageReactionAddEvent.class, event -> !event.getMember().getUser().isBot()
+                                && event.getMessageIdLong() == message.getIdLong(),
                         event -> {
                             Player player = PlayerController.INSTANCE.get(event.getUserIdLong());
                             message.clearReactions().queue();
@@ -100,7 +101,7 @@ public class ShardLootTask {
 
                         });
             }
-        }, 10, 20, TimeUnit.MINUTES);
+        }, 1, 3, TimeUnit.MINUTES);
 
     }
 }

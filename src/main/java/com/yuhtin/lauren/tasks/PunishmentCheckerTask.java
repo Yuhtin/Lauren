@@ -26,7 +26,7 @@ public class PunishmentCheckerTask extends TimerTask {
         Role callRole = Lauren.getInstance().getGuild().getRoleById(771203970118975501L);
 
         if (muteRole == null || callRole == null) {
-            Logger.log("Can't execute PunishmentCheckerTask (roles cannot be null)").save();
+            Logger.log("Can't execute PunishmentCheckerTask (roles cannot be null)");
             return;
         }
 

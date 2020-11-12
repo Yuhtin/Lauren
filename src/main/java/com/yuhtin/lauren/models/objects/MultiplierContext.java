@@ -5,7 +5,7 @@ import java.util.Map;
 
 public interface MultiplierContext {
 
-    Map<String, Double> multiplerList = new HashMap<String, Double>() {
+    Map<String, Double> multiplierList = new HashMap<String, Double>() {
         {
             put("earnings.boost", .15);
             put("role.prime", .15);
@@ -14,6 +14,5 @@ public interface MultiplierContext {
     };
 
     double multiply();
-
 
 }
