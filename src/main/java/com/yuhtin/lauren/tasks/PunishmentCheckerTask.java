@@ -48,6 +48,8 @@ public class PunishmentCheckerTask extends TimerTask {
                     // compare the punishment time and see if the player can be unpunished
                     if (data.getPunishs().get(punishmentType) < System.currentTimeMillis()) {
 
+                        data.getPunishs().remove(punishmentType);
+
                         Role role = punishmentType == PunishmentType.MUTE ? muteRole : callRole;
                         Lauren.getInstance()
                                 .getGuild()
