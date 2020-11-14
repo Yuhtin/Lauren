@@ -33,9 +33,10 @@ public class AddPermissionCommand extends Command {
         Member target = event.getMessage().getMentionedMembers().get(0);
         String[] arguments = event.getMessage().getContentRaw().split(" ");
 
-        if (arguments.length < 2) {
-            event.getChannel().sendMessage("Utilize desta forma: " + arguments[0] + " @usuario <permissão>")
-                    .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+        if (arguments.length < 3) {
+            event.getChannel()
+                    .sendMessage("Utilize desta forma: " + arguments[0] + " @usuario <permissão>")
+                    .queue();
             return;
         }
 

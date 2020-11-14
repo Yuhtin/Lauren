@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.entities.Role;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.HashMap;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
@@ -25,7 +26,7 @@ public class PunishmentCheckerTask extends TimerTask {
         Role callRole = Lauren.getInstance().getGuild().getRoleById(771203970118975501L);
 
         if (muteRole == null || callRole == null) {
-            Logger.log("Can't execute PunishmentCheckerTask (roles cannot be null)").save();
+            Logger.log("Can't execute PunishmentCheckerTask (roles cannot be null)");
             return;
         }
 
@@ -41,10 +42,13 @@ public class PunishmentCheckerTask extends TimerTask {
                     continue;
                 }
 
+                if (data.getPunishs() == null) data.setPunishs(new HashMap<>());
                 for (PunishmentType punishmentType : data.getPunishs().keySet()) {
 
                     // compare the punishment time and see if the player can be unpunished
                     if (data.getPunishs().get(punishmentType) < System.currentTimeMillis()) {
+
+                        data.getPunishs().remove(punishmentType);
 
                         Role role = punishmentType == PunishmentType.MUTE ? muteRole : callRole;
                         Lauren.getInstance()
@@ -59,7 +63,8 @@ public class PunishmentCheckerTask extends TimerTask {
             resultSet.close();
 
         } catch (Exception exception) {
-            Logger.log("Can't check punishment's'");
+            Logger.log("Can't check punishment's");
+            exception.printStackTrace();
         }
     }
 }

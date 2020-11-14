@@ -41,8 +41,8 @@ public class LoggerController {
         bufferedWriter = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
 
         Logger.log("Registering logs to " + file.getName(), LogType.STARTUP);
-        Logger.log("Lauren is now registering logs", LogType.STARTUP).save();
-        Logger.log("Starting log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s", LogType.STARTUP).save();
+        Logger.log("Lauren is now registering logs", LogType.STARTUP);
+        Logger.log("Starting log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s", LogType.STARTUP);
     }
 
     public static LoggerController get() {

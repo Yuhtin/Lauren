@@ -11,6 +11,7 @@ import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Setter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 
@@ -24,19 +25,18 @@ import java.util.concurrent.TimeUnit;
 public class ShardLootTask {
 
     private static final ShardLootTask INSTANCE = new ShardLootTask();
-    @Setter private EventWaiter eventWaiter;
+    @Setter
+    private EventWaiter eventWaiter;
 
     public static ShardLootTask getInstance() {
         return INSTANCE;
     }
 
     public void startRunnable() {
-        Logger.log("Registered MoneyLootTask");
+        Logger.log("Registered ShardLootTask");
 
         final List<Long> allowedChannels = Arrays.asList(
-                765024746655318016L,
-                763757066103554069L,
-                721037764321345578L,
+                704342124732350645L,
                 700673056414367825L
         );
 
@@ -45,7 +45,7 @@ public class ShardLootTask {
         embed.setFooter("© ^Aincrad™ servidor de jogos", Lauren.getInstance().getGuild().getIconUrl());
 
         embed.setThumbnail("https://www.pcguia.pt/wp-content/uploads/2019/11/lootbox.jpg");
-        embed.setColor(Color.getColor("ff69b4"));
+        embed.setColor(Color.MAGENTA);
 
         embed.setDescription("Você encontrou um **shardloot**, seja o primeiro a reajir\n" +
                 "no ícone abaixo para garantir seus **<:boost_emoji:772285522852839445> shards**\n"
@@ -54,7 +54,7 @@ public class ShardLootTask {
         TaskHelper.runTaskTimerAsync(new TimerTask() {
             @Override
             public void run() {
-                Logger.log("Running MoneyLootTask");
+                Logger.log("Running ShardLootTask");
 
                 if (new Random().nextInt(100) > 25) return;
 
@@ -73,36 +73,36 @@ public class ShardLootTask {
                 Message message = channel.sendMessage(embed.build()).complete();
                 message.addReaction(":boost_emoji:772285522852839445").queue();
 
-                eventWaiter.waitForEvent(MessageReactionAddEvent.class, event -> !event.getMember().getUser().isBot(),
+                eventWaiter.waitForEvent(MessageReactionAddEvent.class, event -> !event.getMember().getUser().isBot()
+                                && event.getMessageIdLong() == message.getIdLong(),
                         event -> {
-                            message.clearReactions().queue();
-
-                            String nickname = event.getMember().getNickname();
-                            if (nickname == null) nickname = event.getMember().getEffectiveName();
-
-                            int shard = 20 + new Random().nextInt(30);
-
-                            channel.sendMessage("<:felizpakas:742373250037710918> " +
-                                    "Parabéns **" + nickname + "**, você capturou um shardloot, " +
-                                    "você recebeu <:boost_emoji:772285522852839445> **$" + shard + " shards")
-                                    .queue();
+                            message.delete().queue();
 
                             Player player = PlayerController.INSTANCE.get(event.getUserIdLong());
+                            int shard = 30 + new Random().nextInt(50);
+
                             player.addMoney(shard);
 
+                            PrivateChannel privateChannel = event.getUser().openPrivateChannel().complete();
+                            if (event.getUser().hasPrivateChannel()) {
+
+                                String nickname = event.getMember().getNickname();
+                                if (nickname == null) nickname = event.getMember().getEffectiveName();
+
+                                privateChannel.sendMessage("<:felizpakas:742373250037710918> " +
+                                        "Parabéns **" + nickname + "**, você capturou um shardloot, " +
+                                        "você recebeu <:boost_emoji:772285522852839445> **$" + shard + " shards**")
+                                        .queue();
+
+                            }
+
+
                             Logger.log("The player " + Utilities.INSTANCE.getFullName(event.getUser()) + " getted the sharddrop");
-                        }, 10, TimeUnit.SECONDS,
+                        }, 25, TimeUnit.SECONDS,
 
-                        () -> {
-
-                            message.editMessage("<a:tchau:751941650728747140> " +
-                                    "Infelizmente acabou o tempo e ninguém coletou o loot.")
-                                    .queue();
-                            message.clearReactions().queue();
-
-                        });
+                        () -> message.delete().queue());
             }
-        }, 20, 10, TimeUnit.MINUTES);
+        }, 10, 55, TimeUnit.MINUTES);
 
     }
 }

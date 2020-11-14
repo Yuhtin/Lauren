@@ -22,6 +22,7 @@ public class PlayerSerializer {
     public static String serialize(Player player) {
         return GSON.toJson(player);
     }
+
     public static Player deserialize(String data) {
         return GSON.fromJson(data, Player.class);
     }

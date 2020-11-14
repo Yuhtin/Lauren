@@ -2,7 +2,6 @@ package com.yuhtin.lauren.core.player;
 
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.core.player.controller.PlayerDatabase;
 import com.yuhtin.lauren.core.punish.PunishmentType;
 import com.yuhtin.lauren.core.statistics.controller.StatsController;
 import com.yuhtin.lauren.core.xp.Level;
@@ -13,7 +12,6 @@ import com.yuhtin.lauren.models.objects.Entity;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -136,7 +134,16 @@ public class Player
     }
 
     public Player addMoney(double quantity) {
+        double multiplier = multiply();
+        Logger.log("Multiplicador: " + multiplier + "");
+
+        Logger.log("Quantidade: " + quantity + "");
+        quantity *= multiplier;
+        Logger.log("Quantidade Multiplicada: " + quantity + "");
+
+        Logger.log("Money Antigo:" + money + "");
         money += quantity;
+        Logger.log("Money Atual: " + money + "");
 
         return this;
     }
@@ -146,26 +153,6 @@ public class Player
 
         return this;
     }
-
-    /*public Player gainXP(double quantity) {
-        List<Double> multipliers = Arrays.asList(boosterMultiplier(), rank.getMultiplier());
-
-        for (Double multiplier : multipliers) quantity *= multiplier;
-        experience += (int) quantity;
-
-        int nextLevel = level + 1;
-        if (XpController.getInstance().canUpgrade(nextLevel, experience)) updateLevel(nextLevel);
-
-        StatsController.get().getStats("Ganhar XP").suplyStats(1);
-        return this;
-    }
-
-    private double boosterMultiplier() {
-        Member member = Lauren.getInstance().getGuild().getMemberById(userID);
-
-        double primeBooster = Utilities.INSTANCE.isPrime(member) ? 1.15 : 1;
-        return Utilities.INSTANCE.isBooster(member) ? 1.25 : primeBooster;
-    }*/
 
     public Player gainXP(double quantity) {
         double multiplier = multiply();
@@ -182,15 +169,33 @@ public class Player
 
     @Override
     public double multiply() {
-        ArrayList<String> permissionsClonned = (ArrayList<String>) getPermissions().clone();
-        permissionsClonned.retainAll(multiplerList.keySet());
+        checkList();
 
         double multiplier = 1;
-        for (String permissions : permissionsClonned) {
-            multiplier += multiplerList.get(permissions);
+        for (String permission : getPermissions()) {
+            if (multiplierList.containsKey(permission))
+                multiplier += multiplierList.get(permission);
         }
 
         return multiplier;
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "punishs=" + punishs +
+                ", userID=" + userID +
+                ", dailyDelay=" + dailyDelay +
+                ", leaveTime=" + leaveTime +
+                ", level=" + level +
+                ", money=" + money +
+                ", experience=" + experience +
+                ", lootBoxes=" + lootBoxes +
+                ", rankedPoints=" + rankedPoints +
+                ", totalEvents=" + totalEvents +
+                ", keys=" + keys +
+                ", rank=" + rank +
+                "} " + super.toString();
     }
 }
 

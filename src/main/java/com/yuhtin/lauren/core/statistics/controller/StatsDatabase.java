@@ -35,7 +35,7 @@ public class StatsDatabase {
     }
 
     public static void save() {
-        Logger.log("Saving all stats, the bot may lag for a bit").save();
+        Logger.log("Saving all stats, the bot may lag for a bit");
 
         for (String name : StatsController.get().getStats().keySet()) {
             DatabaseController.getDatabase()
@@ -44,7 +44,7 @@ public class StatsDatabase {
                             "' where `tipo` = '" + name + "'");
         }
 
-        Logger.log("Saved all stats").save();
+        Logger.log("Saved all stats");
     }
 
     public static void create(String name) {

@@ -24,8 +24,9 @@ public class AddPointsCommand extends Command {
             return;
 
         if (event.getMessage().getMentionedMembers().isEmpty()) {
-            event.getChannel().sendMessage("Ops, você precisa mencionar um jogador para receber os pontos")
-                    .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+            event.getChannel()
+                    .sendMessage("Ops, você precisa mencionar um jogador para receber os pontos")
+                    .queue();
             return;
         }
 

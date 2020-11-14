@@ -52,7 +52,7 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
                                 "\uD83D\uDCCC Link: [Clique aqui](" + track.getInfo().uri + ")");
 
         if (searchType == TrackManager.SearchType.SIMPLE_SEARCH) {
-            Logger.log("The player " + Utilities.INSTANCE.getFullName(member.getUser()) + " added a music").save();
+            Logger.log("The player " + Utilities.INSTANCE.getFullName(member.getUser()) + " added a music");
             channel.sendMessage(embed.build()).queue();
 
             StatsController.get().getStats("Tocar Música").suplyStats(1);
@@ -81,7 +81,7 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
                             "\uD83C\uDFB6 Músicas: `" + maxMusics + "`\n" +
                             "\uD83D\uDCCC Link: [Clique aqui](" + trackUrl + ")");
 
-            Logger.log("The player " + Utilities.INSTANCE.getFullName(member.getUser()) + " added a playlist with " + maxMusics + " musics").save();
+            Logger.log("The player " + Utilities.INSTANCE.getFullName(member.getUser()) + " added a playlist with " + maxMusics + " musics");
 
             TrackManager.get().audio = member.getVoiceState().getChannel();
             TaskHelper.runAsync(() -> {

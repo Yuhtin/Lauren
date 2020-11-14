@@ -11,6 +11,7 @@ import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Setter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 
@@ -34,10 +35,7 @@ public class LootGeneratorTask {
         Logger.log("Registered LootGeneratorTask");
 
         final List<Long> allowedChannels = Arrays.asList(
-                765024746655318016L,
-                763757066103554069L,
-                721037764321345578L,
-                700673056414367825L
+                723625569396326473L
         );
 
         EmbedBuilder embed = new EmbedBuilder();
@@ -65,7 +63,7 @@ public class LootGeneratorTask {
             public void run() {
                 Logger.log("Running LootGeneratorTask");
 
-                if (new Random().nextInt(100) > 7) return;
+                if (new Random().nextInt(100) > 15) return;
 
                 int value = new Random().nextInt(allowedChannels.size());
                 long channelID = allowedChannels.get(value);
@@ -82,31 +80,41 @@ public class LootGeneratorTask {
                 Message message = channel.sendMessage(embed.build()).complete();
                 message.addReaction(":radiante:771541052590915585").queue();
 
-                eventWaiter.waitForEvent(MessageReactionAddEvent.class, event -> !event.getMember().getUser().isBot(),
+                eventWaiter.waitForEvent(MessageReactionAddEvent.class, event -> !event.getMember().getUser().isBot()
+                                && event.getMessageIdLong() == message.getIdLong(),
                         event -> {
                             message.clearReactions().queue();
 
                             String nickname = event.getMember().getNickname();
                             if (nickname == null) nickname = event.getMember().getEffectiveName();
 
-                            channel.sendMessage("<:felizpakas:742373250037710918> " +
-                                    "Parabéns **" + nickname + "**, você capturou uma lootbox, você pode abrir ela mais tarde " +
-                                    "usando `$openloot`")
-                                    .queue();
+                            message.delete().queue();
+
+                            PrivateChannel privateChannel = event.getUser().openPrivateChannel().complete();
+                            if (privateChannel != null) {
+
+                                privateChannel.sendMessage("<:felizpakas:742373250037710918> " +
+                                        "Parabéns **" + nickname + "**, você capturou uma lootbox, você pode abrir ela mais tarde " +
+                                        "usando `$openloot`")
+                                        .queue();
+
+                            }
 
                             Player player = PlayerController.INSTANCE.get(event.getUserIdLong());
                             player.setLootBoxes(player.getLootBoxes() + 1);
 
                             Logger.log("The player " + Utilities.INSTANCE.getFullName(event.getUser()) + " getted the drop");
-                        }, 10, TimeUnit.SECONDS,
+                        }, 35, TimeUnit.SECONDS,
 
                         () -> {
-                            message.editMessage("<a:tchau:751941650728747140> " +
+
+                            message.delete().queue();
+                            channel.sendMessage("<a:tchau:751941650728747140> " +
                                     "Infelizmente acabou o tempo e ninguém coletou o loot.")
                                     .queue();
-                            message.clearReactions().queue();
+
                         });
             }
-        }, 10, 30, TimeUnit.MINUTES);
+        }, 25, 95, TimeUnit.MINUTES);
     }
 }

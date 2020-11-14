@@ -17,10 +17,10 @@ public class ShopEmbed {
     @Getter private final Map<String, ShopItem> shopItems = new HashMap<>();
 
     public void build() {
-        shopItems.put("version:756767328334512179", new ShopItem(ItemType.TRADE_COMMAND, 3000));
-        shopItems.put("rename_command:775348818555699210", new ShopItem(ItemType.RENAME_COMMAND, 2000));
-        shopItems.put("bronzekey:775100121322356766", new ShopItem(ItemType.KEY, 2000));
-        shopItems.put("prime:722115525232296056", new ShopItem(ItemType.PRIME, 10000));
+        //shopItems.put("version:756767328334512179", new ShopItem(ItemType.TRADE_COMMAND, 3000));
+        shopItems.put("rename_command:775348818555699210", new ShopItem(ItemType.RENAME_COMMAND, 1000));
+        shopItems.put("bronzekey:775100121322356766", new ShopItem(ItemType.KEY, 1350));
+        shopItems.put("prime:722115525232296056", new ShopItem(ItemType.PRIME, 4000));
 
         embed.setImage("https://www.flaticon.com/br/premium-icon/icons/svg/384/384993.svg");
         embed.setTimestamp(Instant.ofEpochMilli(System.currentTimeMillis()));

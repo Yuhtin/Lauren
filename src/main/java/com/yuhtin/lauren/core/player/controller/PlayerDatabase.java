@@ -4,7 +4,6 @@ import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.database.DatabaseController;
 import com.yuhtin.lauren.utils.serialization.PlayerSerializer;
-import com.yuhtin.lauren.utils.serialization.Serializer;
 import io.github.eikefs.sql.provider.query.Query;
 
 public class PlayerDatabase {
@@ -32,6 +31,9 @@ public class PlayerDatabase {
     }
 
     public static void save(long userID, Player player) {
+
+        Logger.log("Saving player " + userID + ": " + player.toString());
+
         DatabaseController.getDatabase()
                 .updateSync("update `lauren_players`" +
                         " set `data`= '" + PlayerSerializer.serialize(player) + "'," +

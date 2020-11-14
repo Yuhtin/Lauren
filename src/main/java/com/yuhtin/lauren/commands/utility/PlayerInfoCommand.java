@@ -31,7 +31,7 @@ public class PlayerInfoCommand extends Command {
         Player player = PlayerController.INSTANCE.get(target.getIdLong());
         if (player == null) {
 
-            Logger.log("Occured an error on try load player data of " + target.getIdLong(), LogType.ERROR).save();
+            Logger.log("Occured an error on try load player data of " + target.getIdLong(), LogType.ERROR);
 
             event.getChannel().sendMessage("Ocorreu um erro em meus dados, defusa aqui <@272879983326658570>").queue();
             event.getChannel().sendMessage("Player ID: " + target.getIdLong()).queue();
@@ -58,7 +58,7 @@ public class PlayerInfoCommand extends Command {
         embed.addField("<:lootbox:771545027829563402> LootBoxes", "`" + player.getLootBoxes() + " caixas`", true);
         embed.addField("\uD83D\uDD11 Chaves", "`" + player.getKeys() + " keys`", true);
 
-        embed.setFooter("Comando usado por " + event.getMember().getNickname(), event.getMember().getUser().getAvatarUrl());
+        embed.setFooter("Comando usado por " + name, event.getMember().getUser().getAvatarUrl());
         embed.setTimestamp(Instant.now());
 
         event.getChannel().sendMessage(embed.build()).queue();

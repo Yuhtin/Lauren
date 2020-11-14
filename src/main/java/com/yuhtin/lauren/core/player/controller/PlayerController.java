@@ -3,13 +3,12 @@ package com.yuhtin.lauren.core.player.controller;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.OldPlayer;
 import com.yuhtin.lauren.core.player.Player;
-import com.yuhtin.lauren.core.punish.PunishmentType;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.serialization.PlayerSerializer;
 import com.yuhtin.lauren.utils.serialization.Serializer;
 
-import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PlayerController {
 
@@ -17,17 +16,14 @@ public class PlayerController {
     private final Map<Long, Player> cache = new HashMap<>();
 
     public void savePlayers() {
-        Logger.log("Saving all players, the bot may lag for a bit").save();
+        Logger.log("Saving all players, the bot may lag for a bit");
 
-        TaskHelper.runAsync(() -> cache.forEach(PlayerDatabase::save));
-        TaskHelper.runTaskLater(new TimerTask() {
-            @Override
-            public void run() {
-                cache.clear();
-            }
-        }, 10, TimeUnit.SECONDS);
+        TaskHelper.runAsync(() -> {
+            cache.forEach(PlayerDatabase::save);
+            cache.clear();
+        });
 
-        Logger.log("Saved all players").save();
+        Logger.log("Saved all players");
     }
 
     public Player get(long userID) {
@@ -36,7 +32,6 @@ public class PlayerController {
         if (player == null) {
 
             String data = PlayerDatabase.loadPlayer(userID);
-
             if (data.equalsIgnoreCase("")) player = new Player(userID);
 
             else {
@@ -54,10 +49,12 @@ public class PlayerController {
                     tempPlayer.setDailyDelay(oldPlayer.getDailyDelay());
 
                     player = tempPlayer;
-                    Logger.log("Converted data of player " + userID + " to new Player class").save();
+                    Logger.log("Converted data of player " + userID + " to new Player class");
 
                 } else player = deserialize;
 
+
+                Logger.log("Loading player " + userID + ": " + player.toString());
                 if (deserialize.getPunishs() == null) deserialize.setPunishs(new HashMap<>());
             }
 
@@ -66,6 +63,10 @@ public class PlayerController {
         }
 
         return player;
+    }
+
+    public int totalUsers() {
+        return cache.size();
     }
 
 }

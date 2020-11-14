@@ -23,7 +23,7 @@ public class RestartCommand extends Command {
         if (!Utilities.INSTANCE.isOwner(event.getChannel(), event.getMember().getUser(), true)) return;
 
         event.getChannel().sendMessage("Reiniciando meus sistemas :satisfied:").queue();
-        Logger.log("The player " + event.getMember().getUser().getName() + " restarting my systems").save();
+        Logger.log("The player " + event.getMember().getUser().getName() + " restarting my systems");
 
         Lauren.finish();
     }

@@ -62,6 +62,6 @@ public class ClearCommand extends Command {
 
         Logger.log("The user " + event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator()
                 + " cleared " + cleared + " messages from channel #" + event.getChannel().getName()
-                + " (" + event.getChannel().getId() + ")", LogType.LOG).save();
+                + " (" + event.getChannel().getId() + ")", LogType.LOG);
     }
 }

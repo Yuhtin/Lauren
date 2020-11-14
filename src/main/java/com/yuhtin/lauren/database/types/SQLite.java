@@ -27,7 +27,7 @@ public class SQLite implements Data {
             Class.forName("org.sqlite.JDBC");
             return DriverManager.getConnection(url);
         } catch (Exception e) {
-            Logger.log("Conexao com o SQLite falhou").save();
+            Logger.log("Conexao com o SQLite falhou");
             Logger.error(e);
 
             return null;
