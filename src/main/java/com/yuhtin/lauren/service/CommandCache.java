@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.service;
 
 import com.yuhtin.lauren.Lauren;
-import com.yuhtin.lauren.core.entities.RawCommand;
+import com.yuhtin.lauren.models.objects.RawCommand;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import lombok.Getter;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -25,24 +25,24 @@ public class CommandCache {
     }
 
     public static void insert(CommandHandler.CommandType type, RawCommand rawCommand) {
-        aliases.add(rawCommand.name);
-        aliases.addAll(Arrays.asList(rawCommand.aliases));
+        aliases.add(rawCommand.getName());
+        aliases.addAll(Arrays.asList(rawCommand.getAliases()));
 
-        commands.put(rawCommand.name.toLowerCase(), new EmbedBuilder()
+        commands.put(rawCommand.getName().toLowerCase(), new EmbedBuilder()
                 .setImage("https://pa1.narvii.com/7093/1d8551884cec1cb2dd99b88ff4c745436b21f1b4r1-500-500_hq.gif")
-                .setAuthor("Informações do comando " + rawCommand.name, null,
+                .setAuthor("Informações do comando " + rawCommand.getName(), null,
                         Lauren.getInstance()
                                 .getBot()
                                 .getSelfUser()
                                 .getAvatarUrl())
 
-                .setDescription("Você está vendo as informações específicas do comando `" + rawCommand.name + "`," +
+                .setDescription("Você está vendo as informações específicas do comando `" + rawCommand.getName() + "`," +
                         " para ver todos os comandos utilize `$ajuda <comando>`")
 
                 .addField("__Informações do comando:__", "", false)
-                .addField("**Nome** ❓ - _Identificador principal do comando_", rawCommand.name, false)
-                .addField("**Categoria** \uD83E\uDDE9 - _Categoria do comando_", rawCommand.type.getName(), false)
-                .addField("**Descrição** ⭐️ - _Pequena descrição do comando_", rawCommand.description, false));
+                .addField("**Nome** ❓ - _Identificador principal do comando_", rawCommand.getName(), false)
+                .addField("**Categoria** \uD83E\uDDE9 - _Categoria do comando_", rawCommand.getType().getName(), false)
+                .addField("**Descrição** ⭐️ - _Pequena descrição do comando_", rawCommand.getDescription(), false));
 
         commandsType.get(type).add(rawCommand);
     }
@@ -91,7 +91,7 @@ public class CommandCache {
 
     private static String getCommands(CommandHandler.CommandType commandType) {
         StringBuilder builder = new StringBuilder();
-        commandsType.get(commandType).forEach(command -> builder.append("`").append(command.name).append("` "));
+        commandsType.get(commandType).forEach(command -> builder.append("`").append(command.getName()).append("` "));
 
         return builder.toString();
     }

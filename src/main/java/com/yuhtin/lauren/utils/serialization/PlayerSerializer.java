@@ -3,7 +3,7 @@ package com.yuhtin.lauren.utils.serialization;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.yuhtin.lauren.core.player.Player;
-import com.yuhtin.lauren.models.objects.Entity;
+import com.yuhtin.lauren.core.player.impl.Entity;
 
 public class PlayerSerializer {
 

@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.models.objects;
+package com.yuhtin.lauren.core.player.impl;
 
 public abstract class Entity
         extends PermissionAttachment

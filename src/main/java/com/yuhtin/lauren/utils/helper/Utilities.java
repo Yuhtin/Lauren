@@ -54,7 +54,7 @@ public class Utilities {
     }
 
     public boolean isOwner(MessageChannel channel, User user, boolean showMessage) {
-        if (Lauren.getInstance().getConfig().ownerID != user.getIdLong()) {
+        if (Lauren.getInstance().getConfig().getOwnerID() != user.getIdLong()) {
             Logger.log("Failed to check owner permission for user " + getFullName(user));
             if (!showMessage) return false;
 
@@ -77,7 +77,7 @@ public class Utilities {
         if (nickname == null) nickname = member.getEffectiveName();
         if (nickname.contains("] ")) nickname = nickname.split("] ")[1];
 
-        nickname = Lauren.getInstance().getConfig().formatNickname.replace("@level", "" + level) + nickname;
+        nickname = Lauren.getInstance().getConfig().getFormatNickname().replace("@level", "" + level) + nickname;
         if (nickname.length() > 32) nickname = nickname.substring(0, 32);
 
         try {

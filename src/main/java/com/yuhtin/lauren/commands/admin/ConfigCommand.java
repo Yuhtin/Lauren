@@ -3,16 +3,15 @@ package com.yuhtin.lauren.commands.admin;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.Lauren;
-import com.yuhtin.lauren.core.entities.Config;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.models.objects.Config;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.SneakyThrows;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 
 import java.time.Instant;
-import java.util.concurrent.TimeUnit;
 
 @CommandHandler(
         name = "config",
@@ -26,61 +25,97 @@ public class ConfigCommand extends Command {
     protected void execute(CommandEvent event) {
         if (!Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true))
             return;
+
         String[] arguments = event.getMessage().getContentRaw().split(" ");
+
         Config config = Lauren.getInstance().getConfig();
         if (arguments.length < 2) {
-            EmbedBuilder embed = new EmbedBuilder()
-                    .setAuthor("Configurações do bot", "https://google.com", "https://pt.seaicons.com/wp-content/uploads/2015/07/Settings-L-icon.png")
-                    .setThumbnail(event.getJDA().getSelfUser().getAvatarUrl())
-                    .setColor(event.getMember().getColor())
-                    .setTimestamp(Instant.now())
-                    .setFooter("Comando usado as", event.getAuthor().getAvatarUrl())
 
-                    .setDescription(
-                            "\n" +
-                                    " **• $config** setprefix <prefixo>\n" +
-                                    "  Atual: " + config.prefix + "\n" +
-                                    "  Use para trocar o meu identificador\n\n" +
-                                    " **• $config** setregistration <messageid>\n" +
-                                    "  Atual: " + config.resgistrationId + "\n" +
-                                    "  Troque o ID da mensagem de registro\n\n" +
-                                    " **• $config** setlog <true/false>\n" +
-                                    "  Atual: " + (config.log ? "Ativado" : "Desativado") + "\n" +
-                                    "  Ativar ou desativar o salvamento de logs\n\n" +
-                                    "\n");
+            EmbedBuilder embed = new EmbedBuilder();
+
+            embed.setAuthor("Configurações do bot", null,
+                    "https://pt.seaicons.com/wp-content/uploads/2015/07/Settings-L-icon.png");
+
+            embed.setThumbnail(event.getJDA().getSelfUser().getAvatarUrl());
+            embed.setColor(event.getMember().getColor());
+            embed.setTimestamp(Instant.now());
+            embed.setFooter("Comando usado as", event.getAuthor().getAvatarUrl());
+
+            embed.setDescription(
+                    "\n" +
+                            " **• $config** setprefix <prefixo>\n" +
+                            "  Atual: " + config.getPrefix() + "\n" +
+                            "  Use para trocar o meu identificador\n\n" +
+                            " **• $config** setregistration <messageid>\n" +
+                            "  Atual: " + config.getResgistrationId() + "\n" +
+                            "  Troque o ID da mensagem de registro\n\n" +
+                            " **• $config** setlog <true/false>\n" +
+                            "  Atual: " + (config.isLog() ? "Ativado" : "Desativado") + "\n" +
+                            "  Ativar ou desativar o salvamento de logs\n\n" +
+                            "\n");
             event.getChannel().sendMessage(embed.build()).queue();
             return;
         }
+
         String value = arguments[2];
         if (arguments[1].equalsIgnoreCase("setprefix")) {
-            config.setPrefix(value);
-            Logger.log("The player " + event.getMember().getUser().getName() + " changed the prefix to " + value);
 
-            event.getChannel().sendMessage("<a:sim:704295025374265387> O meu prefixo foi alterado para '" + value + "'. Reinicie o bot para realizar a troca.").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+            config.setPrefix(value);
+
+            Logger.log("The player " + event.getMember().getUser().getName() + " changed the prefix to " + value);
+            event.getChannel()
+                    .sendMessage("<a:sim:704295025374265387> " +
+                            "O meu prefixo foi alterado para '" + value + "'. Reinicie o bot para realizar a troca.")
+                    .queue();
             return;
         }
+
         if (arguments[1].equalsIgnoreCase("setregistration")) {
             try {
+
                 config.setResgistrationId(Long.parseLong(value));
                 Logger.log("The player " + event.getMember().getUser().getName() + " changed the registrationID to " + value);
+
             } catch (Exception exception) {
-                event.getChannel().sendMessage("<a:nao:704295026036834375> O valor inserido é invalido: '" + value + "' (insira um id).").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+
+                event.getChannel()
+                        .sendMessage("<a:nao:704295026036834375> " +
+                                "O valor inserido é invalido: '" + value + "' (insira um id).")
+                        .queue();
                 return;
+
             }
 
-            event.getChannel().sendMessage("<a:sim:704295025374265387> O id da mensagem de registro foi alterado para '" + value + "'.").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+            event.getChannel()
+                    .sendMessage("<a:sim:704295025374265387> " +
+                            "O id da mensagem de registro foi alterado para '" + value + "'.")
+                    .queue();
             return;
+
         }
+
         if (arguments[1].equalsIgnoreCase("setlog")) {
+
             try {
+
                 config.setLog(Boolean.parseBoolean(value));
                 Logger.log("The player " + event.getMember().getUser().getName() + " turned logs to " + value);
+
             } catch (Exception exception) {
-                event.getChannel().sendMessage("<a:nao:704295026036834375> O valor inserido é invalido: '" + value + "' (insira true ou false).").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+                event.getChannel()
+                        .sendMessage("<a:nao:704295026036834375> " +
+                                "O valor inserido é invalido: '" + value + "' (insira true ou false).")
+                        .queue();
                 return;
             }
 
-            event.getChannel().sendMessage("<a:sim:704295025374265387> As logs foram " + (config.log ? "ativadas" : "desativadas") + ".").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+            event.getChannel()
+                    .sendMessage("<a:sim:704295025374265387> As logs foram " +
+                            (config.isLog()
+                                    ? "ativadas"
+                                    : "desativadas")
+                            + ".")
+                    .queue();
         }
     }
 }

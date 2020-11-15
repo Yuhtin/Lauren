@@ -8,7 +8,7 @@ import com.yuhtin.lauren.core.xp.Level;
 import com.yuhtin.lauren.core.xp.XpController;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.enums.Rank;
-import com.yuhtin.lauren.models.objects.Entity;
+import com.yuhtin.lauren.core.player.impl.Entity;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
