@@ -21,7 +21,7 @@ Lauren is a discord bot that contains a scrim system for 8ballpool and LudoKing 
 
 ## Discord Server
   Tests the Lauren bot on my discord server
-  <td align="center"><a href="https://discord.gg/ShpKBgk"> <img src="https://invidget.switchblade.xyz/ShpKBgk">
+  <td align="center"><a href="https://discord.gg/ShpKBgk"> <img src="https://media.discordapp.net/attachments/773207393697923113/775920346649591808/aincrad.png">
 
 ## Contributors
 
