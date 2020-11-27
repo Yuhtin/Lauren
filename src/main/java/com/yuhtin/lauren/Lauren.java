@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.yuhtin.lauren.commands.music.QueueCommand;
 import com.yuhtin.lauren.commands.utility.ShopCommand;
 import com.yuhtin.lauren.commands.utility.SugestionCommand;
-import com.yuhtin.lauren.core.entities.Config;
+import com.yuhtin.lauren.models.objects.Config;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
 import com.yuhtin.lauren.core.music.TrackManager;
@@ -66,7 +66,7 @@ public class Lauren {
             return;
         }
 
-        if (instance.getConfig().log) {
+        if (instance.getConfig().isLog()) {
             try {
                 new LoggerController();
             } catch (Exception exception) {
@@ -78,9 +78,9 @@ public class Lauren {
         EventWaiter eventWaiter = new EventWaiter();
         Thread buildThread = new Thread(() -> {
             try {
-                processDatabase(instance.getConfig().databaseType);
                 Utilities.INSTANCE.foundVersion();
-                instance.setBot(JDABuilder.createDefault(instance.getConfig().token)
+                processDatabase(instance.getConfig().getDatabaseType());
+                instance.setBot(JDABuilder.createDefault(instance.getConfig().getToken())
                         .setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"))
                         .setAutoReconnect(true)
                         .enableIntents(EnumSet.allOf(GatewayIntent.class))
@@ -96,7 +96,7 @@ public class Lauren {
         TaskHelper.runAsync(() -> {
             new EventsManager(instance.getBot(), "com.yuhtin.lauren.events");
             new CommandManager(instance.getBot(), "com.yuhtin.lauren.commands");
-            new PterodactylConnection(instance.getConfig().pteroKey);
+            new PterodactylConnection(instance.getConfig().getPteroKey());
             new Thread(Lauren::loadTasks).start();
 
             instance.getBot().addEventListener(eventWaiter);
@@ -207,10 +207,10 @@ public class Lauren {
     private static void processDatabase(String databaseType) {
         Data dataType = new SQLite();
         if (databaseType.equalsIgnoreCase("MySQL"))
-            dataType = new MySQL(instance.getConfig().mySqlHost,
-                    instance.getConfig().mySqlUser,
-                    instance.getConfig().mySqlPassword,
-                    instance.getConfig().mySqlDatabase);
+            dataType = new MySQL(instance.getConfig().getMySqlHost(),
+                    instance.getConfig().getMySqlUser(),
+                    instance.getConfig().getMySqlPassword(),
+                    instance.getConfig().getMySqlDatabase());
 
         Connection connection = dataType.openConnection();
 

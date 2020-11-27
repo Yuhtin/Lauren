@@ -4,7 +4,7 @@ import com.google.common.reflect.ClassPath;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.yuhtin.lauren.Lauren;
-import com.yuhtin.lauren.core.entities.RawCommand;
+import com.yuhtin.lauren.models.objects.RawCommand;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.models.enums.LogType;
@@ -22,7 +22,7 @@ public class CommandManager {
 
         CommandClientBuilder clientBuilder = new CommandClientBuilder();
         clientBuilder.setOwnerId("702518526753243156");
-        clientBuilder.setPrefix(Lauren.getInstance().getConfig().prefix);
+        clientBuilder.setPrefix(Lauren.getInstance().getConfig().getPrefix());
         clientBuilder.setHelpWord("riphelpmessage");
         clientBuilder.setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"));
 

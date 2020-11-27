@@ -53,6 +53,6 @@ public class Logger {
     }
 
     public void save() {
-        if (Lauren.getInstance().getConfig().log) LoggerController.get().toFile(message);
+        if (Lauren.getInstance().getConfig().isLog()) LoggerController.get().toFile(message);
     }
 }

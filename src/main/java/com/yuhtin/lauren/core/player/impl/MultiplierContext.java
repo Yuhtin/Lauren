@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.models.objects;
+package com.yuhtin.lauren.core.player.impl;
 
 import java.util.HashMap;
 import java.util.Map;

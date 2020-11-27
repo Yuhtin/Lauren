@@ -2,6 +2,7 @@ package com.yuhtin.lauren.utils.helper;
 
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.logger.Logger;
+import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.models.enums.LogType;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -54,7 +55,7 @@ public class Utilities {
     }
 
     public boolean isOwner(MessageChannel channel, User user, boolean showMessage) {
-        if (Lauren.getInstance().getConfig().ownerID != user.getIdLong()) {
+        if (Lauren.getInstance().getConfig().getOwnerID() != user.getIdLong()) {
             Logger.log("Failed to check owner permission for user " + getFullName(user));
             if (!showMessage) return false;
 
@@ -69,15 +70,18 @@ public class Utilities {
         Files.delete(path);
     }
 
-    public void updateNickByLevel(Long userID, int level) {
-        Member member = Lauren.getInstance().getBot().getGuilds().get(0).getMemberById(userID);
+    public void updateNickByLevel(Player player, int level) {
+        if (player.isHideLevelOnNickname()) return;
+
+        Member member = Lauren.getInstance().getBot().getGuilds().get(0).getMemberById(player.getUserID());
         if (member == null) return;
 
         String nickname = member.getNickname();
         if (nickname == null) nickname = member.getEffectiveName();
         if (nickname.contains("] ")) nickname = nickname.split("] ")[1];
 
-        nickname = Lauren.getInstance().getConfig().formatNickname.replace("@level", "" + level) + nickname;
+        nickname = Lauren.getInstance().getConfig().getFormatNickname().replace("@level", "" + level) + nickname;
+
         if (nickname.length() > 32) nickname = nickname.substring(0, 32);
 
         try {

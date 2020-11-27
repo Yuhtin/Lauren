@@ -14,7 +14,7 @@ public class MemberReactionEvent extends ListenerAdapter {
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
         if (event.getUser() == null || event.getUser().isBot() || event.getMember() == null) return;
 
-        if (event.getMessageIdLong() == Lauren.getInstance().getConfig().resgistrationId) {
+        if (event.getMessageIdLong() == Lauren.getInstance().getConfig().getResgistrationId()) {
             Role boy = Lauren.getInstance()
                     .getGuild()
                     .getRolesByName("PLEBEU\uD83D\uDC68", true).get(0);

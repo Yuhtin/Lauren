@@ -64,7 +64,7 @@ public class InfoCommand extends Command {
                 .addField("<:discord:723587554422816889> Versão JDA", "`v4.2.0_186`", true)
 
                 .addField("⚙️ Núcleos", "`" + Runtime.getRuntime().availableProcessors() + " cores`", true)
-                .addField("\uD83D\uDEE2 Banco de Dados", "`" + Lauren.getInstance().getConfig().databaseType + "`", true)
+                .addField("\uD83D\uDEE2 Banco de Dados", "`" + Lauren.getInstance().getConfig().getDatabaseType() + "`", true)
                 .addField("\uD83C\uDF9E RAM", "`"
                         + PterodactylConnection.get().getServer().getServerUsage().getMemoryUsage() +
                         "M/"

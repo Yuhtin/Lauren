@@ -63,7 +63,7 @@ public class LootGeneratorTask {
             public void run() {
                 Logger.log("Running LootGeneratorTask");
 
-                if (new Random().nextInt(100) > 15) return;
+                if (new Random().nextInt(100) > 21) return;
 
                 int value = new Random().nextInt(allowedChannels.size());
                 long channelID = allowedChannels.get(value);
@@ -115,6 +115,6 @@ public class LootGeneratorTask {
 
                         });
             }
-        }, 25, 95, TimeUnit.MINUTES);
+        }, 25, 75, TimeUnit.MINUTES);
     }
 }

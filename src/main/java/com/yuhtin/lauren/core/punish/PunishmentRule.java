@@ -1,6 +1,5 @@
 package com.yuhtin.lauren.core.punish;
 
-import com.yuhtin.lauren.core.logger.Logger;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -13,10 +12,10 @@ public enum PunishmentRule {
     P11(PunishmentType.MUTE, TimeUnit.HOURS, 2, "Flodar/Spammar mensagens"),
     P12(PunishmentType.MUTE, TimeUnit.HOURS, 5, "Enviar caracteres inválidos no chat"),
     P13(PunishmentType.MUTE, TimeUnit.HOURS, 1, "Críticas de forma mal-educada"),
-    P14(PunishmentType.MUTE, TimeUnit.HOURS, 48, "Postagem de conteúdo como (pornografia, violência explicita, apologia a drogas e etc...)"),
+    P14(PunishmentType.MUTE, TimeUnit.HOURS, 48, "Postagem de conteúdo como pornografia, violência explicita, apologia a drogas e etc..."),
     P15(PunishmentType.MUTE, TimeUnit.HOURS, 1, "Mensagens postadas em áreas erradas"),
     P16(PunishmentType.MUTE, TimeUnit.MINUTES, 30, "CapsLock excessivo"),
-    P17(PunishmentType.MUTE, TimeUnit.HOURS, 2, "roibido qualquer tipo de divulgação relacionada a outros servidores e ganhos na internet"),
+    P17(PunishmentType.MUTE, TimeUnit.HOURS, 2, "Proibido qualquer tipo de divulgação relacionada a outros servidores e ganhos na internet"),
 
     // Channels proibittions
     P21(PunishmentType.MUTE, TimeUnit.HOURS, 1, "Conversar em canais moderados"),
@@ -28,7 +27,7 @@ public enum PunishmentRule {
     P33(PunishmentType.BAN, TimeUnit.MINUTES, 0, "Nomes ofensivos"),
 
     // Call proibittions
-    P41(PunishmentType.CALLBLOCK, TimeUnit.HOURS, 1, "Ficar gritando em call"),
+    P41(PunishmentType.CALLBLOCK, TimeUnit.HOURS, 1, "Gritar em call"),
     P42(PunishmentType.CALLBLOCK, TimeUnit.HOURS, 3, "Programa de alteração de voz"),
     P43(PunishmentType.CALLBLOCK, TimeUnit.HOURS, 5, "Colocar música estourada"),
     P44(PunishmentType.CALLBLOCK, TimeUnit.HOURS, 2, "Ficar entrando e saindo da call");

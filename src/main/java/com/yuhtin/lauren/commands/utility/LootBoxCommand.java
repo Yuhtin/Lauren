@@ -39,7 +39,7 @@ public class LootBoxCommand extends Command {
         }
 
         if (player.getKeys() == 0) {
-            event.getChannel().sendMessage("<:fodane:764085078187442176> Você não tem chaves para abrir esta lootbox, use `$shop` e adiquira uma").queue();
+            event.getChannel().sendMessage("<:fodane:764085078187442176> Você não tem chaves para abrir esta lootbox, use `$shop` e adquira uma").queue();
             return;
         }
 
