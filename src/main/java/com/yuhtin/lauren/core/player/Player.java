@@ -38,7 +38,7 @@ public class Player
     private int totalEvents = 0;
     private int keys = 0;
 
-    private boolean hideLevelOnNickname = true;
+    private boolean hideLevelOnNickname = false;
 
     private Rank rank = Rank.NOTHING;
 
