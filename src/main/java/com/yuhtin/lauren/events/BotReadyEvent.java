@@ -13,7 +13,7 @@ public class BotReadyEvent extends ListenerAdapter {
     public void onReady(@NotNull ReadyEvent event) {
         Logger.log("Lauren has connected to DiscordAPI", LogType.STARTUP);
 
-        if (Lauren.getInstance().getConfig().laurenTest) Lauren.getInstance().setGuild(event.getJDA().getGuildById(723625569111113740L));
+        if (Lauren.getInstance().getConfig().isLaurenTest()) Lauren.getInstance().setGuild(event.getJDA().getGuildById(723625569111113740L));
         else Lauren.getInstance().setGuild(event.getJDA().getGuildCache().iterator().next());
     }
 }

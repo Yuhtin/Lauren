@@ -78,8 +78,8 @@ public class Lauren {
         EventWaiter eventWaiter = new EventWaiter();
         Thread buildThread = new Thread(() -> {
             try {
-                processDatabase(instance.getConfig().getDatabaseType());
                 Utilities.INSTANCE.foundVersion();
+                processDatabase(instance.getConfig().getDatabaseType());
                 instance.setBot(JDABuilder.createDefault(instance.getConfig().getToken())
                         .setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"))
                         .setAutoReconnect(true)

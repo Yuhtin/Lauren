@@ -2,6 +2,7 @@ package com.yuhtin.lauren.utils.helper;
 
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.logger.Logger;
+import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.models.enums.LogType;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -69,8 +70,10 @@ public class Utilities {
         Files.delete(path);
     }
 
-    public void updateNickByLevel(Long userID, int level) {
-        Member member = Lauren.getInstance().getBot().getGuilds().get(0).getMemberById(userID);
+    public void updateNickByLevel(Player player, int level) {
+        if (player.isHideLevelOnNickname()) return;
+
+        Member member = Lauren.getInstance().getBot().getGuilds().get(0).getMemberById(player.getUserID());
         if (member == null) return;
 
         String nickname = member.getNickname();
@@ -78,6 +81,7 @@ public class Utilities {
         if (nickname.contains("] ")) nickname = nickname.split("] ")[1];
 
         nickname = Lauren.getInstance().getConfig().getFormatNickname().replace("@level", "" + level) + nickname;
+
         if (nickname.length() > 32) nickname = nickname.substring(0, 32);
 
         try {

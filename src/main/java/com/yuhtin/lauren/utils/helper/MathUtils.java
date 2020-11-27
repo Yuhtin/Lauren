@@ -52,9 +52,8 @@ public class MathUtils {
 
         if (format.equals("")) {
             long rest = time / 100;
-            if (rest == 0)
-                rest = 1;
-            format = "0." + rest + "segundo";
+            if (rest == 0) format = "0 segundos";
+            else format = "0." + rest + " segundo";
         }
 
         if (days > 0) {

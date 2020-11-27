@@ -38,6 +38,8 @@ public class Player
     private int totalEvents = 0;
     private int keys = 0;
 
+    private boolean hideLevelOnNickname = true;
+
     private Rank rank = Rank.NOTHING;
 
     public Player(long userID) {
@@ -46,7 +48,7 @@ public class Player
 
     public void updateLevel(int level) {
         this.level = level;
-        new Thread(() -> Utilities.INSTANCE.updateNickByLevel(userID, level)).start();
+        new Thread(() -> Utilities.INSTANCE.updateNickByLevel(this, level)).start();
 
         List<Long> rolesToGive = XpController.getInstance()
                 .getLevelByXp()
@@ -115,7 +117,7 @@ public class Player
         TextChannel channel = Lauren.getInstance().getBot().getTextChannelById(770393139516932158L);
         if (channel != null) channel.sendMessage(message).queue();
 
-        Utilities.INSTANCE.updateNickByLevel(userID, level);
+        Utilities.INSTANCE.updateNickByLevel(this, level);
 
         StatsController.get().getStats("Evoluir Nível").suplyStats(1);
     }

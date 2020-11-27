@@ -53,7 +53,6 @@ public class PlayerController {
 
                 } else player = deserialize;
 
-
                 Logger.log("Loading player " + userID + ": " + player.toString());
                 if (deserialize.getPunishs() == null) deserialize.setPunishs(new HashMap<>());
             }
