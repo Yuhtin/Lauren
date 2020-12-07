@@ -24,11 +24,13 @@ public class LoggerController {
         // create a infinite log archives
         String prefix = "logs/log-";
         int i = 1;
+
         File file = new File(prefix + "1.zip");
         while (file.exists()) {
             ++i;
             file = new File(prefix + i + ".zip");
         }
+
         file = new File(prefix + i + ".log");
         this.file = file;
 

@@ -36,6 +36,7 @@ public class DrawEditting {
                 userID,
                 Lauren.getInstance()
                         .getBot()
-                        .getTextChannelsByName("\uD83C\uDF89┇sorteios", true).get(0), null, false);
+                        .getTextChannelById(721881572973871125L)
+                , null, false);
     }
 }

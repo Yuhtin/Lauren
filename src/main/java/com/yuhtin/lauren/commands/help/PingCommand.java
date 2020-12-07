@@ -2,6 +2,7 @@ package com.yuhtin.lauren.commands.help;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.service.PterodactylConnection;
 import lombok.SneakyThrows;
@@ -36,6 +37,11 @@ public class PingCommand extends Command {
 
     private MessageEmbed createEmbed(long toEpochMilli, Member member, JDA jda) {
 
+        String shardMessage = Lauren.getInstance().getBot().getShardsTotal()
+                + " shards, "
+                + Lauren.getInstance().getBot().getShardsRunning()
+                + " rodando";
+
         EmbedBuilder builder = new EmbedBuilder()
                 .setAuthor("Informações sobre minha hospedagem", null, jda.getSelfUser().getAvatarUrl())
                 .setColor(member.getColor())
@@ -53,6 +59,7 @@ public class PingCommand extends Command {
                 .addField("\uD83E\uDDEA Local do Host", "`Lenoir, North Carolina, USA`", true)
                 .addField("<a:infinito:703187274912759899> Node", "`Gabriela`", true)
                 .addField("", "\uD83D\uDCE1 Informações de conexão", false)
+                .addField("🌏 Shards", "`" + shardMessage + "`", false)
                 .addField("<:discord:723587554422816889> Discord Ping", "`" + toEpochMilli + "ms`", false)
                 .addField("\uD83E\uDDEC Discord API", "`" + jda.getGatewayPing() + "ms`", false)
                 .setFooter("Ping médio: " + ((jda.getGatewayPing() + toEpochMilli) / 2) + "ms", member.getUser().getAvatarUrl());
