@@ -58,6 +58,7 @@ public class PlayerInfoCommand extends Command {
         embed.addField("<:beacon:771543538252120094> Patente", "`" + player.getRank().getName() + "`", true);
         embed.addField("<:lootbox:771545027829563402> LootBoxes", "`" + player.getLootBoxes() + " caixas`", true);
         embed.addField("\uD83D\uDD11 Chaves", "`" + player.getKeys() + " keys`", true);
+        embed.addField("<:rename_command:775348818555699210> Votos no servidor", "`" + player.getVotes() + " votos`", true);
 
         embed.setFooter("Comando usado por " + name, event.getMember().getUser().getAvatarUrl());
         embed.setTimestamp(Instant.now());
