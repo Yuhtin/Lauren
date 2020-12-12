@@ -86,7 +86,7 @@ public class PunishmentUtils {
                 " Motivo", ruleDescription, false);
 
         privateMessage.addField(":alarm_clock: Duração",
-                "`" + (rule.getPunishTime() == 0L ? "Eterno" : MathUtils.format(rule.getPunishTime())) + "`", false);
+                "`" + (rule.getPunishTime() == 0L ? "Eterno" : TimeUtils.formatTime(rule.getPunishTime())) + "`", false);
 
         privateMessage.setFooter("© ^Aincrad™ servidor de jogos", Lauren.getInstance().getGuild().getIconUrl());
 

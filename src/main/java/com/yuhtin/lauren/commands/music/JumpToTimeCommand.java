@@ -6,6 +6,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.MathUtils;
+import com.yuhtin.lauren.utils.helper.TimeUtils;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -80,7 +81,7 @@ public class JumpToTimeCommand extends Command {
         track.setPosition(millis);
 
         event.getChannel().sendMessage(
-                "<:felizpakas:742373250037710918> Pulando a música para `" + MathUtils.format(millis) + "`"
+                "<:felizpakas:742373250037710918> Pulando a música para `" + TimeUtils.formatTime(millis) + "`"
         ).queue();
 
     }

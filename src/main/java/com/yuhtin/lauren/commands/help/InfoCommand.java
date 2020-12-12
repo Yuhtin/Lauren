@@ -9,6 +9,7 @@ import com.yuhtin.lauren.core.statistics.controller.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.service.PterodactylConnection;
 import com.yuhtin.lauren.utils.helper.MathUtils;
+import com.yuhtin.lauren.utils.helper.TimeUtils;
 import lombok.SneakyThrows;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.SelfUser;
@@ -53,7 +54,7 @@ public class InfoCommand extends Command {
                 .addField("🙍‍♂️ Dono", "`" + authorBot + "`", true)
 
                 .addField("<a:infinito:703187274912759899> Uptime",
-                        "`" + MathUtils.format(System.currentTimeMillis() - Lauren.getInstance().getStartTime()) + "`",
+                        "`" + TimeUtils.formatTime(System.currentTimeMillis() - Lauren.getInstance().getStartTime()) + "`",
                         true)
 
                 .addField("💥 Cache", "`" + cacheMessage + "`", true)

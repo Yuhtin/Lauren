@@ -4,7 +4,7 @@ import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.OldPlayer;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
-import com.yuhtin.lauren.utils.serialization.PlayerSerializer;
+import com.yuhtin.lauren.utils.serialization.player.PlayerSerializer;
 import com.yuhtin.lauren.utils.serialization.Serializer;
 
 import java.util.HashMap;

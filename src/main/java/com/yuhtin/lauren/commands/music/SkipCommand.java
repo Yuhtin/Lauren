@@ -12,7 +12,7 @@ import com.yuhtin.lauren.utils.helper.Utilities;
         name = "pular",
         type = CommandHandler.CommandType.MUSIC,
         description = "Iniciar uma votação para pular a música atual",
-        alias = {"votar", "skip"}
+        alias = {"skip"}
 )
 public class SkipCommand extends Command {
 

@@ -1,6 +1,7 @@
 package com.yuhtin.lauren.utils.serialization;
 
 import com.google.gson.Gson;
+import com.yuhtin.lauren.core.vote.VoteResponse;
 import com.yuhtin.lauren.models.objects.Config;
 import com.yuhtin.lauren.core.statistics.StatsInfo;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ public class Serializer<T> {
 
     @Getter private static final Serializer<Config> config = new Serializer<>(Config.class);
     @Getter private static final Serializer<StatsInfo> stats = new Serializer<>(StatsInfo.class);
+    @Getter private static final Serializer<VoteResponse> vote = new Serializer<>(VoteResponse.class);
 
     private final Class<T> type;
     public static final Gson GSON = new Gson();
