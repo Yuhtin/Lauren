@@ -33,8 +33,11 @@ public class CommandCache {
                 .setAuthor("Informações do comando " + rawCommand.getName(), null,
                         Lauren.getInstance()
                                 .getBot()
+                                .getShards()
+                                .get(0)
                                 .getSelfUser()
-                                .getAvatarUrl())
+                                .getAvatarUrl()
+                )
 
                 .setDescription("Você está vendo as informações específicas do comando `" + rawCommand.getName() + "`," +
                         " para ver todos os comandos utilize `$ajuda <comando>`")
@@ -53,8 +56,11 @@ public class CommandCache {
         helpEmbed.setAuthor("Comandos atacaaaaar \uD83E\uDDF8", null,
                 Lauren.getInstance()
                         .getBot()
+                        .getShards()
+                        .get(0)
                         .getSelfUser()
-                        .getAvatarUrl());
+                        .getAvatarUrl()
+        );
 
         helpEmbed.setDescription(
                 "Para mais informações sobre um comando, digite `$ajuda <comando>` que eu lhe informarei mais sobre ele " +

@@ -9,21 +9,21 @@ import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.service.CommandCache;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
 
 public class CommandManager {
 
-    public CommandManager(JDA bot, String folder) {
+    public CommandManager(ShardManager bot, String folder) {
         CommandCache.start();
 
         CommandClientBuilder clientBuilder = new CommandClientBuilder();
         clientBuilder.setOwnerId("702518526753243156");
         clientBuilder.setPrefix(Lauren.getInstance().getConfig().getPrefix());
-        clientBuilder.setHelpWord("riphelpmessage");
+        clientBuilder.useHelpBuilder(false);
         clientBuilder.setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"));
 
         ClassPath classPath;

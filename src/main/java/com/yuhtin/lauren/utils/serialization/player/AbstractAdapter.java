@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.utils.serialization;
+package com.yuhtin.lauren.utils.serialization.player;
 
 import com.google.gson.*;
 import java.lang.reflect.Type;

@@ -7,6 +7,7 @@ import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.controller.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.MathUtils;
+import com.yuhtin.lauren.utils.helper.TimeUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -23,7 +24,7 @@ public class DailyCommand extends Command {
 
         if (data.getDailyDelay() > System.currentTimeMillis()) {
             event.getChannel().sendMessage("Poxa 😥 Você precisa aguardar mais `"
-                    + MathUtils.format(data.getDailyDelay() - System.currentTimeMillis()) + "` para usar este comando novamente").queue();
+                    + TimeUtils.formatTime(data.getDailyDelay() - System.currentTimeMillis()) + "` para usar este comando novamente").queue();
             return;
         }
 

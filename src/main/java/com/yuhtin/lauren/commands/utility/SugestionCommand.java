@@ -85,10 +85,10 @@ public class SugestionCommand extends Command {
 
     private void fillForm(Sugestion sugestion, Runnable cancelRunnable) {
         waiter.waitForEvent(PrivateMessageReceivedEvent.class,
-                (privateMessage) -> !privateMessage.getAuthor().isBot()
+                privateMessage -> !privateMessage.getAuthor().isBot()
                         && sugestion.getMessage().getChannel().getIdLong() == privateMessage.getMessage().getChannel().getIdLong(),
 
-                (privateMessage) -> {
+                privateMessage -> {
 
                     SugestionStage stage = sugestion.getStage();
                     String message = privateMessage.getMessage().getContentRaw();
@@ -115,12 +115,12 @@ public class SugestionCommand extends Command {
 
     private void checkReactions(Sugestion sugestion, Runnable cancelRunnable) {
         waiter.waitForEvent(PrivateMessageReactionAddEvent.class,
-                (privateMessage) -> privateMessage.getUserIdLong() != Lauren.getInstance().getBot().getSelfUser().getIdLong()
+                privateMessage -> privateMessage.getUserIdLong() != Lauren.getInstance().getBot().getShards().get(0).getSelfUser().getIdLong()
                         && sugestion.getMessage().getIdLong() == privateMessage.getReaction().getMessageIdLong()
                         && (privateMessage.getReactionEmote().getIdLong() == 704295025374265387L
                         || privateMessage.getReactionEmote().getIdLong() == 704295026036834375L),
 
-                (privateMessage) -> {
+                privateMessage -> {
 
                     if (privateMessage.getReactionEmote().getIdLong() == 704295026036834375L) {
                         sugestionMap.remove(privateMessage.getUserIdLong());

@@ -9,6 +9,7 @@ import com.yuhtin.lauren.core.statistics.controller.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.utils.helper.MathUtils;
+import com.yuhtin.lauren.utils.helper.TimeUtils;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -57,6 +58,7 @@ public class PlayerInfoCommand extends Command {
         embed.addField("<:beacon:771543538252120094> Patente", "`" + player.getRank().getName() + "`", true);
         embed.addField("<:lootbox:771545027829563402> LootBoxes", "`" + player.getLootBoxes() + " caixas`", true);
         embed.addField("\uD83D\uDD11 Chaves", "`" + player.getKeys() + " keys`", true);
+        embed.addField("<:rename_command:775348818555699210> Votos no servidor", "`" + player.getVotes() + " votos`", true);
 
         embed.setFooter("Comando usado por " + name, event.getMember().getUser().getAvatarUrl());
         embed.setTimestamp(Instant.now());
@@ -69,6 +71,6 @@ public class PlayerInfoCommand extends Command {
     private String subtractTime(OffsetDateTime before) {
         return before.getDayOfMonth() + " de " + before.getMonth().getDisplayName(TextStyle.SHORT, Locale.US) + ", "
                 + before.getYear() + " às " + before.getHour() + ":" + before.getMinute() +
-                " (" + MathUtils.format(System.currentTimeMillis() - before.toInstant().toEpochMilli()) + ")";
+                " (" + TimeUtils.formatTime(System.currentTimeMillis() - before.toInstant().toEpochMilli()) + ")";
     }
 }

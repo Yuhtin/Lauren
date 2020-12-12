@@ -5,11 +5,12 @@ import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.core.logger.Logger;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.io.IOException;
 
 public class EventsManager {
-    public EventsManager(JDA bot, String folder) {
+    public EventsManager(ShardManager bot, String folder) {
         ClassPath cp;
 
         try {

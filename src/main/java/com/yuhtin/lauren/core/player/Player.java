@@ -17,6 +17,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -29,7 +30,9 @@ public class Player
     // Geral
     private long userID;
     private long dailyDelay;
+    private long voteDelay;
     private long leaveTime;
+    private int votes = 0;
     private int level = 0;
     private int money = 100;
     private int experience = 0;
@@ -137,15 +140,9 @@ public class Player
 
     public Player addMoney(double quantity) {
         double multiplier = multiply();
-        Logger.log("Multiplicador: " + multiplier + "");
 
-        Logger.log("Quantidade: " + quantity + "");
         quantity *= multiplier;
-        Logger.log("Quantidade Multiplicada: " + quantity + "");
-
-        Logger.log("Money Antigo:" + money + "");
         money += quantity;
-        Logger.log("Money Atual: " + money + "");
 
         return this;
     }
@@ -167,6 +164,17 @@ public class Player
         StatsController.get().getStats("Ganhar XP").suplyStats(1);
 
         return this;
+    }
+
+    public void executeVote() {
+
+        this.dailyDelay = 0L;
+        this.voteDelay = System.currentTimeMillis() + TimeUnit.HOURS.toMillis(12);
+        this.gainXP(250);
+        this.addMoney(75);
+        this.setRankedPoints(this.getRankedPoints() + 2);
+        ++votes;
+
     }
 
     @Override

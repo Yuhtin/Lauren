@@ -2,6 +2,7 @@ package com.yuhtin.lauren.core.draw;
 
 import com.yuhtin.lauren.core.draw.controller.DrawController;
 import com.yuhtin.lauren.utils.helper.MathUtils;
+import com.yuhtin.lauren.utils.helper.TimeUtils;
 import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
@@ -41,7 +42,7 @@ public class Draw {
 
     public Message render() {
         Instant now = Instant.now();
-        String time = MathUtils.format(end.toEpochMilli() - System.currentTimeMillis());
+        String time = TimeUtils.formatTime(end.toEpochMilli() - System.currentTimeMillis());
         if (time.equalsIgnoreCase("")) {
             finish();
             return null;

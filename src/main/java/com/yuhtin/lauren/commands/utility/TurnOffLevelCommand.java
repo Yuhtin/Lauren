@@ -18,7 +18,7 @@ import net.dv8tion.jda.api.exceptions.HierarchyException;
         name = "desabilitarlevel",
         type = CommandHandler.CommandType.UTILITY,
         description = "Não mostrar o nível em seu nickname",
-        alias = {"turnofflevel", "esconderlevel", "ocultlevel"}
+        alias = {"turnofflevel", "esconderlevel", "ocultlevel", "ocultarnivel", "escondernivel"}
 )
 public class TurnOffLevelCommand extends Command {
 

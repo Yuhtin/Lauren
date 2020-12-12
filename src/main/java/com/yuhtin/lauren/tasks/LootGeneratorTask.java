@@ -63,7 +63,7 @@ public class LootGeneratorTask {
             public void run() {
                 Logger.log("Running LootGeneratorTask");
 
-                if (new Random().nextInt(100) > 21) return;
+                if (new Random().nextInt(100) > 10) return;
 
                 int value = new Random().nextInt(allowedChannels.size());
                 long channelID = allowedChannels.get(value);
@@ -104,7 +104,7 @@ public class LootGeneratorTask {
                             player.setLootBoxes(player.getLootBoxes() + 1);
 
                             Logger.log("The player " + Utilities.INSTANCE.getFullName(event.getUser()) + " getted the drop");
-                        }, 35, TimeUnit.SECONDS,
+                        }, 90, TimeUnit.SECONDS,
 
                         () -> {
 
@@ -115,6 +115,6 @@ public class LootGeneratorTask {
 
                         });
             }
-        }, 25, 75, TimeUnit.MINUTES);
+        }, 25, 60, TimeUnit.MINUTES);
     }
 }

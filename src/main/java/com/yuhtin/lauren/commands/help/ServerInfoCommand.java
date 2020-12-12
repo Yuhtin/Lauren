@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.MathUtils;
+import com.yuhtin.lauren.utils.helper.TimeUtils;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -86,6 +87,6 @@ public class ServerInfoCommand extends Command {
     private String subtractTime(OffsetDateTime before) {
         return before.getDayOfMonth() + " de " + before.getMonth().getDisplayName(TextStyle.SHORT, Locale.US) + ", "
                 + before.getYear() + " às " + before.getHour() + ":" + before.getMinute() +
-                " (" + MathUtils.format(System.currentTimeMillis() - before.toInstant().toEpochMilli()) + ")";
+                " (" + TimeUtils.formatTime(System.currentTimeMillis() - before.toInstant().toEpochMilli()) + ")";
     }
 }

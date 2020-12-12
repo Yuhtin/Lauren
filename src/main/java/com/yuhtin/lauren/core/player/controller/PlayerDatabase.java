@@ -3,7 +3,7 @@ package com.yuhtin.lauren.core.player.controller;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.database.DatabaseController;
-import com.yuhtin.lauren.utils.serialization.PlayerSerializer;
+import com.yuhtin.lauren.utils.serialization.player.PlayerSerializer;
 import io.github.eikefs.sql.provider.query.Query;
 
 public class PlayerDatabase {

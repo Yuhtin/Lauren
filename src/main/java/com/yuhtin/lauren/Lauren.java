@@ -4,7 +4,6 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.yuhtin.lauren.commands.music.QueueCommand;
 import com.yuhtin.lauren.commands.utility.ShopCommand;
 import com.yuhtin.lauren.commands.utility.SugestionCommand;
-import com.yuhtin.lauren.models.objects.Config;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
 import com.yuhtin.lauren.core.music.TrackManager;
@@ -19,6 +18,7 @@ import com.yuhtin.lauren.models.embeds.ShopEmbed;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.manager.CommandManager;
 import com.yuhtin.lauren.models.manager.EventsManager;
+import com.yuhtin.lauren.models.objects.Config;
 import com.yuhtin.lauren.service.PterodactylConnection;
 import com.yuhtin.lauren.tasks.LootGeneratorTask;
 import com.yuhtin.lauren.tasks.PunishmentCheckerTask;
@@ -28,11 +28,10 @@ import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import com.yuhtin.lauren.utils.messages.AsciiBox;
 import lombok.Getter;
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
+import net.dv8tion.jda.api.sharding.ShardManager;
 
 import javax.security.auth.login.LoginException;
 import java.io.File;
@@ -40,7 +39,7 @@ import java.io.FileOutputStream;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.time.LocalDateTime;
-import java.util.EnumSet;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -49,9 +48,10 @@ import java.util.zip.ZipOutputStream;
 @lombok.Data
 public class Lauren {
 
-    @Getter private static Lauren instance = new Lauren();
+    @Getter
+    private static Lauren instance = new Lauren();
 
-    private JDA bot;
+    private ShardManager bot;
     private Guild guild;
     private long startTime;
     private Config config;
@@ -80,10 +80,8 @@ public class Lauren {
             try {
                 Utilities.INSTANCE.foundVersion();
                 processDatabase(instance.getConfig().getDatabaseType());
-                instance.setBot(JDABuilder.createDefault(instance.getConfig().getToken())
-                        .setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"))
+                instance.setBot(DefaultShardManagerBuilder.create(instance.getConfig().getToken(), Arrays.asList(GatewayIntent.values()))
                         .setAutoReconnect(true)
-                        .enableIntents(EnumSet.allOf(GatewayIntent.class))
                         .build());
 
             } catch (LoginException exception) {
