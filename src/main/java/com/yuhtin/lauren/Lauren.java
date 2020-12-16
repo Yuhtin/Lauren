@@ -19,6 +19,7 @@ import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.manager.CommandManager;
 import com.yuhtin.lauren.models.manager.EventsManager;
 import com.yuhtin.lauren.models.objects.Config;
+import com.yuhtin.lauren.service.LocaleManager;
 import com.yuhtin.lauren.service.PterodactylConnection;
 import com.yuhtin.lauren.tasks.LootGeneratorTask;
 import com.yuhtin.lauren.tasks.PunishmentCheckerTask;
@@ -96,6 +97,8 @@ public class Lauren {
             new CommandManager(instance.getBot(), "com.yuhtin.lauren.commands");
             new PterodactylConnection(instance.getConfig().getPteroKey());
             new Thread(Lauren::loadTasks).start();
+
+            LocaleManager.getInstance().searchHost(instance.getConfig().getGeoIpAcessKey());
 
             instance.getBot().addEventListener(eventWaiter);
             instance.getBot().addEventListener(ShopCommand.getEventWaiter());
