@@ -44,6 +44,7 @@ public class LocaleManager {
         } catch (Exception exception) {
 
             Logger.log("Error trying to search host");
+            exception.printStackTrace();
 
         }
 

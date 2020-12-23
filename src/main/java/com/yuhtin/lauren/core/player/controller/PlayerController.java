@@ -46,7 +46,6 @@ public class PlayerController {
                     tempPlayer.setExperience(oldPlayer.getExperience());
                     tempPlayer.setMoney(oldPlayer.getMoney());
                     tempPlayer.setLevel(oldPlayer.getLevel());
-                    tempPlayer.setDailyDelay(oldPlayer.getDailyDelay());
 
                     player = tempPlayer;
                     Logger.log("Converted data of player " + userID + " to new Player class");
