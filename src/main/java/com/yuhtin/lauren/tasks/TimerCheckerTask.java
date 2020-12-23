@@ -23,12 +23,11 @@ public class TimerCheckerTask extends TimerTask {
     public void run() {
 
         String weekDay = week[calendar.get(Calendar.DAY_OF_WEEK)].toLowerCase();
-        Logger.log("Actual day: " + weekDay);
 
         TimerManager instance = TimerManager.getInstance();
         for (Timer timer : instance.getTimers()) {
 
-            if (!timer.day().equalsIgnoreCase(weekDay)
+            if ((!timer.day().equalsIgnoreCase("ALL") && !timer.day().equalsIgnoreCase(weekDay))
                     || timer.hour() != calendar.get(Calendar.HOUR_OF_DAY)
                     || timer.minute() != calendar.get(Calendar.MINUTE)) return;
 
