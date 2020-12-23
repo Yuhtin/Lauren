@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.service.LocaleManager;
 import com.yuhtin.lauren.service.PterodactylConnection;
 import lombok.SneakyThrows;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -56,7 +57,7 @@ public class PingCommand extends Command {
                         + PterodactylConnection.get().getServer().getLimits().getMemory() + "M`", true)
                 .addField("\uD83D\uDD2E Sistema Operacional", "`" + System.getProperty("os.name") + "`", true)
                 .addField("\uD83D\uDED2 Empresa fornecedora:", "[HypeHost - Hospedagem Minecraft e VPS](https://hypehost.com.br)", true)
-                .addField("\uD83E\uDDEA Local do Host", "`Lenoir, North Carolina, USA`", true)
+                .addField("\uD83E\uDDEA Local do Host", "`" + LocaleManager.getInstance().buildMessage() + "`", true)
                 .addField("<a:infinito:703187274912759899> Node", "`Gabriela`", true)
                 .addField("", "\uD83D\uDCE1 Informações de conexão", false)
                 .addField("🌏 Shards", "`" + shardMessage + "`", false)

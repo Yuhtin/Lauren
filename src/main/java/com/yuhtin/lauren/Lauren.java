@@ -18,12 +18,11 @@ import com.yuhtin.lauren.models.embeds.ShopEmbed;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.manager.CommandManager;
 import com.yuhtin.lauren.models.manager.EventsManager;
+import com.yuhtin.lauren.models.manager.TimerManager;
 import com.yuhtin.lauren.models.objects.Config;
+import com.yuhtin.lauren.service.LocaleManager;
 import com.yuhtin.lauren.service.PterodactylConnection;
-import com.yuhtin.lauren.tasks.LootGeneratorTask;
-import com.yuhtin.lauren.tasks.PunishmentCheckerTask;
-import com.yuhtin.lauren.tasks.ShardLootTask;
-import com.yuhtin.lauren.tasks.TopXpUpdater;
+import com.yuhtin.lauren.tasks.*;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import com.yuhtin.lauren.utils.messages.AsciiBox;
@@ -92,10 +91,17 @@ public class Lauren {
         buildThread.join();
 
         TaskHelper.runAsync(() -> {
+
             new EventsManager(instance.getBot(), "com.yuhtin.lauren.events");
             new CommandManager(instance.getBot(), "com.yuhtin.lauren.commands");
+
+            TimerManager timerManager = new TimerManager("com.yuhtin.lauren.timers.impl");
+            timerManager.register();
+
             new PterodactylConnection(instance.getConfig().getPteroKey());
             new Thread(Lauren::loadTasks).start();
+
+            LocaleManager.getInstance().searchHost(instance.getConfig().getGeoIpAcessKey());
 
             instance.getBot().addEventListener(eventWaiter);
             instance.getBot().addEventListener(ShopCommand.getEventWaiter());
@@ -148,6 +154,11 @@ public class Lauren {
         }, 5, 5, TimeUnit.MINUTES);
 
         TaskHelper.runTaskTimerAsync(new PunishmentCheckerTask(), 5, 5, TimeUnit.MINUTES);
+
+        TimerCheckerTask timerCheckerTask = new TimerCheckerTask();
+        timerCheckerTask.updateCalendar();
+
+        TaskHelper.runTaskTimerAsync(timerCheckerTask, 1, 1, TimeUnit.MINUTES);
 
         TopXpUpdater.getInstance().startRunnable();
         LootGeneratorTask.getInstance().startRunnable();

@@ -29,7 +29,6 @@ public class Player
 
     // Geral
     private long userID;
-    private long dailyDelay;
     private long voteDelay;
     private long leaveTime;
     private int votes = 0;
@@ -42,6 +41,7 @@ public class Player
     private int keys = 0;
 
     private boolean hideLevelOnNickname = false;
+    private boolean abbleToDaily = true;
 
     private Rank rank = Rank.NOTHING;
 
@@ -132,12 +132,6 @@ public class Player
         return this;
     }
 
-    public Player setDelay(long delay) {
-        this.dailyDelay = delay;
-
-        return this;
-    }
-
     public Player addMoney(double quantity) {
         double multiplier = multiply();
 
@@ -145,6 +139,13 @@ public class Player
         money += quantity;
 
         return this;
+    }
+
+    public Player setAbbleToDaily(boolean abbleToDaily) {
+
+        this.abbleToDaily = abbleToDaily;
+        return this;
+
     }
 
     public Player removeMoney(double quantity) {
@@ -168,7 +169,7 @@ public class Player
 
     public void executeVote() {
 
-        this.dailyDelay = 0L;
+        this.abbleToDaily = true;
         this.voteDelay = System.currentTimeMillis() + TimeUnit.HOURS.toMillis(12);
         this.gainXP(250);
         this.addMoney(75);
@@ -195,8 +196,9 @@ public class Player
         return "Player{" +
                 "punishs=" + punishs +
                 ", userID=" + userID +
-                ", dailyDelay=" + dailyDelay +
+                ", voteDelay=" + voteDelay +
                 ", leaveTime=" + leaveTime +
+                ", votes=" + votes +
                 ", level=" + level +
                 ", money=" + money +
                 ", experience=" + experience +
@@ -204,6 +206,8 @@ public class Player
                 ", rankedPoints=" + rankedPoints +
                 ", totalEvents=" + totalEvents +
                 ", keys=" + keys +
+                ", hideLevelOnNickname=" + hideLevelOnNickname +
+                ", abbleToDaily=" + abbleToDaily +
                 ", rank=" + rank +
                 "} " + super.toString();
     }

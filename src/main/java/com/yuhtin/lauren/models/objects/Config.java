@@ -31,6 +31,7 @@ public class Config {
     private String pastebinDevKey;
     private String pteroKey;
     private String pastebinUserKey;
+    private String geoIpAcessKey;
     private String vagalumeKey = "";
 
     public static Config startup() {
