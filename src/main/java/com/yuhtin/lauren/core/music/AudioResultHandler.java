@@ -14,11 +14,22 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Builder
 @Data
 public final class AudioResultHandler implements AudioLoadResultHandler {
+
+    // block animal sounds in audios
+    private static final List<String> ANIMALS = Arrays.asList(
+            "cavalo", "ovelha", "macaco", "tartaruga", "lagarto", "tucano", "coelho",
+            "lagartixa", "calango", "barata", "mosquito", "mosca", "grilo", "pintadinha",
+            "formiga", "bezerro", "vaca", "boi", "touro", "gato", "girafa", "porco",
+            "galo", "galinha", "baleia", "animal", "peixe", "pitinho", "coruja",
+            "animais", "lhama", "camelo", "dromedário", "cachorro", "abelha", "égua"
+    );
 
     private final String trackUrl;
     private final Member member;
@@ -28,11 +39,11 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
     @Override
     public void trackLoaded(AudioTrack track) {
 
-        if (!permitedTrack(track)) {
+        if (!permitedTrack(track, Utilities.INSTANCE.isDJ(member, null, false))) {
 
             if (searchType == TrackManager.SearchType.SIMPLE_SEARCH)
                 channel.sendMessage("<:rindo_de_voce:751941649655136588>" +
-                        " Sua música foi bloqueada por ser muito grande ou ser 'som de' algo")
+                        " Sua música foi bloqueada por ser muito grande ou por conter o nome de algum animal")
                         .queue();
             return;
 
@@ -90,7 +101,7 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
 
                     if (track.getInfo().title != null) {
 
-                        if (!permitedTrack(track)) continue;
+                        if (!permitedTrack(track, Utilities.INSTANCE.isDJ(member, null, false))) continue;
                         TrackManager.get().play(track, member);
 
                     } else {
@@ -122,13 +133,8 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
         }
     }
 
-    private boolean permitedTrack(AudioTrack track) {
-        // duration limit
-        return Math.round(track.getDuration() / 1000.0) <= TimeUnit.MINUTES.toSeconds(20)
-
-                //block animal sounds '-'
-                && !track.getInfo().title.toLowerCase().contains("som do")
-                && !track.getInfo().title.toLowerCase().contains("som de")
-                && !track.getInfo().title.toLowerCase().contains("som da");
+    private boolean permitedTrack(AudioTrack track, boolean isDj) {
+        return (isDj || Math.round(track.getDuration() / 1000.0) <= TimeUnit.MINUTES.toSeconds(30))
+                && !ANIMALS.contains(track.getInfo().title.toLowerCase());
     }
 }

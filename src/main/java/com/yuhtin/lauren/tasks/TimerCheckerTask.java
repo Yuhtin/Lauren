@@ -17,28 +17,29 @@ import java.util.TimerTask;
 public class TimerCheckerTask extends TimerTask {
 
     private final String[] week = {"Sábado", "Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta"};
-    private final Calendar calendar = Calendar.getInstance();
 
     @Override
     public void run() {
 
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(TimeZone.getTimeZone(ZoneId.of("America/Sao_Paulo")));
+
         String weekDay = week[calendar.get(Calendar.DAY_OF_WEEK)].toLowerCase();
+        String time = calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
 
         TimerManager instance = TimerManager.getInstance();
         for (Timer timer : instance.getTimers()) {
 
-            if ((!timer.day().equalsIgnoreCase("ALL") && !timer.day().equalsIgnoreCase(weekDay))
-                    || timer.hour() != calendar.get(Calendar.HOUR_OF_DAY)
-                    || timer.minute() != calendar.get(Calendar.MINUTE)) return;
+            String timerTime = timer.hour() + ":" + timer.minute();
+            if ((!timer.day().equalsIgnoreCase("ALL")
+                    && !timer.day().equalsIgnoreCase(weekDay))
+                    || !time.equalsIgnoreCase(timerTime)) continue;
 
+            Logger.log("Running " + timer.name());
             TaskHelper.runAsync(timer::run);
 
         }
 
-    }
-
-    public void updateCalendar() {
-        calendar.setTimeZone(TimeZone.getTimeZone(ZoneId.of("America/Sao_Paulo")));
     }
 
 }

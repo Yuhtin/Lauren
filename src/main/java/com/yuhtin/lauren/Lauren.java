@@ -156,7 +156,6 @@ public class Lauren {
         TaskHelper.runTaskTimerAsync(new PunishmentCheckerTask(), 5, 5, TimeUnit.MINUTES);
 
         TimerCheckerTask timerCheckerTask = new TimerCheckerTask();
-        timerCheckerTask.updateCalendar();
 
         TaskHelper.runTaskTimerAsync(timerCheckerTask, 1, 1, TimeUnit.MINUTES);
 
