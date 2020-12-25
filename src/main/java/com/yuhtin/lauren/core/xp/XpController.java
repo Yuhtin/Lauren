@@ -2,7 +2,6 @@ package com.yuhtin.lauren.core.xp;
 
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.database.DatabaseController;
-import io.github.eikefs.sql.provider.query.Query;
 import lombok.Getter;
 
 import java.sql.PreparedStatement;
@@ -15,8 +14,7 @@ import java.util.Map;
 public class XpController {
 
     private static XpController instance;
-    @Getter
-    private final Map<Integer, Level> levelByXp = new HashMap<>();
+    @Getter private final Map<Integer, Level> levelByXp = new HashMap<>();
 
     public XpController() {
 
@@ -46,9 +44,10 @@ public class XpController {
     }
 
     public static XpController getInstance() {
-        if (instance == null) instance = new XpController();
 
+        if (instance == null) instance = new XpController();
         return instance;
+
     }
 
     public boolean canUpgrade(int nextLevel, int experience) {
@@ -76,6 +75,7 @@ public class XpController {
 
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
+
                 List<Long> rewards = new ArrayList<>();
                 String list = resultSet.getString("rewards");
 
@@ -93,6 +93,7 @@ public class XpController {
                 }
 
                 map.put(resultSet.getInt("level"), rewards);
+
             }
 
             resultSet.close();

@@ -12,6 +12,7 @@ public class StatsController {
     @Getter private final Map<String, StatsInfo> stats = new HashMap<>();
 
     public StatsInfo getStats(String name) {
+
         StatsInfo info = stats.getOrDefault(name, null);
         if (info == null) {
 
@@ -23,6 +24,7 @@ public class StatsController {
         }
 
         return info;
+
     }
 
     public static StatsController get() { return INSTANCE; }
