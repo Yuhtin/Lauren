@@ -22,15 +22,6 @@ import java.util.concurrent.TimeUnit;
 @Data
 public final class AudioResultHandler implements AudioLoadResultHandler {
 
-    // block animal sounds in audios
-    private static final List<String> ANIMALS = Arrays.asList(
-            "cavalo", "ovelha", "macaco", "tartaruga", "lagarto", "tucano", "coelho",
-            "lagartixa", "calango", "barata", "mosquito", "mosca", "grilo", "pintadinha",
-            "formiga", "bezerro", "vaca", "boi", "touro", "gato", "girafa", "porco",
-            "galo", "galinha", "baleia", "animal", "peixe", "pitinho", "coruja",
-            "animais", "lhama", "camelo", "dromedário", "cachorro", "abelha", "égua"
-    );
-
     private final String trackUrl;
     private final Member member;
     private final TextChannel channel;
@@ -52,14 +43,15 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
 
         if (TrackManager.get().player.isPaused()) TrackManager.get().player.setPaused(false);
 
+        String podcastMessage = track.getInfo().title.contains("Podcast") ? "Podcast" : "Música";
+        String videoType = track.getInfo().isStream ? "Stream" : podcastMessage;
+
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("💿 " + Utilities.INSTANCE.getFullName(member.getUser()) + " adicionou 1 música a fila")
                 .setDescription(
                         "\ud83d\udcc0 Nome: `" + track.getInfo().title + "`\n" +
                                 "\uD83D\uDCB0 Autor: `" + track.getInfo().author + "`\n" +
-                                "\uD83D\uDCE2 Tipo de vídeo: `" +
-                                (track.getInfo().isStream ? "Stream" : track.getInfo().title.contains("Podcast") ?
-                                        "Podcast" : "Música") + "`\n" +
+                                "\uD83D\uDCE2 Tipo de vídeo: `" + videoType + "`\n" +
                                 "\uD83D\uDCCC Link: [Clique aqui](" + track.getInfo().uri + ")");
 
         if (searchType == TrackManager.SearchType.SIMPLE_SEARCH) {
@@ -134,7 +126,7 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
     }
 
     private boolean permitedTrack(AudioTrack track, boolean isDj) {
-        return (isDj || Math.round(track.getDuration() / 1000.0) <= TimeUnit.MINUTES.toSeconds(30))
-                && !ANIMALS.contains(track.getInfo().title.toLowerCase());
+        return (isDj || Math.round(track.getDuration() / 1000.0) <= TimeUnit.MINUTES.toSeconds(30));
     }
+
 }

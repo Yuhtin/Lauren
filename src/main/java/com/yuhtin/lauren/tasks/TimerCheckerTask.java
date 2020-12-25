@@ -31,6 +31,7 @@ public class TimerCheckerTask extends TimerTask {
         for (Timer timer : instance.getTimers()) {
 
             String timerTime = timer.hour() + ":" + timer.minute();
+
             if ((!timer.day().equalsIgnoreCase("ALL")
                     && !timer.day().equalsIgnoreCase(weekDay))
                     || !time.equalsIgnoreCase(timerTime)) continue;

@@ -32,8 +32,6 @@ public class PlayerDatabase {
 
     public static void save(long userID, Player player) {
 
-        Logger.log("Saving player " + userID + ": " + player.toString());
-
         DatabaseController.getDatabase()
                 .updateSync("update `lauren_players`" +
                         " set `data`= '" + PlayerSerializer.serialize(player) + "'," +

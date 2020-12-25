@@ -1,5 +1,7 @@
 package com.yuhtin.lauren;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.yuhtin.lauren.commands.music.QueueCommand;
 import com.yuhtin.lauren.commands.utility.ShopCommand;
@@ -10,10 +12,8 @@ import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.controller.StatsDatabase;
 import com.yuhtin.lauren.core.xp.XpController;
-import com.yuhtin.lauren.database.Data;
 import com.yuhtin.lauren.database.DatabaseController;
-import com.yuhtin.lauren.database.types.MySQL;
-import com.yuhtin.lauren.database.types.SQLite;
+import com.yuhtin.lauren.guice.LaurenModule;
 import com.yuhtin.lauren.models.embeds.ShopEmbed;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.manager.CommandManager;
@@ -22,6 +22,10 @@ import com.yuhtin.lauren.models.manager.TimerManager;
 import com.yuhtin.lauren.models.objects.Config;
 import com.yuhtin.lauren.service.LocaleManager;
 import com.yuhtin.lauren.service.PterodactylConnection;
+import com.yuhtin.lauren.sql.connection.ConnectionInfo;
+import com.yuhtin.lauren.sql.connection.SQLConnection;
+import com.yuhtin.lauren.sql.connection.mysql.MySQLConnection;
+import com.yuhtin.lauren.sql.connection.sqlite.SQLiteConnection;
 import com.yuhtin.lauren.tasks.*;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
@@ -49,7 +53,9 @@ public class Lauren {
 
     @Getter
     private static Lauren instance = new Lauren();
+    private Injector injector;
 
+    private SQLConnection sqlConnection;
     private ShardManager bot;
     private Guild guild;
     private long startTime;
@@ -58,6 +64,8 @@ public class Lauren {
 
     public static void main(String[] args) throws InterruptedException {
         instance.setStartTime(System.currentTimeMillis());
+
+        instance.injector = Guice.createInjector(new LaurenModule(instance));
 
         instance.setConfig(Config.startup());
         if (instance.getConfig() == null) {
@@ -87,6 +95,7 @@ public class Lauren {
                 Logger.log("The bot token is wrong", LogType.ERROR);
             }
         });
+
         buildThread.start();
         buildThread.join();
 
@@ -213,17 +222,15 @@ public class Lauren {
     }
 
     private static void processDatabase(String databaseType) {
-        Data dataType = new SQLite();
-        if (databaseType.equalsIgnoreCase("MySQL"))
-            dataType = new MySQL(instance.getConfig().getMySqlHost(),
-                    instance.getConfig().getMySqlUser(),
-                    instance.getConfig().getMySqlPassword(),
-                    instance.getConfig().getMySqlDatabase());
 
-        Connection connection = dataType.openConnection();
+        ConnectionInfo connectionInfo = ConnectionInfo.builder().build();
 
-        DatabaseController.get().constructDatabase(connection);
-        DatabaseController.get().loadAll();
+        if (databaseType.equalsIgnoreCase("MySQL")) instance.setSqlConnection(new MySQLConnection());
+        else instance.setSqlConnection(new SQLiteConnection());
+
+
+        /*DatabaseController.get().constructDatabase(connection);
+        DatabaseController.get().loadAll();*/
 
         Logger.log("Connection to database successful", LogType.STARTUP);
     }
