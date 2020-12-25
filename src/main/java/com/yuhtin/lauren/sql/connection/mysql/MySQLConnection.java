@@ -13,25 +13,19 @@ public final class MySQLConnection implements SQLConnection {
     @Override
     public boolean configure(ConnectionInfo info) {
 
-        if (info.isMysqlEnabled()) {
+        String url = "jdbc:mysql://" + info.getHost() + ":3306/" + info.getDatabase() + "?autoReconnect=true";
+        try {
 
-            String url = "jdbc:mysql://" + info.getHost() + ":3306/" + info.getDatabase() + "?autoReconnect=true";
-            try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection(url, info.getUsername(), info.getPassword());
+            return true;
 
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                connection = DriverManager.getConnection(url, info.getUsername(), info.getPassword());
-                return true;
+        } catch (Exception exception) {
 
-            } catch (Exception exception) {
-
-                exception.printStackTrace();
-                return false;
-
-            }
+            exception.printStackTrace();
+            return false;
 
         }
-
-        return false;
 
     }
 

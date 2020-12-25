@@ -34,14 +34,15 @@ public class Player
     private int votes = 0;
     private int level = 0;
     private int money = 100;
-    private int experience = 0;
     private int lootBoxes = 0;
     private int rankedPoints = 0;
     private int totalEvents = 0;
     private int keys = 0;
 
     private boolean hideLevelOnNickname = false;
-    private boolean abbleToDaily = true;
+
+    private transient int experience = 0;
+    private transient boolean abbleToDaily = true;
 
     private Rank rank = Rank.NOTHING;
 

@@ -12,8 +12,6 @@ import lombok.Data;
 @Builder
 public class ConnectionInfo {
 
-    private final boolean mysqlEnabled;
-
     private final String host;
     private final String database;
     private final String username;

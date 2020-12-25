@@ -46,7 +46,13 @@ public abstract class DatabaseProvider {
     public void update(String query, Object... values) {
         try (PreparedStatement statement = sqlConnection.findConnection().prepareStatement(query)) {
             for (int index = 0; index < values.length; index++) {
-                statement.setObject(index + 1, values[index]);
+
+                Object value = values[index];
+                int parameterIndex = index + 1;
+
+                if (value instanceof Boolean) statement.setObject(parameterIndex, ((boolean) value) ? 1 : 0);
+                else statement.setObject(parameterIndex, value);
+
             }
 
             statement.executeUpdate();

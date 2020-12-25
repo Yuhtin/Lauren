@@ -40,7 +40,6 @@ import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Paths;
-import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -82,11 +81,12 @@ public class Lauren {
             }
         }
 
+        processDatabase();
+
         EventWaiter eventWaiter = new EventWaiter();
         Thread buildThread = new Thread(() -> {
             try {
                 Utilities.INSTANCE.foundVersion();
-                processDatabase(instance.getConfig().getDatabaseType());
                 instance.setBot(DefaultShardManagerBuilder.create(instance.getConfig().getToken(), Arrays.asList(GatewayIntent.values()))
                         .setAutoReconnect(true)
                         .build());
@@ -221,13 +221,20 @@ public class Lauren {
         System.exit(0);
     }
 
-    private static void processDatabase(String databaseType) {
+    private static void processDatabase() {
 
-        ConnectionInfo connectionInfo = ConnectionInfo.builder().build();
+        ConnectionInfo connectionInfo = ConnectionInfo.builder()
+                .file(instance.config.getSqlFile())
+                .database(instance.config.getDatabase())
+                .password(instance.config.getPassword())
+                .host(instance.config.getHost())
+                .username(instance.config.getUsername())
+                .build();
 
-        if (databaseType.equalsIgnoreCase("MySQL")) instance.setSqlConnection(new MySQLConnection());
+        if (instance.config.getDatabaseType().equalsIgnoreCase("MySQL")) instance.setSqlConnection(new MySQLConnection());
         else instance.setSqlConnection(new SQLiteConnection());
 
+        if (!instance.getSqlConnection().configure(connectionInfo)) finish();
 
         /*DatabaseController.get().constructDatabase(connection);
         DatabaseController.get().loadAll();*/

@@ -23,16 +23,19 @@ public class Config {
     private String prefix;
     private String token;
     private String formatNickname;
-    private String databaseType;
-    private String mySqlUser;
-    private String mySqlHost;
-    private String mySqlPassword;
-    private String mySqlDatabase;
     private String pastebinDevKey;
     private String pteroKey;
     private String pastebinUserKey;
     private String geoIpAcessKey;
     private String vagalumeKey = "";
+
+    // Connection info
+    private String databaseType;
+    private String username;
+    private String host;
+    private String password;
+    private String database;
+    private String sqlFile;
 
     public static Config startup() {
         try {

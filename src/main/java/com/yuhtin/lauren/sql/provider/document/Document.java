@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.sql.provider.document;
 
-import com.yuhtin.minecraft.steellooting.sql.provider.document.parser.DocumentParser;
-import org.apache.commons.lang.math.NumberUtils;
+import com.yuhtin.lauren.sql.provider.document.parser.DocumentParser;
+import com.yuhtin.lauren.utils.helper.NumberUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +19,7 @@ public class Document {
     public String getString(String key) {
         Object result = this.valueMap.get(key);
         return result != null ? String.valueOf(result) : null;
+
     }
 
     public Number getNumber(String key) {
