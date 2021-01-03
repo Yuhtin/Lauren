@@ -1,9 +1,7 @@
 package com.yuhtin.lauren.utils.helper;
 
 import com.google.inject.Inject;
-import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.core.player.Player;
-import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.objects.Config;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;

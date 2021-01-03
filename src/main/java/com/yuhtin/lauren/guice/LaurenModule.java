@@ -2,6 +2,7 @@ package com.yuhtin.lauren.guice;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.yuhtin.lauren.core.bot.LaurenDAO;
 import com.yuhtin.lauren.core.music.AudioResultHandler;
 import com.yuhtin.lauren.core.player.Player;
@@ -34,6 +35,9 @@ public class LaurenModule extends AbstractModule {
 
         bind(SQLConnection.class)
                 .toInstance(this.laurenDAO.getSqlConnection());
+
+        bind(EventWaiter.class)
+                .toInstance(this.laurenDAO.getEventWaiter());
 
         bind(Logger.class)
                 .annotatedWith(Names.named("main"))

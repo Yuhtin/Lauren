@@ -2,7 +2,6 @@ package com.yuhtin.lauren.commands.help;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.service.LocaleManager;
 import com.yuhtin.lauren.service.PterodactylConnection;

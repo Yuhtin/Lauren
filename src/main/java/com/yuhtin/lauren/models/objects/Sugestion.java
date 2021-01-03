@@ -1,6 +1,5 @@
 package com.yuhtin.lauren.models.objects;
 
-import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.enums.SugestionStage;

@@ -4,7 +4,6 @@ import com.google.common.reflect.ClassPath;
 import com.google.inject.Injector;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
-import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.models.objects.RawCommand;
 import com.yuhtin.lauren.service.CommandCache;

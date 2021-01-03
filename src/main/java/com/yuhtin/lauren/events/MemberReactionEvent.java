@@ -1,6 +1,5 @@
 package com.yuhtin.lauren.events;
 
-import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.core.draw.controller.DrawController;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;

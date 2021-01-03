@@ -1,4 +1,7 @@
-package com.yuhtin.lauren;
+package com.yuhtin.lauren.startup;
+
+import com.yuhtin.lauren.Lauren;
+import java.util.Scanner;
 
 public class Startup {
 
@@ -27,6 +30,11 @@ public class Startup {
         }
 
         lauren.getLogger().info("[2/3] Registered Commands, Events, Timers and others");
+
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.nextLine().equalsIgnoreCase("stop")) {
+            new Thread(lauren::shutdown).start();
+        }
 
 
     }

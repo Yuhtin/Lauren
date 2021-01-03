@@ -1,25 +1,23 @@
 package com.yuhtin.lauren;
 
 import com.google.inject.Inject;
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.yuhtin.lauren.core.bot.LaurenDAO;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.core.xp.XpController;
+import com.yuhtin.lauren.models.embeds.ShopEmbed;
 import com.yuhtin.lauren.models.manager.CommandManager;
 import com.yuhtin.lauren.models.manager.EventsManager;
 import com.yuhtin.lauren.models.manager.TimerManager;
+import com.yuhtin.lauren.service.LocaleManager;
 import com.yuhtin.lauren.service.PterodactylConnection;
-import com.yuhtin.lauren.sql.dao.ExperienceDAO;
 import com.yuhtin.lauren.sql.dao.PlayerDAO;
 import com.yuhtin.lauren.sql.dao.StatisticDAO;
-import com.yuhtin.lauren.tasks.AutoSaveTask;
-import com.yuhtin.lauren.tasks.LootGeneratorTask;
-import com.yuhtin.lauren.tasks.TimerCheckerTask;
-import com.yuhtin.lauren.tasks.TopXpUpdater;
+import com.yuhtin.lauren.tasks.*;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.messages.AsciiBox;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,17 +29,24 @@ import java.util.zip.ZipOutputStream;
 
 public class Lauren extends LaurenDAO {
 
+    // DAO's
     @Inject private PlayerDAO playerDAO;
     @Inject private StatisticDAO statisticDAO;
 
+    // Controllers
     @Inject private XpController xpController;
     @Inject private PlayerController playerController;
     @Inject private StatsController statsController;
 
+    // Managers
+    @Inject private LocaleManager localeManager;
     @Inject private TimerManager timerManager;
-    @Inject private PterodactylConnection pterodactylConnection;
 
+    // Others
+    @Inject private PterodactylConnection pterodactylConnection;
     @Inject private TopXpUpdater topXpUpdater;
+    @Inject private ShopEmbed shopEmbed;
+
 
     public Lauren(String botName) {
         this.setBotName(botName);
@@ -72,16 +77,38 @@ public class Lauren extends LaurenDAO {
 
         loadCommands();
         loadEvents();
+        loadTasks();
 
         this.timerManager.register("com.yuhtin.lauren.timers.impl");
+
         this.pterodactylConnection.load(this.getConfig().getPteroKey());
+        this.localeManager.searchHost(this.getConfig().getGeoIpAcessKey());
+
+        this.shopEmbed.build();
 
     }
 
     @Override
     public void onReady() {
 
+        this.getBot().addEventListener(this.getEventWaiter());
         this.getLogger().info("[3/3] Lauren is now ready");
+
+        String[] botInfo = new String[]{
+                "",
+                this.getBotName() + " v" + this.getVersion(),
+                "Author: Yuhtin#9147",
+                "",
+                "All systems has loaded",
+                this.getBotName() + " is now online"
+        };
+
+        this.getLogger().info(new AsciiBox()
+                .size(50)
+                .borders("━", "┃")
+                .corners("┏", "┓", "┗", "┛")
+                .render(botInfo)
+        );
 
     }
 
@@ -109,7 +136,7 @@ public class Lauren extends LaurenDAO {
         TrackManager.getGuildTrackManagers().values().forEach(TrackManager::destroy);
         this.getLogger().info("Destroyed all track managers");
 
-        this.getLogger().info("Lauren disabled");
+        this.getLogger().info(this.getBotName() + " disabled");
 
         for (Handler handler : this.getLogger().getHandlers()) {
 
@@ -167,11 +194,28 @@ public class Lauren extends LaurenDAO {
 
     private void loadTasks() {
 
-        EventWaiter eventWaiter = new EventWaiter();
+        AutoSaveTask autoSaveTask = new AutoSaveTask(
+                this.statsController,
+                this.playerController,
+                this.getLogger()
+        );
 
-        AutoSaveTask autoSaveTask = new AutoSaveTask(this.statsController, this.playerController, this.getLogger());
-        TimerCheckerTask timerCheckerTask = new TimerCheckerTask(this.timerManager, this.getLogger());
-        LootGeneratorTask lootGeneratorTask = new LootGeneratorTask(this.playerController, this.getLogger(), eventWaiter);
+        TimerCheckerTask timerCheckerTask = new TimerCheckerTask(
+                this.timerManager,
+                this.getLogger()
+        );
+
+        LootGeneratorTask lootGeneratorTask = new LootGeneratorTask(
+                this.playerController,
+                this.getLogger(),
+                this.getEventWaiter()
+        );
+
+        ShardLootTask shardLootTask = new ShardLootTask(
+                this.getLogger(),
+                this.playerController,
+                this.getEventWaiter()
+        );
 
         TaskHelper.runTaskLater(new TimerTask() {
             @Override
@@ -185,6 +229,7 @@ public class Lauren extends LaurenDAO {
 
         this.topXpUpdater.startRunnable();
         lootGeneratorTask.startRunnable();
+        shardLootTask.startRunnable();
 
     }
 }

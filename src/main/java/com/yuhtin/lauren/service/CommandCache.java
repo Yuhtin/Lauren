@@ -1,6 +1,5 @@
 package com.yuhtin.lauren.service;
 
-import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.models.objects.RawCommand;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import lombok.Getter;

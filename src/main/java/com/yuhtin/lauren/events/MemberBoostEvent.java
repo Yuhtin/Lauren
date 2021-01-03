@@ -1,6 +1,5 @@
 package com.yuhtin.lauren.events;
 
-import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import net.dv8tion.jda.api.entities.Role;

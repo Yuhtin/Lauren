@@ -5,14 +5,15 @@ import com.yuhtin.lauren.models.objects.ShopItem;
 import lombok.Getter;
 import net.dv8tion.jda.api.EmbedBuilder;
 
+import javax.inject.Singleton;
 import java.awt.*;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
+@Singleton
 public class ShopEmbed {
 
-    @Getter private static final ShopEmbed instance = new ShopEmbed();
     @Getter private final EmbedBuilder embed = new EmbedBuilder();
     @Getter private final Map<String, ShopItem> shopItems = new HashMap<>();
 

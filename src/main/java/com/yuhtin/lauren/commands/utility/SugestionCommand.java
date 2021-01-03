@@ -3,7 +3,6 @@ package com.yuhtin.lauren.commands.utility;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.models.enums.SugestionStage;
 import com.yuhtin.lauren.models.objects.Sugestion;

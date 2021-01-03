@@ -1,7 +1,6 @@
 package com.yuhtin.lauren.tasks;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.utils.helper.TaskHelper;

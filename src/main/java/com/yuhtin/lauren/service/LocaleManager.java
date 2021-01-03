@@ -1,12 +1,13 @@
 package com.yuhtin.lauren.service;
 
-import com.yuhtin.lauren.core.logger.Logger;
 import lombok.Data;
-import lombok.Getter;
 import org.json.JSONObject;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.logging.Logger;
 
 /**
  * @author Yuhtin
@@ -14,10 +15,10 @@ import java.net.Socket;
  */
 
 @Data
+@Singleton
 public class LocaleManager {
 
-    @Getter
-    private static final LocaleManager instance = new LocaleManager();
+    @Inject private Logger logger;
 
     private String city;
     private String regionName;
@@ -35,6 +36,7 @@ public class LocaleManager {
             GetConnectionFactory connection = new GetConnectionFactory("http://api.ipstack.com/" + ip + "?access_key=" + accessKey);
             String response = connection.buildConnection();
 
+            assert response != null;
             JSONObject jsonObject = new JSONObject(response);
 
             city = jsonObject.getString("city");
@@ -43,7 +45,7 @@ public class LocaleManager {
 
         } catch (Exception exception) {
 
-            Logger.log("Error trying to search host");
+            this.logger.warning("Error trying to search host");
             exception.printStackTrace();
 
         }

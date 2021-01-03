@@ -1,6 +1,5 @@
 package com.yuhtin.lauren.utils.helper;
 
-import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;

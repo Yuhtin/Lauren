@@ -1,6 +1,5 @@
 package com.yuhtin.lauren.tasks;
 
-import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.punish.PunishmentType;

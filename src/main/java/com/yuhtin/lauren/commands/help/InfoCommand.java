@@ -2,7 +2,6 @@ package com.yuhtin.lauren.commands.help;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.StatsController;

@@ -2,6 +2,7 @@ package com.yuhtin.lauren.core.bot;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.yuhtin.lauren.core.logger.LogFormat;
 import com.yuhtin.lauren.guice.LaurenModule;
 import com.yuhtin.lauren.models.exceptions.GuiceInjectorException;
@@ -20,7 +21,6 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 
 import javax.inject.Singleton;
 import javax.security.auth.login.LoginException;
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Properties;
@@ -40,6 +40,7 @@ public abstract class LaurenDAO implements Bot {
     private Injector injector;
     private SQLConnection sqlConnection;
     private Config config;
+    private EventWaiter eventWaiter = new EventWaiter();
 
     private String logFile;
     private String version;
@@ -64,7 +65,6 @@ public abstract class LaurenDAO implements Bot {
      * Called on bot connect to discord
      */
     public void onReady() {
-
     }
 
     /**
