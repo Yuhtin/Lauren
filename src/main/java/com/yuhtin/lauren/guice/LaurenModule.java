@@ -7,6 +7,7 @@ import com.yuhtin.lauren.core.bot.LaurenDAO;
 import com.yuhtin.lauren.core.music.AudioResultHandler;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.models.objects.Config;
+import com.yuhtin.lauren.service.GetConnectionFactory;
 import com.yuhtin.lauren.sql.connection.SQLConnection;
 import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.JDA;
@@ -46,6 +47,7 @@ public class LaurenModule extends AbstractModule {
         bind(Config.class)
                 .toInstance(this.laurenDAO.getConfig());
 
+        requestStaticInjection(GetConnectionFactory.class);
         requestStaticInjection(AudioResultHandler.class);
         requestStaticInjection(Player.class);
 

@@ -7,10 +7,12 @@ import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -23,9 +25,10 @@ import java.util.logging.Logger;
 @AllArgsConstructor
 public class ShardLootTask {
 
-    private final Logger logger;
     private final PlayerController playerController;
+    private final ShardManager shardManager;
     private final EventWaiter eventWaiter;
+    private final Logger logger;
 
     public void startRunnable() {
         this.logger.info("Registered ShardLootTask");
@@ -37,7 +40,9 @@ public class ShardLootTask {
 
         EmbedBuilder embed = new EmbedBuilder();
         embed.setAuthor("Shard Loot", null, "https://cdn.discordapp.com/emojis/772285522852839445.png?v=1");
-        embed.setFooter("© ^Aincrad™ servidor de jogos", LaurenStartup.getInstance().getGuild().getIconUrl());
+
+        Guild guild = shardManager.getShards().get(0).getGuilds().get(0);
+        embed.setFooter("© ^Aincrad™ servidor de jogos", guild.getIconUrl());
 
         embed.setThumbnail("https://www.pcguia.pt/wp-content/uploads/2019/11/lootbox.jpg");
         embed.setColor(Color.MAGENTA);
@@ -56,7 +61,7 @@ public class ShardLootTask {
                 int value = new Random().nextInt(allowedChannels.size());
                 long channelID = allowedChannels.get(value);
 
-                TextChannel channel = LaurenStartup.getInstance().getGuild().getTextChannelById(channelID);
+                TextChannel channel = guild.getTextChannelById(channelID);
 
                 if (channel == null) {
                     logger.warning("Can't select a random channel to drop a loot");

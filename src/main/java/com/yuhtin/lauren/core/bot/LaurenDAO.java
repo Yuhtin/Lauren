@@ -12,6 +12,7 @@ import com.yuhtin.lauren.sql.connection.ConnectionInfo;
 import com.yuhtin.lauren.sql.connection.SQLConnection;
 import com.yuhtin.lauren.sql.connection.mysql.MySQLConnection;
 import com.yuhtin.lauren.sql.connection.sqlite.SQLiteConnection;
+import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.helper.InfinityFiles;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Data;
@@ -161,11 +162,11 @@ public abstract class LaurenDAO implements Bot {
     }
 
     @Override
-    public void findVersion(Class oClass) throws IOException {
+    public void findVersion() throws IOException {
 
         Properties properties = new Properties();
 
-        properties.load(oClass.getClassLoader().getResourceAsStream("project.properties"));
+        properties.load(Startup.class.getClassLoader().getResourceAsStream("project.properties"));
         this.version = properties.getProperty("version");
 
     }

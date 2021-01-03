@@ -16,9 +16,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -150,14 +151,4 @@ public class Utilities {
         return value == null ? "Não informado" : value;
     }
 
-    public void foundVersion() {
-        Properties properties = new Properties();
-
-        try {
-            properties.load(LaurenStartup.class.getClassLoader().getResourceAsStream("project.properties"));
-            LaurenStartup.getInstance().setVersion(properties.getProperty("version"));
-        } catch (Exception exception) {
-            this.logger.log(Level.WARNING, "An exception was caught while searching for my client version", exception);
-        }
-    }
 }

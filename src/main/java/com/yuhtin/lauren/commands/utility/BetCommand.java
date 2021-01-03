@@ -7,6 +7,7 @@ import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
 
+import javax.inject.Inject;
 import java.awt.*;
 import java.time.Instant;
 import java.util.Random;
@@ -18,12 +19,14 @@ import java.util.Random;
         alias = {"bet", "aposta"})
 public class BetCommand extends Command {
 
+    @Inject private PlayerController playerController;
+
     @Override
     protected void execute(CommandEvent event) {
         String[] arguments = event.getArgs().split(" ");
 
         if (arguments.length < 2) {
-            event.getChannel().sendMessage(helpMessage(event.getMember().getColor()).build()).queue();
+            event.getChannel().sendMessage(helpMessage(event.getMember().getColor(), event.getGuild().getIconUrl()).build()).queue();
             return;
         }
 
@@ -54,20 +57,20 @@ public class BetCommand extends Command {
             }
 
             default: {
-                event.getChannel().sendMessage(helpMessage(event.getMember().getColor()).build()).queue();
+                event.getChannel().sendMessage(helpMessage(event.getMember().getColor(), event.getGuild().getIconUrl()).build()).queue();
                 return;
             }
         }
 
         try {
             if (arguments[1].contains("NaN") || arguments[1].contains("-")) {
-                event.getChannel().sendMessage(helpMessage(event.getMember().getColor()).build()).queue();
+                event.getChannel().sendMessage(helpMessage(event.getMember().getColor(), event.getGuild().getIconUrl()).build()).queue();
                 return;
             }
 
             money = Integer.parseInt(arguments[1]);
         } catch (Exception exception) {
-            event.getChannel().sendMessage(helpMessage(event.getMember().getColor()).build()).queue();
+            event.getChannel().sendMessage(helpMessage(event.getMember().getColor(), event.getGuild().getIconUrl()).build()).queue();
             return;
         }
 
@@ -76,7 +79,7 @@ public class BetCommand extends Command {
             return;
         }
 
-        Player data = PlayerController.INSTANCE.get(event.getAuthor().getIdLong());
+        Player data = this.playerController.get(event.getAuthor().getIdLong());
         if (data.getMoney() < money) {
             event.getChannel().sendMessage("<:chorano:726207542413230142> <@" + event.getAuthor().getId() + ">, você não tem dinheiro suficiente para realizar esta aposta.").queue();
             return;
@@ -93,7 +96,7 @@ public class BetCommand extends Command {
         event.getChannel().sendMessage("<:felizpakas:742373250037710918> <@" + event.getAuthor().getId() + ">, você ganhou `+ $" + total + "` apostando na cor " + color).queue();
     }
 
-    private EmbedBuilder helpMessage(Color color) {
+    private EmbedBuilder helpMessage(Color color, String iconUrl) {
         return new EmbedBuilder()
                 .setTitle("<:chorano:726207542413230142> Apostas")
                 .setDescription("Para realizar uma aposta utilize `$apostar <cor> <valor>`\n\n"
@@ -103,14 +106,7 @@ public class BetCommand extends Command {
                         "- <:online:703089222021808170> Verde (**5x**)")
                 .setColor(color)
                 .setTimestamp(Instant.now())
-                .setFooter("Sistema de apostas",
-                        LaurenStartup.getInstance()
-                                .getBot()
-                                .getShards()
-                                .get(0)
-                                .getSelfUser()
-                                .getAvatarUrl()
-                );
+                .setFooter("Sistema de apostas", iconUrl);
     }
 
 }

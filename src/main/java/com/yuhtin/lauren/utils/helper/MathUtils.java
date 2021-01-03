@@ -1,12 +1,10 @@
 package com.yuhtin.lauren.utils.helper;
 
-import com.yuhtin.lauren.core.logger.Logger;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MathUtils {
-
-    private MathUtils() {
-        Logger.log("Unable to instantiate a utility class");
-    }
 
     public static int parseTime(String minutes) {
         try {

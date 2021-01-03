@@ -70,7 +70,7 @@ public class Lauren extends LaurenDAO {
     @Override
     public void onEnable() throws Exception {
 
-        this.findVersion(Lauren.class);
+        this.findVersion();
         this.connectDiscord();
 
         loadSQLTables();
@@ -188,7 +188,9 @@ public class Lauren extends LaurenDAO {
 
         this.playerDAO.createTable();
         this.xpController.load();
+
         this.statisticDAO.createTable();
+        this.statisticDAO.findAllStats().forEach(this.statsController::insertStats);
 
     }
 
@@ -197,6 +199,7 @@ public class Lauren extends LaurenDAO {
         AutoSaveTask autoSaveTask = new AutoSaveTask(
                 this.statsController,
                 this.playerController,
+                this.getBot(),
                 this.getLogger()
         );
 
@@ -207,14 +210,16 @@ public class Lauren extends LaurenDAO {
 
         LootGeneratorTask lootGeneratorTask = new LootGeneratorTask(
                 this.playerController,
-                this.getLogger(),
-                this.getEventWaiter()
+                this.getBot(),
+                this.getEventWaiter(),
+                this.getLogger()
         );
 
         ShardLootTask shardLootTask = new ShardLootTask(
-                this.getLogger(),
                 this.playerController,
-                this.getEventWaiter()
+                this.getBot(),
+                this.getEventWaiter(),
+                this.getLogger()
         );
 
         TaskHelper.runTaskLater(new TimerTask() {

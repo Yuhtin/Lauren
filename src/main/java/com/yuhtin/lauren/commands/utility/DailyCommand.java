@@ -21,6 +21,7 @@ public class DailyCommand extends Command {
 
     @Inject private PlayerController playerController;
     @Inject private ResetDailyTimer resetDailyTimer;
+    @Inject private StatsController statsController;
 
     @Override
     protected void execute(CommandEvent event) {
@@ -48,7 +49,7 @@ public class DailyCommand extends Command {
                         "💙 Veja suas informações atualizadas usando `$perfil`")
                 .queue();
 
-        StatsController.get().getStats("Daily Command").suplyStats(1);
+        this.statsController.getStats("Daily Command").suplyStats(1);
 
     }
 }

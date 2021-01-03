@@ -43,16 +43,18 @@ public class TrackUtils {
     }
 
     public boolean isMusicOwner(Member member) {
-        return TrackManager.get()
+        return TrackManager.of(member.getGuild())
                 .getTrackInfo()
                 .getAuthor()
                 .equals(member);
     }
 
     public boolean isIdle(TextChannel channel) {
-        if (TrackManager.get().player.getPlayingTrack() == null) {
-            if (channel != null) channel.sendMessage("\uD83D\uDCCC Eita, não tem nenhum batidão pra tocar, adiciona uns ai <3").queue();
+        if (TrackManager.of(channel.getGuild()).getPlayer().getPlayingTrack() == null) {
+
+            channel.sendMessage("\uD83D\uDCCC Eita, não tem nenhum batidão pra tocar, adiciona uns ai <3").queue();
             return true;
+
         }
 
         return false;

@@ -7,7 +7,9 @@ import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.sql.provider.document.Document;
 import com.yuhtin.lauren.utils.serialization.player.PlayerSerializer;
 import lombok.AllArgsConstructor;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.util.HashMap;
 import java.util.TimerTask;
@@ -19,6 +21,7 @@ public class AutoSaveTask extends TimerTask {
 
     private final StatsController statsController;
     private final PlayerController playerController;
+    private final ShardManager shardManager;
     private final Logger logger;
 
     @Override
@@ -29,8 +32,9 @@ public class AutoSaveTask extends TimerTask {
 
         String sql = "SELECT * FROM `lauren_players`";
 
-        Role muteRole = LaurenStartup.getInstance().getGuild().getRoleById(760242509355024404L);
-        Role callRole = LaurenStartup.getInstance().getGuild().getRoleById(771203970118975501L);
+        Guild guild = shardManager.getShards().get(0).getGuilds().get(0);
+        Role muteRole = guild.getRoleById(760242509355024404L);
+        Role callRole = guild.getRoleById(771203970118975501L);
 
         if (muteRole == null || callRole == null) {
             this.logger.info("Can't execute PunishmentCheckerTask (roles cannot be null)");
@@ -58,10 +62,7 @@ public class AutoSaveTask extends TimerTask {
                     data.getPunishs().remove(punishmentType);
 
                     Role role = punishmentType == PunishmentType.MUTE ? muteRole : callRole;
-                    LaurenStartup.getInstance()
-                            .getGuild()
-                            .removeRoleFromMember(data.getUserID(), role)
-                            .queue();
+                    guild.removeRoleFromMember(data.getUserID(), role).queue();
 
                 }
             }

@@ -19,7 +19,7 @@ public interface Bot {
 
     void loadEvents() throws IOException;
 
-    void findVersion(Class<Object> oClass) throws IOException;
+    void findVersion() throws IOException;
 
     void shutdown() throws Exception;
 

@@ -9,9 +9,7 @@ public class Startup {
 
         Lauren lauren = new Lauren("Lauren");
 
-        try {
-            lauren.onLoad();
-        } catch (Exception exception) {
+        try { lauren.onLoad(); } catch (Exception exception) {
 
             exception.printStackTrace();
             lauren.shutdown();
@@ -20,9 +18,7 @@ public class Startup {
 
         lauren.getLogger().info("[1/3] High important systems enabled successfully");
 
-        try {
-            lauren.onEnable();
-        } catch (Exception exception) {
+        try { lauren.onEnable(); } catch (Exception exception) {
 
             exception.printStackTrace();
             lauren.shutdown();

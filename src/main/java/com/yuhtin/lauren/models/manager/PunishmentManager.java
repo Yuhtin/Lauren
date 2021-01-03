@@ -1,36 +1,42 @@
-package com.yuhtin.lauren.utils.helper;
+package com.yuhtin.lauren.models.manager;
 
-import com.yuhtin.lauren.core.logger.Logger;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.punish.PunishmentRule;
 import com.yuhtin.lauren.core.punish.PunishmentType;
+import com.yuhtin.lauren.utils.helper.TimeUtils;
+import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
 
-public class PunishmentUtils {
+import javax.inject.Named;
+import java.util.logging.Logger;
 
-    private PunishmentUtils() {
-        Logger.log("Unable to instantiate a utility class");
-    }
+@Singleton
+public class PunishmentManager {
 
-    public static void applyPunish(User author, Member user, PunishmentRule rule, String proof) {
-        Player player = PlayerController.INSTANCE.get(user.getIdLong());
+    @Inject @Named("main") private Logger logger;
+    @Inject private PlayerController playerController;
+
+    public void applyPunish(User author, Member user, PunishmentRule rule, String proof) {
+        Player player = playerController.get(user.getIdLong());
         PunishmentType type = rule.getType();
 
         if (type == PunishmentType.BAN) {
 
-            Logger.log(Utilities.INSTANCE.getFullName(author) +
+            this.logger.info(Utilities.INSTANCE.getFullName(author) +
                     " banned user " +
                     Utilities.INSTANCE.getFullName(user.getUser()) +
                     " in rule " +
                     rule.toString() +
                     (proof.equalsIgnoreCase("") ? "" : " with proof " + proof));
 
-            LaurenStartup.getInstance().getGuild().ban(user, 7, "Banned with punish system").queue();
+            user.getGuild().ban(user, 7, "Banned with punish system").queue();
 
-            sendPunishMessage(author, user.getUser(), rule, proof);
+            sendPunishMessage(author, user, rule, proof);
             return;
         }
 
@@ -40,28 +46,28 @@ public class PunishmentUtils {
         if (player.getPunishs().containsKey(type)) player.getPunishs().replace(type, player.getPunishs().get(type) + duration);
         else player.getPunishs().put(type, duration);
 
-        Role role = LaurenStartup.getInstance()
-                .getGuild()
+        Role role = user.getGuild()
                 .getRoleById(type == PunishmentType.MUTE
                         ? 760242509355024404L
                         : 771203970118975501L);
 
-        if (role == null) Logger.log("Error on try to punish a user");
+        if (role == null) this.logger.warning("Error on try to punish a user");
         else {
 
-            LaurenStartup.getInstance().getGuild().addRoleToMember(user, role).queue();
-            sendPunishMessage(author, user.getUser(), rule, proof);
+            user.getGuild().addRoleToMember(user, role).queue();
+            sendPunishMessage(author, user, rule, proof);
 
         }
     }
 
-    private static void sendPunishMessage(User author, User user, PunishmentRule rule, String proof) {
-        TextChannel announcementChannel = LaurenStartup.getInstance().getGuild().getTextChannelById(771384145027792986L);
+    private void sendPunishMessage(User author, Member user, PunishmentRule rule, String proof) {
+
+        TextChannel announcementChannel = user.getGuild().getTextChannelById(771384145027792986L);
         String ruleDescription = "Regra " + rule.toString() + ": " + rule.getMotive() + (proof.equalsIgnoreCase("") ? "" : ", " + proof);
 
         if (announcementChannel != null) {
             MessageBuilder announcementMessage = new MessageBuilder();
-            announcementMessage.setContent("**Usuário punido:** " + Utilities.INSTANCE.getFullName(user) + "\n" +
+            announcementMessage.setContent("**Usuário punido:** " + Utilities.INSTANCE.getFullName(user.getUser()) + "\n" +
                     "**Punido por:** <@" + author.getId() + ">\n" +
                     "**Motivo:** " + ruleDescription
             );
@@ -69,14 +75,14 @@ public class PunishmentUtils {
             announcementChannel.sendMessage(announcementMessage.build()).queue();
         }
 
-        PrivateChannel privateChannel = user.openPrivateChannel().complete();
+        PrivateChannel privateChannel = user.getUser().openPrivateChannel().complete();
         if (privateChannel == null) return;
 
         EmbedBuilder privateMessage = new EmbedBuilder();
         privateMessage.setAuthor(Utilities.INSTANCE.getFullName(author), null, author.getAvatarUrl());
 
         privateMessage.addField("<:chorano:726207542413230142>" +
-                        " Você foi " + rule.getType().getFormated() + " de " + LaurenStartup.getInstance().getGuild().getName(),
+                        " Você foi " + rule.getType().getFormated() + " de " + user.getUser().getName(),
                 "", false);
 
         privateMessage.addField("<:beacon:771543538252120094> Punido por", "`" + Utilities.INSTANCE.getFullName(author) + "`", false);
@@ -87,7 +93,7 @@ public class PunishmentUtils {
         privateMessage.addField(":alarm_clock: Duração",
                 "`" + (rule.getPunishTime() == 0L ? "Eterno" : TimeUtils.formatTime(rule.getPunishTime())) + "`", false);
 
-        privateMessage.setFooter("© ^Aincrad™ servidor de jogos", LaurenStartup.getInstance().getGuild().getIconUrl());
+        privateMessage.setFooter("© ^Aincrad™ servidor de jogos", user.getGuild().getIconUrl());
 
         privateChannel.sendMessage(privateMessage.build()).queue();
     }

@@ -31,4 +31,8 @@ public class StatsController {
 
     }
 
+    public void insertStats(StatsInfo statsInfo) {
+        this.stats.put(statsInfo.getName(), statsInfo);
+    }
+
 }
