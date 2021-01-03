@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.sql;
+package com.yuhtin.lauren.sql.dao;
 
 import com.google.inject.Singleton;
 import com.yuhtin.lauren.core.statistics.StatsInfo;

@@ -2,7 +2,7 @@ package com.yuhtin.lauren.commands.help;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.service.LocaleManager;
 import com.yuhtin.lauren.service.PterodactylConnection;
@@ -38,9 +38,9 @@ public class PingCommand extends Command {
 
     private MessageEmbed createEmbed(long toEpochMilli, Member member, JDA jda) {
 
-        String shardMessage = Lauren.getInstance().getBot().getShardsTotal()
+        String shardMessage = LaurenStartup.getInstance().getBot().getShardsTotal()
                 + " shards, "
-                + Lauren.getInstance().getBot().getShardsRunning()
+                + LaurenStartup.getInstance().getBot().getShardsRunning()
                 + " rodando";
 
         EmbedBuilder builder = new EmbedBuilder()

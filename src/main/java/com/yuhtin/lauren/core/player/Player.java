@@ -1,14 +1,14 @@
 package com.yuhtin.lauren.core.player;
 
-import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.core.logger.Logger;
+import com.yuhtin.lauren.core.player.impl.Entity;
 import com.yuhtin.lauren.core.punish.PunishmentType;
 import com.yuhtin.lauren.core.statistics.controller.StatsController;
 import com.yuhtin.lauren.core.xp.Level;
 import com.yuhtin.lauren.core.xp.XpController;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.enums.Rank;
-import com.yuhtin.lauren.core.player.impl.Entity;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,7 +16,10 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Data
@@ -51,8 +54,8 @@ public class Player
     }
 
     public void updateLevel(int level) {
+
         this.level = level;
-        new Thread(() -> Utilities.INSTANCE.updateNickByLevel(this, level)).start();
 
         List<Long> rolesToGive = XpController.getInstance()
                 .getLevelByXp()
@@ -60,22 +63,19 @@ public class Player
                 .getRolesToGive();
 
         List<Long> rolesToRemove = new ArrayList<>();
-        if (level >= 10) {
-            for (Integer integer : XpController.getInstance().getLevelByXp().keySet()) {
-                if (integer >= level) break;
+        for (Integer integer : XpController.getInstance().getLevelByXp().keySet()) {
+            if (integer >= level) break;
 
-                Level tempLevel = XpController.getInstance().getLevelByXp().get(integer);
-                if (tempLevel.getRolesToGive().isEmpty()) continue;
+            Level tempLevel = XpController.getInstance().getLevelByXp().get(integer);
+            if (tempLevel.getRolesToGive().isEmpty()) continue;
 
-                for (Long roleID : tempLevel.getRolesToGive()) {
+            for (Long roleID : tempLevel.getRolesToGive()) {
 
-                    if (roleID.equals(722957999949348935L)
-                            || roleID.equals(722116789055782912L)
-                            || roleID.equals(770371418177011713L)) continue;
+                if (roleID.equals(722957999949348935L)
+                        || roleID.equals(722116789055782912L)
+                        || roleID.equals(770371418177011713L)) continue;
 
-                    rolesToRemove.add(roleID);
-                }
-
+                rolesToRemove.add(roleID);
             }
 
         }
@@ -84,25 +84,25 @@ public class Player
 
             for (long roleID : rolesToGive) {
 
-                Role role = Lauren.getInstance().getGuild().getRoleById(roleID);
+                Role role = LaurenStartup.getInstance().getGuild().getRoleById(roleID);
                 if (role == null) {
                     Logger.log("Role is null", LogType.ERROR);
                     continue;
                 }
 
-                Lauren.getInstance().getGuild().addRoleToMember(userID, role).queue();
+                LaurenStartup.getInstance().getGuild().addRoleToMember(userID, role).queue();
 
             }
 
             for (long roleID : rolesToRemove) {
 
-                Role role = Lauren.getInstance().getGuild().getRoleById(roleID);
+                Role role = LaurenStartup.getInstance().getGuild().getRoleById(roleID);
                 if (role == null) {
                     Logger.log("Role is null", LogType.ERROR);
                     continue;
                 }
 
-                Lauren.getInstance().getGuild().removeRoleFromMember(userID, role).queue();
+                LaurenStartup.getInstance().getGuild().removeRoleFromMember(userID, role).queue();
 
             }
         }
@@ -116,10 +116,14 @@ public class Player
 
         }
 
-        if (level == 30) message = "<:oi:762303876732420176> O jogador <@" + userID + "> tornou-se DJ";
+        TextChannel channel = LaurenStartup.getInstance().getBot().getTextChannelById(770393139516932158L);
+        if (channel != null) {
 
-        TextChannel channel = Lauren.getInstance().getBot().getTextChannelById(770393139516932158L);
-        if (channel != null) channel.sendMessage(message).queue();
+            channel.sendMessage(message).queue();
+            if (level == 30)
+                channel.sendMessage("<:oi:762303876732420176> O jogador <@" + userID + "> tornou-se DJ").queue();
+
+        }
 
         Utilities.INSTANCE.updateNickByLevel(this, level);
 

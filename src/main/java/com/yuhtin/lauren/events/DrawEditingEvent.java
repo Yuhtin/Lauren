@@ -1,6 +1,5 @@
 package com.yuhtin.lauren.events;
 
-import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.utils.helper.MathUtils;
 import com.yuhtin.lauren.core.draw.controller.DrawController;
 import com.yuhtin.lauren.models.enums.DrawEditingStatus;

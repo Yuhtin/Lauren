@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.sql;
+package com.yuhtin.lauren.sql.dao;
 
 import com.google.inject.Singleton;
 import com.yuhtin.lauren.core.player.Player;
@@ -44,5 +44,22 @@ public class PlayerDAO extends DatabaseProvider {
         );
 
     }
+
+    public void deletePlayer(long userID) {
+
+        update("delete from `lauren_players_new` where `id` = ?",
+                userID
+        );
+
+    }
+
+    public void updateAllDailys() {
+
+        update("update `lauren_players_new` set `abbleToDaily` = ?",
+                true
+        );
+
+    }
+
 
 }

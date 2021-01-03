@@ -2,13 +2,12 @@ package com.yuhtin.lauren.commands.help;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.controller.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.service.PterodactylConnection;
-import com.yuhtin.lauren.utils.helper.MathUtils;
 import com.yuhtin.lauren.utils.helper.TimeUtils;
 import lombok.SneakyThrows;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -50,11 +49,11 @@ public class InfoCommand extends Command {
 
                 .addField("📆 Criado em", "`" + timeCreated.getDayOfMonth() + " de " + timeCreated.getMonth().getDisplayName(TextStyle.SHORT, Locale.US) + ", "
                         + timeCreated.getYear() + " às " + timeCreated.getHour() + ":" + timeCreated.getMinute() + "`", true)
-                .addField("<a:feliz_2:726220815749611603> Versão atual", "`v" + Lauren.getInstance().getVersion() + "`", true)
+                .addField("<a:feliz_2:726220815749611603> Versão atual", "`v" + LaurenStartup.getInstance().getVersion() + "`", true)
                 .addField("🙍‍♂️ Dono", "`" + authorBot + "`", true)
 
                 .addField("<a:infinito:703187274912759899> Uptime",
-                        "`" + TimeUtils.formatTime(System.currentTimeMillis() - Lauren.getInstance().getStartTime()) + "`",
+                        "`" + TimeUtils.formatTime(System.currentTimeMillis() - LaurenStartup.getInstance().getStartTime()) + "`",
                         true)
 
                 .addField("💥 Cache", "`" + cacheMessage + "`", true)
@@ -65,7 +64,7 @@ public class InfoCommand extends Command {
                 .addField("<:discord:723587554422816889> Versão JDA", "`v4.2.0_186`", true)
 
                 .addField("⚙️ Núcleos", "`" + Runtime.getRuntime().availableProcessors() + " cores`", true)
-                .addField("\uD83D\uDEE2 Banco de Dados", "`" + Lauren.getInstance().getConfig().getDatabaseType() + "`", true)
+                .addField("\uD83D\uDEE2 Banco de Dados", "`" + LaurenStartup.getInstance().getConfig().getDatabaseType() + "`", true)
                 .addField("\uD83C\uDF9E RAM", "`"
                         + PterodactylConnection.get().getServer().getServerUsage().getMemoryUsage() +
                         "M/"

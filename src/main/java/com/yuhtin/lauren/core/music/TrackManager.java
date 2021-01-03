@@ -7,7 +7,7 @@ import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.LaurenStartup;
 import lombok.Getter;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -44,7 +44,7 @@ public class TrackManager extends AudioEventAdapter {
         AudioSourceManagers.registerLocalSource(audioManager);
 
         player.addListener(this);
-        Lauren.getInstance().getGuild().getAudioManager().setSendingHandler(new AudioPlayerSendHandler(player));
+        LaurenStartup.getInstance().getGuild().getAudioManager().setSendingHandler(new AudioPlayerSendHandler(player));
 
         player.setFilterFactory(this.equalizer);
     }

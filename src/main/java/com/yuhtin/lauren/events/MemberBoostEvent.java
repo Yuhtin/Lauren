@@ -1,6 +1,6 @@
 package com.yuhtin.lauren.events;
 
-import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import net.dv8tion.jda.api.entities.Role;
@@ -23,11 +23,11 @@ public class MemberBoostEvent extends ListenerAdapter {
         if (role == null) player.removePermission("role.booster");
         else {
 
-            Role primeRole = Lauren.getInstance()
+            Role primeRole = LaurenStartup.getInstance()
                     .getGuild()
                     .getRoleById(722116789055782912L);
 
-            if (primeRole != null) Lauren.getInstance()
+            if (primeRole != null) LaurenStartup.getInstance()
                     .getGuild()
                     .addRoleToMember(event.getMember(), primeRole)
                     .queue();

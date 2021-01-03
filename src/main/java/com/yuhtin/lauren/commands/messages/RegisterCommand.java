@@ -2,7 +2,7 @@ package com.yuhtin.lauren.commands.messages;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.Permission;
@@ -36,7 +36,7 @@ public class RegisterCommand extends Command {
         action.queue(message -> {
             message.addReaction(":nao_pertubar:703089222185386056").queue();
             message.addReaction(":live:704293077623504957").queue();
-            Lauren.getInstance().getConfig().setResgistrationId(message.getIdLong());
+            LaurenStartup.getInstance().getConfig().setResgistrationId(message.getIdLong());
         });
     }
 }

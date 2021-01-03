@@ -9,22 +9,26 @@ import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.timers.impl.ResetDailyTimer;
 import com.yuhtin.lauren.utils.helper.TimeUtils;
 
-import java.util.concurrent.TimeUnit;
+import javax.inject.Inject;
 
 @CommandHandler(
         name = "daily",
         type = CommandHandler.CommandType.UTILITY,
         description = "Pegar uma pequena quantia de XP e dinheiro diariamente",
-        alias = {"diario", "d", "dly", "diaria"})
+        alias = {"diario", "d", "dly", "diaria"}
+)
 public class DailyCommand extends Command {
+
+    @Inject private PlayerController playerController;
+    @Inject private ResetDailyTimer resetDailyTimer;
 
     @Override
     protected void execute(CommandEvent event) {
 
-        Player data = PlayerController.INSTANCE.get(event.getMember().getIdLong());
+        Player data = this.playerController.get(event.getMember().getIdLong());
         if (!data.isAbbleToDaily()) {
 
-            long nextReset = ResetDailyTimer.getInstance().getNextReset();
+            long nextReset = this.resetDailyTimer.getNextReset();
             if (nextReset == 0) {
 
                 event.getChannel().sendMessage("Poxa 😥 Você precisa aguardar até 12:00 para usar este comando novamente").queue();
@@ -38,7 +42,7 @@ public class DailyCommand extends Command {
 
         }
 
-        data.setAbbleToDaily(false).addMoney(45).gainXP(100);
+        data.setAbbleToDaily(false).addMoney(75).gainXP(300);
         event.getChannel()
                 .sendMessage("🌟 Aaaaa, eu to muito feliz por ter lembrado de mim e pego seu daily " +
                         "💙 Veja suas informações atualizadas usando `$perfil`")

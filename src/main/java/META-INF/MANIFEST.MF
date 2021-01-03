@@ -1,2 +1,2 @@
 Manifest-Version: 1.0
-Main-Class: com.yuhtin.lauren.Lauren
+Main-Class: com.yuhtin.lauren.LaurenStartup

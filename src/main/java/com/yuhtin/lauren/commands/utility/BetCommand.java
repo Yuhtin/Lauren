@@ -2,7 +2,7 @@ package com.yuhtin.lauren.commands.utility;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
@@ -105,7 +105,7 @@ public class BetCommand extends Command {
                 .setColor(color)
                 .setTimestamp(Instant.now())
                 .setFooter("Sistema de apostas",
-                        Lauren.getInstance()
+                        LaurenStartup.getInstance()
                                 .getBot()
                                 .getShards()
                                 .get(0)

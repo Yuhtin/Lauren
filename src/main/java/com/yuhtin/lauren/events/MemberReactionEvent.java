@@ -1,6 +1,6 @@
 package com.yuhtin.lauren.events;
 
-import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.core.draw.controller.DrawController;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
@@ -14,12 +14,12 @@ public class MemberReactionEvent extends ListenerAdapter {
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
         if (event.getUser() == null || event.getUser().isBot() || event.getMember() == null) return;
 
-        if (event.getMessageIdLong() == Lauren.getInstance().getConfig().getResgistrationId()) {
-            Role boy = Lauren.getInstance()
+        if (event.getMessageIdLong() == LaurenStartup.getInstance().getConfig().getResgistrationId()) {
+            Role boy = LaurenStartup.getInstance()
                     .getGuild()
                     .getRolesByName("PLEBEU\uD83D\uDC68", true).get(0);
 
-            Role girl = Lauren.getInstance()
+            Role girl = LaurenStartup.getInstance()
                     .getBot()
                     .getRolesByName("PLEBÉIA \uD83D\uDC69", true).get(0);
 

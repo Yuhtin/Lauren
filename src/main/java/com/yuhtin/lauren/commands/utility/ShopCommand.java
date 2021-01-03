@@ -3,7 +3,7 @@ package com.yuhtin.lauren.commands.utility;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
@@ -99,7 +99,7 @@ public class ShopCommand extends Command {
 
                         case PRIME:
 
-                            Role role = Lauren.getInstance().getGuild().getRoleById(722116789055782912L);
+                            Role role = LaurenStartup.getInstance().getGuild().getRoleById(722116789055782912L);
                             if (role == null) {
 
                                 Logger.log("The player "
@@ -110,7 +110,7 @@ public class ShopCommand extends Command {
                             }
 
 
-                            Lauren.getInstance()
+                            LaurenStartup.getInstance()
                                     .getGuild()
                                     .addRoleToMember(event.getAuthor().getIdLong(), role)
                                     .queue();

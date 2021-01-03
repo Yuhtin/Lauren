@@ -20,7 +20,7 @@ public final class PlayerDocumentParser implements DocumentParser<Player> {
 
         Player player = PlayerSerializer.deserialize(document.getString("data"));
         player.setExperience(document.getNumber("xp").intValue());
-        player.setAbbleToDaily(document.getString("abbleToDaily").equalsIgnoreCase("1"));
+        player.setAbbleToDaily(document.getBoolean("abbleToDaily"));
 
         return player;
 

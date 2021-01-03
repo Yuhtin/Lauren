@@ -10,15 +10,15 @@ import java.io.*;
 @Data
 public class Config {
 
-    private boolean log = false;
-    private boolean laurenTest = false;
+    private boolean log;
+    private boolean laurenTest;
 
     private long ownerID;
     private long resgistrationId;
     private long valorantCasual;
     private long valorantRanked;
     private long poolCasual;
-    private long poolRanked = 0;
+    private long poolRanked;
 
     private String prefix;
     private String token;
@@ -27,7 +27,7 @@ public class Config {
     private String pteroKey;
     private String pastebinUserKey;
     private String geoIpAcessKey;
-    private String vagalumeKey = "";
+    private String vagalumeKey;
 
     // Connection info
     private String databaseType;
@@ -37,21 +37,14 @@ public class Config {
     private String database;
     private String sqlFile;
 
-    public static Config startup() {
+    public static Config loadConfig(String path) {
         try {
-            File file = new File("config/config.json");
+            File file = new File(path);
             if (!file.exists()) {
 
                 if (!file.createNewFile()) return null;
-                Config config = new Config();
-                config.setPrefix("$");
-                config.setToken("Put token here");
-                config.setResgistrationId(704303594211639356L);
-                config.setOwnerID(272879983326658570L);
-                config.setFormatNickname("[@level] ");
-                config.setDatabaseType("SQLite");
-                config.setLog(true);
 
+                Config config = new Config();
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(file.getAbsolutePath()))) {
                     writer.write(Serializer.getConfig().serialize(config));
                     writer.newLine();

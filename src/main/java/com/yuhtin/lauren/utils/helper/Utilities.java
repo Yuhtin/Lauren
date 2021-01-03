@@ -1,6 +1,6 @@
 package com.yuhtin.lauren.utils.helper;
 
-import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.models.enums.LogType;
@@ -55,7 +55,7 @@ public class Utilities {
     }
 
     public boolean isOwner(MessageChannel channel, User user, boolean showMessage) {
-        if (Lauren.getInstance().getConfig().getOwnerID() != user.getIdLong()) {
+        if (LaurenStartup.getInstance().getConfig().getOwnerID() != user.getIdLong()) {
             Logger.log("Failed to check owner permission for user " + getFullName(user));
             if (!showMessage) return false;
 
@@ -73,14 +73,14 @@ public class Utilities {
     public void updateNickByLevel(Player player, int level) {
         if (player.isHideLevelOnNickname()) return;
 
-        Member member = Lauren.getInstance().getBot().getGuilds().get(0).getMemberById(player.getUserID());
+        Member member = LaurenStartup.getInstance().getBot().getGuilds().get(0).getMemberById(player.getUserID());
         if (member == null) return;
 
         String nickname = member.getNickname();
         if (nickname == null) nickname = member.getEffectiveName();
         if (nickname.contains("] ")) nickname = nickname.split("] ")[1];
 
-        nickname = Lauren.getInstance().getConfig().getFormatNickname().replace("@level", "" + level) + nickname;
+        nickname = LaurenStartup.getInstance().getConfig().getFormatNickname().replace("@level", "" + level) + nickname;
 
         if (nickname.length() > 32) nickname = nickname.substring(0, 32);
 
@@ -108,18 +108,6 @@ public class Utilities {
         }
 
         return builder.toString();
-    }
-
-    public String randomString() {
-        StringBuilder sb = new StringBuilder();
-        String a = "1234567890";
-        int i;
-        for (int t = 0; t < 6; t++) {
-            i = new Random().nextInt(a.length());
-            sb.append(a, i, i + 1);
-        }
-
-        return sb.toString();
     }
 
     public void writeToZip(File file, ZipOutputStream zipStream) throws IOException {
@@ -161,11 +149,6 @@ public class Utilities {
         return member.getRoles().stream().filter(Objects::nonNull).anyMatch(role -> role.getIdLong() == 722116789055782912L);
     }
 
-    public boolean isBooster(Member member) {
-        if (member == null) return false;
-
-        return member.getRoles().stream().filter(Objects::nonNull).anyMatch(role -> role.getIdLong() == 750365511430307931L);
-    }
 
     public String protectedString(String value) {
         return value == null ? "Não informado" : value;
@@ -175,8 +158,8 @@ public class Utilities {
         Properties properties = new Properties();
 
         try {
-            properties.load(Lauren.class.getClassLoader().getResourceAsStream("project.properties"));
-            Lauren.getInstance().setVersion(properties.getProperty("version"));
+            properties.load(LaurenStartup.class.getClassLoader().getResourceAsStream("project.properties"));
+            LaurenStartup.getInstance().setVersion(properties.getProperty("version"));
         } catch (Exception exception) {
             Logger.log("An exception was caught while searching for my client version", LogType.ERROR);
             Logger.error(exception);

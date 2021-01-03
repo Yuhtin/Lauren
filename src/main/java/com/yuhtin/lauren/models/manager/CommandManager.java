@@ -1,28 +1,35 @@
 package com.yuhtin.lauren.models.manager;
 
 import com.google.common.reflect.ClassPath;
+import com.google.inject.Injector;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
-import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.models.objects.RawCommand;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.service.CommandCache;
+import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
 
+@AllArgsConstructor
 public class CommandManager {
 
-    public CommandManager(ShardManager bot, String folder) {
+    private final ShardManager bot;
+    private final Injector injector;
+    private final String folder;
+
+    public void load() {
         CommandCache.start();
 
         CommandClientBuilder clientBuilder = new CommandClientBuilder();
         clientBuilder.setOwnerId("702518526753243156");
-        clientBuilder.setPrefix(Lauren.getInstance().getConfig().getPrefix());
+        clientBuilder.setPrefix(LaurenStartup.getInstance().getConfig().getPrefix());
         clientBuilder.useHelpBuilder(false);
         clientBuilder.setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"));
 
@@ -61,6 +68,7 @@ public class CommandManager {
                         else if (field.getName().equalsIgnoreCase("aliases")) field.set(command, handler.alias());
                     }
 
+                    this.injector.injectMembers(command);
                     clientBuilder.addCommand(command);
                     CommandCache.insert(handler.type(), rawCommand);
 

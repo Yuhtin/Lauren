@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.tasks;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
@@ -42,7 +42,7 @@ public class ShardLootTask {
 
         EmbedBuilder embed = new EmbedBuilder();
         embed.setAuthor("Shard Loot", null, "https://cdn.discordapp.com/emojis/772285522852839445.png?v=1");
-        embed.setFooter("© ^Aincrad™ servidor de jogos", Lauren.getInstance().getGuild().getIconUrl());
+        embed.setFooter("© ^Aincrad™ servidor de jogos", LaurenStartup.getInstance().getGuild().getIconUrl());
 
         embed.setThumbnail("https://www.pcguia.pt/wp-content/uploads/2019/11/lootbox.jpg");
         embed.setColor(Color.MAGENTA);
@@ -61,7 +61,7 @@ public class ShardLootTask {
                 int value = new Random().nextInt(allowedChannels.size());
                 long channelID = allowedChannels.get(value);
 
-                TextChannel channel = Lauren.getInstance().getGuild().getTextChannelById(channelID);
+                TextChannel channel = LaurenStartup.getInstance().getGuild().getTextChannelById(channelID);
 
                 if (channel == null) {
                     Logger.log("Can't select a random channel to drop a loot", LogType.ERROR);

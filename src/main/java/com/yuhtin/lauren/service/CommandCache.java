@@ -1,6 +1,6 @@
 package com.yuhtin.lauren.service;
 
-import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.models.objects.RawCommand;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import lombok.Getter;
@@ -31,7 +31,7 @@ public class CommandCache {
         commands.put(rawCommand.getName().toLowerCase(), new EmbedBuilder()
                 .setImage("https://pa1.narvii.com/7093/1d8551884cec1cb2dd99b88ff4c745436b21f1b4r1-500-500_hq.gif")
                 .setAuthor("Informações do comando " + rawCommand.getName(), null,
-                        Lauren.getInstance()
+                        LaurenStartup.getInstance()
                                 .getBot()
                                 .getShards()
                                 .get(0)
@@ -54,7 +54,7 @@ public class CommandCache {
         helpEmbed.setImage("https://i.imgur.com/mQVFSrP.gif");
 
         helpEmbed.setAuthor("Comandos atacaaaaar \uD83E\uDDF8", null,
-                Lauren.getInstance()
+                LaurenStartup.getInstance()
                         .getBot()
                         .getShards()
                         .get(0)

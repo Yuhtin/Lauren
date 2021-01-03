@@ -3,7 +3,7 @@ package com.yuhtin.lauren.commands.utility;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.models.enums.SugestionStage;
 import com.yuhtin.lauren.models.objects.Sugestion;
@@ -115,7 +115,7 @@ public class SugestionCommand extends Command {
 
     private void checkReactions(Sugestion sugestion, Runnable cancelRunnable) {
         waiter.waitForEvent(PrivateMessageReactionAddEvent.class,
-                privateMessage -> privateMessage.getUserIdLong() != Lauren.getInstance().getBot().getShards().get(0).getSelfUser().getIdLong()
+                privateMessage -> privateMessage.getUserIdLong() != LaurenStartup.getInstance().getBot().getShards().get(0).getSelfUser().getIdLong()
                         && sugestion.getMessage().getIdLong() == privateMessage.getReaction().getMessageIdLong()
                         && (privateMessage.getReactionEmote().getIdLong() == 704295025374265387L
                         || privateMessage.getReactionEmote().getIdLong() == 704295026036834375L),
@@ -138,10 +138,10 @@ public class SugestionCommand extends Command {
                         return;
                     }
 
-                    TextChannel channel = Lauren.getInstance().getGuild().getTextChannelsByName("sugestões", true).get(0);
-                    if (Utilities.INSTANCE.isPrime(Lauren.getInstance().getGuild().getMemberById(privateMessage.getUserIdLong()))) {
+                    TextChannel channel = LaurenStartup.getInstance().getGuild().getTextChannelsByName("sugestões", true).get(0);
+                    if (Utilities.INSTANCE.isPrime(LaurenStartup.getInstance().getGuild().getMemberById(privateMessage.getUserIdLong()))) {
 
-                        channel = Lauren.getInstance().getGuild().getTextChannelsByName("sugestões-premium", true).get(0);
+                        channel = LaurenStartup.getInstance().getGuild().getTextChannelsByName("sugestões-premium", true).get(0);
 
                     }
 

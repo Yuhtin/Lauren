@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.sql;
+package com.yuhtin.lauren.sql.dao;
 
 import com.google.inject.Singleton;
 import com.yuhtin.lauren.core.player.Player;
@@ -24,7 +24,7 @@ public class StatisticDAO extends DatabaseProvider {
         update("create table if not exists `lauren_stats` ("
                 + "`type` varchar(40) primary key not null, "
                 + "`data` longtext"
-                + ");"
+                + " );"
         );
 
     }

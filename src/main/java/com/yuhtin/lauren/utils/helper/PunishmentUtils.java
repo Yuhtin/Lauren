@@ -1,6 +1,6 @@
 package com.yuhtin.lauren.utils.helper;
 
-import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
@@ -29,7 +29,7 @@ public class PunishmentUtils {
                     rule.toString() +
                     (proof.equalsIgnoreCase("") ? "" : " with proof " + proof));
 
-            Lauren.getInstance().getGuild().ban(user, 7, "Banned with punish system").queue();
+            LaurenStartup.getInstance().getGuild().ban(user, 7, "Banned with punish system").queue();
 
             sendPunishMessage(author, user.getUser(), rule, proof);
             return;
@@ -41,7 +41,7 @@ public class PunishmentUtils {
         if (player.getPunishs().containsKey(type)) player.getPunishs().replace(type, player.getPunishs().get(type) + duration);
         else player.getPunishs().put(type, duration);
 
-        Role role = Lauren.getInstance()
+        Role role = LaurenStartup.getInstance()
                 .getGuild()
                 .getRoleById(type == PunishmentType.MUTE
                         ? 760242509355024404L
@@ -50,14 +50,14 @@ public class PunishmentUtils {
         if (role == null) Logger.log("Error on try to punish a user");
         else {
 
-            Lauren.getInstance().getGuild().addRoleToMember(user, role).queue();
+            LaurenStartup.getInstance().getGuild().addRoleToMember(user, role).queue();
             sendPunishMessage(author, user.getUser(), rule, proof);
 
         }
     }
 
     private static void sendPunishMessage(User author, User user, PunishmentRule rule, String proof) {
-        TextChannel announcementChannel = Lauren.getInstance().getGuild().getTextChannelById(771384145027792986L);
+        TextChannel announcementChannel = LaurenStartup.getInstance().getGuild().getTextChannelById(771384145027792986L);
         String ruleDescription = "Regra " + rule.toString() + ": " + rule.getMotive() + (proof.equalsIgnoreCase("") ? "" : ", " + proof);
 
         if (announcementChannel != null) {
@@ -77,7 +77,7 @@ public class PunishmentUtils {
         privateMessage.setAuthor(Utilities.INSTANCE.getFullName(author), null, author.getAvatarUrl());
 
         privateMessage.addField("<:chorano:726207542413230142>" +
-                        " Você foi " + rule.getType().getFormated() + " de " + Lauren.getInstance().getGuild().getName(),
+                        " Você foi " + rule.getType().getFormated() + " de " + LaurenStartup.getInstance().getGuild().getName(),
                 "", false);
 
         privateMessage.addField("<:beacon:771543538252120094> Punido por", "`" + Utilities.INSTANCE.getFullName(author) + "`", false);
@@ -88,7 +88,7 @@ public class PunishmentUtils {
         privateMessage.addField(":alarm_clock: Duração",
                 "`" + (rule.getPunishTime() == 0L ? "Eterno" : TimeUtils.formatTime(rule.getPunishTime())) + "`", false);
 
-        privateMessage.setFooter("© ^Aincrad™ servidor de jogos", Lauren.getInstance().getGuild().getIconUrl());
+        privateMessage.setFooter("© ^Aincrad™ servidor de jogos", LaurenStartup.getInstance().getGuild().getIconUrl());
 
         privateChannel.sendMessage(privateMessage.build()).queue();
     }

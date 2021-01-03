@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.guice;
 
 import com.google.inject.AbstractModule;
-import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.core.bot.LaurenDAO;
 import com.yuhtin.lauren.sql.connection.SQLConnection;
 import lombok.AllArgsConstructor;
 
@@ -13,16 +13,16 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class LaurenModule extends AbstractModule {
 
-    private final Lauren lauren;
+    private final LaurenDAO laurenDAO;
 
     @Override
     protected void configure() {
 
-        bind(Lauren.class)
-                .toInstance(lauren);
+        bind(LaurenDAO.class)
+                .toInstance(laurenDAO);
 
         bind(SQLConnection.class)
-                .toInstance(lauren.getSqlConnection());
+                .toInstance(laurenDAO.getSqlConnection());
 
     }
 

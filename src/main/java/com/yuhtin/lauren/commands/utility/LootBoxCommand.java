@@ -2,7 +2,7 @@ package com.yuhtin.lauren.commands.utility;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
@@ -94,7 +94,7 @@ public class LootBoxCommand extends Command {
                     switch (gainReward) {
                         case ROLE:
 
-                            Role role = Lauren.getInstance().getGuild().getRoleById(771541080634032149L);
+                            Role role = LaurenStartup.getInstance().getGuild().getRoleById(771541080634032149L);
                             if (role == null) {
 
                                 Logger.log("The player " + Utilities.INSTANCE.getFullName(event.getAuthor()) + " win the Lucky role but i can't give");
@@ -102,7 +102,7 @@ public class LootBoxCommand extends Command {
 
                             }
 
-                            Lauren.getInstance().getGuild().addRoleToMember(event.getMember(), role).queue();
+                            LaurenStartup.getInstance().getGuild().addRoleToMember(event.getMember(), role).queue();
                             break;
 
                         case MONEY:

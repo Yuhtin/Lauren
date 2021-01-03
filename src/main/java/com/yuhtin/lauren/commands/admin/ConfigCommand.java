@@ -2,7 +2,7 @@ package com.yuhtin.lauren.commands.admin;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.models.objects.Config;
@@ -28,7 +28,7 @@ public class ConfigCommand extends Command {
 
         String[] arguments = event.getMessage().getContentRaw().split(" ");
 
-        Config config = Lauren.getInstance().getConfig();
+        Config config = LaurenStartup.getInstance().getConfig();
         if (arguments.length < 2) {
 
             EmbedBuilder embed = new EmbedBuilder();

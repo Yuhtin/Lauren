@@ -26,6 +26,10 @@ public class Document {
         return NumberUtils.createNumber(this.getString(key));
     }
 
+    public boolean getBoolean(String key) {
+        return Boolean.parseBoolean(this.getString(key));
+    }
+
     public <T> T parse(DocumentParser<T> documentParser) {
         return documentParser.parse(this);
     }
