@@ -8,15 +8,26 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.yuhtin.lauren.LaurenStartup;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.sharding.ShardManager;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.*;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
+@Data
 public class TrackManager extends AudioEventAdapter {
+
+    @Getter private static final Map<Long, TrackManager> guildTrackManagers = new HashMap<>();
 
     private static final float[] BASS_BOOST = {
             0.2f, 0.15f, 0.1f,
@@ -26,42 +37,48 @@ public class TrackManager extends AudioEventAdapter {
             -0.1f, -0.1f, -0.1f
     };
 
-    private static TrackManager instance;
+    private EqualizerFactory equalizer;
+    private GuildMusicManager musicManager;
+    private AudioPlayerManager audioManager;
+    private AudioPlayer player;
+    private VoiceChannel audio;
 
-    public final GuildMusicManager musicManager;
-    public final AudioPlayerManager audioManager;
-    @Getter private final EqualizerFactory equalizer;
-    public final AudioPlayer player;
-    public VoiceChannel audio;
+    public static TrackManager of(Guild guild) {
 
-    public TrackManager() {
-        this.audioManager = new DefaultAudioPlayerManager();
-        this.player = audioManager.createPlayer();
-        this.equalizer = new EqualizerFactory();
+        if (guildTrackManagers.containsKey(guild.getIdLong())) return guildTrackManagers.get(guild.getIdLong());
 
-        musicManager = new GuildMusicManager(player);
-        AudioSourceManagers.registerRemoteSources(audioManager);
-        AudioSourceManagers.registerLocalSource(audioManager);
+        TrackManager trackManager = new TrackManager();
 
-        player.addListener(this);
-        LaurenStartup.getInstance().getGuild().getAudioManager().setSendingHandler(new AudioPlayerSendHandler(player));
+        trackManager.setAudioManager(new DefaultAudioPlayerManager());
+        trackManager.setPlayer(trackManager.getAudioManager().createPlayer());
+        trackManager.setMusicManager(new GuildMusicManager(trackManager.getPlayer()));
 
-        player.setFilterFactory(this.equalizer);
-    }
+        AudioSourceManagers.registerRemoteSources(trackManager.getAudioManager());
+        AudioSourceManagers.registerLocalSource(trackManager.getAudioManager());
 
-    public static TrackManager get() {
-        if (instance == null) instance = new TrackManager();
+        trackManager.getPlayer().addListener(trackManager);
+        guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(trackManager.getPlayer()));
 
-        return instance;
+        trackManager.setEqualizer(new EqualizerFactory());
+        trackManager.getPlayer().setFilterFactory(trackManager.getEqualizer());
+
+        guildTrackManagers.put(guild.getIdLong(), trackManager);
+
+        return trackManager;
+
     }
 
     public void destroy() {
+
         if (audio == null) return;
 
         audio.getGuild().getAudioManager().closeAudioConnection();
+
         purgeQueue();
         player.stopTrack();
+
         musicManager.player.destroy();
+
     }
 
     public void loadTrack(String trackUrl, Member member, TextChannel channel, SearchType type) {
@@ -72,6 +89,7 @@ public class TrackManager extends AudioEventAdapter {
         }
 
         audioManager.loadItemOrdered(musicManager, trackUrl, AudioResultHandler.builder()
+                .trackManager(this)
                 .trackUrl(trackUrl)
                 .member(member)
                 .channel(channel)

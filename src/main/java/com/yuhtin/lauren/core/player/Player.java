@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.core.player;
 
+import com.google.inject.Inject;
 import com.yuhtin.lauren.LaurenStartup;
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.impl.Entity;
 import com.yuhtin.lauren.core.punish.PunishmentType;
 import com.yuhtin.lauren.core.statistics.StatsController;
@@ -14,6 +14,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,12 +22,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Player
         extends Entity
         implements Serializable {
+
+    @Inject private static Logger logger;
+    @Inject private static ShardManager shardManager;
+    @Inject private static StatsController statsController;
+    @Inject private static XpController xpController;
 
     private Map<PunishmentType, Long> punishs = new HashMap<>();
 
@@ -57,16 +64,16 @@ public class Player
 
         this.level = level;
 
-        List<Long> rolesToGive = XpController.getInstance()
+        List<Long> rolesToGive = xpController
                 .getLevelByXp()
                 .get(level)
                 .getRolesToGive();
 
         List<Long> rolesToRemove = new ArrayList<>();
-        for (Integer integer : XpController.getInstance().getLevelByXp().keySet()) {
+        for (Integer integer : xpController.getLevelByXp().keySet()) {
             if (integer >= level) break;
 
-            Level tempLevel = XpController.getInstance().getLevelByXp().get(integer);
+            Level tempLevel = xpController.getLevelByXp().get(integer);
             if (tempLevel.getRolesToGive().isEmpty()) continue;
 
             for (Long roleID : tempLevel.getRolesToGive()) {
@@ -86,8 +93,10 @@ public class Player
 
                 Role role = LaurenStartup.getInstance().getGuild().getRoleById(roleID);
                 if (role == null) {
-                    Logger.log("Role is null", LogType.ERROR);
+
+                    logger.warning("Role is null");
                     continue;
+
                 }
 
                 LaurenStartup.getInstance().getGuild().addRoleToMember(userID, role).queue();
@@ -98,8 +107,10 @@ public class Player
 
                 Role role = LaurenStartup.getInstance().getGuild().getRoleById(roleID);
                 if (role == null) {
-                    Logger.log("Role is null", LogType.ERROR);
+
+                    logger.warning("Role is null");
                     continue;
+
                 }
 
                 LaurenStartup.getInstance().getGuild().removeRoleFromMember(userID, role).queue();
@@ -126,8 +137,8 @@ public class Player
         }
 
         Utilities.INSTANCE.updateNickByLevel(this, level);
+        statsController.getStats("Evoluir Nível").suplyStats(1);
 
-        StatsController.get().getStats("Evoluir Nível").suplyStats(1);
     }
 
 
@@ -165,9 +176,9 @@ public class Player
         experience += quantity;
 
         int nextLevel = level + 1;
-        if (XpController.getInstance().canUpgrade(nextLevel, experience)) updateLevel(nextLevel);
+        if (xpController.canUpgrade(nextLevel, experience)) updateLevel(nextLevel);
 
-        StatsController.get().getStats("Ganhar XP").suplyStats(1);
+        statsController.getStats("Ganhar XP").suplyStats(1);
 
         return this;
     }

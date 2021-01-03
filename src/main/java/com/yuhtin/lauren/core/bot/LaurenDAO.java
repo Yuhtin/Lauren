@@ -12,6 +12,7 @@ import com.yuhtin.lauren.sql.connection.SQLConnection;
 import com.yuhtin.lauren.sql.connection.mysql.MySQLConnection;
 import com.yuhtin.lauren.sql.connection.sqlite.SQLiteConnection;
 import com.yuhtin.lauren.utils.helper.InfinityFiles;
+import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Data;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
@@ -19,10 +20,12 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 
 import javax.inject.Singleton;
 import javax.security.auth.login.LoginException;
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.logging.FileHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Data
@@ -38,6 +41,7 @@ public abstract class LaurenDAO implements Bot {
     private SQLConnection sqlConnection;
     private Config config;
 
+    private String logFile;
     private String version;
     private long botStartTime;
     private boolean loaded;
@@ -66,15 +70,19 @@ public abstract class LaurenDAO implements Bot {
     /**
      * Called on bot disabled (forced and natural)
      */
-    public void onDisable() {
+    public void onDisable() throws Exception {
     }
 
     @Override
     public void shutdown() {
 
-        onDisable();
+        try { onDisable(); } catch (Exception exception) {
 
-        logger.info("Successfully shutdown");
+            this.logger.log(Level.SEVERE, "Can't run onDisable, shutdown cancelled", exception);
+            return;
+
+        }
+
         System.exit(0);
 
     }
@@ -96,7 +104,9 @@ public abstract class LaurenDAO implements Bot {
 
             InfinityFiles infinityFiles = new InfinityFiles("log", "logs", ".log", ".zip");
 
-            FileHandler file = new FileHandler(infinityFiles.getNextFile());
+            logFile = infinityFiles.getNextFile();
+
+            FileHandler file = new FileHandler(logFile);
             file.setFormatter(new LogFormat());
 
             this.logger.addHandler(file);
@@ -121,6 +131,7 @@ public abstract class LaurenDAO implements Bot {
 
             this.injector = Guice.createInjector(new LaurenModule(this));
             this.injector.injectMembers(this);
+            this.injector.injectMembers(Utilities.INSTANCE);
 
         } catch (Exception exception) {
             throw new GuiceInjectorException();

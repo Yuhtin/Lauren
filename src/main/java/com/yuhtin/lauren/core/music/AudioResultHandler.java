@@ -4,7 +4,6 @@ import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
@@ -14,12 +13,20 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Builder
 @Data
 public final class AudioResultHandler implements AudioLoadResultHandler {
 
+    @Inject @Named("main") private static Logger logger;
+    @Inject private static StatsController statsController;
+
+    private final TrackManager trackManager;
     private final String trackUrl;
     private final Member member;
     private final TextChannel channel;
@@ -38,9 +45,6 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
 
         }
 
-
-        if (TrackManager.get().player.isPaused()) TrackManager.get().player.setPaused(false);
-
         String podcastMessage = track.getInfo().title.contains("Podcast") ? "Podcast" : "Música";
         String videoType = track.getInfo().isStream ? "Stream" : podcastMessage;
 
@@ -53,15 +57,17 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
                                 "\uD83D\uDCCC Link: [Clique aqui](" + track.getInfo().uri + ")");
 
         if (searchType == TrackManager.SearchType.SIMPLE_SEARCH) {
-            Logger.log("The player " + Utilities.INSTANCE.getFullName(member.getUser()) + " added a music");
+
             channel.sendMessage(embed.build()).queue();
 
-            StatsController.get().getStats("Tocar Música").suplyStats(1);
-            StatsController.get().getStats("Requests Externos").suplyStats(1);
+            statsController.getStats("Tocar Música").suplyStats(1);
+            statsController.getStats("Requests Externos").suplyStats(1);
+
         }
 
-        TrackManager.get().audio = member.getVoiceState().getChannel();
-        TrackManager.get().play(track, member);
+        this.trackManager.setAudio(member.getVoiceState().getChannel());
+        this.trackManager.play(track, member);
+
     }
 
     @Override
@@ -70,7 +76,6 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
         else if (playlist.isSearchResult()) trackLoaded(playlist.getTracks().get(0));
 
         else {
-            if (TrackManager.get().player.isPaused()) TrackManager.get().player.setPaused(false);
 
             int limit = Utilities.INSTANCE.isPrime(member) || Utilities.INSTANCE.isDJ(member, null, false) ? 100 : 25;
             int maxMusics = Math.min(playlist.getTracks().size(), limit);
@@ -82,9 +87,9 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
                             "\uD83C\uDFB6 Músicas: `" + maxMusics + "`\n" +
                             "\uD83D\uDCCC Link: [Clique aqui](" + trackUrl + ")");
 
-            Logger.log("The player " + Utilities.INSTANCE.getFullName(member.getUser()) + " added a playlist with " + maxMusics + " musics");
+            logger.info("The player " + Utilities.INSTANCE.getFullName(member.getUser()) + " added a playlist with " + maxMusics + " musics");
 
-            TrackManager.get().audio = member.getVoiceState().getChannel();
+            trackManager.setAudio(member.getVoiceState().getChannel());
             TaskHelper.runAsync(() -> {
                 for (int i = 0; i < maxMusics; i++) {
                     AudioTrack track = playlist.getTracks().get(i);
@@ -92,19 +97,19 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
                     if (track.getInfo().title != null) {
 
                         if (!permitedTrack(track, Utilities.INSTANCE.isDJ(member, null, false))) continue;
-                        TrackManager.get().play(track, member);
+                        this.trackManager.play(track, member);
 
                     } else {
 
                         String link = "https://youtube.com/watch?v=" + track.getIdentifier();
-                        TrackManager.get().loadTrack(link, member, channel, TrackManager.SearchType.LOOKING_PLAYLIST);
+                        this.trackManager.loadTrack(link, member, channel, TrackManager.SearchType.LOOKING_PLAYLIST);
 
                     }
                 }
             });
 
-            StatsController.get().getStats("Tocar Música").suplyStats(maxMusics);
-            StatsController.get().getStats("Requests Externos").suplyStats(maxMusics);
+            statsController.getStats("Tocar Música").suplyStats(maxMusics);
+            statsController.getStats("Requests Externos").suplyStats(maxMusics);
             channel.sendMessage(embed.build()).queue();
         }
     }
@@ -118,8 +123,10 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
     @Override
     public void loadFailed(FriendlyException exception) {
         if (searchType == TrackManager.SearchType.SIMPLE_SEARCH) {
+
             channel.sendMessage("**Erro** \uD83D\uDCCC `O vídeo ou playlist está privado`").queue();
-            Logger.error(exception);
+            logger.log(Level.WARNING, "Error on try load a track", exception);
+
         }
     }
 

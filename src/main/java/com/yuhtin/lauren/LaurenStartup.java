@@ -97,81 +97,9 @@ public class LaurenStartup {
 
     private static void loadTasks() {
 
-        TimerCheckerTask timerCheckerTask = new TimerCheckerTask();
-
-        TaskHelper.runTaskTimerAsync(timerCheckerTask, 1, 1, TimeUnit.MINUTES);
-
-        TopXpUpdater.getInstance().startRunnable();
         LootGeneratorTask.getInstance().startRunnable();
         ShardLootTask.getInstance().startRunnable();
 
     }
 
-    public static void finish() {
-
-        if (DatabaseController.getDatabase() != null) {
-
-            PlayerController.INSTANCE.savePlayers();
-            StatsDatabase.save();
-
-        }
-
-        TrackManager.get().destroy();
-        TaskHelper.runTaskLater(new TimerTask() {
-            @Override
-            public void run() {
-                saveLog();
-            }
-        }, 6, TimeUnit.SECONDS);
-    }
-
-    private static void saveLog() {
-
-        try {
-            LocalDateTime now = LocalDateTime.now();
-
-            File file = LoggerController.get().getFile();
-            Logger.log("Compressing the log '" + file.getName() + "' to a zip file", LogType.FINISH);
-            Logger.log("Ending log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s", LogType.FINISH);
-
-            FileOutputStream outputStream = new FileOutputStream(file.getPath().split("\\.")[0] + ".zip");
-            ZipOutputStream zipFileOutput = new ZipOutputStream(outputStream);
-
-            Utilities.INSTANCE.writeToZip(file, zipFileOutput);
-            Utilities.INSTANCE.cleanUp(Paths.get(file.getPath()));
-
-            zipFileOutput.close();
-            outputStream.close();
-
-
-
-            Logger.log("Successfully compressed file", LogType.FINISH);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            Logger.log("Can't compress a log file", LogType.WARN);
-        }
-
-        System.exit(0);
-    }
-
-    private static void processDatabase() {
-
-        ConnectionInfo connectionInfo = ConnectionInfo.builder()
-                .file(instance.config.getSqlFile())
-                .database(instance.config.getDatabase())
-                .password(instance.config.getPassword())
-                .host(instance.config.getHost())
-                .username(instance.config.getUsername())
-                .build();
-
-        if (instance.config.getDatabaseType().equalsIgnoreCase("MySQL")) instance.setSqlConnection(new MySQLConnection());
-        else instance.setSqlConnection(new SQLiteConnection());
-
-        if (!instance.getSqlConnection().configure(connectionInfo)) finish();
-
-        /*DatabaseController.get().constructDatabase(connection);
-        DatabaseController.get().loadAll();*/
-
-        Logger.log("Connection to database successful", LogType.STARTUP);
-    }
 }

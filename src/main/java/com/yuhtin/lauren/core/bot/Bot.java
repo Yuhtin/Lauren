@@ -21,6 +21,6 @@ public interface Bot {
 
     void findVersion(Class<Object> oClass) throws IOException;
 
-    void shutdown();
+    void shutdown() throws Exception;
 
 }

@@ -17,7 +17,7 @@ public class ExperienceDocumentParser implements DocumentParser<Level> {
     public Level parse(Document document) {
 
         Level level = Level.builder()
-                .miniumExperience(document.getNumber("level").intValue())
+                .level(document.getNumber("level").intValue())
                 .build();
 
         String rewards = document.getString("rewards");

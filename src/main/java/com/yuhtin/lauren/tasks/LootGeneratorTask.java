@@ -32,7 +32,8 @@ public class LootGeneratorTask {
         this.logger.info("Registered LootGeneratorTask");
 
         final List<Long> allowedChannels = Arrays.asList(
-                723625569396326473L
+                700673056414367825L,
+                704342124732350645L
         );
 
         EmbedBuilder embed = new EmbedBuilder();
