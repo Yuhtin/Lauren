@@ -2,7 +2,6 @@ package com.yuhtin.lauren;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.yuhtin.lauren.commands.music.QueueCommand;
 import com.yuhtin.lauren.commands.utility.ShopCommand;
 import com.yuhtin.lauren.commands.utility.SugestionCommand;
@@ -10,16 +9,11 @@ import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.core.statistics.controller.StatsDatabase;
 import com.yuhtin.lauren.core.xp.XpController;
 import com.yuhtin.lauren.models.embeds.ShopEmbed;
 import com.yuhtin.lauren.models.enums.LogType;
-import com.yuhtin.lauren.models.manager.CommandManager;
-import com.yuhtin.lauren.models.manager.EventsManager;
-import com.yuhtin.lauren.models.manager.TimerManager;
 import com.yuhtin.lauren.models.objects.Config;
 import com.yuhtin.lauren.service.LocaleManager;
-import com.yuhtin.lauren.service.PterodactylConnection;
 import com.yuhtin.lauren.sql.connection.ConnectionInfo;
 import com.yuhtin.lauren.sql.connection.SQLConnection;
 import com.yuhtin.lauren.sql.connection.mysql.MySQLConnection;
@@ -31,16 +25,12 @@ import com.yuhtin.lauren.utils.helper.Utilities;
 import com.yuhtin.lauren.utils.messages.AsciiBox;
 import lombok.Getter;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 
-import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Scanner;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -62,35 +52,9 @@ public class LaurenStartup {
     private String version;
 
     public static void main(String[] args) throws InterruptedException {
-        instance.setStartTime(System.currentTimeMillis());
-
-        processDatabase();
-
-        EventWaiter eventWaiter = new EventWaiter();
-        Thread buildThread = new Thread(() -> {
-            try {
-                Utilities.INSTANCE.foundVersion();
-                instance.setBot(DefaultShardManagerBuilder.create(instance.getConfig().getToken(), Arrays.asList(GatewayIntent.values()))
-                        .setAutoReconnect(true)
-                        .build());
-
-            } catch (LoginException exception) {
-                Logger.log("The bot token is wrong", LogType.ERROR);
-            }
-        });
-
-        buildThread.start();
-        buildThread.join();
 
         TaskHelper.runAsync(() -> {
 
-            new EventsManager(instance.getBot(), "com.yuhtin.lauren.events");
-            new CommandManager(instance.getBot(), instance.injector, "com.yuhtin.lauren.commands").load();
-
-            TimerManager timerManager = new TimerManager("com.yuhtin.lauren.timers.impl");
-            timerManager.register();
-
-            new PterodactylConnection(instance.getConfig().getPteroKey());
             new Thread(LaurenStartup::loadTasks).start();
 
             LocaleManager.getInstance().searchHost(instance.getConfig().getGeoIpAcessKey());
@@ -132,23 +96,6 @@ public class LaurenStartup {
     }
 
     private static void loadTasks() {
-
-        TaskHelper.runTaskLater(new TimerTask() {
-            @Override
-            public void run() {
-                if (instance.getGuild() == null) finish();
-            }
-        }, 10, TimeUnit.SECONDS);
-
-        TaskHelper.runTaskTimerAsync(new TimerTask() {
-            @Override
-            public void run() {
-                StatsDatabase.save();
-                PlayerController.INSTANCE.savePlayers();
-            }
-        }, 5, 5, TimeUnit.MINUTES);
-
-        TaskHelper.runTaskTimerAsync(new PunishmentCheckerTask(instance.playerDAO), 5, 5, TimeUnit.MINUTES);
 
         TimerCheckerTask timerCheckerTask = new TimerCheckerTask();
 
@@ -196,7 +143,7 @@ public class LaurenStartup {
             zipFileOutput.close();
             outputStream.close();
 
-            DatabaseController.getDatabase().shutdown();
+
 
             Logger.log("Successfully compressed file", LogType.FINISH);
         } catch (Exception exception) {

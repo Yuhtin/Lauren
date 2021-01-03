@@ -1,45 +1,32 @@
 package com.yuhtin.lauren.models.manager;
 
 import com.google.common.reflect.ClassPath;
-import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.timers.Timer;
 import lombok.Getter;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * @author Yuhtin
  * Github: https://github.com/Yuhtin
  */
 
+@Singleton
 public class TimerManager {
 
-    @Getter private static TimerManager instance;
+    @Inject @Named("main") private Logger logger;
 
-    @Getter private List<Timer> timers = new ArrayList<>();
-    private String folder;
+    @Getter private final List<Timer> timers = new ArrayList<>();
 
-    public TimerManager(String folder) {
-        this.folder = folder;
-        instance = this;
-    }
+    public void register(String folder) throws IOException {
 
-    public void register() {
-
-        ClassPath classPath;
-        try {
-
-            classPath = ClassPath.from(getClass().getClassLoader());
-
-        } catch (IOException exception) {
-
-            Logger.log("ClassPath could not be instantiated", LogType.ERROR);
-            return;
-
-        }
+        ClassPath classPath = ClassPath.from(getClass().getClassLoader());
 
         for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive(folder)) {
             try {
@@ -54,7 +41,7 @@ public class TimerManager {
                 }
 
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException exception) {
-                Logger.log("The " + classInfo.getName() + " class could not be instantiated", LogType.WARN);
+                this.logger.warning("The " + classInfo.getName() + " class could not be instantiated");
             }
         }
 

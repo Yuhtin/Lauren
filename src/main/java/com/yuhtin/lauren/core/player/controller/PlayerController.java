@@ -1,32 +1,34 @@
 package com.yuhtin.lauren.core.player.controller;
 
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.sql.dao.PlayerDAO;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import lombok.Getter;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 @Singleton
 public class PlayerController {
 
     @Getter @Inject private PlayerDAO playerDAO;
+    @Inject @Named("main") private Logger logger;
 
     private final Map<Long, Player> cache = new HashMap<>();
 
     public void savePlayers() {
-        Logger.log("Saving all players, the bot may lag for a bit");
+        this.logger.info("Saving all players, the bot may lag for a bit");
 
         TaskHelper.runAsync(() -> {
             this.cache.values().forEach(this.playerDAO::updatePlayer);
             this.cache.clear();
         });
 
-        Logger.log("Saved all players");
+        this.logger.info("Saved all players");
     }
 
     public Player get(long userID) {
@@ -51,11 +53,11 @@ public class PlayerController {
                     player.setMoney(loadedPlayer.getMoney());
                     player.setLevel(loadedPlayer.getLevel());
 
-                    Logger.log("Converted data of player " + userID + " to new Player class");
+                    this.logger.info("Converted data of player " + userID + " to new Player class");
 
                 } else player = loadedPlayer;
 
-                Logger.log("Loading player " + userID + ": " + player.toString());
+                this.logger.info("Loading player " + userID);
                 if (loadedPlayer.getPunishs() == null) loadedPlayer.setPunishs(new HashMap<>());
             }
 

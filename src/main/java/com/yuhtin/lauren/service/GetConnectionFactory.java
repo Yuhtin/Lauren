@@ -1,6 +1,6 @@
 package com.yuhtin.lauren.service;
 
-import com.yuhtin.lauren.core.statistics.controller.StatsController;
+import com.yuhtin.lauren.core.statistics.StatsController;
 
 import javax.annotation.Nullable;
 import java.io.BufferedReader;

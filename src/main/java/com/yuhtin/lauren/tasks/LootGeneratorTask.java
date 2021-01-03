@@ -2,13 +2,11 @@ package com.yuhtin.lauren.tasks;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.yuhtin.lauren.LaurenStartup;
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.PrivateChannel;
@@ -21,18 +19,17 @@ import java.util.List;
 import java.util.Random;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
+@AllArgsConstructor
 public class LootGeneratorTask {
 
-    private static final LootGeneratorTask INSTANCE = new LootGeneratorTask();
-    @Setter private EventWaiter eventWaiter;
-
-    public static LootGeneratorTask getInstance() {
-        return INSTANCE;
-    }
+    private final PlayerController playerController;
+    private final Logger logger;
+    private final EventWaiter eventWaiter;
 
     public void startRunnable() {
-        Logger.log("Registered LootGeneratorTask");
+        this.logger.info("Registered LootGeneratorTask");
 
         final List<Long> allowedChannels = Arrays.asList(
                 723625569396326473L
@@ -61,7 +58,7 @@ public class LootGeneratorTask {
         TaskHelper.runTaskTimerAsync(new TimerTask() {
             @Override
             public void run() {
-                Logger.log("Running LootGeneratorTask");
+                logger.info("Running LootGeneratorTask");
 
                 if (new Random().nextInt(100) > 10) return;
 
@@ -71,11 +68,11 @@ public class LootGeneratorTask {
                 TextChannel channel = LaurenStartup.getInstance().getGuild().getTextChannelById(channelID);
 
                 if (channel == null) {
-                    Logger.log("Can't select a random channel to drop a loot", LogType.ERROR);
+                    logger.warning("Can't select a random channel to drop a loot");
                     return;
                 }
 
-                Logger.log("Dropped loot on channel " + channel.getName());
+                logger.info("Dropped loot on channel " + channel.getName());
 
                 Message message = channel.sendMessage(embed.build()).complete();
                 message.addReaction(":radiante:771541052590915585").queue();
@@ -100,10 +97,11 @@ public class LootGeneratorTask {
 
                             }
 
-                            Player player = PlayerController.INSTANCE.get(event.getUserIdLong());
+                            Player player = playerController.get(event.getUserIdLong());
                             player.setLootBoxes(player.getLootBoxes() + 1);
 
-                            Logger.log("The player " + Utilities.INSTANCE.getFullName(event.getUser()) + " getted the drop");
+                            logger.info("The player " + Utilities.INSTANCE.getFullName(event.getUser()) + " getted the drop");
+
                         }, 90, TimeUnit.SECONDS,
 
                         () -> {

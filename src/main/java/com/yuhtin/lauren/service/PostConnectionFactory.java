@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.service;
 
 import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.core.statistics.controller.StatsController;
+import com.yuhtin.lauren.core.statistics.StatsController;
 import lombok.Getter;
 import lombok.Setter;
 

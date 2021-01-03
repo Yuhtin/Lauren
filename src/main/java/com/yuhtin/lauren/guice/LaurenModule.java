@@ -1,9 +1,12 @@
 package com.yuhtin.lauren.guice;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.name.Names;
 import com.yuhtin.lauren.core.bot.LaurenDAO;
 import com.yuhtin.lauren.sql.connection.SQLConnection;
 import lombok.AllArgsConstructor;
+
+import java.util.logging.Logger;
 
 /**
  * @author Yuhtin
@@ -19,10 +22,14 @@ public class LaurenModule extends AbstractModule {
     protected void configure() {
 
         bind(LaurenDAO.class)
-                .toInstance(laurenDAO);
+                .toInstance(this.laurenDAO);
 
         bind(SQLConnection.class)
-                .toInstance(laurenDAO.getSqlConnection());
+                .toInstance(this.laurenDAO.getSqlConnection());
+
+        bind(Logger.class)
+                .annotatedWith(Names.named("main"))
+                .toInstance(this.laurenDAO.getLogger());
 
     }
 

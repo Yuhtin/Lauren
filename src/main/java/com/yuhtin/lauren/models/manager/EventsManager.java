@@ -1,34 +1,38 @@
 package com.yuhtin.lauren.models.manager;
 
 import com.google.common.reflect.ClassPath;
-import com.yuhtin.lauren.models.enums.LogType;
-import com.yuhtin.lauren.core.logger.Logger;
-import net.dv8tion.jda.api.JDA;
+import com.google.inject.Injector;
+import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
+@AllArgsConstructor
 public class EventsManager {
-    public EventsManager(ShardManager bot, String folder) {
-        ClassPath cp;
 
-        try {
-            cp = ClassPath.from(getClass().getClassLoader());
-        } catch (IOException exception) {
-            Logger.log("ClassPath could not be instantiated", LogType.ERROR);
-            return;
-        }
+    private final ShardManager bot;
+    private final Injector injector;
+    private final Logger logger;
+    private final String folder;
 
-        for (ClassPath.ClassInfo classInfo : cp.getTopLevelClassesRecursive(folder)) {
+    public void load() throws IOException {
+
+        ClassPath classPath = ClassPath.from(getClass().getClassLoader());
+
+        for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive(folder)) {
             try {
                 Class event = Class.forName(classInfo.getName());
                 Object object = event.newInstance();
 
+                this.injector.injectMembers(object);
+
                 if (object instanceof ListenerAdapter) bot.addEventListener(object);
                 else throw new InstantiationException();
+
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException exception) {
-                Logger.log("The " + classInfo.getName() + " class could not be instantiated", LogType.WARN);
+                this.logger.warning("The " + classInfo.getName() + " class could not be instantiated");
             }
         }
     }

@@ -1,19 +1,26 @@
 package com.yuhtin.lauren.core.bot;
 
+import com.yuhtin.lauren.models.exceptions.SQLConnectionException;
+
+import javax.security.auth.login.LoginException;
 import java.io.IOException;
 
 public interface Bot {
 
-    boolean connectDiscord();
+    void connectDiscord() throws LoginException;
 
-    boolean setupLogger();
+    void setupLogger() throws IOException;
 
-    boolean setupConfig();
+    void setupConfig() throws InstantiationException;
 
-    boolean setupGuice();
+    void configureConnection() throws SQLConnectionException;
 
-    boolean configureConnection();
+    void loadCommands() throws IOException;
 
-    boolean findVersion(Class<Object> oClass);
+    void loadEvents() throws IOException;
+
+    void findVersion(Class<Object> oClass) throws IOException;
+
+    void shutdown();
 
 }

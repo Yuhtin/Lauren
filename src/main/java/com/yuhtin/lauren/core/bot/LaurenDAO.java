@@ -2,10 +2,10 @@ package com.yuhtin.lauren.core.bot;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.yuhtin.lauren.LaurenStartup;
 import com.yuhtin.lauren.core.logger.LogFormat;
 import com.yuhtin.lauren.guice.LaurenModule;
-import com.yuhtin.lauren.models.enums.LogType;
+import com.yuhtin.lauren.models.exceptions.GuiceInjectorException;
+import com.yuhtin.lauren.models.exceptions.SQLConnectionException;
 import com.yuhtin.lauren.models.objects.Config;
 import com.yuhtin.lauren.sql.connection.ConnectionInfo;
 import com.yuhtin.lauren.sql.connection.SQLConnection;
@@ -13,11 +13,17 @@ import com.yuhtin.lauren.sql.connection.mysql.MySQLConnection;
 import com.yuhtin.lauren.sql.connection.sqlite.SQLiteConnection;
 import com.yuhtin.lauren.utils.helper.InfinityFiles;
 import lombok.Data;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
+import net.dv8tion.jda.api.sharding.ShardManager;
 
 import javax.inject.Singleton;
+import javax.security.auth.login.LoginException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.logging.FileHandler;
+import java.util.logging.Logger;
 
 @Data
 @Singleton
@@ -25,18 +31,29 @@ public abstract class LaurenDAO implements Bot {
 
     private String botName;
 
-    private java.util.logging.Logger logger;
+    private ShardManager bot;
+
+    private Logger logger;
     private Injector injector;
     private SQLConnection sqlConnection;
     private Config config;
 
     private String version;
     private long botStartTime;
+    private boolean loaded;
 
     /**
      * Called on bot starting
+     * Used for enable high important systems
      */
-    public void onEnable() {
+    public void onLoad() throws Exception {
+
+    }
+
+    /**
+     * Called on bot starting after onLoad
+     */
+    public void onEnable() throws Exception {
     }
 
     /**
@@ -52,6 +69,7 @@ public abstract class LaurenDAO implements Bot {
     public void onDisable() {
     }
 
+    @Override
     public void shutdown() {
 
         onDisable();
@@ -62,58 +80,42 @@ public abstract class LaurenDAO implements Bot {
     }
 
     @Override
-    public boolean connectDiscord() {
+    public void connectDiscord() throws LoginException {
 
-        return true;
+        this.bot = DefaultShardManagerBuilder.create(this.config.getToken(), Arrays.asList(GatewayIntent.values()))
+                .setAutoReconnect(true)
+                .build();
 
     }
 
     @Override
-    public boolean setupLogger() {
+    public void setupLogger() throws IOException {
 
-        this.logger = java.util.logging.Logger.getLogger(botName);
-
+        this.logger = Logger.getLogger(botName);
         if (this.config.isLog()) {
 
             InfinityFiles infinityFiles = new InfinityFiles("log", "logs", ".log", ".zip");
-            try {
 
-                FileHandler file = new FileHandler(infinityFiles.getNextFile());
-                file.setFormatter(new LogFormat());
-                this.logger.addHandler(file);
+            FileHandler file = new FileHandler(infinityFiles.getNextFile());
+            file.setFormatter(new LogFormat());
 
-            } catch (Exception exception) {
-
-                exception.printStackTrace();
-                return false;
-
-            }
+            this.logger.addHandler(file);
 
         }
 
         this.logger.info("Logger setup successfully");
-        return true;
 
     }
 
     @Override
-    public boolean setupConfig() {
+    public void setupConfig() throws InstantiationException {
 
         this.config = Config.loadConfig("config/config.json");
-
-        if (this.config == null) {
-            this.logger.severe("There was an error loading the config");
-            return false;
-
-
-        }
-
-        return true;
+        if (config == null) throw new InstantiationException("Config created, configure token");
 
     }
 
-    @Override
-    public boolean setupGuice() {
+    public void setupGuice() throws GuiceInjectorException {
 
         try {
 
@@ -121,18 +123,13 @@ public abstract class LaurenDAO implements Bot {
             this.injector.injectMembers(this);
 
         } catch (Exception exception) {
-
-            exception.printStackTrace();
-            return false;
-
+            throw new GuiceInjectorException();
         }
-
-        return true;
 
     }
 
     @Override
-    public boolean configureConnection() {
+    public void configureConnection() throws SQLConnectionException {
 
         ConnectionInfo connectionInfo = ConnectionInfo.builder()
                 .file(this.config.getSqlFile())
@@ -146,31 +143,19 @@ public abstract class LaurenDAO implements Bot {
             this.sqlConnection = new MySQLConnection();
         else this.sqlConnection = new SQLiteConnection();
 
-        if (!this.sqlConnection.configure(connectionInfo)) return false;
+        if (!this.sqlConnection.configure(connectionInfo)) throw new SQLConnectionException();
 
         this.logger.info("Connection to database successful");
-        return true;
 
     }
 
     @Override
-    public boolean findVersion(Class oClass) {
+    public void findVersion(Class oClass) throws IOException {
 
         Properties properties = new Properties();
 
-        try {
-
-            properties.load(oClass.getClassLoader().getResourceAsStream("project.properties"));
-            this.version = properties.getProperty("version");
-
-            return true;
-
-        } catch (Exception exception) {
-
-            this.logger.info("An exception was caught while searching for my client version");
-            return false;
-
-        }
+        properties.load(oClass.getClassLoader().getResourceAsStream("project.properties"));
+        this.version = properties.getProperty("version");
 
     }
 }

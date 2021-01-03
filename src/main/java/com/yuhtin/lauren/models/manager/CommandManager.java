@@ -5,10 +5,8 @@ import com.google.inject.Injector;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.yuhtin.lauren.LaurenStartup;
-import com.yuhtin.lauren.models.objects.RawCommand;
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.enums.LogType;
+import com.yuhtin.lauren.models.objects.RawCommand;
 import com.yuhtin.lauren.service.CommandCache;
 import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.entities.Activity;
@@ -16,15 +14,17 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.logging.Logger;
 
 @AllArgsConstructor
 public class CommandManager {
 
     private final ShardManager bot;
     private final Injector injector;
+    private final Logger logger;
     private final String folder;
 
-    public void load() {
+    public void load() throws IOException {
         CommandCache.start();
 
         CommandClientBuilder clientBuilder = new CommandClientBuilder();
@@ -33,17 +33,7 @@ public class CommandManager {
         clientBuilder.useHelpBuilder(false);
         clientBuilder.setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"));
 
-        ClassPath classPath;
-        try {
-
-            classPath = ClassPath.from(getClass().getClassLoader());
-
-        } catch (IOException exception) {
-
-            Logger.log("ClassPath could not be instantiated", LogType.ERROR);
-            return;
-
-        }
+        ClassPath classPath = ClassPath.from(getClass().getClassLoader());
 
         for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive(folder)) {
             try {
@@ -75,12 +65,13 @@ public class CommandManager {
                 } else throw new InstantiationException();
 
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException exception) {
-                Logger.log("The " + classInfo.getName() + " class could not be instantiated", LogType.WARN);
+                logger.warning("The " + classInfo.getName() + " class could not be instantiated");
             }
         }
 
         bot.addEventListener(clientBuilder.build());
         CommandCache.construct();
+
     }
 
 }
