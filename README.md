@@ -9,7 +9,7 @@
 [![MIT License](https://img.shields.io/badge/license-AGPLV3-blue.svg?color=1bcc1b)](https://choosealicense.com/licenses/agpl-3.0/)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.png?v=103)](https://github.com/ellerbrock/open-source-badges/)
 
-Lauren is a discord bot that contains a scrim system for 8ballpool and LudoKing and some other features
+Lauren is a discord bot that contains moderation commands, draw, experience, statistics, music, punishment and others minors features
 
 ### Credits
 
