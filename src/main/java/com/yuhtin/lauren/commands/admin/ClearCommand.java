@@ -1,10 +1,10 @@
 package com.yuhtin.lauren.commands.admin;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 @CommandHandler(
         name = "clear",
@@ -20,6 +21,8 @@ import java.util.concurrent.TimeUnit;
         description = "Limpar algumas mensagens do canal atual",
         alias = {"clearchat", "cc"})
 public class ClearCommand extends Command {
+
+    @Inject @Named("main") private Logger logger;
 
     @Override
     protected void execute(CommandEvent event) {
@@ -60,8 +63,8 @@ public class ClearCommand extends Command {
         event.getChannel().sendMessage("<:online:703089222021808170> Foram apagadas **" + cleared + "** mensagens deste canal.")
                 .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
 
-        Logger.log("The user " + event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator()
+        this.logger.info("The user " + event.getAuthor().getName() + "#" + event.getAuthor().getDiscriminator()
                 + " cleared " + cleared + " messages from channel #" + event.getChannel().getName()
-                + " (" + event.getChannel().getId() + ")", LogType.LOG);
+                + " (" + event.getChannel().getId() + ")");
     }
 }

@@ -1,11 +1,11 @@
 package com.yuhtin.lauren.models.embeds;
 
+import com.google.inject.Singleton;
 import com.yuhtin.lauren.models.enums.ItemType;
 import com.yuhtin.lauren.models.objects.ShopItem;
 import lombok.Getter;
 import net.dv8tion.jda.api.EmbedBuilder;
 
-import javax.inject.Singleton;
 import java.awt.*;
 import java.time.Instant;
 import java.util.HashMap;

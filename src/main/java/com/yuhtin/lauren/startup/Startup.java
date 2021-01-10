@@ -1,13 +1,15 @@
 package com.yuhtin.lauren.startup;
 
 import com.yuhtin.lauren.Lauren;
+import lombok.Getter;
+
 import java.util.Scanner;
 
 public class Startup {
 
-    public static void main(String[] args) {
+    @Getter private static final Lauren lauren = new Lauren("Lauren");
 
-        Lauren lauren = new Lauren("Lauren");
+    public static void main(String[] args) {
 
         try { lauren.onLoad(); } catch (Exception exception) {
 
@@ -31,7 +33,6 @@ public class Startup {
         while (scanner.nextLine().equalsIgnoreCase("stop")) {
             new Thread(lauren::shutdown).start();
         }
-
 
     }
 

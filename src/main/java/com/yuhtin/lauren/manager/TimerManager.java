@@ -1,12 +1,12 @@
-package com.yuhtin.lauren.models.manager;
+package com.yuhtin.lauren.manager;
 
 import com.google.common.reflect.ClassPath;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import com.yuhtin.lauren.timers.Timer;
 import lombok.Getter;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

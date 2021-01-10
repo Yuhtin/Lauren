@@ -1,8 +1,9 @@
 package com.yuhtin.lauren.commands.utility;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -13,6 +14,7 @@ import net.dv8tion.jda.api.entities.RichPresence;
 import java.awt.*;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 @CommandHandler(
         name = "spotify",
@@ -21,6 +23,8 @@ import java.util.concurrent.TimeUnit;
         alias = {}
 )
 public class SpotifyCommand extends Command {
+
+    @Inject @Named("main") private Logger logger;
 
     @Override
     protected void execute(CommandEvent event) {
@@ -37,16 +41,14 @@ public class SpotifyCommand extends Command {
         Member member = event.getMessage().getMentionedMembers().get(0);
         Activity activity = null;
 
-        if (member == null) {
-            Logger.log("sadasdads");
-        }
         for (Activity target : member.getActivities()) {
-            Logger.log(target.getName());
+
             if (target.getType() == Activity.ActivityType.LISTENING
                     && target.getName().equalsIgnoreCase("Spotify")) {
                 activity = target;
                 break;
             }
+
         }
 
         if (activity == null) {

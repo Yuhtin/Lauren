@@ -2,6 +2,7 @@ package com.yuhtin.lauren.core.bot;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Singleton;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.yuhtin.lauren.core.logger.LogFormat;
 import com.yuhtin.lauren.guice.LaurenModule;
@@ -19,8 +20,9 @@ import lombok.Data;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
-import javax.inject.Singleton;
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.util.Arrays;
@@ -91,7 +93,10 @@ public abstract class LaurenDAO implements Bot {
     @Override
     public void connectDiscord() throws LoginException {
 
-        this.bot = DefaultShardManagerBuilder.create(this.config.getToken(), Arrays.asList(GatewayIntent.values()))
+        this.bot = DefaultShardManagerBuilder.createDefault(this.config.getToken())
+                .setMemberCachePolicy(MemberCachePolicy.ALL)
+                .setChunkingFilter(ChunkingFilter.ALL)
+                .enableIntents(Arrays.asList(GatewayIntent.values()))
                 .setAutoReconnect(true)
                 .build();
 

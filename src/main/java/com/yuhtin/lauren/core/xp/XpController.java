@@ -1,10 +1,10 @@
 package com.yuhtin.lauren.core.xp;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.yuhtin.lauren.sql.dao.ExperienceDAO;
 import lombok.Getter;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

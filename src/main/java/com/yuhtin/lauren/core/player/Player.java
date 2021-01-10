@@ -1,18 +1,20 @@
 package com.yuhtin.lauren.core.player;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.yuhtin.lauren.core.player.impl.Entity;
 import com.yuhtin.lauren.core.punish.PunishmentType;
 import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.core.xp.Level;
 import com.yuhtin.lauren.core.xp.XpController;
 import com.yuhtin.lauren.models.enums.Rank;
+import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,10 +30,10 @@ public class Player
         extends Entity
         implements Serializable {
 
-    @Inject private static Logger logger;
-    @Inject private static ShardManager shardManager;
+    @Inject @Named("main") private static Logger logger;
     @Inject private static StatsController statsController;
     @Inject private static XpController xpController;
+    private static Guild guild = Startup.getLauren().getGuild();
 
     private Map<PunishmentType, Long> punishs = new HashMap<>();
 
@@ -89,7 +91,7 @@ public class Player
 
             for (long roleID : rolesToGive) {
 
-                Role role = LaurenStartup.getInstance().getGuild().getRoleById(roleID);
+                Role role = guild.getRoleById(roleID);
                 if (role == null) {
 
                     logger.warning("Role is null");
@@ -97,13 +99,13 @@ public class Player
 
                 }
 
-                LaurenStartup.getInstance().getGuild().addRoleToMember(userID, role).queue();
+                guild.addRoleToMember(userID, role).queue();
 
             }
 
             for (long roleID : rolesToRemove) {
 
-                Role role = LaurenStartup.getInstance().getGuild().getRoleById(roleID);
+                Role role = guild.getRoleById(roleID);
                 if (role == null) {
 
                     logger.warning("Role is null");
@@ -111,7 +113,7 @@ public class Player
 
                 }
 
-                LaurenStartup.getInstance().getGuild().removeRoleFromMember(userID, role).queue();
+                guild.removeRoleFromMember(userID, role).queue();
 
             }
         }
@@ -125,7 +127,7 @@ public class Player
 
         }
 
-        TextChannel channel = LaurenStartup.getInstance().getBot().getTextChannelById(770393139516932158L);
+        TextChannel channel = guild.getTextChannelById(770393139516932158L);
         if (channel != null) {
 
             channel.sendMessage(message).queue();

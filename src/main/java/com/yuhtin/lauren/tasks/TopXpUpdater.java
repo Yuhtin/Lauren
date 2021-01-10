@@ -1,5 +1,8 @@
 package com.yuhtin.lauren.tasks;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.SimplePlayer;
 import com.yuhtin.lauren.sql.connection.SQLConnection;
@@ -7,9 +10,6 @@ import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.serialization.player.PlayerSerializer;
 import lombok.Getter;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

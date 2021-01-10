@@ -1,13 +1,16 @@
 package com.yuhtin.lauren.commands.utility;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.models.enums.LogType;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
+
+import java.util.logging.Logger;
 
 /**
  * @author Yuhtin
@@ -22,10 +25,13 @@ import net.dv8tion.jda.api.exceptions.HierarchyException;
 )
 public class TurnOffLevelCommand extends Command {
 
+    @Inject @Named("main") private Logger logger;
+    @Inject private PlayerController playerController;
+
     @Override
     protected void execute(CommandEvent event) {
 
-        Player player = PlayerController.INSTANCE.get(event.getAuthor().getIdLong());
+        Player player = this.playerController.get(event.getAuthor().getIdLong());
         player.setHideLevelOnNickname(true);
 
         if (event.getMember().getNickname() != null) {
@@ -38,7 +44,7 @@ public class TurnOffLevelCommand extends Command {
                 try {
                     event.getMember().modifyNickname(nickname).queue();
                 } catch (HierarchyException ignored) {
-                    Logger.log("Can't update member with role higher my self", LogType.ERROR);
+                    this.logger.warning("Can't update member with role higher my self");
                 }
 
             }

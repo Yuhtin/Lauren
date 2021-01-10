@@ -67,7 +67,7 @@ public class SugestionCommand extends Command {
                 .message(privateChannel.sendMessage("Loading").complete())
                 .user(event.getAuthor())
                 .reason(null)
-                .sugestion(null)
+                .corp(null)
                 .build();
 
         builder.getMessage().addReaction("a:nao:704295026036834375").complete();
@@ -93,7 +93,7 @@ public class SugestionCommand extends Command {
                     String message = privateMessage.getMessage().getContentRaw();
                     if (stage == SugestionStage.SUGESTION) {
 
-                        sugestion.setSugestion(message);
+                        sugestion.setCorp(message);
                         sugestion.setStage(SugestionStage.SUGESTION_REASON);
 
                         fillForm(sugestion, cancelRunnable);

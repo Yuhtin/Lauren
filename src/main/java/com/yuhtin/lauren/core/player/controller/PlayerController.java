@@ -1,13 +1,13 @@
 package com.yuhtin.lauren.core.player.controller;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.sql.dao.PlayerDAO;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import lombok.Getter;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;

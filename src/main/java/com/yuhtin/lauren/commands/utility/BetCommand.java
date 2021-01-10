@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.commands.utility;
 
+import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.player.Player;
@@ -7,7 +8,6 @@ import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import net.dv8tion.jda.api.EmbedBuilder;
 
-import javax.inject.Inject;
 import java.awt.*;
 import java.time.Instant;
 import java.util.Random;
@@ -32,34 +32,38 @@ public class BetCommand extends Command {
 
         String color;
         double multiplier;
-        int chance, money;
+        int chance;
+        int money;
 
         switch (arguments[0].toLowerCase()) {
-            case "vermelho": {
+
+            case "vermelho":
                 color = "Vermelho";
                 multiplier = 1.5;
                 chance = 50;
                 break;
-            }
 
-            case "amarelo": {
+            case "amarelo":
+
                 color = "Amarela";
                 multiplier = 2;
                 chance = 19;
                 break;
-            }
 
-            case "verde": {
+
+            case "verde":
+
                 color = "Verde";
                 multiplier = 5;
                 chance = 5;
                 break;
-            }
 
-            default: {
+
+            default:
+
                 event.getChannel().sendMessage(helpMessage(event.getMember().getColor(), event.getGuild().getIconUrl()).build()).queue();
                 return;
-            }
+
         }
 
         try {

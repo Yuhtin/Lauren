@@ -1,6 +1,7 @@
 package com.yuhtin.lauren.utils.helper;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.models.objects.Config;
 import net.dv8tion.jda.api.Permission;
@@ -8,7 +9,6 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.sharding.ShardManager;
 
-import javax.inject.Named;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

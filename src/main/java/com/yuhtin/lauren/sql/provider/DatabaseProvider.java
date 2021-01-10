@@ -16,7 +16,7 @@ public abstract class DatabaseProvider {
 
     public List<Document> queryMany(String query) {
 
-        List<Document> documents = new ArrayList();
+        List<Document> documents = new ArrayList<>();
         try (PreparedStatement statement = sqlConnection.findConnection().prepareStatement(query)) {
 
             try (ResultSet resultSet = statement.executeQuery()) {

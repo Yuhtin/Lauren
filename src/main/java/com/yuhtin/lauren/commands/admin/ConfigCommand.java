@@ -1,16 +1,19 @@
 package com.yuhtin.lauren.commands.admin;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.models.objects.Config;
+import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.SneakyThrows;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 
 import java.time.Instant;
+import java.util.logging.Logger;
 
 @CommandHandler(
         name = "config",
@@ -18,6 +21,8 @@ import java.time.Instant;
         description = "Configurar algumas informações minha",
         alias = {"configurar", "cfg", "editar", "edit"})
 public class ConfigCommand extends Command {
+
+    @Inject @Named("main") private Logger logger;
 
     @SneakyThrows
     @Override
@@ -27,7 +32,7 @@ public class ConfigCommand extends Command {
 
         String[] arguments = event.getMessage().getContentRaw().split(" ");
 
-        Config config = LaurenStartup.getInstance().getConfig();
+        Config config = Startup.getLauren().getConfig();
         if (arguments.length < 2) {
 
             EmbedBuilder embed = new EmbedBuilder();
@@ -61,7 +66,7 @@ public class ConfigCommand extends Command {
 
             config.setPrefix(value);
 
-            Logger.log("The player " + event.getMember().getUser().getName() + " changed the prefix to " + value);
+            this.logger.info("The player " + event.getMember().getUser().getName() + " changed the prefix to " + value);
             event.getChannel()
                     .sendMessage("<a:sim:704295025374265387> " +
                             "O meu prefixo foi alterado para '" + value + "'. Reinicie o bot para realizar a troca.")
@@ -73,7 +78,7 @@ public class ConfigCommand extends Command {
             try {
 
                 config.setResgistrationId(Long.parseLong(value));
-                Logger.log("The player " + event.getMember().getUser().getName() + " changed the registrationID to " + value);
+                this.logger.info("The player " + event.getMember().getUser().getName() + " changed the registrationID to " + value);
 
             } catch (Exception exception) {
 
@@ -98,7 +103,7 @@ public class ConfigCommand extends Command {
             try {
 
                 config.setLog(Boolean.parseBoolean(value));
-                Logger.log("The player " + event.getMember().getUser().getName() + " turned logs to " + value);
+                this.logger.info("The player " + event.getMember().getUser().getName() + " turned logs to " + value);
 
             } catch (Exception exception) {
                 event.getChannel()

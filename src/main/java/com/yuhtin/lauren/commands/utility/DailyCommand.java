@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.commands.utility;
 
+import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.player.Player;
@@ -8,8 +9,6 @@ import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.timers.impl.ResetDailyTimer;
 import com.yuhtin.lauren.utils.helper.TimeUtils;
-
-import javax.inject.Inject;
 
 @CommandHandler(
         name = "daily",

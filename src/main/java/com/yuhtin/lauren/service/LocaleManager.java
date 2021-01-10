@@ -1,10 +1,10 @@
 package com.yuhtin.lauren.service;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import lombok.Data;
 import org.json.JSONObject;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.logging.Logger;
@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 @Singleton
 public class LocaleManager {
 
-    @Inject private Logger logger;
+    @Inject @Named("main") private Logger logger;
 
     private String city;
     private String regionName;

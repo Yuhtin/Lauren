@@ -7,9 +7,9 @@ import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.core.xp.XpController;
 import com.yuhtin.lauren.models.embeds.ShopEmbed;
-import com.yuhtin.lauren.models.manager.CommandManager;
-import com.yuhtin.lauren.models.manager.EventsManager;
-import com.yuhtin.lauren.models.manager.TimerManager;
+import com.yuhtin.lauren.manager.CommandManager;
+import com.yuhtin.lauren.manager.EventsManager;
+import com.yuhtin.lauren.manager.TimerManager;
 import com.yuhtin.lauren.service.LocaleManager;
 import com.yuhtin.lauren.service.PterodactylConnection;
 import com.yuhtin.lauren.sql.dao.PlayerDAO;
@@ -18,6 +18,8 @@ import com.yuhtin.lauren.tasks.*;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import com.yuhtin.lauren.utils.messages.AsciiBox;
+import lombok.Getter;
+import net.dv8tion.jda.api.entities.Guild;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -47,6 +49,7 @@ public class Lauren extends LaurenDAO {
     @Inject private TopXpUpdater topXpUpdater;
     @Inject private ShopEmbed shopEmbed;
 
+    @Getter private Guild guild;
 
     public Lauren(String botName) {
         this.setBotName(botName);
@@ -91,8 +94,10 @@ public class Lauren extends LaurenDAO {
     @Override
     public void onReady() {
 
-        this.getBot().addEventListener(this.getEventWaiter());
         this.getLogger().info("[3/3] Lauren is now ready");
+
+        this.getBot().addEventListener(this.getEventWaiter());
+        this.guild = this.getBot().getGuildById(700673055982354472L);
 
         String[] botInfo = new String[]{
                 "",

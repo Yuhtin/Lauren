@@ -1,8 +1,9 @@
 package com.yuhtin.lauren.commands.utility;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.statistics.StatsInfo;
 import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
@@ -11,6 +12,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Logger;
 
 @CommandHandler(
         name = "stats",
@@ -20,6 +22,9 @@ import java.util.Date;
 )
 public class StatsCommand extends Command {
 
+    @Inject @Named("main") private Logger logger;
+    @Inject private StatsController statsController;
+
     @Override
     protected void execute(CommandEvent event) {
         String args = event.getArgs();
@@ -28,7 +33,7 @@ public class StatsCommand extends Command {
             builder.setAuthor("| Todas as estatísticas da Lauren", null, event.getGuild().getIconUrl());
             builder.setDescription(
                     "Para ver uma estatística completa, use `$stats <nome>`\n\n" +
-                            "Todas as estatísticas: " + StatsController.get().getStats().keySet());
+                            "Todas as estatísticas: " + this.statsController.getStats().keySet());
 
             builder.setFooter("Comando usado as", event.getAuthor().getAvatarUrl());
             builder.setTimestamp(Instant.now());
@@ -37,7 +42,7 @@ public class StatsCommand extends Command {
             return;
         }
 
-        StatsInfo info = StatsController.get().getStats().getOrDefault(args, null);
+        StatsInfo info = this.statsController.getStats().getOrDefault(args, null);
         if (info == null) {
             event.getChannel().sendMessage("⚡ Não encontrei nenhuma estatística relacionada").queue();
             return;
@@ -69,6 +74,6 @@ public class StatsCommand extends Command {
         builder.setTimestamp(Instant.now());
 
         event.getChannel().sendMessage(builder.build()).queue();
-        StatsController.get().getStats("Análise de Estatísticas").suplyStats(1);
+        this.statsController.getStats("Análise de Estatísticas").suplyStats(1);
     }
 }

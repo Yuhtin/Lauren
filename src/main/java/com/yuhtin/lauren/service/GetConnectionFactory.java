@@ -1,9 +1,9 @@
 package com.yuhtin.lauren.service;
 
+import com.google.inject.Inject;
 import com.yuhtin.lauren.core.statistics.StatsController;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
-import javax.inject.Inject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

@@ -1,7 +1,8 @@
-package com.yuhtin.lauren.models.manager;
+package com.yuhtin.lauren.manager;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.punish.PunishmentRule;
@@ -12,7 +13,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
 
-import javax.inject.Named;
 import java.util.logging.Logger;
 
 @Singleton
@@ -27,12 +27,13 @@ public class PunishmentManager {
 
         if (type == PunishmentType.BAN) {
 
-            this.logger.info(Utilities.INSTANCE.getFullName(author) +
-                    " banned user " +
-                    Utilities.INSTANCE.getFullName(user.getUser()) +
-                    " in rule " +
-                    rule.toString() +
-                    (proof.equalsIgnoreCase("") ? "" : " with proof " + proof));
+            this.logger.info(String.format(
+                    "%s banned user %s in rule %s %s",
+                    Utilities.INSTANCE.getFullName(author),
+                    Utilities.INSTANCE.getFullName(user.getUser()),
+                    rule.toString(),
+                    (proof.equalsIgnoreCase("") ? "" : " with proof " + proof)
+            ));
 
             user.getGuild().ban(user, 7, "Banned with punish system").queue();
 
@@ -43,7 +44,8 @@ public class PunishmentManager {
         long duration = System.currentTimeMillis() + rule.getPunishTime();
 
         // accumulate punishments
-        if (player.getPunishs().containsKey(type)) player.getPunishs().replace(type, player.getPunishs().get(type) + duration);
+        if (player.getPunishs().containsKey(type))
+            player.getPunishs().replace(type, player.getPunishs().get(type) + duration);
         else player.getPunishs().put(type, duration);
 
         Role role = user.getGuild()

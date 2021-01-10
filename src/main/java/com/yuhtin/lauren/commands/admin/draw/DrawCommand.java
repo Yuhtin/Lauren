@@ -1,10 +1,11 @@
 package com.yuhtin.lauren.commands.admin.draw;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.draw.controller.DrawController;
 import com.yuhtin.lauren.core.draw.controller.DrawEditting;
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -14,6 +15,7 @@ import java.time.Instant;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 @CommandHandler(
         name = "sorteio",
@@ -21,6 +23,8 @@ import java.util.concurrent.TimeUnit;
         description = "Iniciar um sorteio sobre algum conteúdo",
         alias = {"sortear", "draw"})
 public class DrawCommand extends Command {
+
+    @Inject @Named("main") private Logger logger;
 
     @Override
     protected void execute(CommandEvent event) {
@@ -69,13 +73,13 @@ public class DrawCommand extends Command {
                         DrawController.editing = null;
 
                     } catch (Exception exception) {
-                        Logger.log("Can't send a private message for user " + Utilities.INSTANCE.getFullName(event.getMember().getUser()));
+                        this.logger.warning("Can't send a private message for user " + Utilities.INSTANCE.getFullName(event.getMember().getUser()));
                     }
                 }
             }, 2, TimeUnit.MINUTES);
 
         } catch (Exception exception) {
-            Logger.log("Can't send a private message for user " + Utilities.INSTANCE.getFullName(event.getMember().getUser()));
+            this.logger.warning("Can't send a private message for user " + Utilities.INSTANCE.getFullName(event.getMember().getUser()));
         }
     }
 }

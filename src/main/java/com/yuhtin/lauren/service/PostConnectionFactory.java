@@ -1,9 +1,9 @@
 package com.yuhtin.lauren.service;
 
-import com.yuhtin.lauren.core.logger.Logger;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.yuhtin.lauren.core.statistics.StatsController;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -12,10 +12,14 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-@Setter
-@Getter
+@Data
 public class PostConnectionFactory {
+
+    @Inject @Named("main") private static Logger logger;
+    @Inject private static StatsController statsController;
 
     private String api;
 
@@ -46,10 +50,10 @@ public class PostConnectionFactory {
                     content.append(line).append("\n");
                 }
 
-                StatsController.get().getStats("Requests Externos").suplyStats(1);
+                statsController.getStats("Requests Externos").suplyStats(1);
                 return content.toString();
             } catch (Exception exception) {
-                Logger.error(exception);
+                logger.log(Level.WARNING, "Try to execute connection", exception);
             }
         }
 
@@ -69,14 +73,12 @@ public class PostConnectionFactory {
                 OutputStream outputStream = finalConnection.getOutputStream();
                 outputStream.write(out);
             } catch (Exception exception) {
-                Logger.log("Failed to get outputstream from post");
-                Logger.error(exception);
+                logger.log(Level.WARNING, "Try to execute connection", exception);
             }
 
             return finalConnection.getInputStream();
         } catch (Exception exception) {
-            Logger.log("Failed to build finalConnection");
-            Logger.error(exception);
+            logger.log(Level.WARNING, "Try to execute connection", exception);
             return null;
         }
     }

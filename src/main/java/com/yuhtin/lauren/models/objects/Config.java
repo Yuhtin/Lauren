@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.models.objects;
 
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.enums.LogType;
+import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.serialization.Serializer;
 import lombok.Data;
 
@@ -51,7 +51,7 @@ public class Config {
                     writer.flush();
                 }
 
-                Logger.log("Put a valid token in the bot's config", LogType.WARN);
+                Startup.getLauren().getLogger().warning("Put a valid token in the bot's config");
                 return null;
             }
 

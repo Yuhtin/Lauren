@@ -1,5 +1,7 @@
 package com.yuhtin.lauren.commands.admin;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mysql.cj.exceptions.NumberOutOfRange;
@@ -11,8 +13,6 @@ import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.sql.PreparedStatement;
 import java.util.logging.Logger;
 

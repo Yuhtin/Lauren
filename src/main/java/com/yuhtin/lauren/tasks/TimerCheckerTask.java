@@ -1,9 +1,8 @@
 package com.yuhtin.lauren.tasks;
 
-import com.yuhtin.lauren.models.manager.TimerManager;
+import com.yuhtin.lauren.manager.TimerManager;
 import com.yuhtin.lauren.timers.Timer;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
-import lombok.AllArgsConstructor;
 
 import java.time.ZoneId;
 import java.util.Calendar;
