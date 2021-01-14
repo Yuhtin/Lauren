@@ -1,9 +1,9 @@
 package com.yuhtin.lauren.commands.utility;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.StatsController;
@@ -17,7 +17,6 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.format.TextStyle;
 import java.util.Locale;
-import java.util.logging.Logger;
 
 @CommandHandler(
         name = "perfil",
@@ -26,7 +25,7 @@ import java.util.logging.Logger;
         alias = {"pinfo", "jogador", "playerinfo", "player", "profile", "conta"})
 public class PlayerInfoCommand extends Command {
 
-    @Inject @Named("main") private Logger logger;
+    @Inject private Logger logger;
     @Inject private PlayerController playerController;
     @Inject private StatsController statsController;
 

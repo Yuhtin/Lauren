@@ -1,10 +1,10 @@
 package com.yuhtin.lauren.commands.utility;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 @CommandHandler(
         name = "loja",
@@ -33,7 +32,7 @@ public class ShopCommand extends Command {
 
     @Inject private ShopEmbed shopEmbed;
     @Inject private PlayerController playerController;
-    @Inject @Named("main") private Logger logger;
+    @Inject private Logger logger;
     @Inject private EventWaiter eventWaiter;
 
     private final Map<Long, Integer> events = new HashMap<>();

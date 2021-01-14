@@ -3,14 +3,13 @@ package com.yuhtin.lauren.manager;
 import com.google.common.reflect.ClassPath;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.inject.name.Named;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.timers.Timer;
 import lombok.Getter;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * @author Yuhtin
@@ -20,7 +19,7 @@ import java.util.logging.Logger;
 @Singleton
 public class TimerManager {
 
-    @Inject @Named("main") private Logger logger;
+    @Inject private Logger logger;
 
     @Getter private final List<Timer> timers = new ArrayList<>();
 

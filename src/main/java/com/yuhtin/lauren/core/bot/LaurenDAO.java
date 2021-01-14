@@ -1,11 +1,10 @@
 package com.yuhtin.lauren.core.bot;
 
-import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.Singleton;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.yuhtin.lauren.core.logger.LogFormat;
-import com.yuhtin.lauren.guice.LaurenModule;
+import com.yuhtin.lauren.core.logger.Logger;
+import com.yuhtin.lauren.events.BotReadyEvent;
+import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.exceptions.GuiceInjectorException;
 import com.yuhtin.lauren.models.exceptions.SQLConnectionException;
 import com.yuhtin.lauren.models.objects.Config;
@@ -14,8 +13,6 @@ import com.yuhtin.lauren.sql.connection.SQLConnection;
 import com.yuhtin.lauren.sql.connection.mysql.MySQLConnection;
 import com.yuhtin.lauren.sql.connection.sqlite.SQLiteConnection;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.helper.InfinityFiles;
-import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Data;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
@@ -27,28 +24,21 @@ import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Properties;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Data
-@Singleton
 public abstract class LaurenDAO implements Bot {
 
+    private final Logger logger = new Logger();
+    private final EventWaiter eventWaiter = new EventWaiter();
+
     private String botName;
-
     private ShardManager bot;
-
-    private Logger logger;
     private Injector injector;
     private SQLConnection sqlConnection;
     private Config config;
-    private EventWaiter eventWaiter = new EventWaiter();
 
-    private String logFile;
     private String version;
     private long botStartTime;
-    private boolean loaded;
 
     /**
      * Called on bot starting
@@ -81,7 +71,7 @@ public abstract class LaurenDAO implements Bot {
 
         try { onDisable(); } catch (Exception exception) {
 
-            this.logger.log(Level.SEVERE, "Can't run onDisable, shutdown cancelled", exception);
+            this.logger.log(LogType.SEVERE, "Can't run onDisable, shutdown cancelled", exception);
             return;
 
         }
@@ -92,34 +82,6 @@ public abstract class LaurenDAO implements Bot {
 
     @Override
     public void connectDiscord() throws LoginException {
-
-        this.bot = DefaultShardManagerBuilder.createDefault(this.config.getToken())
-                .setMemberCachePolicy(MemberCachePolicy.ALL)
-                .setChunkingFilter(ChunkingFilter.ALL)
-                .enableIntents(Arrays.asList(GatewayIntent.values()))
-                .setAutoReconnect(true)
-                .build();
-
-    }
-
-    @Override
-    public void setupLogger() throws IOException {
-
-        this.logger = Logger.getLogger(botName);
-        if (this.config.isLog()) {
-
-            InfinityFiles infinityFiles = new InfinityFiles("log", "logs", ".log", ".zip");
-
-            logFile = infinityFiles.getNextFile();
-
-            FileHandler file = new FileHandler(logFile);
-            file.setFormatter(new LogFormat());
-
-            this.logger.addHandler(file);
-
-        }
-
-        this.logger.info("Logger setup successfully");
 
     }
 
@@ -132,16 +94,6 @@ public abstract class LaurenDAO implements Bot {
     }
 
     public void setupGuice() throws GuiceInjectorException {
-
-        try {
-
-            this.injector = Guice.createInjector(new LaurenModule(this));
-            this.injector.injectMembers(this);
-            this.injector.injectMembers(Utilities.INSTANCE);
-
-        } catch (Exception exception) {
-            throw new GuiceInjectorException();
-        }
 
     }
 
@@ -161,8 +113,6 @@ public abstract class LaurenDAO implements Bot {
         else this.sqlConnection = new SQLiteConnection();
 
         if (!this.sqlConnection.configure(connectionInfo)) throw new SQLConnectionException();
-
-        this.logger.info("Connection to database successful");
 
     }
 

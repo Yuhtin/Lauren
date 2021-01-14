@@ -9,8 +9,6 @@ public interface Bot {
 
     void connectDiscord() throws LoginException;
 
-    void setupLogger() throws IOException;
-
     void setupConfig() throws InstantiationException;
 
     void configureConnection() throws SQLConnectionException;

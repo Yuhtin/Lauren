@@ -1,17 +1,18 @@
 package com.yuhtin.lauren.events;
 
-import com.google.inject.Inject;
-import com.yuhtin.lauren.core.bot.LaurenDAO;
+import com.yuhtin.lauren.Lauren;
+import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
+@AllArgsConstructor
 public class BotReadyEvent extends ListenerAdapter {
 
-    @Inject private LaurenDAO laurenDAO;
+    private final Lauren lauren;
 
     @Override
     public void onReady(@NotNull ReadyEvent event) {
-        this.laurenDAO.onReady();
+        this.lauren.onReady();
     }
 }

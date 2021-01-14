@@ -84,7 +84,7 @@ public abstract class DatabaseProvider {
                 Object value = values[index];
                 int parameterIndex = index + 1;
 
-                if (value instanceof Boolean) statement.setObject(parameterIndex, ((Boolean) value).toString());
+                if (value instanceof Boolean) statement.setString(parameterIndex, ((Boolean) value).toString());
                 else statement.setObject(parameterIndex, value);
 
             }

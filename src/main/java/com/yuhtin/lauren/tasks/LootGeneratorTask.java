@@ -1,6 +1,7 @@
 package com.yuhtin.lauren.tasks;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
@@ -20,7 +21,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 @AllArgsConstructor
 public class LootGeneratorTask {

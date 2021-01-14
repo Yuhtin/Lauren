@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.models.objects.Config;
 import com.yuhtin.lauren.startup.Startup;
@@ -13,7 +14,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 
 import java.time.Instant;
-import java.util.logging.Logger;
 
 @CommandHandler(
         name = "config",
@@ -22,7 +22,7 @@ import java.util.logging.Logger;
         alias = {"configurar", "cfg", "editar", "edit"})
 public class ConfigCommand extends Command {
 
-    @Inject @Named("main") private Logger logger;
+    @Inject private Logger logger;
 
     @SneakyThrows
     @Override
@@ -52,11 +52,8 @@ public class ConfigCommand extends Command {
                             "  Use para trocar o meu identificador\n\n" +
                             " **• $config** setregistration <messageid>\n" +
                             "  Atual: " + config.getResgistrationId() + "\n" +
-                            "  Troque o ID da mensagem de registro\n\n" +
-                            " **• $config** setlog <true/false>\n" +
-                            "  Atual: " + (config.isLog() ? "Ativado" : "Desativado") + "\n" +
-                            "  Ativar ou desativar o salvamento de logs\n\n" +
-                            "\n");
+                            "  Troque o ID da mensagem de registro\n\n"
+            );
             event.getChannel().sendMessage(embed.build()).queue();
             return;
         }
@@ -98,28 +95,5 @@ public class ConfigCommand extends Command {
 
         }
 
-        if (arguments[1].equalsIgnoreCase("setlog")) {
-
-            try {
-
-                config.setLog(Boolean.parseBoolean(value));
-                this.logger.info("The player " + event.getMember().getUser().getName() + " turned logs to " + value);
-
-            } catch (Exception exception) {
-                event.getChannel()
-                        .sendMessage("<a:nao:704295026036834375> " +
-                                "O valor inserido é invalido: '" + value + "' (insira true ou false).")
-                        .queue();
-                return;
-            }
-
-            event.getChannel()
-                    .sendMessage("<a:sim:704295025374265387> As logs foram " +
-                            (config.isLog()
-                                    ? "ativadas"
-                                    : "desativadas")
-                            + ".")
-                    .queue();
-        }
     }
 }

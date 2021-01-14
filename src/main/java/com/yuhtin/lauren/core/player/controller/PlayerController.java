@@ -2,7 +2,7 @@ package com.yuhtin.lauren.core.player.controller;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.inject.name.Named;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.sql.dao.PlayerDAO;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
@@ -10,13 +10,12 @@ import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 @Singleton
 public class PlayerController {
 
     @Getter @Inject private PlayerDAO playerDAO;
-    @Inject @Named("main") private Logger logger;
+    @Inject private Logger logger;
 
     private final Map<Long, Player> cache = new HashMap<>();
 

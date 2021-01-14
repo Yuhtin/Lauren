@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.utils.helper;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.models.objects.Config;
 import net.dv8tion.jda.api.Permission;
@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -28,7 +27,7 @@ public class Utilities {
 
     public static final Utilities INSTANCE = new Utilities();
 
-    @Inject @Named("main") private Logger logger;
+    @Inject private Logger logger;
     @Inject private Config config;
     @Inject private ShardManager shardManager;
 
@@ -105,6 +104,13 @@ public class Utilities {
         }
 
         return builder.toString();
+    }
+
+    public StackTraceElement[] getStackTrace() {
+        Throwable throwable = new Throwable();
+        throwable.fillInStackTrace();
+
+        return throwable.getStackTrace();
     }
 
     public void writeToZip(File file, ZipOutputStream zipStream) throws IOException {

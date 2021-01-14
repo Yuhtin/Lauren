@@ -1,9 +1,9 @@
 package com.yuhtin.lauren.guice;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.name.Names;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.yuhtin.lauren.core.bot.LaurenDAO;
+import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.music.AudioResultHandler;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.models.objects.Config;
@@ -11,10 +11,7 @@ import com.yuhtin.lauren.service.GetConnectionFactory;
 import com.yuhtin.lauren.service.PostConnectionFactory;
 import com.yuhtin.lauren.sql.connection.SQLConnection;
 import lombok.AllArgsConstructor;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.sharding.ShardManager;
-
-import java.util.logging.Logger;
 
 /**
  * @author Yuhtin
@@ -24,34 +21,34 @@ import java.util.logging.Logger;
 @AllArgsConstructor
 public class LaurenModule extends AbstractModule {
 
-    private final LaurenDAO laurenDAO;
+    private final Lauren lauren;
 
     @Override
     protected void configure() {
 
-        bind(LaurenDAO.class)
-                .toInstance(this.laurenDAO);
+        bind(Lauren.class)
+                .toInstance(this.lauren);
 
         bind(ShardManager.class)
-                .toInstance(this.laurenDAO.getBot());
+                .toInstance(this.lauren.getBot());
 
         bind(SQLConnection.class)
-                .toInstance(this.laurenDAO.getSqlConnection());
+                .toInstance(this.lauren.getSqlConnection());
 
         bind(EventWaiter.class)
-                .toInstance(this.laurenDAO.getEventWaiter());
+                .toInstance(this.lauren.getEventWaiter());
 
         bind(Logger.class)
-                .annotatedWith(Names.named("main"))
-                .toInstance(this.laurenDAO.getLogger());
+                .toInstance(this.lauren.getLogger());
 
         bind(Config.class)
-                .toInstance(this.laurenDAO.getConfig());
+                .toInstance(this.lauren.getConfig());
 
         requestStaticInjection(GetConnectionFactory.class);
         requestStaticInjection(AudioResultHandler.class);
         requestStaticInjection(Player.class);
         requestStaticInjection(PostConnectionFactory.class);
+        requestStaticInjection(Logger.class);
 
     }
 

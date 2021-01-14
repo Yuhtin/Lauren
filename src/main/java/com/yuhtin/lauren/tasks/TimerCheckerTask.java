@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.tasks;
 
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.manager.TimerManager;
 import com.yuhtin.lauren.timers.Timer;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
@@ -8,7 +9,6 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.TimerTask;
-import java.util.logging.Logger;
 
 /**
  * @author Yuhtin

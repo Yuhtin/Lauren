@@ -2,7 +2,7 @@ package com.yuhtin.lauren.manager;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.inject.name.Named;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.punish.PunishmentRule;
@@ -13,12 +13,10 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
 
-import java.util.logging.Logger;
-
 @Singleton
 public class PunishmentManager {
 
-    @Inject @Named("main") private Logger logger;
+    @Inject private Logger logger;
     @Inject private PlayerController playerController;
 
     public void applyPunish(User author, Member user, PunishmentRule rule, String proof) {

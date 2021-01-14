@@ -1,6 +1,5 @@
 package com.yuhtin.lauren.models.objects;
 
-import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.serialization.Serializer;
 import lombok.Data;
@@ -10,7 +9,6 @@ import java.io.*;
 @Data
 public class Config {
 
-    private boolean log;
     private boolean laurenTest;
 
     private long ownerID;

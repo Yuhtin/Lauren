@@ -1,9 +1,9 @@
 package com.yuhtin.lauren.commands.admin;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.Permission;
@@ -13,7 +13,6 @@ import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 @CommandHandler(
         name = "clear",
@@ -22,7 +21,7 @@ import java.util.logging.Logger;
         alias = {"clearchat", "cc"})
 public class ClearCommand extends Command {
 
-    @Inject @Named("main") private Logger logger;
+    @Inject private Logger logger;
 
     @Override
     protected void execute(CommandEvent event) {

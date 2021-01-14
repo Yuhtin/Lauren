@@ -1,14 +1,12 @@
 package com.yuhtin.lauren.commands.admin;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.helper.Utilities;
-
-import java.util.logging.Logger;
 
 @CommandHandler(
         name = "restart",
@@ -17,7 +15,7 @@ import java.util.logging.Logger;
         alias = {"reiniciar"})
 public class RestartCommand extends Command {
 
-    @Inject @Named("main") private Logger logger;
+    @Inject private Logger logger;
 
     @Override
     protected void execute(CommandEvent event) {

@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.core.player;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.impl.Entity;
 import com.yuhtin.lauren.core.punish.PunishmentType;
 import com.yuhtin.lauren.core.statistics.StatsController;
@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -30,7 +29,7 @@ public class Player
         extends Entity
         implements Serializable {
 
-    @Inject @Named("main") private static Logger logger;
+    @Inject private static Logger logger;
     @Inject private static StatsController statsController;
     @Inject private static XpController xpController;
     private static Guild guild = Startup.getLauren().getGuild();

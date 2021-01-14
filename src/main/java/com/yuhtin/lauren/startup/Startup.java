@@ -15,6 +15,7 @@ public class Startup {
 
             exception.printStackTrace();
             lauren.shutdown();
+            return;
 
         }
 
@@ -24,6 +25,7 @@ public class Startup {
 
             exception.printStackTrace();
             lauren.shutdown();
+            return;
 
         }
 

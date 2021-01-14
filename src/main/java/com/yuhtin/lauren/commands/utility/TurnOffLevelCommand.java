@@ -1,16 +1,13 @@
 package com.yuhtin.lauren.commands.utility;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.enums.LogType;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
-
-import java.util.logging.Logger;
 
 /**
  * @author Yuhtin
@@ -25,7 +22,7 @@ import java.util.logging.Logger;
 )
 public class TurnOffLevelCommand extends Command {
 
-    @Inject @Named("main") private Logger logger;
+    @Inject private Logger logger;
     @Inject private PlayerController playerController;
 
     @Override

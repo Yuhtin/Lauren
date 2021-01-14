@@ -2,12 +2,12 @@ package com.yuhtin.lauren.manager;
 
 import com.google.common.reflect.ClassPath;
 import com.google.inject.Injector;
+import com.yuhtin.lauren.core.logger.Logger;
 import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
 @AllArgsConstructor
 public class EventsManager {

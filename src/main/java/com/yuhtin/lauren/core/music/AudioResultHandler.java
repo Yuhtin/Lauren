@@ -1,12 +1,13 @@
 package com.yuhtin.lauren.core.music;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.statistics.StatsController;
+import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Builder;
@@ -17,13 +18,12 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Builder
 @Data
 public final class AudioResultHandler implements AudioLoadResultHandler {
 
-    @Inject @Named("main") private static Logger logger;
+    @Inject private static Logger logger;
     @Inject private static StatsController statsController;
 
     private final TrackManager trackManager;
@@ -125,7 +125,7 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
         if (searchType == TrackManager.SearchType.SIMPLE_SEARCH) {
 
             channel.sendMessage("**Erro** \uD83D\uDCCC `O vídeo ou playlist está privado`").queue();
-            logger.log(Level.WARNING, "Error on try load a track", exception);
+            logger.log(LogType.WARNING, "Error on try load a track", exception);
 
         }
     }

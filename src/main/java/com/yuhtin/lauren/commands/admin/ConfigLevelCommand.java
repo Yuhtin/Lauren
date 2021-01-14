@@ -1,20 +1,20 @@
 package com.yuhtin.lauren.commands.admin;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mysql.cj.exceptions.NumberOutOfRange;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.xp.Level;
 import com.yuhtin.lauren.core.xp.XpController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.sql.connection.SQLConnection;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
 
 import java.sql.PreparedStatement;
-import java.util.logging.Logger;
 
 @CommandHandler(
         name = "configlevel",
@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 )
 public class ConfigLevelCommand extends Command {
 
-    @Inject @Named("main") private Logger logger;
+    @Inject private Logger logger;
     @Inject private XpController xpController;
     @Inject private SQLConnection sqlConnection;
 
@@ -68,7 +68,7 @@ public class ConfigLevelCommand extends Command {
 
             statement.executeUpdate();
         } catch (Exception exception) {
-            this.logger.log(java.util.logging.Level.WARNING, "Can't update level rewards", exception);
+            this.logger.log(LogType.WARNING, "Can't update level rewards", exception);
         }
 
         event.getChannel()

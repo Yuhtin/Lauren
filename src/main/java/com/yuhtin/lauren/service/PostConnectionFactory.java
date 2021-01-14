@@ -1,8 +1,9 @@
 package com.yuhtin.lauren.service;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.statistics.StatsController;
+import com.yuhtin.lauren.models.enums.LogType;
 import lombok.Data;
 
 import java.io.BufferedReader;
@@ -13,12 +14,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Data
 public class PostConnectionFactory {
 
-    @Inject @Named("main") private static Logger logger;
+    @Inject private static Logger logger;
     @Inject private static StatsController statsController;
 
     private String api;
@@ -53,7 +53,7 @@ public class PostConnectionFactory {
                 statsController.getStats("Requests Externos").suplyStats(1);
                 return content.toString();
             } catch (Exception exception) {
-                logger.log(Level.WARNING, "Try to execute connection", exception);
+                logger.log(LogType.WARNING, "Try to execute connection", exception);
             }
         }
 
@@ -73,12 +73,12 @@ public class PostConnectionFactory {
                 OutputStream outputStream = finalConnection.getOutputStream();
                 outputStream.write(out);
             } catch (Exception exception) {
-                logger.log(Level.WARNING, "Try to execute connection", exception);
+                logger.log(LogType.WARNING, "Try to execute connection", exception);
             }
 
             return finalConnection.getInputStream();
         } catch (Exception exception) {
-            logger.log(Level.WARNING, "Try to execute connection", exception);
+            logger.log(LogType.WARNING, "Try to execute connection", exception);
             return null;
         }
     }

@@ -1,9 +1,9 @@
 package com.yuhtin.lauren.commands.utility;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.statistics.StatsInfo;
 import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
@@ -12,7 +12,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.logging.Logger;
 
 @CommandHandler(
         name = "stats",
@@ -22,7 +21,7 @@ import java.util.logging.Logger;
 )
 public class StatsCommand extends Command {
 
-    @Inject @Named("main") private Logger logger;
+    @Inject private Logger logger;
     @Inject private StatsController statsController;
 
     @Override

@@ -2,9 +2,10 @@ package com.yuhtin.lauren.tasks;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.inject.name.Named;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.SimplePlayer;
+import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.sql.connection.SQLConnection;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.serialization.player.PlayerSerializer;
@@ -18,12 +19,11 @@ import java.util.List;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Singleton
 public class TopXpUpdater {
 
-    @Inject @Named("main") private Logger logger;
+    @Inject private Logger logger;
     @Inject private SQLConnection sqlConnection;
 
     @Getter private String topPlayers;
@@ -56,7 +56,7 @@ public class TopXpUpdater {
                     resultSet.close();
 
                 } catch (Exception exception) {
-                    logger.log(Level.WARNING, "Can't update top xp", exception);
+                    logger.log(LogType.WARNING, "Can't update top xp", exception);
                     return;
                 }
 
