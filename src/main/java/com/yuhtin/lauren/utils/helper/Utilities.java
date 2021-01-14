@@ -85,6 +85,7 @@ public class Utilities {
         if (nickname.length() > 32) nickname = nickname.substring(0, 32);
 
         try { member.modifyNickname(nickname).queue(); } catch (HierarchyException ignored) { }
+
     }
 
     public String format(double valor) {
