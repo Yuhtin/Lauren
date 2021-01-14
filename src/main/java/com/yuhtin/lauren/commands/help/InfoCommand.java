@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.commands.help;
 
+import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.music.TrackManager;
@@ -7,6 +8,7 @@ import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.service.PterodactylConnection;
+import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.helper.TimeUtils;
 import lombok.SneakyThrows;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -26,6 +28,10 @@ import java.util.Locale;
 )
 public class InfoCommand extends Command {
 
+    @Inject private PlayerController playerController;
+    @Inject private StatsController statsController;
+    @Inject private PterodactylConnection pterodactylConnection;
+
     @SneakyThrows
     @Override
     protected void execute(CommandEvent event) {
@@ -35,11 +41,12 @@ public class InfoCommand extends Command {
         User user = event.getJDA().getUserById(272879983326658570L);
         String authorBot = user == null ? bot.getName() + "#" + bot.getDiscriminator() : user.getName() + "#" + user.getDiscriminator();
 
-        String cacheMessage = PlayerController.INSTANCE.totalUsers()
+        TrackManager trackManager = TrackManager.of(event.getGuild());
+        String cacheMessage = this.playerController.totalUsers()
                 + " jogadores, "
-                + TrackManager.get().musicManager.scheduler.queue.size()
+                + trackManager.getMusicManager().scheduler.queue.size()
                 + " músicas e "
-                + StatsController.get().getStats().size()
+                + this.statsController.getStats().size()
                 + " estatísticas";
 
 
@@ -48,11 +55,11 @@ public class InfoCommand extends Command {
 
                 .addField("📆 Criado em", "`" + timeCreated.getDayOfMonth() + " de " + timeCreated.getMonth().getDisplayName(TextStyle.SHORT, Locale.US) + ", "
                         + timeCreated.getYear() + " às " + timeCreated.getHour() + ":" + timeCreated.getMinute() + "`", true)
-                .addField("<a:feliz_2:726220815749611603> Versão atual", "`v" + LaurenStartup.getInstance().getVersion() + "`", true)
+                .addField("<a:feliz_2:726220815749611603> Versão atual", "`v" + Startup.getLauren().getVersion() + "`", true)
                 .addField("🙍‍♂️ Dono", "`" + authorBot + "`", true)
 
                 .addField("<a:infinito:703187274912759899> Uptime",
-                        "`" + TimeUtils.formatTime(System.currentTimeMillis() - LaurenStartup.getInstance().getStartTime()) + "`",
+                        "`" + TimeUtils.formatTime(System.currentTimeMillis() - Startup.getLauren().getBotStartTime()) + "`",
                         true)
 
                 .addField("💥 Cache", "`" + cacheMessage + "`", true)
@@ -63,11 +70,11 @@ public class InfoCommand extends Command {
                 .addField("<:discord:723587554422816889> Versão JDA", "`v4.2.0_186`", true)
 
                 .addField("⚙️ Núcleos", "`" + Runtime.getRuntime().availableProcessors() + " cores`", true)
-                .addField("\uD83D\uDEE2 Banco de Dados", "`" + LaurenStartup.getInstance().getConfig().getDatabaseType() + "`", true)
+                .addField("\uD83D\uDEE2 Banco de Dados", "`" + Startup.getLauren().getConfig().getDatabaseType() + "`", true)
                 .addField("\uD83C\uDF9E RAM", "`"
-                        + PterodactylConnection.get().getServer().getServerUsage().getMemoryUsage() +
+                        + this.pterodactylConnection.getServer().getServerUsage().getMemoryUsage() +
                         "M/"
-                        + PterodactylConnection.get().getServer().getLimits().getMemory() + "M`", true)
+                        + this.pterodactylConnection.getServer().getLimits().getMemory() + "M`", true)
 
                 .setFooter("Mais informações em $ping", event.getAuthor().getAvatarUrl())
                 .setColor(event.getMember().getColor())

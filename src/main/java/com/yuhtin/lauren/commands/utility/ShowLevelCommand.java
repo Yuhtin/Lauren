@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.commands.utility;
 
+import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.player.Player;
@@ -19,10 +20,12 @@ import com.yuhtin.lauren.utils.helper.Utilities;
 )
 public class ShowLevelCommand extends Command {
 
+    @Inject private PlayerController playerController;
+
     @Override
     protected void execute(CommandEvent event) {
 
-        Player player = PlayerController.INSTANCE.get(event.getAuthor().getIdLong());
+        Player player = this.playerController.get(event.getAuthor().getIdLong());
         player.setHideLevelOnNickname(false);
 
         Utilities.INSTANCE.updateNickByLevel(player, player.getLevel());

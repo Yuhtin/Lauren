@@ -21,7 +21,7 @@ public class RepeatCommand extends Command {
         if (TrackUtils.get().isIdle(event.getTextChannel())) return;
         if (!Utilities.INSTANCE.isDJ(event.getMember(), event.getTextChannel(), true)) return;
 
-        AudioInfo audio = TrackManager.get().getTrackInfo();
+        AudioInfo audio = TrackManager.of(event.getGuild()).getTrackInfo();
         audio.setRepeat(!audio.isRepeat());
 
         String message = audio.isRepeat()

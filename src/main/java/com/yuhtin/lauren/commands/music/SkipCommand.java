@@ -24,21 +24,23 @@ public class SkipCommand extends Command {
         }
 
         if (TrackUtils.get().isIdle(event.getTextChannel())) return;
+
+        TrackManager trackManager = TrackManager.of(event.getGuild());
         if (TrackUtils.get().isMusicOwner(event.getMember())) {
-            TrackManager.get().player.stopTrack();
+            trackManager.getPlayer().stopTrack();
             event.getChannel().sendMessage("\u23e9 Pulei a música pra você <3").queue();
             return;
         }
 
-        AudioInfo info = TrackManager.get().getTrackInfo();
+        AudioInfo info = trackManager.getTrackInfo();
         if (info.hasVoted(event.getAuthor())) {
             event.getChannel().sendMessage("\uD83D\uDC6E\uD83C\uDFFD\u200D♀️ Ei você já votou pra pular essa música ;-;").queue();
             return;
         }
 
         info.addSkip(event.getAuthor());
-        if (info.getSkips() >= TrackManager.get().audio.getMembers().size() - 2) {
-            TrackManager.get().player.stopTrack();
+        if (info.getSkips() >= trackManager.getAudio().getMembers().size() - 2) {
+            trackManager.getPlayer().stopTrack();
             event.getChannel().sendMessage("\uD83E\uDDF6 Amo quando todos concordam entre si, pulando a música").queue();
             return;
         }
@@ -50,7 +52,7 @@ public class SkipCommand extends Command {
         String message = "\uD83E\uDDEC **"
                 + name +
                 "** votou para pular a música **("
-                + info.getSkips() + "/" + (TrackManager.get().audio.getMembers().size() - 2)
+                + info.getSkips() + "/" + (trackManager.getAudio().getMembers().size() - 2)
                 + ")**";
 
         event.getChannel().sendMessage(message).queue();

@@ -26,32 +26,33 @@ public class BassBoostCommand extends Command {
             return;
         }
 
+        TrackManager trackManager = TrackManager.of(event.getGuild());
         switch (event.getArgs().toLowerCase()) {
 
             case "low":
 
-                TrackManager.get().eqLowBass(-.35f);
+                trackManager.eqLowBass(-.35f);
                 event.getChannel().sendMessage(":loud_sound: Equalizando o baixo da música!").queue();
                 break;
 
             case "high":
 
-                TrackManager.get().eqHighBass(.083f);
+                trackManager.eqHighBass(.083f);
                 event.getChannel().sendMessage(":loud_sound: Equalizando o grave da música!").queue();
                 break;
 
 
             case "boost":
 
-                TrackManager.get().bassBoost();
+                trackManager.bassBoost();
                 event.getChannel().sendMessage(":loud_sound: Equalizando tudão, cuidado rapaziada!").queue();
                 break;
 
 
             case "normal":
 
-                TrackManager.get().eqHighBass(0);
-                TrackManager.get().eqLowBass(0);
+                trackManager.eqHighBass(0);
+                trackManager.eqLowBass(0);
                 event.getChannel().sendMessage(":loud_sound: Tirando equalização").queue();
                 break;
 

@@ -20,7 +20,7 @@ public class ForceJumpCommand extends Command {
         if (TrackUtils.get().isIdle(event.getTextChannel())) return;
         if (!Utilities.INSTANCE.isDJ(event.getMember(), event.getTextChannel(), true)) return;
 
-        TrackManager.get().player.stopTrack();
+        TrackManager.of(event.getGuild()).getPlayer().stopTrack();
         event.getChannel().sendMessage("\u23e9 Pulei a música pra você <3").queue();
     }
 }

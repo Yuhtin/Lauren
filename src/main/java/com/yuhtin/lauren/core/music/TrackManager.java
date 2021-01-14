@@ -46,7 +46,7 @@ public class TrackManager extends AudioEventAdapter {
 
         trackManager.setAudioManager(new DefaultAudioPlayerManager());
         trackManager.setPlayer(trackManager.getAudioManager().createPlayer());
-        trackManager.setMusicManager(new GuildMusicManager(trackManager.getPlayer()));
+        trackManager.setMusicManager(new GuildMusicManager(trackManager.getPlayer(), guild));
 
         AudioSourceManagers.registerRemoteSources(trackManager.getAudioManager());
         AudioSourceManagers.registerLocalSource(trackManager.getAudioManager());

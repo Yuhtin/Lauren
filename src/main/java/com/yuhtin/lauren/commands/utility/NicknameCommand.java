@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.commands.utility;
 
+import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.player.Player;
@@ -14,9 +15,12 @@ import com.yuhtin.lauren.models.annotations.CommandHandler;
 )
 public class NicknameCommand extends Command {
 
+    @Inject private PlayerController playerController;
+
     @Override
     protected void execute(CommandEvent event) {
-        Player player = PlayerController.INSTANCE.get(event.getAuthor().getIdLong());
+
+        Player player = this.playerController.get(event.getAuthor().getIdLong());
         if (!player.hasPermission("commands.nickname")) {
 
             event.getChannel().sendMessage("<:oi:762303876732420176> " +

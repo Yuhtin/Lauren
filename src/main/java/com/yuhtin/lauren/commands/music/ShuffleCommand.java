@@ -20,7 +20,7 @@ public class ShuffleCommand extends Command {
         if (TrackUtils.get().isIdle(event.getTextChannel())) return;
         if (!Utilities.INSTANCE.isDJ(event.getMember(), event.getTextChannel(), true)) return;
 
-        TrackManager.get().shuffleQueue();
+        TrackManager.of(event.getGuild()).shuffleQueue();
         event.getChannel().sendMessage("<a:infinito:703187274912759899> Misturando a lista de músicas").queue();
     }
 

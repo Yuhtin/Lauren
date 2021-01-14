@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.events;
 
+import com.google.inject.Inject;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.vote.VoteResponse;
@@ -15,6 +16,8 @@ import org.jetbrains.annotations.NotNull;
  * Github: https://github.com/Yuhtin
  */
 public class WebhookMessageEvent extends ListenerAdapter {
+
+    @Inject private PlayerController playerController;
 
     @Override
     public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
@@ -38,7 +41,7 @@ public class WebhookMessageEvent extends ListenerAdapter {
 
         }
 
-        Player player = PlayerController.INSTANCE.get(voteResponse.getUser());
+        Player player = this.playerController.get(voteResponse.getUser());
         player.executeVote();
 
     }

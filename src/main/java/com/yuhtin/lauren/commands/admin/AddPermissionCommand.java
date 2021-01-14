@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.commands.admin;
 
+import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.player.Player;
@@ -18,6 +19,8 @@ import java.util.concurrent.TimeUnit;
         alias = {"addpermissão"}
 )
 public class AddPermissionCommand extends Command {
+
+    @Inject private PlayerController playerController;
 
     @Override
     protected void execute(CommandEvent event) {
@@ -42,7 +45,7 @@ public class AddPermissionCommand extends Command {
 
         String permission = arguments[2];
 
-        Player data = PlayerController.INSTANCE.get(target.getIdLong());
+        Player data = this.playerController.get(target.getIdLong());
         data.addPermission(permission);
 
         event.getChannel().sendMessage("<:felizpakas:742373250037710918> " +

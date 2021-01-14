@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.commands.admin;
 
+import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.player.Player;
@@ -17,6 +18,8 @@ import java.util.concurrent.TimeUnit;
         description = "Adicionar pontos de ranked para um jogador",
         alias = {"adicionarpontos"})
 public class AddPointsCommand extends Command {
+
+    @Inject private PlayerController playerController;
 
     @Override
     protected void execute(CommandEvent event) {
@@ -41,7 +44,7 @@ public class AddPointsCommand extends Command {
 
         int xp = Integer.parseInt(arguments[2]);
 
-        Player data = PlayerController.INSTANCE.get(member.getIdLong());
+        Player data = this.playerController.get(member.getIdLong());
         data.setRankedPoints(data.getRankedPoints() + xp);
 
         data.updateRank();

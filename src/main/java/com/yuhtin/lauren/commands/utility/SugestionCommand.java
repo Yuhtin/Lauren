@@ -3,9 +3,11 @@ package com.yuhtin.lauren.commands.utility;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.models.enums.SugestionStage;
 import com.yuhtin.lauren.models.objects.Sugestion;
+import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Setter;
 import net.dv8tion.jda.api.entities.PrivateChannel;
@@ -113,8 +115,10 @@ public class SugestionCommand extends Command {
     }
 
     private void checkReactions(Sugestion sugestion, Runnable cancelRunnable) {
+
+        Lauren lauren = Startup.getLauren();
         waiter.waitForEvent(PrivateMessageReactionAddEvent.class,
-                privateMessage -> privateMessage.getUserIdLong() != LaurenStartup.getInstance().getBot().getShards().get(0).getSelfUser().getIdLong()
+                privateMessage -> privateMessage.getUserIdLong() != lauren.getBot().getShards().get(0).getSelfUser().getIdLong()
                         && sugestion.getMessage().getIdLong() == privateMessage.getReaction().getMessageIdLong()
                         && (privateMessage.getReactionEmote().getIdLong() == 704295025374265387L
                         || privateMessage.getReactionEmote().getIdLong() == 704295026036834375L),
@@ -137,10 +141,10 @@ public class SugestionCommand extends Command {
                         return;
                     }
 
-                    TextChannel channel = LaurenStartup.getInstance().getGuild().getTextChannelsByName("sugestões", true).get(0);
-                    if (Utilities.INSTANCE.isPrime(LaurenStartup.getInstance().getGuild().getMemberById(privateMessage.getUserIdLong()))) {
+                    TextChannel channel = lauren.getGuild().getTextChannelsByName("sugestões", true).get(0);
+                    if (Utilities.INSTANCE.isPrime(lauren.getGuild().getMemberById(privateMessage.getUserIdLong()))) {
 
-                        channel = LaurenStartup.getInstance().getGuild().getTextChannelsByName("sugestões-premium", true).get(0);
+                        channel = lauren.getGuild().getTextChannelsByName("sugestões-premium", true).get(0);
 
                     }
 

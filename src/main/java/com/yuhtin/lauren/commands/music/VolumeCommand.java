@@ -16,13 +16,15 @@ public class VolumeCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
+
+        TrackManager trackManager = TrackManager.of(event.getGuild());
         if (!Utilities.INSTANCE.isDJ(event.getMember(), event.getChannel(), false)) {
-            event.getChannel().sendMessage("\uD83D\uDD0A Meu volume atual está em: `" + TrackManager.get().player.getVolume() + "%`").queue();
+            event.getChannel().sendMessage("\uD83D\uDD0A Meu volume atual está em: `" + trackManager.getPlayer().getVolume() + "%`").queue();
             return;
         }
 
         if (event.getArgs().isEmpty()) {
-            event.getChannel().sendMessage("\uD83D\uDD0A Meu volume atual está em: `" + TrackManager.get().player.getVolume() + "%`").queue();
+            event.getChannel().sendMessage("\uD83D\uDD0A Meu volume atual está em: `" + trackManager.getPlayer().getVolume() + "%`").queue();
             event.getChannel().sendMessage("\uD83D\uDCA2 Eita calma ai, se quiser mudar o volume, insira um valor de `1 a 100` (Padrão: 25)").queue();
             return;
         }
@@ -36,7 +38,7 @@ public class VolumeCommand extends Command {
             return;
         }
 
-        TrackManager.get().player.setVolume(volume);
+        trackManager.getPlayer().setVolume(volume);
         event.getChannel().sendMessage("♻️ Opaaaa, você setou o volume dos meus batidões para `" + volume + "%`").queue();
     }
 }

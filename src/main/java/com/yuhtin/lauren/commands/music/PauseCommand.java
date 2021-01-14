@@ -20,8 +20,10 @@ public class PauseCommand extends Command {
         if (TrackUtils.get().isIdle(event.getTextChannel())) return;
         if (!Utilities.INSTANCE.isDJ(event.getMember(), event.getTextChannel(), true)) return;
 
-        TrackManager.get().player.setPaused(!TrackManager.get().player.isPaused());
-        String message = TrackManager.get().player.isPaused() ?
+        TrackManager trackManager = TrackManager.of(event.getGuild());
+        trackManager.getPlayer().setPaused(!trackManager.getPlayer().isPaused());
+
+        String message = trackManager.getPlayer().isPaused() ?
                 "\uD83E\uDD7A Taxaram meu batidão, espero que me liberem logo"
                 : "\uD83E\uDD73 Liberaram meu batidão uhhuuuu";
         event.getChannel().sendMessage(message).queue();

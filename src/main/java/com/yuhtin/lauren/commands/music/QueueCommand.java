@@ -32,7 +32,8 @@ public class QueueCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        TrackManager trackManager = TrackManager.get();
+
+        TrackManager trackManager = TrackManager.of(event.getGuild());
         if (trackManager.getQueuedTracks().isEmpty()) {
             event.getChannel().sendMessage("\uD83D\uDCCC Eita, não tem nenhum batidão pra tocar, adiciona uns ai <3").queue();
             return;
@@ -59,17 +60,17 @@ public class QueueCommand extends Command {
         String timeInLetter = TrackUtils.get().getTimeStamp(totalTime);
         builder.setText((number, number2) -> {
             StringBuilder stringBuilder = new StringBuilder();
-            if (trackManager.player.getPlayingTrack() != null) {
+            if (trackManager.getPlayer().getPlayingTrack() != null) {
 
-                stringBuilder.append(trackManager.player.isPaused() ? "\u23F8" : "\u25B6")
+                stringBuilder.append(trackManager.getPlayer().isPaused() ? "\u23F8" : "\u25B6")
                         .append(" **")
-                        .append(trackManager.player.getPlayingTrack().getInfo().title)
+                        .append(trackManager.getPlayer().getPlayingTrack().getInfo().title)
                         .append("**")
                         .append(" - ")
                         .append("`")
-                        .append(TrackUtils.get().getTimeStamp(trackManager.player.getPlayingTrack().getPosition()))
+                        .append(TrackUtils.get().getTimeStamp(trackManager.getPlayer().getPlayingTrack().getPosition()))
                         .append(" / ")
-                        .append(TrackUtils.get().getTimeStamp(trackManager.player.getPlayingTrack().getInfo().length))
+                        .append(TrackUtils.get().getTimeStamp(trackManager.getPlayer().getPlayingTrack().getInfo().length))
                         .append("`")
                         .append("\n");
 
