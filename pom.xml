@@ -6,7 +6,7 @@
 
     <groupId>com.yuhtin</groupId>
     <artifactId>lauren</artifactId>
-    <version>1.9-SNAPSHOT</version>
+    <version>1.9.0.1-SNAPSHOT</version>
 
     <build>
 

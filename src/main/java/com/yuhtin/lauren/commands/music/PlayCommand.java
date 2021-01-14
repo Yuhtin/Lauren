@@ -25,7 +25,7 @@ public class PlayCommand extends Command {
         }
 
         TrackManager trackManager = TrackManager.of(event.getGuild());
-        if (!trackManager.getAudio().equals(event.getMember().getVoiceState().getChannel())) {
+        if (trackManager.getAudio() != null && !trackManager.getAudio().equals(event.getMember().getVoiceState().getChannel())) {
 
             event.getChannel().sendMessage("\uD83C\uDFB6 Você precisa estar no mesmo canal que eu para usar isto").queue();
             return;
