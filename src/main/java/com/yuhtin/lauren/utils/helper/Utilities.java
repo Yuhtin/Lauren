@@ -1,13 +1,13 @@
 package com.yuhtin.lauren.utils.helper;
 
-import com.yuhtin.lauren.Lauren;
+import com.google.inject.Inject;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
-import com.yuhtin.lauren.models.enums.LogType;
+import com.yuhtin.lauren.models.objects.Config;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,7 +16,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -25,45 +27,42 @@ public class Utilities {
 
     public static final Utilities INSTANCE = new Utilities();
 
+    @Inject private Logger logger;
+    @Inject private Config config;
+    @Inject private ShardManager shardManager;
+
     public boolean isPermission(Member member, MessageChannel channel, Permission permission, boolean showMessage) {
+
         if (!member.hasPermission(permission)) {
+
             if (!showMessage) return false;
 
-            MessageAction message = channel.sendMessage("<a:nao:704295026036834375> Você não tem permissão para usar esta função");
-            message.queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-            Logger.log("Failed to check permissions for user " + getFullName(member.getUser()));
+            channel.sendMessage("<a:nao:704295026036834375> Você não tem permissão para usar esta função")
+                    .queue(message -> message.delete().queueAfter(5, TimeUnit.SECONDS));
+
             return false;
+
         }
+
         return true;
-    }
 
-    public boolean isCommandsChannel(Member member, MessageChannel channel) {
-        if (member.hasPermission(Permission.MESSAGE_MANAGE) || channel.getIdLong() == 704342124732350645L) return true;
-
-        channel.sendMessage("<:rindo_de_voce:751941649655136588> " +
-                "Meus comandos só estão liberados em <#704342124732350645>")
-                .queue();
-
-        return false;
-    }
-
-    public StackTraceElement[] getStackTrace() {
-        Throwable throwable = new Throwable();
-        throwable.fillInStackTrace();
-
-        return throwable.getStackTrace();
     }
 
     public boolean isOwner(MessageChannel channel, User user, boolean showMessage) {
-        if (Lauren.getInstance().getConfig().getOwnerID() != user.getIdLong()) {
-            Logger.log("Failed to check owner permission for user " + getFullName(user));
+
+        if (this.config.getOwnerID() != user.getIdLong()) {
+
             if (!showMessage) return false;
 
-            MessageAction message = channel.sendMessage("<a:nao:704295026036834375> Você não tem permissão para usar esta função");
-            message.queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+            channel.sendMessage("<a:nao:704295026036834375> Você não tem permissão para usar esta função")
+                    .queue(message -> message.delete().queueAfter(5, TimeUnit.SECONDS));
+
             return false;
+
         }
+
         return true;
+
     }
 
     public void cleanUp(Path path) throws IOException {
@@ -71,22 +70,22 @@ public class Utilities {
     }
 
     public void updateNickByLevel(Player player, int level) {
+
         if (player.isHideLevelOnNickname()) return;
 
-        Member member = Lauren.getInstance().getBot().getGuilds().get(0).getMemberById(player.getUserID());
+        Member member = this.shardManager.getShards().get(0).getGuilds().get(0).getMemberById(player.getUserID());
         if (member == null) return;
 
         String nickname = member.getNickname();
         if (nickname == null) nickname = member.getEffectiveName();
         if (nickname.contains("] ")) nickname = nickname.split("] ")[1];
 
-        nickname = Lauren.getInstance().getConfig().getFormatNickname().replace("@level", "" + level) + nickname;
+        nickname = this.config.getFormatNickname().replace("@level", "" + level) + nickname;
 
         if (nickname.length() > 32) nickname = nickname.substring(0, 32);
 
-        try {
-            member.modifyNickname(nickname).queue();
-        } catch (HierarchyException ignored) { }
+        try { member.modifyNickname(nickname).queue(); } catch (HierarchyException ignored) { }
+
     }
 
     public String format(double valor) {
@@ -108,16 +107,11 @@ public class Utilities {
         return builder.toString();
     }
 
-    public String randomString() {
-        StringBuilder sb = new StringBuilder();
-        String a = "1234567890";
-        int i;
-        for (int t = 0; t < 6; t++) {
-            i = new Random().nextInt(a.length());
-            sb.append(a, i, i + 1);
-        }
+    public StackTraceElement[] getStackTrace() {
+        Throwable throwable = new Throwable();
+        throwable.fillInStackTrace();
 
-        return sb.toString();
+        return throwable.getStackTrace();
     }
 
     public void writeToZip(File file, ZipOutputStream zipStream) throws IOException {
@@ -159,25 +153,9 @@ public class Utilities {
         return member.getRoles().stream().filter(Objects::nonNull).anyMatch(role -> role.getIdLong() == 722116789055782912L);
     }
 
-    public boolean isBooster(Member member) {
-        if (member == null) return false;
-
-        return member.getRoles().stream().filter(Objects::nonNull).anyMatch(role -> role.getIdLong() == 750365511430307931L);
-    }
 
     public String protectedString(String value) {
         return value == null ? "Não informado" : value;
     }
 
-    public void foundVersion() {
-        Properties properties = new Properties();
-
-        try {
-            properties.load(Lauren.class.getClassLoader().getResourceAsStream("project.properties"));
-            Lauren.getInstance().setVersion(properties.getProperty("version"));
-        } catch (Exception exception) {
-            Logger.log("An exception was caught while searching for my client version", LogType.ERROR);
-            Logger.error(exception);
-        }
-    }
 }

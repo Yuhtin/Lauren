@@ -1,19 +1,19 @@
 package com.yuhtin.lauren.tasks;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -22,25 +22,27 @@ import java.util.Random;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+@AllArgsConstructor
 public class LootGeneratorTask {
 
-    private static final LootGeneratorTask INSTANCE = new LootGeneratorTask();
-    @Setter private EventWaiter eventWaiter;
-
-    public static LootGeneratorTask getInstance() {
-        return INSTANCE;
-    }
+    private final PlayerController playerController;
+    private final ShardManager shardManager;
+    private final EventWaiter eventWaiter;
+    private final Logger logger;
 
     public void startRunnable() {
-        Logger.log("Registered LootGeneratorTask");
+        this.logger.info("Registered LootGeneratorTask");
 
         final List<Long> allowedChannels = Arrays.asList(
-                723625569396326473L
+                700673056414367825L,
+                704342124732350645L
         );
 
         EmbedBuilder embed = new EmbedBuilder();
         embed.setAuthor("Loot Radiante", null, "https://cdn.discordapp.com/emojis/724759930653114399.png?v=1");
-        embed.setFooter("© ^Aincrad™ servidor de jogos", Lauren.getInstance().getGuild().getIconUrl());
+
+        Guild guild = shardManager.getShards().get(0).getGuilds().get(0);
+        embed.setFooter("© ^Aincrad™ servidor de jogos", guild.getIconUrl());
 
         embed.setThumbnail("https://www.pcguia.pt/wp-content/uploads/2019/11/lootbox.jpg");
         embed.setColor(Color.ORANGE);
@@ -61,21 +63,21 @@ public class LootGeneratorTask {
         TaskHelper.runTaskTimerAsync(new TimerTask() {
             @Override
             public void run() {
-                Logger.log("Running LootGeneratorTask");
+                logger.info("Running LootGeneratorTask");
 
                 if (new Random().nextInt(100) > 10) return;
 
                 int value = new Random().nextInt(allowedChannels.size());
                 long channelID = allowedChannels.get(value);
 
-                TextChannel channel = Lauren.getInstance().getGuild().getTextChannelById(channelID);
+                TextChannel channel = guild.getTextChannelById(channelID);
 
                 if (channel == null) {
-                    Logger.log("Can't select a random channel to drop a loot", LogType.ERROR);
+                    logger.warning("Can't select a random channel to drop a loot");
                     return;
                 }
 
-                Logger.log("Dropped loot on channel " + channel.getName());
+                logger.info("Dropped loot on channel " + channel.getName());
 
                 Message message = channel.sendMessage(embed.build()).complete();
                 message.addReaction(":radiante:771541052590915585").queue();
@@ -100,10 +102,11 @@ public class LootGeneratorTask {
 
                             }
 
-                            Player player = PlayerController.INSTANCE.get(event.getUserIdLong());
+                            Player player = playerController.get(event.getUserIdLong());
                             player.setLootBoxes(player.getLootBoxes() + 1);
 
-                            Logger.log("The player " + Utilities.INSTANCE.getFullName(event.getUser()) + " getted the drop");
+                            logger.info("The player " + Utilities.INSTANCE.getFullName(event.getUser()) + " getted the drop");
+
                         }, 90, TimeUnit.SECONDS,
 
                         () -> {

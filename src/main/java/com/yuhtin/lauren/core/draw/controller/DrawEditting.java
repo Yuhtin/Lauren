@@ -1,8 +1,8 @@
 package com.yuhtin.lauren.core.draw.controller;
 
-import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.draw.Draw;
 import com.yuhtin.lauren.models.enums.DrawEditingStatus;
+import com.yuhtin.lauren.startup.Startup;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.requests.RestAction;
@@ -34,7 +34,7 @@ public class DrawEditting {
                 winnersCount,
                 Instant.now().plusSeconds(seconds),
                 userID,
-                Lauren.getInstance()
+                Startup.getLauren()
                         .getBot()
                         .getTextChannelById(721881572973871125L)
                 , null, false);

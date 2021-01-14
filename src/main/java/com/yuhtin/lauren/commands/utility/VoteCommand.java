@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.commands.utility;
 
+import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.player.Player;
@@ -23,6 +24,8 @@ import java.awt.*;
 )
 public class VoteCommand extends Command {
 
+    @Inject private PlayerController playerController;
+
     @Override
     protected void execute(CommandEvent event) {
 
@@ -32,7 +35,7 @@ public class VoteCommand extends Command {
         embedBuilder.setFooter("| Todos os direitos reservados", event.getGuild().getIconUrl());
         embedBuilder.setColor(Color.GRAY);
 
-        Player player = PlayerController.INSTANCE.get(event.getAuthor().getIdLong());
+        Player player = this.playerController.get(event.getAuthor().getIdLong());
         String voteStatus = System.currentTimeMillis() > player.getVoteDelay()
                 ? "<:online:703089222021808170> Você já pode votar novamente"
                 : "<:nao_pertubar:703089222185386056> Você precisa aguardar mais "

@@ -43,7 +43,7 @@ public class Draw {
     public Message render() {
         Instant now = Instant.now();
         String time = TimeUtils.formatTime(end.toEpochMilli() - System.currentTimeMillis());
-        if (time.equalsIgnoreCase("")) {
+        if (time.equalsIgnoreCase("alguns instantes")) {
             finish();
             return null;
         }

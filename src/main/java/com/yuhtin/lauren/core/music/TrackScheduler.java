@@ -14,21 +14,26 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class TrackScheduler extends AudioEventAdapter {
     public final BlockingQueue<AudioInfo> queue;
     private final AudioPlayer player;
+    private final Guild guild;
 
-    public TrackScheduler(AudioPlayer player) {
+    public TrackScheduler(AudioPlayer player, Guild guild) {
         this.player = player;
+        this.guild = guild;
         this.queue = new LinkedBlockingQueue<>();
     }
 
     public void queue(AudioTrack track, Member author) {
+
         AudioInfo info = new AudioInfo(track, author);
         queue.add(info);
+
         if (this.player.getPlayingTrack() == null) this.player.playTrack(track);
+
     }
 
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
-        VoiceChannel voice = TrackManager.get().audio;
+        VoiceChannel voice = TrackManager.of(guild).getAudio();
         voice.getGuild().getAudioManager().openAudioConnection(voice);
     }
 

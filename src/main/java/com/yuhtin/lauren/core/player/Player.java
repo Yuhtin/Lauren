@@ -1,22 +1,26 @@
 package com.yuhtin.lauren.core.player;
 
-import com.yuhtin.lauren.Lauren;
+import com.google.inject.Inject;
 import com.yuhtin.lauren.core.logger.Logger;
+import com.yuhtin.lauren.core.player.impl.Entity;
 import com.yuhtin.lauren.core.punish.PunishmentType;
-import com.yuhtin.lauren.core.statistics.controller.StatsController;
+import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.core.xp.Level;
 import com.yuhtin.lauren.core.xp.XpController;
-import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.enums.Rank;
-import com.yuhtin.lauren.core.player.impl.Entity;
+import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Data
@@ -24,6 +28,11 @@ import java.util.concurrent.TimeUnit;
 public class Player
         extends Entity
         implements Serializable {
+
+    @Inject private static Logger logger;
+    @Inject private static StatsController statsController;
+    @Inject private static XpController xpController;
+    private static Guild guild = Startup.getLauren().getGuild();
 
     private Map<PunishmentType, Long> punishs = new HashMap<>();
 
@@ -34,14 +43,15 @@ public class Player
     private int votes = 0;
     private int level = 0;
     private int money = 100;
-    private int experience = 0;
     private int lootBoxes = 0;
     private int rankedPoints = 0;
     private int totalEvents = 0;
     private int keys = 0;
 
     private boolean hideLevelOnNickname = false;
-    private boolean abbleToDaily = true;
+
+    private transient int experience = 0;
+    private transient boolean abbleToDaily = true;
 
     private Rank rank = Rank.NOTHING;
 
@@ -50,31 +60,28 @@ public class Player
     }
 
     public void updateLevel(int level) {
-        this.level = level;
-        new Thread(() -> Utilities.INSTANCE.updateNickByLevel(this, level)).start();
 
-        List<Long> rolesToGive = XpController.getInstance()
+        this.level = level;
+
+        List<Long> rolesToGive = xpController
                 .getLevelByXp()
                 .get(level)
                 .getRolesToGive();
 
         List<Long> rolesToRemove = new ArrayList<>();
-        if (level >= 10) {
-            for (Integer integer : XpController.getInstance().getLevelByXp().keySet()) {
-                if (integer >= level) break;
+        for (Integer integer : xpController.getLevelByXp().keySet()) {
+            if (integer >= level) break;
 
-                Level tempLevel = XpController.getInstance().getLevelByXp().get(integer);
-                if (tempLevel.getRolesToGive().isEmpty()) continue;
+            Level tempLevel = xpController.getLevelByXp().get(integer);
+            if (tempLevel.getRolesToGive().isEmpty()) continue;
 
-                for (Long roleID : tempLevel.getRolesToGive()) {
+            for (Long roleID : tempLevel.getRolesToGive()) {
 
-                    if (roleID.equals(722957999949348935L)
-                            || roleID.equals(722116789055782912L)
-                            || roleID.equals(770371418177011713L)) continue;
+                if (roleID.equals(722957999949348935L)
+                        || roleID.equals(722116789055782912L)
+                        || roleID.equals(770371418177011713L)) continue;
 
-                    rolesToRemove.add(roleID);
-                }
-
+                rolesToRemove.add(roleID);
             }
 
         }
@@ -83,25 +90,29 @@ public class Player
 
             for (long roleID : rolesToGive) {
 
-                Role role = Lauren.getInstance().getGuild().getRoleById(roleID);
+                Role role = guild.getRoleById(roleID);
                 if (role == null) {
-                    Logger.log("Role is null", LogType.ERROR);
+
+                    logger.warning("Role is null");
                     continue;
+
                 }
 
-                Lauren.getInstance().getGuild().addRoleToMember(userID, role).queue();
+                guild.addRoleToMember(userID, role).queue();
 
             }
 
             for (long roleID : rolesToRemove) {
 
-                Role role = Lauren.getInstance().getGuild().getRoleById(roleID);
+                Role role = guild.getRoleById(roleID);
                 if (role == null) {
-                    Logger.log("Role is null", LogType.ERROR);
+
+                    logger.warning("Role is null");
                     continue;
+
                 }
 
-                Lauren.getInstance().getGuild().removeRoleFromMember(userID, role).queue();
+                guild.removeRoleFromMember(userID, role).queue();
 
             }
         }
@@ -115,14 +126,18 @@ public class Player
 
         }
 
-        if (level == 30) message = "<:oi:762303876732420176> O jogador <@" + userID + "> tornou-se DJ";
+        TextChannel channel = guild.getTextChannelById(770393139516932158L);
+        if (channel != null) {
 
-        TextChannel channel = Lauren.getInstance().getBot().getTextChannelById(770393139516932158L);
-        if (channel != null) channel.sendMessage(message).queue();
+            channel.sendMessage(message).queue();
+            if (level == 30)
+                channel.sendMessage("<:oi:762303876732420176> O jogador <@" + userID + "> tornou-se DJ").queue();
+
+        }
 
         Utilities.INSTANCE.updateNickByLevel(this, level);
+        statsController.getStats("Evoluir Nível").suplyStats(1);
 
-        StatsController.get().getStats("Evoluir Nível").suplyStats(1);
     }
 
 
@@ -160,9 +175,9 @@ public class Player
         experience += quantity;
 
         int nextLevel = level + 1;
-        if (XpController.getInstance().canUpgrade(nextLevel, experience)) updateLevel(nextLevel);
+        if (xpController.canUpgrade(nextLevel, experience)) updateLevel(nextLevel);
 
-        StatsController.get().getStats("Ganhar XP").suplyStats(1);
+        statsController.getStats("Ganhar XP").suplyStats(1);
 
         return this;
     }

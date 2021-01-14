@@ -18,7 +18,7 @@ public class LeaveCommand extends Command {
     protected void execute(CommandEvent event) {
         if (!Utilities.INSTANCE.isDJ(event.getMember(), event.getTextChannel(), true)) return;
 
-        TrackManager.get().destroy();
+        TrackManager.of(event.getGuild()).destroy();
         event.getChannel()
                 .sendMessage("Que ⁉️ Pensei que estavam gostando do batidão \uD83D\uDC94 Prometo que da próxima será melhor")
                 .queue();

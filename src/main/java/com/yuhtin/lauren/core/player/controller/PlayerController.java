@@ -1,29 +1,33 @@
 package com.yuhtin.lauren.core.player.controller;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.core.player.OldPlayer;
 import com.yuhtin.lauren.core.player.Player;
+import com.yuhtin.lauren.sql.dao.PlayerDAO;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
-import com.yuhtin.lauren.utils.serialization.player.PlayerSerializer;
-import com.yuhtin.lauren.utils.serialization.Serializer;
+import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Singleton
 public class PlayerController {
 
-    public static final PlayerController INSTANCE = new PlayerController();
+    @Getter @Inject private PlayerDAO playerDAO;
+    @Inject private Logger logger;
+
     private final Map<Long, Player> cache = new HashMap<>();
 
     public void savePlayers() {
-        Logger.log("Saving all players, the bot may lag for a bit");
+        this.logger.info("Saving all players, the bot may lag for a bit");
 
         TaskHelper.runAsync(() -> {
-            cache.forEach(PlayerDatabase::save);
-            cache.clear();
+            this.cache.values().forEach(this.playerDAO::updatePlayer);
+            this.cache.clear();
         });
 
-        Logger.log("Saved all players");
+        this.logger.info("Saved all players");
     }
 
     public Player get(long userID) {
@@ -31,32 +35,32 @@ public class PlayerController {
 
         if (player == null) {
 
-            String data = PlayerDatabase.loadPlayer(userID);
-            if (data.equalsIgnoreCase("")) player = new Player(userID);
+            Player loadedPlayer = this.playerDAO.findById(userID);
+            if (loadedPlayer == null) {
 
-            else {
+                player = new Player(userID);
+                this.playerDAO.insertPlayer(player);
 
-                Player deserialize = PlayerSerializer.deserialize(data);
-                if (deserialize.getRank() == null) {
+            } else {
+
+                if (loadedPlayer.getRank() == null) {
                     // execute conversion
 
-                    Player tempPlayer = new Player(userID);
-                    OldPlayer oldPlayer = Serializer.GSON.fromJson(data, OldPlayer.class);
+                    player = new Player(userID);
 
-                    tempPlayer.setExperience(oldPlayer.getExperience());
-                    tempPlayer.setMoney(oldPlayer.getMoney());
-                    tempPlayer.setLevel(oldPlayer.getLevel());
+                    player.setExperience(loadedPlayer.getExperience());
+                    player.setMoney(loadedPlayer.getMoney());
+                    player.setLevel(loadedPlayer.getLevel());
 
-                    player = tempPlayer;
-                    Logger.log("Converted data of player " + userID + " to new Player class");
+                    this.logger.info("Converted data of player " + userID + " to new Player class");
 
-                } else player = deserialize;
+                } else player = loadedPlayer;
 
-                Logger.log("Loading player " + userID + ": " + player.toString());
-                if (deserialize.getPunishs() == null) deserialize.setPunishs(new HashMap<>());
+                this.logger.info("Loading player " + userID);
+                if (loadedPlayer.getPunishs() == null) loadedPlayer.setPunishs(new HashMap<>());
             }
 
-            cache.put(userID, player);
+            this.cache.put(userID, player);
 
         }
 

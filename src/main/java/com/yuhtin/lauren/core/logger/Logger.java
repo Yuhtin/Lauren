@@ -1,23 +1,43 @@
 package com.yuhtin.lauren.core.logger;
 
-import com.yuhtin.lauren.Lauren;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.utils.helper.Utilities;
-import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
+/**
+ * @author Yuhtin
+ * Github: https://github.com/Yuhtin
+ */
+
+@Singleton
 public class Logger {
 
-    public final String message;
+    @Inject private static LoggerController loggerController;
 
-    public static void error(Exception exception) {
-        log(exception.getLocalizedMessage(), LogType.ERROR);
+    public void log(LogType logType, String message, Exception exception) {
+
+        log(message, logType);
+        exception.printStackTrace();
+
     }
 
-    public static void log(Object message, LogType logType) {
+    public void info(String message) {
+        log(message, LogType.INFO);
+    }
+
+    public void warning(String message) {
+        log(message, LogType.WARNING);
+    }
+
+    public void severe(String message) {
+        log(message, LogType.SEVERE);
+    }
+
+    public void log(Object message, LogType logType) {
         if (message == null) message = "Generated a null content";
 
         StackTraceElement[] stackTrace = Utilities.INSTANCE.getStackTrace();
@@ -39,20 +59,17 @@ public class Logger {
         message = time + logType.toString() + "> " + "[" + className + "] " + message.toString();
 
         System.out.println(message.toString());
-        new Logger(message.toString()).save();
+        loggerController.toFile(message.toString());
     }
 
-    public static void log(String... message) {
+    public void log(String... message) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < message.length; i++) {
             if (i + 1 == message.length) builder.append(message[i]);
             else builder.append(message[i]).append("\n");
         }
 
-        log(builder.toString(), LogType.LOG);
+        log(builder.toString(), LogType.INFO);
     }
 
-    public void save() {
-        if (Lauren.getInstance().getConfig().isLog()) LoggerController.get().toFile(message);
-    }
 }

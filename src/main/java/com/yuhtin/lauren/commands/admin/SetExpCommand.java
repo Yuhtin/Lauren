@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.commands.admin;
 
+import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.player.Player;
@@ -17,6 +18,8 @@ import java.util.concurrent.TimeUnit;
         description = "Abusar uns xpzinhos pros ademiros",
         alias = {"setxp"})
 public class SetExpCommand extends Command {
+
+    @Inject private PlayerController playerController;
 
     @Override
     protected void execute(CommandEvent event) {
@@ -38,7 +41,7 @@ public class SetExpCommand extends Command {
             return;
         }
 
-        Player player = PlayerController.INSTANCE.get(member.getIdLong());
+        Player player = this.playerController.get(member.getIdLong());
         player.gainXP(Integer.parseInt(arguments[2]));
         event.getChannel().sendMessage("Consegui setar com sucesso o XP do usuário inserido")
                 .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));

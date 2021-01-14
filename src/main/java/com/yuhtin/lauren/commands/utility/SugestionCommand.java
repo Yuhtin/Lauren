@@ -7,6 +7,7 @@ import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.models.enums.SugestionStage;
 import com.yuhtin.lauren.models.objects.Sugestion;
+import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Setter;
 import net.dv8tion.jda.api.entities.PrivateChannel;
@@ -68,7 +69,7 @@ public class SugestionCommand extends Command {
                 .message(privateChannel.sendMessage("Loading").complete())
                 .user(event.getAuthor())
                 .reason(null)
-                .sugestion(null)
+                .corp(null)
                 .build();
 
         builder.getMessage().addReaction("a:nao:704295026036834375").complete();
@@ -94,7 +95,7 @@ public class SugestionCommand extends Command {
                     String message = privateMessage.getMessage().getContentRaw();
                     if (stage == SugestionStage.SUGESTION) {
 
-                        sugestion.setSugestion(message);
+                        sugestion.setCorp(message);
                         sugestion.setStage(SugestionStage.SUGESTION_REASON);
 
                         fillForm(sugestion, cancelRunnable);
@@ -114,8 +115,10 @@ public class SugestionCommand extends Command {
     }
 
     private void checkReactions(Sugestion sugestion, Runnable cancelRunnable) {
+
+        Lauren lauren = Startup.getLauren();
         waiter.waitForEvent(PrivateMessageReactionAddEvent.class,
-                privateMessage -> privateMessage.getUserIdLong() != Lauren.getInstance().getBot().getShards().get(0).getSelfUser().getIdLong()
+                privateMessage -> privateMessage.getUserIdLong() != lauren.getBot().getShards().get(0).getSelfUser().getIdLong()
                         && sugestion.getMessage().getIdLong() == privateMessage.getReaction().getMessageIdLong()
                         && (privateMessage.getReactionEmote().getIdLong() == 704295025374265387L
                         || privateMessage.getReactionEmote().getIdLong() == 704295026036834375L),
@@ -138,10 +141,10 @@ public class SugestionCommand extends Command {
                         return;
                     }
 
-                    TextChannel channel = Lauren.getInstance().getGuild().getTextChannelsByName("sugestões", true).get(0);
-                    if (Utilities.INSTANCE.isPrime(Lauren.getInstance().getGuild().getMemberById(privateMessage.getUserIdLong()))) {
+                    TextChannel channel = lauren.getGuild().getTextChannelsByName("sugestões", true).get(0);
+                    if (Utilities.INSTANCE.isPrime(lauren.getGuild().getMemberById(privateMessage.getUserIdLong()))) {
 
-                        channel = Lauren.getInstance().getGuild().getTextChannelsByName("sugestões-premium", true).get(0);
+                        channel = lauren.getGuild().getTextChannelsByName("sugestões-premium", true).get(0);
 
                     }
 

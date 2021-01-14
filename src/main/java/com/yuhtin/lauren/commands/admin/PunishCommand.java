@@ -1,11 +1,11 @@
 package com.yuhtin.lauren.commands.admin;
 
+import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.punish.PunishmentRule;
+import com.yuhtin.lauren.manager.PunishmentManager;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.utils.helper.PunishmentUtils;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -17,6 +17,8 @@ import net.dv8tion.jda.api.entities.Member;
         alias = {}
 )
 public class PunishCommand extends Command {
+
+    @Inject private PunishmentManager punishmentManager;
 
     @Override
     protected void execute(CommandEvent event) {
@@ -43,7 +45,7 @@ public class PunishCommand extends Command {
         try {
 
             PunishmentRule punishmentRule = PunishmentRule.valueOf("P" + rule.replace(".", ""));
-            PunishmentUtils.applyPunish(event.getAuthor(), target, punishmentRule, proof);
+            this.punishmentManager.applyPunish(event.getAuthor(), target, punishmentRule, proof);
 
             event.getChannel()
                     .sendMessage("<:feliz_pra_caralho:760202116504485948> " +

@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.events;
 
+import com.google.inject.Inject;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.service.CommandCache;
 import com.yuhtin.lauren.utils.helper.LevenshteinCalculator;
@@ -11,6 +12,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import java.util.concurrent.TimeUnit;
 
 public class ChatMessage extends ListenerAdapter {
+
+    @Inject private PlayerController playerController;
 
     /* Earn 3 XP for every message sent */
     @Override
@@ -54,7 +57,7 @@ public class ChatMessage extends ListenerAdapter {
             return;
         }
 
-        PlayerController.INSTANCE.get(event.getMember().getIdLong()).gainXP(3);
+        this.playerController.get(event.getMember().getIdLong()).gainXP(3);
     }
 
     private boolean isMusicCommand(String contentRaw) {

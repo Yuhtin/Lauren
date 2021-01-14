@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.commands.admin.draw;
 
+import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.draw.controller.DrawController;
@@ -21,6 +22,8 @@ import java.util.concurrent.TimeUnit;
         description = "Iniciar um sorteio sobre algum conteúdo",
         alias = {"sortear", "draw"})
 public class DrawCommand extends Command {
+
+    @Inject private Logger logger;
 
     @Override
     protected void execute(CommandEvent event) {
@@ -69,13 +72,13 @@ public class DrawCommand extends Command {
                         DrawController.editing = null;
 
                     } catch (Exception exception) {
-                        Logger.log("Can't send a private message for user " + Utilities.INSTANCE.getFullName(event.getMember().getUser()));
+                        this.logger.warning("Can't send a private message for user " + Utilities.INSTANCE.getFullName(event.getMember().getUser()));
                     }
                 }
             }, 2, TimeUnit.MINUTES);
 
         } catch (Exception exception) {
-            Logger.log("Can't send a private message for user " + Utilities.INSTANCE.getFullName(event.getMember().getUser()));
+            this.logger.warning("Can't send a private message for user " + Utilities.INSTANCE.getFullName(event.getMember().getUser()));
         }
     }
 }

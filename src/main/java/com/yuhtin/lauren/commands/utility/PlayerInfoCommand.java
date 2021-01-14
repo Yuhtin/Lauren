@@ -1,14 +1,13 @@
 package com.yuhtin.lauren.commands.utility;
 
+import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.core.statistics.controller.StatsController;
+import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.models.enums.LogType;
-import com.yuhtin.lauren.utils.helper.MathUtils;
 import com.yuhtin.lauren.utils.helper.TimeUtils;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -26,13 +25,17 @@ import java.util.Locale;
         alias = {"pinfo", "jogador", "playerinfo", "player", "profile", "conta"})
 public class PlayerInfoCommand extends Command {
 
+    @Inject private Logger logger;
+    @Inject private PlayerController playerController;
+    @Inject private StatsController statsController;
+
     @Override
     protected void execute(CommandEvent event) {
         Member target = event.getMessage().getMentionedMembers().isEmpty() ? event.getMember() : event.getMessage().getMentionedMembers().get(0);
-        Player player = PlayerController.INSTANCE.get(target.getIdLong());
+        Player player = this.playerController.get(target.getIdLong());
         if (player == null) {
 
-            Logger.log("Occured an error on try load player data of " + target.getIdLong(), LogType.ERROR);
+            this.logger.severe("Occured an error on try load player data of " + target.getIdLong());
 
             event.getChannel().sendMessage("Ocorreu um erro em meus dados, defusa aqui <@272879983326658570>").queue();
             event.getChannel().sendMessage("Player ID: " + target.getIdLong()).queue();
@@ -65,7 +68,7 @@ public class PlayerInfoCommand extends Command {
 
         event.getChannel().sendMessage(embed.build()).queue();
 
-        StatsController.get().getStats("Player Command").suplyStats(1);
+        this.statsController.getStats("Player Command").suplyStats(1);
     }
 
     private String subtractTime(OffsetDateTime before) {

@@ -1,9 +1,12 @@
 package com.yuhtin.lauren.tasks;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.SimplePlayer;
-import com.yuhtin.lauren.database.DatabaseController;
+import com.yuhtin.lauren.models.enums.LogType;
+import com.yuhtin.lauren.sql.connection.SQLConnection;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.serialization.player.PlayerSerializer;
 import lombok.Getter;
@@ -15,25 +18,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
+@Singleton
 public class TopXpUpdater {
-    private static final TopXpUpdater INSTANCE = new TopXpUpdater();
+
+    @Inject private Logger logger;
+    @Inject private SQLConnection sqlConnection;
+
     @Getter private String topPlayers;
 
-    public static TopXpUpdater getInstance() {
-        return INSTANCE;
-    }
-
     public void startRunnable() {
-        Logger.log("Registered TopXpUpdater task");
 
-        Connection connection = DatabaseController.get().getConnection();
+        logger.info("Registered TopXpUpdater task");
+
+        Connection connection = this.sqlConnection.findConnection();
         TaskHelper.runTaskTimerAsync(new TimerTask() {
             @Override
             public void run() {
+
                 topPlayers = "";
 
-                Logger.log("Started TopXpUpdater task");
+                logger.info("Started TopXpUpdater task");
                 long lastMillis = System.currentTimeMillis();
 
                 List<SimplePlayer> players = new ArrayList<>();
@@ -50,7 +56,7 @@ public class TopXpUpdater {
                     resultSet.close();
 
                 } catch (Exception exception) {
-                    Logger.log("Can't update top xp");
+                    logger.log(LogType.WARNING, "Can't update top xp", exception);
                     return;
                 }
 
@@ -73,7 +79,7 @@ public class TopXpUpdater {
                 players.clear();
 
                 long ms = System.currentTimeMillis() - lastMillis;
-                Logger.log("Finished TopXpUpdater task successfully in " + ms + " ms");
+                logger.info("Finished TopXpUpdater task successfully in " + ms + " ms");
 
             }
         }, 0, 30, TimeUnit.MINUTES);

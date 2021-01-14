@@ -67,7 +67,7 @@ public class JumpToTimeCommand extends Command {
 
         }
 
-        AudioTrack track = TrackManager.get().getTrackInfo().getTrack();
+        AudioTrack track = TrackManager.of(event.getGuild()).getTrackInfo().getTrack();
 
         long duration = track.getDuration();
         if (millis > duration) {

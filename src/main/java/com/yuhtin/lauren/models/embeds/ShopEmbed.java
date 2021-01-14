@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.models.embeds;
 
+import com.google.inject.Singleton;
 import com.yuhtin.lauren.models.enums.ItemType;
 import com.yuhtin.lauren.models.objects.ShopItem;
 import lombok.Getter;
@@ -10,9 +11,9 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
+@Singleton
 public class ShopEmbed {
 
-    @Getter private static final ShopEmbed instance = new ShopEmbed();
     @Getter private final EmbedBuilder embed = new EmbedBuilder();
     @Getter private final Map<String, ShopItem> shopItems = new HashMap<>();
 

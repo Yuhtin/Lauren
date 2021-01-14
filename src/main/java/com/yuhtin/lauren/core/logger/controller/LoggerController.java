@@ -1,7 +1,11 @@
 package com.yuhtin.lauren.core.logger.controller;
 
-import com.yuhtin.lauren.models.enums.LogType;
+
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.yuhtin.lauren.core.logger.Logger;
+import com.yuhtin.lauren.models.enums.LogType;
+import lombok.Data;
 import lombok.Getter;
 
 import java.io.BufferedWriter;
@@ -10,16 +14,21 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-@Getter
+/**
+ * @author Yuhtin
+ * Github: https://github.com/Yuhtin
+ */
+
+@Data
+@Singleton
 public class LoggerController {
 
-    private static LoggerController INSTANCE;
+    private File file;
+    private BufferedWriter bufferedWriter;
 
-    private final File file;
-    private final BufferedWriter bufferedWriter;
+    @Inject private Logger logger;
 
-    public LoggerController() throws IOException {
-        INSTANCE = this;
+    public void create() {
 
         // create a infinite log archives
         String prefix = "logs/log-";
@@ -34,21 +43,21 @@ public class LoggerController {
         file = new File(prefix + i + ".log");
         this.file = file;
 
-        // try to create log file
-        file.createNewFile();
+        try {
+            // try to create log file
+            file.createNewFile();
 
-        // starting log
+            // starting log
+            bufferedWriter = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
+
+        } catch (Exception exception) {
+            return;
+        }
+
         LocalDateTime now = LocalDateTime.now();
-
-        bufferedWriter = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
-
-        Logger.log("Registering logs to " + file.getName(), LogType.STARTUP);
-        Logger.log("Lauren is now registering logs", LogType.STARTUP);
-        Logger.log("Starting log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s", LogType.STARTUP);
-    }
-
-    public static LoggerController get() {
-        return INSTANCE;
+        this.logger.log("Registering logs to " + file.getName(), LogType.STARTUP);
+        this.logger.log("Lauren is now registering logs", LogType.STARTUP);
+        this.logger.log("Starting log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s", LogType.STARTUP);
     }
 
     public void toFile(String log) {
@@ -57,7 +66,7 @@ public class LoggerController {
             bufferedWriter.newLine();
             bufferedWriter.flush();
         } catch (IOException exception) {
-            Logger.log("Attemp to save log: " + log, LogType.WARN);
+            this.logger.warning("Attemp to save log: " + log);
         }
     }
 }

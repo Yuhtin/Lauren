@@ -1,8 +1,8 @@
 package com.yuhtin.lauren.commands.utility;
 
+import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
@@ -11,7 +11,6 @@ import com.yuhtin.lauren.models.enums.Reward;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Getter;
-import lombok.SneakyThrows;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
 
@@ -28,11 +27,13 @@ public class LootBoxCommand extends Command {
 
     boolean running = false;
 
-    @SneakyThrows
+    @Inject private Logger logger;
+    @Inject private PlayerController playerController;
+
     @Override
     protected void execute(CommandEvent event) {
 
-        Player player = PlayerController.INSTANCE.get(event.getAuthor().getIdLong());
+        Player player = this.playerController.get(event.getAuthor().getIdLong());
         if (player.getLootBoxes() == 0) {
             event.getChannel().sendMessage("<:fodane:764085078187442176> Você não tem lootboxes para abrir").queue();
             return;
@@ -94,15 +95,15 @@ public class LootBoxCommand extends Command {
                     switch (gainReward) {
                         case ROLE:
 
-                            Role role = Lauren.getInstance().getGuild().getRoleById(771541080634032149L);
+                            Role role = event.getGuild().getRoleById(771541080634032149L);
                             if (role == null) {
 
-                                Logger.log("The player " + Utilities.INSTANCE.getFullName(event.getAuthor()) + " win the Lucky role but i can't give");
+                                logger.warning("The player " + Utilities.INSTANCE.getFullName(event.getAuthor()) + " win the Lucky role but i can't give");
                                 break;
 
                             }
 
-                            Lauren.getInstance().getGuild().addRoleToMember(event.getMember(), role).queue();
+                            event.getGuild().addRoleToMember(event.getMember(), role).queue();
                             break;
 
                         case MONEY:

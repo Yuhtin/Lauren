@@ -38,7 +38,7 @@ public class InstagramCommand extends Command {
         GetConnectionFactory connection = new GetConnectionFactory("https://www.instagram.com/" + instagram + "/?__a=1");
 
         String response = connection.buildConnection();
-        if (response == null || response.equalsIgnoreCase("") || response.equalsIgnoreCase("{}")) {
+        if (response == null || response.equalsIgnoreCase("") || !response.contains("{")) {
             event.getChannel().sendMessage("<:eita:764084277226373120> Esse perfil ai não tem no meu livro não, tenta outro").queue();
             return;
         }

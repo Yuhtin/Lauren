@@ -1,13 +1,15 @@
 package com.yuhtin.lauren.commands.admin;
 
+import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.mysql.cj.exceptions.NumberOutOfRange;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.xp.Level;
 import com.yuhtin.lauren.core.xp.XpController;
-import com.yuhtin.lauren.database.DatabaseController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.models.enums.LogType;
+import com.yuhtin.lauren.sql.connection.SQLConnection;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
@@ -21,6 +23,10 @@ import java.sql.PreparedStatement;
         description = "Configurar os rewards de um level"
 )
 public class ConfigLevelCommand extends Command {
+
+    @Inject private Logger logger;
+    @Inject private XpController xpController;
+    @Inject private SQLConnection sqlConnection;
 
     @Override
     protected void execute(CommandEvent event) {
@@ -41,7 +47,7 @@ public class ConfigLevelCommand extends Command {
             return;
         }
 
-        Level level = XpController.getInstance().getLevelByXp().get(identifier);
+        Level level = this.xpController.getLevelByXp().get(identifier);
         level.getRolesToGive().clear();
 
         if (event.getMessage().getMentionedRoles().isEmpty()) {
@@ -58,11 +64,11 @@ public class ConfigLevelCommand extends Command {
         }
 
         String sql = "update `lauren_levelrewards` set `rewards` = '" + value.toString() + "' where `level` = '" + identifier + "'";
-        try (PreparedStatement statement = DatabaseController.get().getConnection().prepareStatement(sql)) {
+        try (PreparedStatement statement = this.sqlConnection.findConnection().prepareStatement(sql)) {
 
             statement.executeUpdate();
         } catch (Exception exception) {
-            Logger.error(exception);
+            this.logger.log(LogType.WARNING, "Can't update level rewards", exception);
         }
 
         event.getChannel()

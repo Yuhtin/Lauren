@@ -6,7 +6,7 @@
 
     <groupId>com.yuhtin</groupId>
     <artifactId>lauren</artifactId>
-    <version>1.7.5.2-SNAPSHOT</version>
+    <version>1.9-SNAPSHOT</version>
 
     <build>
 
@@ -29,7 +29,7 @@
                     <archive>
 
                         <manifest>
-                            <mainClass>com.yuhtin.lauren.Lauren</mainClass>
+                            <mainClass>com.yuhtin.lauren.startup.Startup</mainClass>
                         </manifest>
 
                     </archive>
@@ -61,6 +61,12 @@
     <dependencies>
 
         <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>4.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.eikefs</groupId>
             <artifactId>sql-provider</artifactId>
             <version>1.0.1</version>
@@ -71,13 +77,6 @@
             <groupId>com.github.stanjg</groupId>
             <artifactId>Ptero4J</artifactId>
             <version>master-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sachinhandiekar</groupId>
-            <artifactId>jMusixMatch</artifactId>
-            <version>1.1.4</version>
             <scope>compile</scope>
         </dependency>
 
@@ -134,8 +133,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>29.0-jre</version>
-            <scope>compile</scope>
+            <version>30.1-jre</version>
         </dependency>
 
         <dependency>

@@ -1,8 +1,9 @@
 package com.yuhtin.lauren.service;
 
-import com.yuhtin.lauren.core.statistics.controller.StatsController;
+import com.google.inject.Inject;
+import com.yuhtin.lauren.core.statistics.StatsController;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,6 +11,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class GetConnectionFactory {
+
+    @Inject private static StatsController statsController;
 
     final String url;
 
@@ -35,7 +38,7 @@ public class GetConnectionFactory {
             while ((line = reader.readLine()) != null) responseContent.append(line);
             reader.close();
 
-            StatsController.get().getStats("Requests Externos").suplyStats(1);
+            statsController.getStats("Requests Externos").suplyStats(1);
         } catch (IOException exception) {
             return null;
         }

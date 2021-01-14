@@ -1,27 +1,25 @@
 package com.yuhtin.lauren;
 
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.yuhtin.lauren.commands.music.QueueCommand;
-import com.yuhtin.lauren.commands.utility.ShopCommand;
-import com.yuhtin.lauren.commands.utility.SugestionCommand;
-import com.yuhtin.lauren.core.logger.Logger;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.yuhtin.lauren.core.bot.LaurenDAO;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.core.statistics.controller.StatsDatabase;
+import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.core.xp.XpController;
-import com.yuhtin.lauren.database.Data;
-import com.yuhtin.lauren.database.DatabaseController;
-import com.yuhtin.lauren.database.types.MySQL;
-import com.yuhtin.lauren.database.types.SQLite;
+import com.yuhtin.lauren.events.BotReadyEvent;
+import com.yuhtin.lauren.guice.LaurenModule;
+import com.yuhtin.lauren.manager.CommandManager;
+import com.yuhtin.lauren.manager.EventsManager;
+import com.yuhtin.lauren.manager.TimerManager;
 import com.yuhtin.lauren.models.embeds.ShopEmbed;
 import com.yuhtin.lauren.models.enums.LogType;
-import com.yuhtin.lauren.models.manager.CommandManager;
-import com.yuhtin.lauren.models.manager.EventsManager;
-import com.yuhtin.lauren.models.manager.TimerManager;
-import com.yuhtin.lauren.models.objects.Config;
+import com.yuhtin.lauren.models.exceptions.GuiceInjectorException;
 import com.yuhtin.lauren.service.LocaleManager;
 import com.yuhtin.lauren.service.PterodactylConnection;
+import com.yuhtin.lauren.sql.dao.PlayerDAO;
+import com.yuhtin.lauren.sql.dao.StatisticDAO;
 import com.yuhtin.lauren.tasks.*;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
@@ -30,202 +28,255 @@ import lombok.Getter;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
-import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
 import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Paths;
-import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Scanner;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipOutputStream;
 
-@lombok.Data
-public class Lauren {
+public class Lauren extends LaurenDAO {
 
-    @Getter
-    private static Lauren instance = new Lauren();
+    // DAO's
+    @Inject private PlayerDAO playerDAO;
+    @Inject private StatisticDAO statisticDAO;
 
-    private ShardManager bot;
-    private Guild guild;
-    private long startTime;
-    private Config config;
-    private String version;
+    // Controllers
+    @Inject private XpController xpController;
+    @Inject private PlayerController playerController;
+    @Inject private StatsController statsController;
+    @Inject private LoggerController loggerController;
 
-    public static void main(String[] args) throws InterruptedException {
-        instance.setStartTime(System.currentTimeMillis());
+    // Managers
+    @Inject private LocaleManager localeManager;
+    @Inject private TimerManager timerManager;
 
-        instance.setConfig(Config.startup());
-        if (instance.getConfig() == null) {
-            Logger.log("There was an error loading the config", LogType.ERROR);
-            return;
-        }
+    // Others
+    @Inject private PterodactylConnection pterodactylConnection;
+    @Inject private TopXpUpdater topXpUpdater;
+    @Inject private ShopEmbed shopEmbed;
 
-        if (instance.getConfig().isLog()) {
-            try {
-                new LoggerController();
-            } catch (Exception exception) {
-                instance.getConfig().setLog(false);
-                Logger.log("I founded an error on load LoggerController, logs turned off", LogType.ERROR);
-            }
-        }
+    @Getter private Guild guild;
 
-        EventWaiter eventWaiter = new EventWaiter();
-        Thread buildThread = new Thread(() -> {
-            try {
-                Utilities.INSTANCE.foundVersion();
-                processDatabase(instance.getConfig().getDatabaseType());
-                instance.setBot(DefaultShardManagerBuilder.create(instance.getConfig().getToken(), Arrays.asList(GatewayIntent.values()))
-                        .setAutoReconnect(true)
-                        .build());
+    public Lauren(String botName) {
+        this.setBotName(botName);
+    }
 
-            } catch (LoginException exception) {
-                Logger.log("The bot token is wrong", LogType.ERROR);
-            }
-        });
-        buildThread.start();
-        buildThread.join();
+    @Override
+    public void onLoad() throws Exception {
 
-        TaskHelper.runAsync(() -> {
+        this.setBotStartTime(System.currentTimeMillis());
+        this.setupConfig();
 
-            new EventsManager(instance.getBot(), "com.yuhtin.lauren.events");
-            new CommandManager(instance.getBot(), "com.yuhtin.lauren.commands");
+        this.configureConnection();
 
-            TimerManager timerManager = new TimerManager("com.yuhtin.lauren.timers.impl");
-            timerManager.register();
+        this.findVersion();
+        this.connectDiscord();
 
-            new PterodactylConnection(instance.getConfig().getPteroKey());
-            new Thread(Lauren::loadTasks).start();
+        this.setupGuice();
+        this.getInjector().injectMembers(this);
 
-            LocaleManager.getInstance().searchHost(instance.getConfig().getGeoIpAcessKey());
+        this.loggerController.create();
 
-            instance.getBot().addEventListener(eventWaiter);
-            instance.getBot().addEventListener(ShopCommand.getEventWaiter());
-            QueueCommand.getBuilder().setEventWaiter(eventWaiter);
-            SugestionCommand.setWaiter(eventWaiter);
-            LootGeneratorTask.getInstance().setEventWaiter(eventWaiter);
-            ShardLootTask.getInstance().setEventWaiter(eventWaiter);
+    }
 
-            XpController.getInstance();
-            ShopEmbed.getInstance().build();
-        });
+    @Override
+    public void onEnable() throws Exception {
 
+        loadSQLTables();
 
-        String[] loadNonFormated = new String[]{
+        loadCommands();
+        loadEvents();
+
+        this.timerManager.register("com.yuhtin.lauren.timers.impl");
+
+        this.pterodactylConnection.load(this.getConfig().getPteroKey());
+        this.localeManager.searchHost(this.getConfig().getGeoIpAcessKey());
+
+        this.shopEmbed.build();
+
+    }
+
+    @Override
+    public void onReady() {
+
+        loadTasks();
+
+        this.guild = this.getBot().getGuildById(700673055982354472L);
+        this.getBot().addEventListener(this.getEventWaiter());
+
+        String[] botInfo = new String[]{
                 "",
-                "Lauren v" + instance.getVersion(),
+                this.getBotName() + " v" + this.getVersion(),
                 "Author: Yuhtin#9147",
                 "",
                 "All systems has loaded",
-                "Lauren is now online"
+                this.getBotName() + " is now online"
         };
 
-        Logger.log(new AsciiBox()
+        this.getLogger().info(new AsciiBox()
                 .size(50)
                 .borders("━", "┃")
                 .corners("┏", "┓", "┗", "┛")
-                .render(loadNonFormated), LogType.STARTUP);
+                .render(botInfo)
+        );
 
-        Scanner scanner = new Scanner(System.in);
-        while (scanner.nextLine().equalsIgnoreCase("stop")) {
-            new Thread(Lauren::finish).start();
-        }
-    }
-
-    private static void loadTasks() {
-
-        TaskHelper.runTaskLater(new TimerTask() {
-            @Override
-            public void run() {
-                if (instance.getGuild() == null) finish();
-            }
-        }, 10, TimeUnit.SECONDS);
-
-        TaskHelper.runTaskTimerAsync(new TimerTask() {
-            @Override
-            public void run() {
-                StatsDatabase.save();
-                PlayerController.INSTANCE.savePlayers();
-            }
-        }, 5, 5, TimeUnit.MINUTES);
-
-        TaskHelper.runTaskTimerAsync(new PunishmentCheckerTask(), 5, 5, TimeUnit.MINUTES);
-
-        TimerCheckerTask timerCheckerTask = new TimerCheckerTask();
-        timerCheckerTask.updateCalendar();
-
-        TaskHelper.runTaskTimerAsync(timerCheckerTask, 1, 1, TimeUnit.MINUTES);
-
-        TopXpUpdater.getInstance().startRunnable();
-        LootGeneratorTask.getInstance().startRunnable();
-        ShardLootTask.getInstance().startRunnable();
+        this.getLogger().info("[3/3] Lauren is now ready");
 
     }
 
-    public static void finish() {
+    @Override
+    public void onDisable() throws Exception {
 
-        if (DatabaseController.getDatabase() != null) {
+        if (!this.getSqlConnection().findConnection().isClosed()) {
 
-            PlayerController.INSTANCE.savePlayers();
-            StatsDatabase.save();
+            this.playerController.savePlayers();
+            this.statsController.getStats().values().forEach(this.statisticDAO::updateStatistic);
+
+            this.getLogger().info("Saved player's and statistic's data");
+
+        } else {
+
+            this.getLogger().warning("SQLConnection is closed, reconfiguring");
+            this.configureConnection();
+
+            this.getLogger().info("Executing onDisable again");
+            onDisable();
+            return;
 
         }
 
-        TrackManager.get().destroy();
-        TaskHelper.runTaskLater(new TimerTask() {
-            @Override
-            public void run() {
-                saveLog();
-            }
-        }, 6, TimeUnit.SECONDS);
+        TrackManager.getGuildTrackManagers().values().forEach(TrackManager::destroy);
+        this.getLogger().info("Destroyed all track managers");
+
+        this.getLogger().info(this.getBotName() + " disabled");
+
+        LocalDateTime now = LocalDateTime.now();
+        File file = this.loggerController.getFile();
+
+        this.getLogger().log("Compressing the log '" + file.getName() + "' to a zip file", LogType.FINISH);
+        this.getLogger().log("Ending log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s", LogType.FINISH);
+
+        FileOutputStream outputStream = new FileOutputStream(file.getPath().split("\\.")[0] + ".zip");
+        ZipOutputStream zipFileOutput = new ZipOutputStream(outputStream);
+
+        Utilities.INSTANCE.writeToZip(file, zipFileOutput);
+        Utilities.INSTANCE.cleanUp(Paths.get(file.getPath()));
+
+        zipFileOutput.close();
+        outputStream.close();
+
+        this.getLogger().info("Zipped last log file successfully");
+
     }
 
-    private static void saveLog() {
+    @Override
+    public void connectDiscord() throws LoginException {
+
+        this.setBot(DefaultShardManagerBuilder.createDefault(this.getConfig().getToken())
+                .setMemberCachePolicy(MemberCachePolicy.ALL)
+                .setChunkingFilter(ChunkingFilter.ALL)
+                .enableIntents(Arrays.asList(GatewayIntent.values()))
+                .setAutoReconnect(true)
+                .addEventListeners(new BotReadyEvent(this))
+                .build()
+        );
+
+    }
+
+    @Override
+    public void loadCommands() throws IOException {
+
+        CommandManager commandManager = new CommandManager(
+                this.getBot(),
+                this.getInjector(),
+                this.getLogger(),
+                "com.yuhtin.lauren.commands"
+        );
+
+        commandManager.load();
+
+    }
+
+    @Override
+    public void loadEvents() throws IOException {
+
+        EventsManager eventsManager = new EventsManager(this.getBot(),
+                this.getInjector(),
+                this.getLogger(),
+                "com.yuhtin.lauren.events"
+        );
+
+        eventsManager.load();
+
+    }
+
+    @Override
+    public void setupGuice() throws GuiceInjectorException {
 
         try {
-            LocalDateTime now = LocalDateTime.now();
 
-            File file = LoggerController.get().getFile();
-            Logger.log("Compressing the log '" + file.getName() + "' to a zip file", LogType.FINISH);
-            Logger.log("Ending log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s", LogType.FINISH);
+            this.setInjector(Guice.createInjector(new LaurenModule(this)));
+            this.getInjector().injectMembers(this);
+            this.getInjector().injectMembers(Utilities.INSTANCE);
 
-            FileOutputStream outputStream = new FileOutputStream(file.getPath().split("\\.")[0] + ".zip");
-            ZipOutputStream zipFileOutput = new ZipOutputStream(outputStream);
-
-            Utilities.INSTANCE.writeToZip(file, zipFileOutput);
-            Utilities.INSTANCE.cleanUp(Paths.get(file.getPath()));
-
-            zipFileOutput.close();
-            outputStream.close();
-
-            DatabaseController.getDatabase().shutdown();
-
-            Logger.log("Successfully compressed file", LogType.FINISH);
         } catch (Exception exception) {
             exception.printStackTrace();
-            Logger.log("Can't compress a log file", LogType.WARN);
+            throw new GuiceInjectorException();
         }
 
-        System.exit(0);
     }
 
-    private static void processDatabase(String databaseType) {
-        Data dataType = new SQLite();
-        if (databaseType.equalsIgnoreCase("MySQL"))
-            dataType = new MySQL(instance.getConfig().getMySqlHost(),
-                    instance.getConfig().getMySqlUser(),
-                    instance.getConfig().getMySqlPassword(),
-                    instance.getConfig().getMySqlDatabase());
+    private void loadSQLTables() {
 
-        Connection connection = dataType.openConnection();
+        this.playerDAO.createTable();
+        this.xpController.load();
 
-        DatabaseController.get().constructDatabase(connection);
-        DatabaseController.get().loadAll();
+        this.statisticDAO.createTable();
+        this.statisticDAO.findAllStats().forEach(this.statsController::insertStats);
 
-        Logger.log("Connection to database successful", LogType.STARTUP);
+    }
+
+    private void loadTasks() {
+
+        AutoSaveTask autoSaveTask = new AutoSaveTask(
+                this.statsController,
+                this.playerController,
+                this.getBot(),
+                this.getLogger()
+        );
+
+        TimerCheckerTask timerCheckerTask = new TimerCheckerTask(
+                this.timerManager,
+                this.getLogger()
+        );
+
+        LootGeneratorTask lootGeneratorTask = new LootGeneratorTask(
+                this.playerController,
+                this.getBot(),
+                this.getEventWaiter(),
+                this.getLogger()
+        );
+
+        ShardLootTask shardLootTask = new ShardLootTask(
+                this.playerController,
+                this.getBot(),
+                this.getEventWaiter(),
+                this.getLogger()
+        );
+
+        TaskHelper.runTaskTimerAsync(autoSaveTask, 5, 5, TimeUnit.MINUTES);
+        TaskHelper.runTaskTimerAsync(timerCheckerTask, 1, 1, TimeUnit.MINUTES);
+
+        this.topXpUpdater.startRunnable();
+        lootGeneratorTask.startRunnable();
+        shardLootTask.startRunnable();
+
     }
 }

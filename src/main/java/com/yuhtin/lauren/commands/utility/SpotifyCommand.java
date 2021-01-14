@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.commands.utility;
 
+import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.logger.Logger;
@@ -22,6 +23,8 @@ import java.util.concurrent.TimeUnit;
 )
 public class SpotifyCommand extends Command {
 
+    @Inject private Logger logger;
+
     @Override
     protected void execute(CommandEvent event) {
         if (event.getMessage().getMentionedMembers().isEmpty()) {
@@ -37,16 +40,14 @@ public class SpotifyCommand extends Command {
         Member member = event.getMessage().getMentionedMembers().get(0);
         Activity activity = null;
 
-        if (member == null) {
-            Logger.log("sadasdads");
-        }
         for (Activity target : member.getActivities()) {
-            Logger.log(target.getName());
+
             if (target.getType() == Activity.ActivityType.LISTENING
                     && target.getName().equalsIgnoreCase("Spotify")) {
                 activity = target;
                 break;
             }
+
         }
 
         if (activity == null) {

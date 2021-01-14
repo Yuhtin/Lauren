@@ -1,17 +1,17 @@
 package com.yuhtin.lauren.commands.utility;
 
+import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.models.embeds.ShopEmbed;
 import com.yuhtin.lauren.models.objects.ShopItem;
+import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.helper.Utilities;
-import lombok.Getter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
@@ -30,13 +30,17 @@ import java.util.concurrent.TimeUnit;
 )
 public class ShopCommand extends Command {
 
-    @Getter private static final EventWaiter eventWaiter = new EventWaiter();
-    final Map<Long, Integer> events = new HashMap<>();
+    @Inject private ShopEmbed shopEmbed;
+    @Inject private PlayerController playerController;
+    @Inject private Logger logger;
+    @Inject private EventWaiter eventWaiter;
+
+    private final Map<Long, Integer> events = new HashMap<>();
 
     @Override
     protected void execute(CommandEvent event) {
-        EmbedBuilder embed = ShopEmbed.getInstance().getEmbed();
-        Map<String, ShopItem> shopItems = ShopEmbed.getInstance().getShopItems();
+        EmbedBuilder embed = this.shopEmbed.getEmbed();
+        Map<String, ShopItem> shopItems = this.shopEmbed.getShopItems();
 
         embed.setAuthor("Minha Lojinha v2000", null, event.getJDA().getSelfUser().getAvatarUrl());
         embed.setFooter("Bem-vindo(a) minha lojinha, eu abri ela às", event.getGuild().getIconUrl());
@@ -54,8 +58,8 @@ public class ShopCommand extends Command {
         if (events.containsKey(event.getAuthor().getIdLong())) events.replace(event.getAuthor().getIdLong(), randomInt);
         else events.put(event.getAuthor().getIdLong(), randomInt);
 
-        Player player = PlayerController.INSTANCE.get(event.getAuthor().getIdLong());
-        eventWaiter.waitForEvent(MessageReactionAddEvent.class,
+        Player player = this.playerController.get(event.getAuthor().getIdLong());
+        this.eventWaiter.waitForEvent(MessageReactionAddEvent.class,
 
                 reaction -> {
                     if (reaction.getUserIdLong() == event.getAuthor().getIdLong()
@@ -99,10 +103,10 @@ public class ShopCommand extends Command {
 
                         case PRIME:
 
-                            Role role = Lauren.getInstance().getGuild().getRoleById(722116789055782912L);
+                            Role role = Startup.getLauren().getGuild().getRoleById(722116789055782912L);
                             if (role == null) {
 
-                                Logger.log("The player "
+                                this.logger.warning("The player "
                                         + Utilities.INSTANCE.getFullName(event.getAuthor()) +
                                         " buyed Prime role, but i can't give");
                                 break;
@@ -110,7 +114,7 @@ public class ShopCommand extends Command {
                             }
 
 
-                            Lauren.getInstance()
+                            Startup.getLauren()
                                     .getGuild()
                                     .addRoleToMember(event.getAuthor().getIdLong(), role)
                                     .queue();

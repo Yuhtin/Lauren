@@ -1,7 +1,6 @@
 package com.yuhtin.lauren.models.objects;
 
-import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.models.enums.LogType;
+import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.serialization.Serializer;
 import lombok.Data;
 
@@ -10,52 +9,47 @@ import java.io.*;
 @Data
 public class Config {
 
-    private boolean log = false;
-    private boolean laurenTest = false;
+    private boolean laurenTest;
 
     private long ownerID;
     private long resgistrationId;
     private long valorantCasual;
     private long valorantRanked;
     private long poolCasual;
-    private long poolRanked = 0;
+    private long poolRanked;
 
     private String prefix;
     private String token;
     private String formatNickname;
-    private String databaseType;
-    private String mySqlUser;
-    private String mySqlHost;
-    private String mySqlPassword;
-    private String mySqlDatabase;
     private String pastebinDevKey;
     private String pteroKey;
     private String pastebinUserKey;
     private String geoIpAcessKey;
-    private String vagalumeKey = "";
+    private String vagalumeKey;
 
-    public static Config startup() {
+    // Connection info
+    private String databaseType;
+    private String username;
+    private String host;
+    private String password;
+    private String database;
+    private String sqlFile;
+
+    public static Config loadConfig(String path) {
         try {
-            File file = new File("config/config.json");
+            File file = new File(path);
             if (!file.exists()) {
 
                 if (!file.createNewFile()) return null;
-                Config config = new Config();
-                config.setPrefix("$");
-                config.setToken("Put token here");
-                config.setResgistrationId(704303594211639356L);
-                config.setOwnerID(272879983326658570L);
-                config.setFormatNickname("[@level] ");
-                config.setDatabaseType("SQLite");
-                config.setLog(true);
 
+                Config config = new Config();
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(file.getAbsolutePath()))) {
                     writer.write(Serializer.getConfig().serialize(config));
                     writer.newLine();
                     writer.flush();
                 }
 
-                Logger.log("Put a valid token in the bot's config", LogType.WARN);
+                Startup.getLauren().getLogger().warning("Put a valid token in the bot's config");
                 return null;
             }
 

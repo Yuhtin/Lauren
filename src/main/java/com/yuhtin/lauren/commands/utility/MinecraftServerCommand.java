@@ -2,7 +2,6 @@ package com.yuhtin.lauren.commands.utility;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.core.statistics.controller.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.service.GetConnectionFactory;
 import lombok.AllArgsConstructor;

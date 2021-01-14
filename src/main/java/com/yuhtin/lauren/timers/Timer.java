@@ -6,6 +6,7 @@ package com.yuhtin.lauren.timers;
  */
 public interface Timer {
 
+    String name();
     String day();
     int hour();
     int minute();

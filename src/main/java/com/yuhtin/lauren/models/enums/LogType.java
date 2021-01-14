@@ -1,9 +1,9 @@
 package com.yuhtin.lauren.models.enums;
 
 public enum LogType {
-    LOG,
-    WARN,
-    ERROR,
+    INFO,
+    WARNING,
+    SEVERE,
     STARTUP,
     DEBUG,
     FINISH
