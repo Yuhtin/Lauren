@@ -7,8 +7,6 @@ import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.timers.impl.ResetDailyTimer;
-import com.yuhtin.lauren.utils.helper.TimeUtils;
 
 @CommandHandler(
         name = "daily",
@@ -19,7 +17,6 @@ import com.yuhtin.lauren.utils.helper.TimeUtils;
 public class DailyCommand extends Command {
 
     @Inject private PlayerController playerController;
-    @Inject private ResetDailyTimer resetDailyTimer;
     @Inject private StatsController statsController;
 
     @Override
@@ -28,16 +25,7 @@ public class DailyCommand extends Command {
         Player data = this.playerController.get(event.getMember().getIdLong());
         if (!data.isAbbleToDaily()) {
 
-            long nextReset = this.resetDailyTimer.getNextReset();
-            if (nextReset == 0) {
-
-                event.getChannel().sendMessage("Poxa 😥 Você precisa aguardar até 12:00 para usar este comando novamente").queue();
-                return;
-
-            }
-
-            event.getChannel().sendMessage("Poxa 😥 Você precisa aguardar mais `"
-                    + TimeUtils.formatTime(nextReset - System.currentTimeMillis()) + "` para usar este comando novamente").queue();
+            event.getChannel().sendMessage("Poxa 😥 Você precisa aguardar até 12:00 para usar este comando novamente").queue();
             return;
 
         }

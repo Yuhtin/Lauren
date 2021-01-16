@@ -4,6 +4,7 @@ import com.google.common.reflect.ClassPath;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.yuhtin.lauren.core.logger.Logger;
+import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.timers.Timer;
 import lombok.Getter;
 
@@ -35,6 +36,8 @@ public class TimerManager {
                 if (object instanceof Timer) {
 
                     Timer timer = (Timer) object;
+                    Startup.getLauren().getInjector().injectMembers(timer);
+
                     timers.add(timer);
 
                 }
