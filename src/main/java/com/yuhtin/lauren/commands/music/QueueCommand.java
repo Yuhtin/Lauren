@@ -6,6 +6,7 @@ import com.jagrosh.jdautilities.menu.Paginator;
 import com.yuhtin.lauren.core.music.AudioInfo;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
 import lombok.Getter;
 
@@ -24,6 +25,7 @@ public class QueueCommand extends Command {
             .setColumns(1)
             .setFinalAction(message -> message.clearReactions().queue())
             .setItemsPerPage(10)
+            .setEventWaiter(Startup.getLauren().getEventWaiter())
             .waitOnSinglePage(false)
             .useNumberedItems(true)
             .showPageNumbers(true)
