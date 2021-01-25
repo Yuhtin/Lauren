@@ -114,7 +114,7 @@ public class LootGeneratorTask {
                             message.delete().queue();
                             channel.sendMessage("<a:tchau:751941650728747140> " +
                                     "Infelizmente acabou o tempo e ninguém coletou o loot.")
-                                    .queue();
+                                    .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
 
                         });
             }

@@ -189,7 +189,7 @@ public class Player
         this.gainXP(250);
         this.addMoney(75);
         this.setRankedPoints(this.getRankedPoints() + 2);
-        ++votes;
+        ++this.votes;
 
     }
 
