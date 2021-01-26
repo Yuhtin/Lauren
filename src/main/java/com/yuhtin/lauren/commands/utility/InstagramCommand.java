@@ -1,13 +1,24 @@
 package com.yuhtin.lauren.commands.utility;
 
+import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.service.GetConnectionFactory;
+import com.yuhtin.lauren.startup.Startup;
+import com.yuhtin.lauren.utils.helper.TimeUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
-import org.json.JSONArray;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @CommandHandler(
         name = "instagram",
@@ -17,11 +28,20 @@ import org.json.JSONObject;
 )
 public class InstagramCommand extends Command {
 
+    private static final Map<Long, Long> DELAYS = new HashMap<>();
+
+    @Inject private StatsController statsController;
+
     @Override
     protected void execute(CommandEvent event) {
-        if (!event.getMember().hasPermission(Permission.MESSAGE_TTS)) {
 
-            event.getChannel().sendMessage("<:chorano:726207542413230142> Comando em manutenção :(").queue();
+        long delay = DELAYS.getOrDefault(event.getMember().getIdLong(), 0L);
+        if (delay > System.currentTimeMillis()) {
+
+            event.getChannel().sendMessage("<:chorano:726207542413230142> Aguarde mais "
+                            + TimeUtils.formatTime(delay - System.currentTimeMillis())
+                            + " para usar este comando."
+            ).queue();
             return;
 
         }
@@ -32,52 +52,62 @@ public class InstagramCommand extends Command {
             return;
         }
 
+        DELAYS.put(event.getMember().getIdLong(), Instant.now().plusMillis(TimeUnit.MINUTES.toMillis(1)).toEpochMilli());
+
         event.getChannel().sendTyping().queue();
         instagram = event.getArgs().replace(" ", "_");
 
-        GetConnectionFactory connection = new GetConnectionFactory("https://www.instagram.com/" + instagram + "/?__a=1");
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("https://instagram-utils.p.rapidapi.com/v1/profile_info?profile=" + instagram)
+                .get()
+                .addHeader("x-rapidapi-key", Startup.getLauren().getConfig().getInstagramApiKey())
+                .addHeader("x-rapidapi-host", "instagram-utils.p.rapidapi.com")
+                .build();
 
-        String response = connection.buildConnection();
-        if (response == null || response.equalsIgnoreCase("") || !response.contains("{")) {
+        statsController.getStats("Requests Externos").suplyStats(1);
+
+        try {
+
+            Response response = client.newCall(request).execute();
+
+            String line;
+            StringBuilder content = new StringBuilder();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(response.body().byteStream()));
+            while ((line = reader.readLine()) != null) content.append(line);
+            reader.close();
+
+            JSONObject jsonObject = new JSONObject(content.toString()).getJSONObject("user_info");
+
+            String username = jsonObject.getString("username");
+            String biography = jsonObject.getString("biography");
+
+            int following = jsonObject.getInt("following");
+            int followers = jsonObject.getInt("followed_by");
+
+            int posts = jsonObject.getInt("timeline_media");
+            String fullName = jsonObject.getString("full_name");
+            String picture = jsonObject.getString("profile_pic_url_hd");
+
+            EmbedBuilder embed = new EmbedBuilder();
+            embed.setTitle("Instagram de " + fullName, "https://www.instagram.com/" + username);
+            embed.setThumbnail(picture);
+            embed.setDescription("**Nome**: " + name + "\n" +
+                    "**Bio**: " + biography + "\n" +
+                    "**Seguidores**: " + followers + "\n" +
+                    "**Seguindo**: " + following + "\n" +
+                    "**Uploads**: " + posts);
+
+            event.getChannel().sendMessage(embed.build()).queue();
+
+        }catch (Exception exception) {
+
             event.getChannel().sendMessage("<:eita:764084277226373120> Esse perfil ai não tem no meu livro não, tenta outro").queue();
             return;
+
         }
 
-        JSONObject object = new JSONObject(response);
-        JSONObject data = object.getJSONObject("graphql").getJSONObject("user");
-
-        String username = data.getString("username"),
-                name = data.getString("full_name"),
-                biography = data.getString("biography"),
-                picture = data.getString("profile_pic_url_hd");
-
-        JSONObject pictures = data.getJSONObject("edge_owner_to_timeline_media");
-
-        int followers = data.getJSONObject("edge_followed_by").getInt("count"),
-                following = data.getJSONObject("edge_follow").getInt("count"),
-                uploads = pictures.getInt("count");
-
-        boolean isPrivate = data.getBoolean("is_private");
-
-        EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle("Instagram de " + username, "https://www.instagram.com/" + username);
-        embed.setThumbnail(picture);
-        embed.setDescription("**Nome**: " + name + "\n" +
-                "**Bio**: " + biography + "\n" +
-                "**Tipo**: " + (isPrivate ? "<:errado:756770088639791234> Privado" : "<:certo:756770088538996847> Público") + "\n" +
-                "**Seguidores**: " + followers + "\n" +
-                "**Seguindo**: " + following + "\n" +
-                "**Uploads**: " + uploads);
-
-        embed.setImage(getLatestImage(pictures.getJSONArray("edges")));
-
-        event.getChannel().sendMessage(embed.build()).queue();
     }
 
-    private String getLatestImage(JSONArray images) {
-        if (images.length() == 0) return null;
-
-        JSONObject object = new JSONObject(images.get(0).toString()).getJSONObject("node");
-        return object.getString("thumbnail_src");
-    }
 }

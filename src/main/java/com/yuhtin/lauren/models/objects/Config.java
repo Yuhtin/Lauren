@@ -25,7 +25,7 @@ public class Config {
     private String pteroKey;
     private String pastebinUserKey;
     private String geoIpAcessKey;
-    private String vagalumeKey;
+    private String instagramApiKey;
 
     // Connection info
     private String databaseType;
