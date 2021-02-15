@@ -5,7 +5,6 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.utils.helper.MathUtils;
 import com.yuhtin.lauren.utils.helper.TimeUtils;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
 import com.yuhtin.lauren.utils.helper.Utilities;
@@ -41,7 +40,7 @@ public class JumpToTimeCommand extends Command {
 
         }
 
-        long millis = 0;
+        long millis;
 
         if (!args.contains(":")) {
 
@@ -53,17 +52,27 @@ public class JumpToTimeCommand extends Command {
         } else {
 
             String[] split = args.split(":");
-            if (split.length == 2) {
 
-                long minutesInMillis = parseInt(split[0], TimeUnit.MINUTES, event.getTextChannel());
+            long secondsInMillis = parseInt(split[split.length - 1], TimeUnit.SECONDS, event.getTextChannel());
+            if (secondsInMillis == -1) return;
+
+            long minutesInMillis = 0;
+            if (split.length > 1) {
+
+                minutesInMillis = parseInt(split[split.length - 2], TimeUnit.MINUTES, event.getTextChannel());
                 if (minutesInMillis == -1) return;
 
-                long secondsInMillis = parseInt(split[1], TimeUnit.SECONDS, event.getTextChannel());
-                if (secondsInMillis == -1) return;
+            }
 
-                millis = minutesInMillis + secondsInMillis;
+            long hoursInMillis = 0;
+            if (split.length > 2) {
+
+                hoursInMillis = parseInt(split[split.length - 3], TimeUnit.HOURS, event.getTextChannel());
+                if (hoursInMillis == -1) return;
 
             }
+
+            millis = hoursInMillis + minutesInMillis + secondsInMillis;
 
         }
 
@@ -94,7 +103,8 @@ public class JumpToTimeCommand extends Command {
 
             if (time < 0) time = 0;
             else if (timeUnit == TimeUnit.SECONDS && time > 60) time = 60;
-            else if (timeUnit == TimeUnit.MINUTES && time > 30) time = 30;
+            else if (timeUnit == TimeUnit.MINUTES && time > 60) time = 60;
+            else if (timeUnit == TimeUnit.HOURS && time > 24) time = 24;
 
             return timeUnit.toMillis(time);
 

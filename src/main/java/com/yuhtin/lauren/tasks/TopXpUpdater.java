@@ -49,8 +49,10 @@ public class TopXpUpdater {
                     ResultSet resultSet = statement.executeQuery();
 
                     while (resultSet.next()) {
+
                         Player data = PlayerSerializer.deserialize(resultSet.getString("data"));
-                        players.add(new SimplePlayer(resultSet.getLong("id"), data.getLevel(), data.getExperience()));
+                        players.add(new SimplePlayer(resultSet.getLong("id"), data.getLevel(), resultSet.getInt("xp")));
+
                     }
 
                     resultSet.close();

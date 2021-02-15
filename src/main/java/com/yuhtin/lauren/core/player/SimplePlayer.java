@@ -8,5 +8,6 @@ import lombok.Getter;
 public class SimplePlayer {
 
     private final long userID;
-    private final int level, xp;
+    private final int level;
+    private final int xp;
 }

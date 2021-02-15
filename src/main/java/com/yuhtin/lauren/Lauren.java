@@ -23,7 +23,6 @@ import com.yuhtin.lauren.sql.dao.StatisticDAO;
 import com.yuhtin.lauren.tasks.*;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
-import com.yuhtin.lauren.utils.messages.AsciiBox;
 import lombok.Getter;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -111,21 +110,14 @@ public class Lauren extends LaurenDAO {
         this.guild = this.getBot().getGuildById(700673055982354472L);
         this.getBot().addEventListener(this.getEventWaiter());
 
-        String[] botInfo = new String[]{
+        Arrays.asList(
                 "",
                 this.getBotName() + " v" + this.getVersion(),
                 "Author: Yuhtin#9147",
                 "",
                 "All systems has loaded",
                 this.getBotName() + " is now online"
-        };
-
-        this.getLogger().info(new AsciiBox()
-                .size(50)
-                .borders("━", "┃")
-                .corners("┏", "┓", "┗", "┛")
-                .render(botInfo)
-        );
+        ).forEach(System.out::println);
 
         this.getLogger().info("[3/3] Lauren is now ready");
 

@@ -11,25 +11,21 @@ public class Startup {
 
     public static void main(String[] args) {
 
-        try { lauren.onLoad(); } catch (Exception exception) {
+        try {
+
+            lauren.onLoad();
+            lauren.getLogger().info("[1/3] High important systems enabled successfully");
+
+            lauren.onEnable();
+            lauren.getLogger().info("[2/3] Registered Commands, Events, Timers and others");
+
+        } catch (Exception exception) {
 
             exception.printStackTrace();
             lauren.shutdown();
             return;
 
         }
-
-        lauren.getLogger().info("[1/3] High important systems enabled successfully");
-
-        try { lauren.onEnable(); } catch (Exception exception) {
-
-            exception.printStackTrace();
-            lauren.shutdown();
-            return;
-
-        }
-
-        lauren.getLogger().info("[2/3] Registered Commands, Events, Timers and others");
 
         Scanner scanner = new Scanner(System.in);
         while (scanner.nextLine().equalsIgnoreCase("stop")) {

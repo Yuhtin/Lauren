@@ -12,7 +12,6 @@ import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -32,7 +31,6 @@ public class Player
     @Inject private static Logger logger;
     @Inject private static StatsController statsController;
     @Inject private static XpController xpController;
-    private static Guild guild = Startup.getLauren().getGuild();
 
     private Map<PunishmentType, Long> punishs = new HashMap<>();
 
@@ -90,7 +88,7 @@ public class Player
 
             for (long roleID : rolesToGive) {
 
-                Role role = guild.getRoleById(roleID);
+                Role role = Startup.getLauren().getGuild().getRoleById(roleID);
                 if (role == null) {
 
                     logger.warning("Role is null");
@@ -98,13 +96,13 @@ public class Player
 
                 }
 
-                guild.addRoleToMember(userID, role).queue();
+                Startup.getLauren().getGuild().addRoleToMember(userID, role).queue();
 
             }
 
             for (long roleID : rolesToRemove) {
 
-                Role role = guild.getRoleById(roleID);
+                Role role = Startup.getLauren().getGuild().getRoleById(roleID);
                 if (role == null) {
 
                     logger.warning("Role is null");
@@ -112,7 +110,7 @@ public class Player
 
                 }
 
-                guild.removeRoleFromMember(userID, role).queue();
+                Startup.getLauren().getGuild().removeRoleFromMember(userID, role).queue();
 
             }
         }
@@ -126,7 +124,7 @@ public class Player
 
         }
 
-        TextChannel channel = guild.getTextChannelById(770393139516932158L);
+        TextChannel channel = Startup.getLauren().getGuild().getTextChannelById(770393139516932158L);
         if (channel != null) {
 
             channel.sendMessage(message).queue();
@@ -142,9 +140,10 @@ public class Player
 
 
     public Player updateRank() {
-        this.rank = Rank.getByPoints(rankedPoints);
 
+        this.rank = Rank.getByPoints(rankedPoints);
         return this;
+
     }
 
     public Player addMoney(double quantity) {
@@ -164,13 +163,16 @@ public class Player
     }
 
     public Player removeMoney(double quantity) {
-        money -= quantity;
 
+        money -= quantity;
         return this;
+
     }
 
     public Player gainXP(double quantity) {
+
         double multiplier = multiply();
+
         quantity *= multiplier;
         experience += quantity;
 
@@ -195,15 +197,14 @@ public class Player
 
     @Override
     public double multiply() {
-        checkList();
+
+        assertList();
 
         double multiplier = 1;
-        for (String permission : getPermissions()) {
-            if (multiplierList.containsKey(permission))
-                multiplier += multiplierList.get(permission);
-        }
+        multiplier += getPermissions().stream().filter(multiplierList::containsKey).mapToDouble(multiplierList::get).sum();
 
         return multiplier;
+
     }
 
     @Override

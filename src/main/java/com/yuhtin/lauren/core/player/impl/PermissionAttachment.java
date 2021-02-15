@@ -10,21 +10,21 @@ public abstract class PermissionAttachment implements Serializable {
     @Getter private ArrayList<String> permissions = new ArrayList<>();
 
     public void addPermission(String permission) {
-        checkList();
+        assertList();
         permissions.add(permission);
     }
 
     public void removePermission(String permission) {
-        checkList();
+        assertList();
         permissions.remove(permission);
     }
 
     public boolean hasPermission(String permission) {
-        checkList();
+        assertList();
         return permissions.contains(permission);
     }
 
-    public void checkList() {
+    public void assertList() {
         if (permissions == null) permissions = new ArrayList<>();
     }
 
