@@ -17,7 +17,6 @@ import com.yuhtin.lauren.models.embeds.ShopEmbed;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.exceptions.GuiceInjectorException;
 import com.yuhtin.lauren.service.LocaleManager;
-import com.yuhtin.lauren.service.PterodactylConnection;
 import com.yuhtin.lauren.sql.dao.PlayerDAO;
 import com.yuhtin.lauren.sql.dao.StatisticDAO;
 import com.yuhtin.lauren.tasks.*;
@@ -57,7 +56,6 @@ public class Lauren extends LaurenDAO {
     @Inject private TimerManager timerManager;
 
     // Others
-    @Inject private PterodactylConnection pterodactylConnection;
     @Inject private TopXpUpdater topXpUpdater;
     @Inject private ShopEmbed shopEmbed;
 
@@ -94,9 +92,7 @@ public class Lauren extends LaurenDAO {
         loadEvents();
 
         this.timerManager.register("com.yuhtin.lauren.timers.impl");
-
-        this.pterodactylConnection.load(this.getConfig().getPteroKey());
-        this.localeManager.searchHost(this.getConfig().getGeoIpAcessKey());
+        this.localeManager.searchHost(this.getConfig().getGeoIpAccessKey());
 
         this.shopEmbed.build();
 

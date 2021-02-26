@@ -5,8 +5,8 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.service.LocaleManager;
-import com.yuhtin.lauren.service.PterodactylConnection;
 import com.yuhtin.lauren.startup.Startup;
+import com.yuhtin.lauren.utils.helper.SystemStatsUtils;
 import lombok.SneakyThrows;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -23,7 +23,6 @@ import java.time.Instant;
 public class PingCommand extends Command {
 
     @Inject private LocaleManager localeManager;
-    @Inject private PterodactylConnection pterodactylConnection;
 
     @SneakyThrows
     @Override
@@ -53,12 +52,11 @@ public class PingCommand extends Command {
                 .setTimestamp(Instant.now())
                 .addField("", "\uD83D\uDDA5 Informações do Host", false)
                 .addField("\uD83D\uDEE2 Núcleos disponíveis:", "`" + Runtime.getRuntime().availableProcessors() + " cores ("
-                        + this.pterodactylConnection.getServer().getServerUsage().getCpuUsage() +
-                        "%)`", true)
+                        + SystemStatsUtils.getProcessCpuLoad() + "%)`", true)
                 .addField("\uD83C\uDF9E Memória RAM", "`"
-                        + this.pterodactylConnection.getServer().getServerUsage().getMemoryUsage() +
+                        + SystemStatsUtils.usedMemory() +
                         "M/"
-                        + this.pterodactylConnection.getServer().getLimits().getMemory() + "M`", true)
+                        + SystemStatsUtils.totalMemory() + "M`", true)
                 .addField("\uD83D\uDD2E Sistema Operacional", "`" + System.getProperty("os.name") + "`", true)
                 .addField("\uD83D\uDED2 Empresa fornecedora:", "[HypeHost - Hospedagem Minecraft e VPS](https://hypehost.com.br)", true)
                 .addField("\uD83E\uDDEA Local do Host", "`" + this.localeManager.buildMessage() + "`", true)

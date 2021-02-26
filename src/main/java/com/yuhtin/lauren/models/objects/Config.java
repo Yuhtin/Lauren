@@ -22,9 +22,8 @@ public class Config {
     private String token;
     private String formatNickname;
     private String pastebinDevKey;
-    private String pteroKey;
     private String pastebinUserKey;
-    private String geoIpAcessKey;
+    private String geoIpAccessKey;
     private String instagramApiKey;
 
     // Connection info

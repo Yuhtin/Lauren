@@ -7,8 +7,8 @@ import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
-import com.yuhtin.lauren.service.PterodactylConnection;
 import com.yuhtin.lauren.startup.Startup;
+import com.yuhtin.lauren.utils.helper.SystemStatsUtils;
 import com.yuhtin.lauren.utils.helper.TimeUtils;
 import lombok.SneakyThrows;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -30,7 +30,6 @@ public class InfoCommand extends Command {
 
     @Inject private PlayerController playerController;
     @Inject private StatsController statsController;
-    @Inject private PterodactylConnection pterodactylConnection;
 
     @SneakyThrows
     @Override
@@ -72,9 +71,9 @@ public class InfoCommand extends Command {
                 .addField("⚙️ Núcleos", "`" + Runtime.getRuntime().availableProcessors() + " cores`", true)
                 .addField("\uD83D\uDEE2 Banco de Dados", "`" + Startup.getLauren().getConfig().getDatabaseType() + "`", true)
                 .addField("\uD83C\uDF9E RAM", "`"
-                        + this.pterodactylConnection.getServer().getServerUsage().getMemoryUsage() +
+                        + SystemStatsUtils.usedMemory() +
                         "M/"
-                        + this.pterodactylConnection.getServer().getLimits().getMemory() + "M`", true)
+                        + SystemStatsUtils.totalMemory() + "M`", true)
 
                 .setFooter("Mais informações em $ping", event.getAuthor().getAvatarUrl())
                 .setColor(event.getMember().getColor())
