@@ -69,11 +69,10 @@ public class InfoCommand extends Command {
                 .addField("<:discord:723587554422816889> Versão JDA", "`v4.2.0_186`", true)
 
                 .addField("⚙️ Núcleos", "`" + Runtime.getRuntime().availableProcessors() + " cores`", true)
-                .addField("\uD83D\uDEE2 Banco de Dados", "`" + Startup.getLauren().getConfig().getDatabaseType() + "`", true)
+                .addField("\uD83D\uDEE2 Banco de Dados", "`MySQL`", true)
                 .addField("\uD83C\uDF9E RAM", "`"
-                        + SystemStatsUtils.usedMemory() +
-                        "M/"
-                        + SystemStatsUtils.totalMemory() + "M`", true)
+                        + SystemStatsUtils.usedMemory() + "/"
+                        + SystemStatsUtils.totalMemory() + "`", true)
 
                 .setFooter("Mais informações em $ping", event.getAuthor().getAvatarUrl())
                 .setColor(event.getMember().getColor())

@@ -27,12 +27,10 @@ public class Config {
     private String instagramApiKey;
 
     // Connection info
-    private String databaseType;
     private String username;
     private String host;
     private String password;
     private String database;
-    private String sqlFile;
 
     public static Config loadConfig(String path) {
         try {

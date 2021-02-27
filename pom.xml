@@ -6,7 +6,7 @@
 
     <groupId>com.yuhtin</groupId>
     <artifactId>lauren</artifactId>
-    <version>1.9.0.5-SNAPSHOT</version>
+    <version>1.9.0.6-SNAPSHOT</version>
 
     <build>
 
@@ -74,23 +74,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.stanjg</groupId>
-            <artifactId>Ptero4J</artifactId>
-            <version>master-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.20</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.xerial</groupId>
-            <artifactId>sqlite-jdbc</artifactId>
-            <version>3.31.1</version>
             <scope>compile</scope>
         </dependency>
 
