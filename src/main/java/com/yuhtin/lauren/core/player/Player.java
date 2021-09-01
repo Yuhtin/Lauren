@@ -9,7 +9,7 @@ import com.yuhtin.lauren.core.xp.Level;
 import com.yuhtin.lauren.core.xp.XpController;
 import com.yuhtin.lauren.models.enums.Rank;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.dv8tion.jda.api.entities.Role;
@@ -133,7 +133,7 @@ public class Player
 
         }
 
-        Utilities.INSTANCE.updateNickByLevel(this, level);
+        UserUtil.INSTANCE.updateNickByLevel(this, level);
         statsController.getStats("Evoluir Nível").suplyStats(1);
 
     }

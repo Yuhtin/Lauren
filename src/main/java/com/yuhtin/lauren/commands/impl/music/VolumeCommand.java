@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.commands.CommandHandler;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 
 @CommandHandler(
         name = "volume",
@@ -18,7 +18,7 @@ public class VolumeCommand extends Command {
     protected void execute(CommandEvent event) {
 
         TrackManager trackManager = TrackManager.of(event.getGuild());
-        if (!Utilities.INSTANCE.isDJ(event.getMember(), event.getChannel(), false)) {
+        if (!UserUtil.INSTANCE.isDJ(event.getMember(), event.getChannel(), false)) {
             event.getChannel().sendMessage("\uD83D\uDD0A Meu volume atual está em: `" + trackManager.getPlayer().getVolume() + "%`").queue();
             return;
         }
@@ -32,7 +32,7 @@ public class VolumeCommand extends Command {
         int volume;
         try {
             volume = Integer.parseInt(event.getArgs());
-            if (volume < 1 || (volume > 100 && !Utilities.INSTANCE.isOwner(null, event.getAuthor(), false))) volume = 25;
+            if (volume < 1 || (volume > 100 && !UserUtil.INSTANCE.isOwner(null, event.getAuthor(), false))) volume = 25;
         } catch (Exception exception) {
             event.getChannel().sendMessage("\uD83D\uDCA2 Eita calma ai, insira um valor de `1 a 100` para ser o volume").queue();
             return;

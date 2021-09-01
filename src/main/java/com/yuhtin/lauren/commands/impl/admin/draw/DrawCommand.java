@@ -7,7 +7,7 @@ import com.yuhtin.lauren.core.draw.controller.DrawController;
 import com.yuhtin.lauren.core.draw.controller.DrawEditting;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.commands.CommandHandler;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 
@@ -27,7 +27,7 @@ public class DrawCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        if (!Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true)) return;
+        if (!UserUtil.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true)) return;
 
         if (DrawController.get() != null || DrawController.editing != null) {
             EmbedBuilder embed = new EmbedBuilder()
@@ -72,13 +72,13 @@ public class DrawCommand extends Command {
                         DrawController.editing = null;
 
                     } catch (Exception exception) {
-                        this.logger.warning("Can't send a private message for user " + Utilities.INSTANCE.getFullName(event.getMember().getUser()));
+                        this.logger.warning("Can't send a private message for user " + UserUtil.INSTANCE.getFullName(event.getMember().getUser()));
                     }
                 }
             }, 2, TimeUnit.MINUTES);
 
         } catch (Exception exception) {
-            this.logger.warning("Can't send a private message for user " + Utilities.INSTANCE.getFullName(event.getMember().getUser()));
+            this.logger.warning("Can't send a private message for user " + UserUtil.INSTANCE.getFullName(event.getMember().getUser()));
         }
     }
 }

@@ -8,7 +8,7 @@ import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.punish.PunishmentRule;
 import com.yuhtin.lauren.core.punish.PunishmentType;
 import com.yuhtin.lauren.utils.helper.TimeUtils;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -27,8 +27,8 @@ public class PunishmentManager {
 
             this.logger.info(String.format(
                     "%s banned user %s in rule %s %s",
-                    Utilities.INSTANCE.getFullName(author),
-                    Utilities.INSTANCE.getFullName(user.getUser()),
+                    UserUtil.INSTANCE.getFullName(author),
+                    UserUtil.INSTANCE.getFullName(user.getUser()),
                     rule.toString(),
                     (proof.equalsIgnoreCase("") ? "" : " with proof " + proof)
             ));
@@ -67,7 +67,7 @@ public class PunishmentManager {
 
         if (announcementChannel != null) {
             MessageBuilder announcementMessage = new MessageBuilder();
-            announcementMessage.setContent("**Usuário punido:** " + Utilities.INSTANCE.getFullName(user.getUser()) + "\n" +
+            announcementMessage.setContent("**Usuário punido:** " + UserUtil.INSTANCE.getFullName(user.getUser()) + "\n" +
                     "**Punido por:** <@" + author.getId() + ">\n" +
                     "**Motivo:** " + ruleDescription
             );
@@ -79,13 +79,13 @@ public class PunishmentManager {
         if (privateChannel == null) return;
 
         EmbedBuilder privateMessage = new EmbedBuilder();
-        privateMessage.setAuthor(Utilities.INSTANCE.getFullName(author), null, author.getAvatarUrl());
+        privateMessage.setAuthor(UserUtil.INSTANCE.getFullName(author), null, author.getAvatarUrl());
 
         privateMessage.addField("<:chorano:726207542413230142>" +
                         " Você foi " + rule.getType().getFormated() + " de " + user.getUser().getName(),
                 "", false);
 
-        privateMessage.addField("<:beacon:771543538252120094> Punido por", "`" + Utilities.INSTANCE.getFullName(author) + "`", false);
+        privateMessage.addField("<:beacon:771543538252120094> Punido por", "`" + UserUtil.INSTANCE.getFullName(author) + "`", false);
 
         privateMessage.addField("<:time:756767328498090044>" +
                 " Motivo", ruleDescription, false);

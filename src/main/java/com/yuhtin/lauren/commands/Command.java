@@ -8,6 +8,6 @@ import net.dv8tion.jda.api.entities.Message;
  */
 public interface Command {
 
-    void execute(Message message, String args);
+    void execute(CommandEvent event);
 
 }

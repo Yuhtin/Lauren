@@ -3,9 +3,9 @@ package com.yuhtin.lauren.tasks;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.utils.helper.EventWaiter;
+import com.yuhtin.lauren.models.objects.EventWaiter;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 import lombok.AllArgsConstructor;
 import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -95,7 +95,7 @@ public class ShardLootTask {
 
                             }
 
-                            logger.info("The player " + Utilities.INSTANCE.getFullName(event.getUser()) + " getted the sharddrop");
+                            logger.info("The player " + UserUtil.INSTANCE.getFullName(event.getUser()) + " getted the sharddrop");
 
                         }, 25, TimeUnit.SECONDS,
 

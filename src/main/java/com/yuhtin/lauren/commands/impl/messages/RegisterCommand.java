@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
@@ -18,7 +18,7 @@ public class RegisterCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
         event.getMessage().delete().queue();
-        if (!Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true)) return;
+        if (!UserUtil.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true)) return;
 
         MessageAction action = event.getChannel().sendMessage(":flag_br: - Portuguese\n" +
                 "Olá jogadores, para realizar seu cadastro reaja abaixo desta mensagem qual o seu sexo respectivamente\n" +

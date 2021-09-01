@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.service.CommandCache;
 import com.yuhtin.lauren.utils.helper.LevenshteinCalculator;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -48,7 +48,7 @@ public class ChatMessage extends ListenerAdapter {
         if (!isMusicCommand(event.getMessage().getContentRaw())
                 && event.getMessage().getContentRaw().contains("://")
                 && event.getChannel().getIdLong() != 753628118161424384L
-                && !Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.MESSAGE_MANAGE, false)) {
+                && !UserUtil.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.MESSAGE_MANAGE, false)) {
 
             event.getChannel()
                     .sendMessage("<:chorano:726207542413230142> Poxa, não divulga aqui amigo, temos nosso sistema de parceria, fale com o <@272879983326658570> no privado.")

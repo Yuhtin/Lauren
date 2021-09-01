@@ -7,7 +7,7 @@ import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.TimeUtils;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 import net.dv8tion.jda.api.entities.MessageChannel;
 
 import java.util.concurrent.TimeUnit;
@@ -28,7 +28,7 @@ public class JumpToTimeCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
         if (TrackUtils.get().isIdle(event.getTextChannel())) return;
-        if (!Utilities.INSTANCE.isDJ(event.getMember(), event.getChannel(), true)) return;
+        if (!UserUtil.INSTANCE.isDJ(event.getMember(), event.getChannel(), true)) return;
 
         String args = event.getArgs();
         if (args.equalsIgnoreCase("")) {

@@ -6,7 +6,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.commands.CommandHandler;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 import net.dv8tion.jda.api.Permission;
 
 @CommandHandler(
@@ -21,7 +21,7 @@ public class AbuseCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        if (!Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true))
+        if (!UserUtil.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true))
             return;
 
         Player player = this.playerController.get(event.getAuthor().getIdLong());

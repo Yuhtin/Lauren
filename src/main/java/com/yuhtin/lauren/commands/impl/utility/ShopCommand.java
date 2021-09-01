@@ -11,7 +11,7 @@ import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.models.embeds.ShopEmbed;
 import com.yuhtin.lauren.models.objects.ShopItem;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
@@ -107,7 +107,7 @@ public class ShopCommand extends Command {
                             if (role == null) {
 
                                 this.logger.warning("The player "
-                                        + Utilities.INSTANCE.getFullName(event.getAuthor()) +
+                                        + UserUtil.INSTANCE.getFullName(event.getAuthor()) +
                                         " buyed Prime role, but i can't give");
                                 break;
 

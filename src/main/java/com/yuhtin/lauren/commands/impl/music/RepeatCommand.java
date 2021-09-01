@@ -6,7 +6,7 @@ import com.yuhtin.lauren.core.music.AudioInfo;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 
 @CommandHandler(
         name = "repetir",
@@ -19,7 +19,7 @@ public class RepeatCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
         if (TrackUtils.get().isIdle(event.getTextChannel())) return;
-        if (!Utilities.INSTANCE.isDJ(event.getMember(), event.getTextChannel(), true)) return;
+        if (!UserUtil.INSTANCE.isDJ(event.getMember(), event.getTextChannel(), true)) return;
 
         AudioInfo audio = TrackManager.of(event.getGuild()).getTrackInfo();
         audio.setRepeat(!audio.isRepeat());

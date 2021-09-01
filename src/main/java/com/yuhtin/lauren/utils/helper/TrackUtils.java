@@ -1,8 +1,6 @@
 package com.yuhtin.lauren.utils.helper;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
-import com.yuhtin.lauren.core.music.AudioInfo;
 import com.yuhtin.lauren.core.music.TrackManager;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -39,7 +37,7 @@ public class TrackUtils {
         return member.getVoiceState() != null
                 && member.getVoiceState().getChannel() != null
                 && (member.getVoiceState().getChannel().getName().contains("Batidões")
-                || Utilities.INSTANCE.isDJ(member, null, false));
+                || UserUtil.INSTANCE.isDJ(member, null, false));
     }
 
     public boolean isMusicOwner(Member member) {

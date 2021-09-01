@@ -7,7 +7,7 @@ import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.models.objects.Config;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 import lombok.SneakyThrows;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -26,7 +26,7 @@ public class ConfigCommand extends Command {
     @SneakyThrows
     @Override
     protected void execute(CommandEvent event) {
-        if (!Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true))
+        if (!UserUtil.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true))
             return;
 
         String[] arguments = event.getMessage().getContentRaw().split(" ");

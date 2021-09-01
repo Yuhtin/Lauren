@@ -5,7 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 
 @CommandHandler(
         name = "pausar",
@@ -18,7 +18,7 @@ public class PauseCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
         if (TrackUtils.get().isIdle(event.getTextChannel())) return;
-        if (!Utilities.INSTANCE.isDJ(event.getMember(), event.getTextChannel(), true)) return;
+        if (!UserUtil.INSTANCE.isDJ(event.getMember(), event.getTextChannel(), true)) return;
 
         TrackManager trackManager = TrackManager.of(event.getGuild());
         trackManager.getPlayer().setPaused(!trackManager.getPlayer().isPaused());

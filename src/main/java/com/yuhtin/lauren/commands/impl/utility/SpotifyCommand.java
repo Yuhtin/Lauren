@@ -5,7 +5,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.commands.CommandHandler;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Member;
@@ -35,7 +35,7 @@ public class SpotifyCommand extends Command {
 
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTimestamp(Instant.now());
-        embed.setFooter("Comando usado por " + Utilities.INSTANCE.getFullName(event.getMember().getUser()), event.getMember().getUser().getAvatarUrl());
+        embed.setFooter("Comando usado por " + UserUtil.INSTANCE.getFullName(event.getMember().getUser()), event.getMember().getUser().getAvatarUrl());
 
         Member member = event.getMessage().getMentionedMembers().get(0);
         Activity activity = null;

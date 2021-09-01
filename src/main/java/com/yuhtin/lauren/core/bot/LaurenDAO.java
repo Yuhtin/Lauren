@@ -11,7 +11,7 @@ import com.yuhtin.lauren.sql.connection.ConnectionInfo;
 import com.yuhtin.lauren.sql.connection.SQLConnection;
 import com.yuhtin.lauren.sql.connection.mysql.MySQLConnection;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.helper.EventWaiter;
+import com.yuhtin.lauren.models.objects.EventWaiter;
 import lombok.Data;
 import net.dv8tion.jda.api.JDA;
 

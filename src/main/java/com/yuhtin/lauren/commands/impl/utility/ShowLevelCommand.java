@@ -6,7 +6,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.commands.CommandHandler;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 
 /**
  * @author Yuhtin
@@ -28,7 +28,7 @@ public class ShowLevelCommand extends Command {
         Player player = this.playerController.get(event.getAuthor().getIdLong());
         player.setHideLevelOnNickname(false);
 
-        Utilities.INSTANCE.updateNickByLevel(player, player.getLevel());
+        UserUtil.INSTANCE.updateNickByLevel(player, player.getLevel());
 
         event.getChannel().sendMessage(
                 "<:felizpakas:742373250037710918> Você habilitou o nível em seu nickname"

@@ -6,7 +6,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.punish.PunishmentRule;
 import com.yuhtin.lauren.manager.PunishmentManager;
 import com.yuhtin.lauren.commands.CommandHandler;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 
@@ -22,7 +22,7 @@ public class PunishCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        if (!Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.MESSAGE_MANAGE, true))
+        if (!UserUtil.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.MESSAGE_MANAGE, true))
             return;
 
         String[] arguments = event.getArgs().split(" ");
@@ -49,7 +49,7 @@ public class PunishCommand extends Command {
 
             event.getChannel()
                     .sendMessage("<:feliz_pra_caralho:760202116504485948> " +
-                            "Você puniu o jogador `" + Utilities.INSTANCE.getFullName(target.getUser()) + "` com sucesso.")
+                            "Você puniu o jogador `" + UserUtil.INSTANCE.getFullName(target.getUser()) + "` com sucesso.")
                     .queue();
 
         }catch (IllegalStateException exception) {

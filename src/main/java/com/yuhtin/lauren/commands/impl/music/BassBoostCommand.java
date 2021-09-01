@@ -5,7 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 
 @CommandHandler(
         name = "bass",
@@ -19,7 +19,7 @@ public class BassBoostCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
         if (TrackUtils.get().isIdle(event.getTextChannel())) return;
-        if (!Utilities.INSTANCE.isDJ(event.getMember(), event.getTextChannel(), true)) return;
+        if (!UserUtil.INSTANCE.isDJ(event.getMember(), event.getTextChannel(), true)) return;
 
         if (event.getArgs().isEmpty()) {
             event.getChannel().sendMessage("<a:tchau:751941650728747140> Você precisa inserir a opção do boost: `low, high, boost ou normal`").queue();

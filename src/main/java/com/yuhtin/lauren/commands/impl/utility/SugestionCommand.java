@@ -8,7 +8,7 @@ import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.models.enums.SugestionStage;
 import com.yuhtin.lauren.models.objects.Sugestion;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 import lombok.Setter;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -142,7 +142,7 @@ public class SugestionCommand extends Command {
                     }
 
                     TextChannel channel = lauren.getGuild().getTextChannelsByName("sugestões", true).get(0);
-                    if (Utilities.INSTANCE.isPrime(lauren.getGuild().getMemberById(privateMessage.getUserIdLong()))) {
+                    if (UserUtil.INSTANCE.isPrime(lauren.getGuild().getMemberById(privateMessage.getUserIdLong()))) {
 
                         channel = lauren.getGuild().getTextChannelsByName("sugestões-premium", true).get(0);
 

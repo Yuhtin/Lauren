@@ -6,7 +6,7 @@ import com.yuhtin.lauren.core.music.AudioInfo;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 
 @CommandHandler(
         name = "pular",
@@ -46,7 +46,7 @@ public class SkipCommand extends Command {
         }
 
         String name = event.getMember().getNickname() == null
-                ? Utilities.INSTANCE.getFullName(event.getAuthor())
+                ? UserUtil.INSTANCE.getFullName(event.getAuthor())
                 : event.getMember().getNickname();
 
         String message = "\uD83E\uDDEC **"

@@ -21,7 +21,7 @@ import com.yuhtin.lauren.sql.dao.PlayerDAO;
 import com.yuhtin.lauren.sql.dao.StatisticDAO;
 import com.yuhtin.lauren.tasks.*;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 import lombok.Getter;
 import lombok.val;
 import net.dv8tion.jda.api.JDABuilder;
@@ -154,8 +154,8 @@ public final class Lauren extends LaurenDAO {
         FileOutputStream outputStream = new FileOutputStream(file.getPath().split("\\.")[0] + ".zip");
         ZipOutputStream zipFileOutput = new ZipOutputStream(outputStream);
 
-        Utilities.INSTANCE.writeToZip(file, zipFileOutput);
-        Utilities.INSTANCE.cleanUp(Paths.get(file.getPath()));
+        UserUtil.INSTANCE.writeToZip(file, zipFileOutput);
+        UserUtil.INSTANCE.cleanUp(Paths.get(file.getPath()));
 
         zipFileOutput.close();
         outputStream.close();
@@ -214,7 +214,7 @@ public final class Lauren extends LaurenDAO {
 
             setInjector(Guice.createInjector(new LaurenModule(this)));
             getInjector().injectMembers(this);
-            getInjector().injectMembers(Utilities.INSTANCE);
+            getInjector().injectMembers(UserUtil.INSTANCE);
 
         } catch (Exception exception) {
             exception.printStackTrace();

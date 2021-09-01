@@ -12,4 +12,6 @@ public class RawCommand {
     private final String description;
     private final CommandHandler.CommandType type;
     private final String[] aliases;
+    private final Command command;
+
 }

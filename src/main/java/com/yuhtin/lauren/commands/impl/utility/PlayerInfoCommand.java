@@ -9,7 +9,7 @@ import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.TimeUtils;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 
@@ -44,7 +44,7 @@ public class PlayerInfoCommand extends Command {
 
         }
 
-        String roles = Utilities.INSTANCE.rolesToString(target.getRoles());
+        String roles = UserUtil.INSTANCE.rolesToString(target.getRoles());
         String name = target.getNickname() == null ? target.getUser().getName() : target.getNickname();
         String userDate = event.getMessage().getMember() == null ? "Erro" : subtractTime(target.getTimeJoined());
 
@@ -53,11 +53,11 @@ public class PlayerInfoCommand extends Command {
         embed.setAuthor("Informações do jogador " + name, null, target.getUser().getAvatarUrl());
         embed.setThumbnail(player.getRank().getUrl());
 
-        embed.addField("⚗️ Experiência", "`Nível " + player.getLevel() + " (" + Utilities.INSTANCE.format(player.getExperience()) + " XP)`", false);
+        embed.addField("⚗️ Experiência", "`Nível " + player.getLevel() + " (" + UserUtil.INSTANCE.format(player.getExperience()) + " XP)`", false);
         embed.addField("🧶 Cargos", "`" + (roles.equalsIgnoreCase("") ? "Nenhum" : roles) + "`", false);
         embed.addField("✨ Entrou em", userDate, false);
         embed.addField("\uD83D\uDC7E Eventos", "`" + player.getTotalEvents() + "`", false);
-        embed.addField("<:boost_emoji:772285522852839445> Shards", "`$" + (Utilities.INSTANCE.format(player.getMoney())) + " shards`", true);
+        embed.addField("<:boost_emoji:772285522852839445> Shards", "`$" + (UserUtil.INSTANCE.format(player.getMoney())) + " shards`", true);
         embed.addField("<:beacon:771543538252120094> Patente", "`" + player.getRank().getName() + "`", true);
         embed.addField("<:lootbox:771545027829563402> LootBoxes", "`" + player.getLootBoxes() + " caixas`", true);
         embed.addField("\uD83D\uDD11 Chaves", "`" + player.getKeys() + " keys`", true);

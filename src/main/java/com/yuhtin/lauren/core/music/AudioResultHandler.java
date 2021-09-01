@@ -9,7 +9,7 @@ import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 import lombok.Builder;
 import lombok.Data;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -17,7 +17,6 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 
 @Builder
 @Data
@@ -35,7 +34,7 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
     @Override
     public void trackLoaded(AudioTrack track) {
 
-        if (!permitedTrack(track, Utilities.INSTANCE.isDJ(member, null, false))) {
+        if (!permitedTrack(track, UserUtil.INSTANCE.isDJ(member, null, false))) {
 
             if (searchType == TrackManager.SearchType.SIMPLE_SEARCH)
                 channel.sendMessage("<:rindo_de_voce:751941649655136588>" +
@@ -49,7 +48,7 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
         String videoType = track.getInfo().isStream ? "Stream" : podcastMessage;
 
         EmbedBuilder embed = new EmbedBuilder()
-                .setTitle("💿 " + Utilities.INSTANCE.getFullName(member.getUser()) + " adicionou 1 música a fila")
+                .setTitle("💿 " + UserUtil.INSTANCE.getFullName(member.getUser()) + " adicionou 1 música a fila")
                 .setDescription(
                         "\ud83d\udcc0 Nome: `" + track.getInfo().title + "`\n" +
                                 "\uD83D\uDCB0 Autor: `" + track.getInfo().author + "`\n" +
@@ -77,17 +76,17 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
 
         else {
 
-            int limit = Utilities.INSTANCE.isPrime(member) || Utilities.INSTANCE.isDJ(member, null, false) ? 100 : 25;
+            int limit = UserUtil.INSTANCE.isPrime(member) || UserUtil.INSTANCE.isDJ(member, null, false) ? 100 : 25;
             int maxMusics = Math.min(playlist.getTracks().size(), limit);
 
             EmbedBuilder embed = new EmbedBuilder()
-                    .setTitle("💿 " + Utilities.INSTANCE.getFullName(member.getUser()) + " adicionou " + maxMusics + " músicas a fila")
+                    .setTitle("💿 " + UserUtil.INSTANCE.getFullName(member.getUser()) + " adicionou " + maxMusics + " músicas a fila")
                     .setDescription("\uD83D\uDCBD Informações da playlist:\n\n" +
                             "\ud83d\udcc0 Nome: `" + playlist.getName() + "`\n" +
                             "\uD83C\uDFB6 Músicas: `" + maxMusics + "`\n" +
                             "\uD83D\uDCCC Link: [Clique aqui](" + trackUrl + ")");
 
-            logger.info("The player " + Utilities.INSTANCE.getFullName(member.getUser()) + " added a playlist with " + maxMusics + " musics");
+            logger.info("The player " + UserUtil.INSTANCE.getFullName(member.getUser()) + " added a playlist with " + maxMusics + " musics");
 
             trackManager.setAudio(member.getVoiceState().getChannel());
             TaskHelper.runAsync(() -> {
@@ -96,7 +95,7 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
 
                     if (track.getInfo().title != null) {
 
-                        if (!permitedTrack(track, Utilities.INSTANCE.isDJ(member, null, false))) continue;
+                        if (!permitedTrack(track, UserUtil.INSTANCE.isDJ(member, null, false))) continue;
                         this.trackManager.play(track, member);
 
                     } else {

@@ -9,7 +9,7 @@ import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.models.enums.Reward;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 import lombok.Getter;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
@@ -98,7 +98,7 @@ public class LootBoxCommand extends Command {
                             Role role = event.getGuild().getRoleById(771541080634032149L);
                             if (role == null) {
 
-                                logger.warning("The player " + Utilities.INSTANCE.getFullName(event.getAuthor()) + " win the Lucky role but i can't give");
+                                logger.warning("The player " + UserUtil.INSTANCE.getFullName(event.getAuthor()) + " win the Lucky role but i can't give");
                                 break;
 
                             }

@@ -3,14 +3,13 @@ package com.yuhtin.lauren.tasks;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.utils.helper.EventWaiter;
+import com.yuhtin.lauren.models.objects.EventWaiter;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 import lombok.AllArgsConstructor;
 import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -105,7 +104,7 @@ public class LootGeneratorTask {
                             Player player = playerController.get(event.getUserIdLong());
                             player.setLootBoxes(player.getLootBoxes() + 1);
 
-                            logger.info("The player " + Utilities.INSTANCE.getFullName(event.getUser()) + " getted the drop");
+                            logger.info("The player " + UserUtil.INSTANCE.getFullName(event.getUser()) + " getted the drop");
 
                         }, 90, TimeUnit.SECONDS,
 

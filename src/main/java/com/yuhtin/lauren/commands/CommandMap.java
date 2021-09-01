@@ -17,9 +17,9 @@ public final class CommandMap {
     private final JDA bot;
     private final String prefix;
 
-    private Map<String, Command> commands = new HashMap<>();
+    private Map<String, RawCommand> commands = new HashMap<>();
 
-    public void register(String key, Command value, String... aliases) {
+    public void register(String key, RawCommand value, String... aliases) {
         if (!key.startsWith(prefix)) key = prefix + key;
 
         commands.put(key, value);

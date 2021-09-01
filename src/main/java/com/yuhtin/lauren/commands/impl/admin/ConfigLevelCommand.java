@@ -10,7 +10,7 @@ import com.yuhtin.lauren.core.xp.XpController;
 import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.sql.connection.SQLConnection;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
 
@@ -30,7 +30,7 @@ public class ConfigLevelCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        if (!Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true))
+        if (!UserUtil.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true))
             return;
 
         int identifier;

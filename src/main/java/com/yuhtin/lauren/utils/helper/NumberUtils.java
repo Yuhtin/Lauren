@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.DecimalFormat;
 
 /**
  * @author Yuhtin
@@ -13,6 +14,12 @@ import java.math.BigInteger;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class NumberUtils {
+
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
+
+    public static String format(double valor) {
+        return DECIMAL_FORMAT.format(valor);
+    }
 
     public static Number createNumber(String str) throws NumberFormatException {
 

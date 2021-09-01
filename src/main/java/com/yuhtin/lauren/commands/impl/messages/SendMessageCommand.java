@@ -3,7 +3,7 @@ package com.yuhtin.lauren.commands.impl.messages;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.commands.CommandHandler;
-import com.yuhtin.lauren.utils.helper.Utilities;
+import com.yuhtin.lauren.utils.helper.UserUtil;
 import lombok.SneakyThrows;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
@@ -21,12 +21,12 @@ public class SendMessageCommand extends Command {
     @SneakyThrows
     @Override
     protected void execute(CommandEvent event) {
-        if (!Utilities.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.MANAGE_CHANNEL, true)) return;
+        if (!UserUtil.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.MANAGE_CHANNEL, true)) return;
 
         if (!event.getMessage().getAttachments().isEmpty()) {
             Message.Attachment attachment = event.getMessage().getAttachments().get(0);
             try {
-                File file = Utilities.INSTANCE.getAttachment(attachment);
+                File file = UserUtil.INSTANCE.getAttachment(attachment);
 
                 if (file != null) event.getChannel().sendMessage("@everyone").addFile(file)
                         .queue(m -> event.getMessage().delete().queueAfter(3, TimeUnit.SECONDS, m2 -> file.delete()));
