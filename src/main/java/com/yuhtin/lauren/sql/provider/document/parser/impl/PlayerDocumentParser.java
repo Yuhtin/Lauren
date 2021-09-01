@@ -7,6 +7,7 @@ import com.yuhtin.lauren.utils.serialization.player.PlayerSerializer;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.val;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PlayerDocumentParser implements DocumentParser<Player> {
@@ -18,7 +19,7 @@ public final class PlayerDocumentParser implements DocumentParser<Player> {
 
         if (document.isEmpty()) return null;
 
-        Player player = PlayerSerializer.deserialize(document.getString("data"));
+        val player = PlayerSerializer.deserialize(document.getString("data"));
         player.setExperience(document.getNumber("xp").intValue());
         player.setAbbleToDaily(document.getBoolean("abbleToDaily"));
 

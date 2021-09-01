@@ -71,10 +71,6 @@ public class UserUtil {
 
     }
 
-    public static String getFullName(User user) {
-        return user.getName() + "#" + user.getDiscriminator();
-    }
-
     public static String rolesToString(List<Role> roles) {
         val builder = new StringBuilder();
         for (int i = 0; i < roles.size(); i++) {

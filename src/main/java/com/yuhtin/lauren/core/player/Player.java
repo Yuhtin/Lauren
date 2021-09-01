@@ -5,20 +5,18 @@ import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.impl.Entity;
 import com.yuhtin.lauren.core.punish.PunishmentType;
 import com.yuhtin.lauren.core.statistics.StatsController;
-import com.yuhtin.lauren.core.xp.Level;
 import com.yuhtin.lauren.core.xp.XpController;
 import com.yuhtin.lauren.models.enums.Rank;
 import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.helper.UserUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
+import lombok.val;
+import lombok.var;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -61,19 +59,19 @@ public class Player
 
         this.level = level;
 
-        List<Long> rolesToGive = xpController
+        val rolesToGive = xpController
                 .getLevelByXp()
                 .get(level)
                 .getRolesToGive();
 
-        List<Long> rolesToRemove = new ArrayList<>();
-        for (Integer integer : xpController.getLevelByXp().keySet()) {
+        val rolesToRemove = new ArrayList<Long>();
+        for (val integer : xpController.getLevelByXp().keySet()) {
             if (integer >= level) break;
 
-            Level tempLevel = xpController.getLevelByXp().get(integer);
+            val tempLevel = xpController.getLevelByXp().get(integer);
             if (tempLevel.getRolesToGive().isEmpty()) continue;
 
-            for (Long roleID : tempLevel.getRolesToGive()) {
+            for (val roleID : tempLevel.getRolesToGive()) {
 
                 if (roleID.equals(722957999949348935L)
                         || roleID.equals(722116789055782912L)
@@ -86,9 +84,9 @@ public class Player
 
         if (rolesToGive != null && !rolesToGive.isEmpty()) {
 
-            for (long roleID : rolesToGive) {
+            for (val roleID : rolesToGive) {
 
-                Role role = Startup.getLauren().getGuild().getRoleById(roleID);
+                val role = Startup.getLauren().getGuild().getRoleById(roleID);
                 if (role == null) {
 
                     logger.warning("Role is null");
@@ -100,9 +98,9 @@ public class Player
 
             }
 
-            for (long roleID : rolesToRemove) {
+            for (val roleID : rolesToRemove) {
 
-                Role role = Startup.getLauren().getGuild().getRoleById(roleID);
+                val role = Startup.getLauren().getGuild().getRoleById(roleID);
                 if (role == null) {
 
                     logger.warning("Role is null");
@@ -115,16 +113,16 @@ public class Player
             }
         }
 
-        String message = "Parabéns <@" + userID + "> você alcançou o nível **__" + level + "__** <a:tutut:770408915300384798>";
+        var message = "Parabéns <@" + userID + "> você alcançou o nível **__" + level + "__** <a:tutut:770408915300384798>";
 
         if (level == 20) {
 
-            message = "<:prime:722115525232296056> O jogador <@" + userID + "> tornou-se Prime";
+            message += "\n<:prime:722115525232296056> O jogador <@" + userID + "> tornou-se Prime";
             addPermission("role.prime");
 
         }
 
-        TextChannel channel = Startup.getLauren().getGuild().getTextChannelById(770393139516932158L);
+        val channel = Startup.getLauren().getGuild().getTextChannelById(770393139516932158L);
         if (channel != null) {
 
             channel.sendMessage(message).queue();
@@ -133,7 +131,7 @@ public class Player
 
         }
 
-        UserUtil.INSTANCE.updateNickByLevel(this, level);
+        UserUtil.updateNickByLevel(this, level);
         statsController.getStats("Evoluir Nível").suplyStats(1);
 
     }
@@ -141,13 +139,13 @@ public class Player
 
     public Player updateRank() {
 
-        this.rank = Rank.getByPoints(rankedPoints);
+        rank = Rank.getByPoints(rankedPoints);
         return this;
 
     }
 
     public Player addMoney(double quantity) {
-        double multiplier = multiply();
+        val multiplier = multiply();
 
         quantity *= multiplier;
         money += quantity;
@@ -171,12 +169,12 @@ public class Player
 
     public Player gainXP(double quantity) {
 
-        double multiplier = multiply();
+        val multiplier = multiply();
 
         quantity *= multiplier;
         experience += quantity;
 
-        int nextLevel = level + 1;
+        val nextLevel = level + 1;
         if (xpController.canUpgrade(nextLevel, experience)) updateLevel(nextLevel);
 
         statsController.getStats("Ganhar XP").suplyStats(1);
@@ -186,12 +184,12 @@ public class Player
 
     public void executeVote() {
 
-        this.abbleToDaily = true;
-        this.voteDelay = System.currentTimeMillis() + TimeUnit.HOURS.toMillis(12);
-        this.gainXP(250);
-        this.addMoney(75);
-        this.setRankedPoints(this.getRankedPoints() + 2);
-        ++this.votes;
+        abbleToDaily = true;
+        voteDelay = System.currentTimeMillis() + TimeUnit.HOURS.toMillis(12);
+        gainXP(250);
+        addMoney(75);
+        setRankedPoints(this.getRankedPoints() + 2);
+        ++votes;
 
     }
 
@@ -199,11 +197,7 @@ public class Player
     public double multiply() {
 
         assertList();
-
-        double multiplier = 1;
-        multiplier += getPermissions().stream().filter(multiplierList::containsKey).mapToDouble(multiplierList::get).sum();
-
-        return multiplier;
+        return 1 + getPermissions().stream().filter(multiplierList::containsKey).mapToDouble(multiplierList::get).sum();
 
     }
 

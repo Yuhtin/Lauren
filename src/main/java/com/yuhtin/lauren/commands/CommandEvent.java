@@ -2,6 +2,7 @@ package com.yuhtin.lauren.commands;
 
 import lombok.Builder;
 import lombok.Data;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -14,6 +15,8 @@ import net.dv8tion.jda.api.entities.User;
 @Data
 @Builder
 public class CommandEvent {
+
+    private final JDA JDA;
 
     private final TextChannel channel;
     private final Message message;

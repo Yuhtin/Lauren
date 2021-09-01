@@ -1,13 +1,14 @@
 package com.yuhtin.lauren.commands.impl.admin.draw;
 
 import com.google.inject.Inject;
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.commands.CommandEvent;
+import com.yuhtin.lauren.commands.CommandExecutor;
 import com.yuhtin.lauren.core.draw.controller.DrawController;
 import com.yuhtin.lauren.core.draw.controller.DrawEditting;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.UserUtil;
+import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 
@@ -21,30 +22,30 @@ import java.util.concurrent.TimeUnit;
         type = CommandHandler.CommandType.ADMIN,
         description = "Iniciar um sorteio sobre algum conteúdo",
         alias = {"sortear", "draw"})
-public class DrawCommand extends Command {
+public class DrawCommand implements CommandExecutor {
 
     @Inject private Logger logger;
 
     @Override
-    protected void execute(CommandEvent event) {
-        if (!UserUtil.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true)) return;
+    public void execute(CommandEvent event) {
+        if (!UserUtil.hasPermission(event.getMember(), event.getMessage(), Permission.ADMINISTRATOR, true)) return;
 
         if (DrawController.get() != null || DrawController.editing != null) {
-            EmbedBuilder embed = new EmbedBuilder()
+            val embed = new EmbedBuilder()
                     .setTitle("\uD83D\uDC94 Erro ao criar um sorteio")
                     .setDescription("\uD83D\uDCA1 Já existe um sorteio ativo ou alguém está criando um");
             event.getChannel().sendMessage(embed.build()).queue();
             return;
         }
 
-        EmbedBuilder embed = new EmbedBuilder()
+        val embed = new EmbedBuilder()
                 .setTitle("\uD83D\uDCB3 Criando um sorteio")
                 .setDescription("\uD83D\uDCE5 Você recebeu uma mensagem no privado para criar um sorteio, digite as informações do mesmo em seu privado \n" +
                         "⚠️ Você tem até `2 minutos` para criar o sorteio\n\n" +
                         "\uD83D\uDCCC Caso não tenha recebido a mensagem, ative suas mensagens diretas neste servidor.");
         event.getChannel().sendMessage(embed.build()).queue();
 
-        EmbedBuilder privateEmbed = new EmbedBuilder()
+        val privateEmbed = new EmbedBuilder()
                 .setTitle("\uD83D\uDCB3 Criando um sorteio")
                 .setDescription("\uD83D\uDCC4 Informações do sorteio:\n\n" +
                         " ✏️ Item a ser sorteado: `Digite no chat`")
@@ -72,13 +73,13 @@ public class DrawCommand extends Command {
                         DrawController.editing = null;
 
                     } catch (Exception exception) {
-                        this.logger.warning("Can't send a private message for user " + UserUtil.INSTANCE.getFullName(event.getMember().getUser()));
+                        this.logger.warning("Can't send a private message for user " + event.getAuthor().getAsTag());
                     }
                 }
             }, 2, TimeUnit.MINUTES);
 
         } catch (Exception exception) {
-            this.logger.warning("Can't send a private message for user " + UserUtil.INSTANCE.getFullName(event.getMember().getUser()));
+            this.logger.warning("Can't send a private message for user " + event.getAuthor().getAsTag());
         }
     }
 }

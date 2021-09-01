@@ -1,14 +1,14 @@
 package com.yuhtin.lauren.commands.impl.admin;
 
 import com.google.inject.Inject;
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.core.player.Player;
-import com.yuhtin.lauren.core.player.controller.PlayerController;
+import com.yuhtin.lauren.commands.CommandEvent;
+import com.yuhtin.lauren.commands.CommandExecutor;
 import com.yuhtin.lauren.commands.CommandHandler;
+import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.utils.helper.UserUtil;
+import lombok.val;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
 
 import java.util.concurrent.TimeUnit;
 
@@ -18,34 +18,36 @@ import java.util.concurrent.TimeUnit;
         description = "Adicionar uma permissão a um jogador",
         alias = {"addpermissão"}
 )
-public class AddPermissionCommand extends Command {
+public class AddPermissionCommand implements CommandExecutor {
 
     @Inject private PlayerController playerController;
 
     @Override
-    protected void execute(CommandEvent event) {
-        if (!UserUtil.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true))
+    public void execute(CommandEvent event) {
+        if (!UserUtil.hasPermission(event.getMember(), event.getMessage(), Permission.ADMINISTRATOR, true))
             return;
 
         if (event.getMessage().getMentionedMembers().isEmpty()) {
-            event.getChannel().sendMessage("Ops, você precisa mencionar um jogador para receber a permissão")
-                    .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-            return;
-        }
-
-        Member target = event.getMessage().getMentionedMembers().get(0);
-        String[] arguments = event.getMessage().getContentRaw().split(" ");
-
-        if (arguments.length < 3) {
-            event.getChannel()
-                    .sendMessage("Utilize desta forma: " + arguments[0] + " @usuario <permissão>")
+            event.getChannel().sendMessage(":x: Ops, você precisa mencionar um jogador para receber a permissão")
+                    .delay(10, TimeUnit.SECONDS)
+                    .flatMap(Message::delete)
                     .queue();
             return;
         }
 
-        String permission = arguments[2];
+        val target = event.getMessage().getMentionedMembers().get(0);
+        val arguments = event.getMessage().getContentRaw().split(" ");
 
-        Player data = this.playerController.get(target.getIdLong());
+        if (arguments.length < 3) {
+            event.getChannel()
+                    .sendMessage(":x: Utilize desta forma: " + arguments[0] + " @usuario <permissão>")
+                    .queue();
+            return;
+        }
+
+        val permission = arguments[2];
+
+        val data = playerController.get(target.getIdLong());
         data.addPermission(permission);
 
         event.getChannel().sendMessage("<:felizpakas:742373250037710918> " +

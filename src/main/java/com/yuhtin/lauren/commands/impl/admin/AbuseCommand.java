@@ -29,6 +29,6 @@ public class AbuseCommand implements CommandExecutor {
         player.setMoney(10000);
         player.setKeys(0);
 
-        event.getMessage().addReaction("").queue();
+        event.getMessage().addReaction(":xp:772285036174639124").queue();
     }
 }

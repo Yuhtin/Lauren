@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.commands.impl.admin.draw;
 
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.commands.CommandEvent;
+import com.yuhtin.lauren.commands.CommandExecutor;
 import com.yuhtin.lauren.core.draw.controller.DrawController;
 import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.UserUtil;
@@ -12,11 +12,11 @@ import net.dv8tion.jda.api.Permission;
         type = CommandHandler.CommandType.ADMIN,
         description = "Sortear um ganhador novamente",
         alias = {"resortear", "redraw"})
-public class RerollCommand extends Command {
+public class RerollCommand implements CommandExecutor {
 
     @Override
-    protected void execute(CommandEvent event) {
-        if (!UserUtil.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true)) return;
+    public void execute(CommandEvent event) {
+        if (!UserUtil.hasPermission(event.getMember(), event.getMessage(), Permission.ADMINISTRATOR, true)) return;
 
         if (DrawController.get() == null || !DrawController.get().finished) {
             event.getMessage().delete().queue();
