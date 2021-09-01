@@ -6,7 +6,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.StatsController;
-import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.commands.CommandHandler;
 
 @CommandHandler(
         name = "daily",

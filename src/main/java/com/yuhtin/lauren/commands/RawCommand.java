@@ -1,7 +1,7 @@
-package com.yuhtin.lauren.models.objects;
+package com.yuhtin.lauren.commands;
 
 import lombok.AllArgsConstructor;
-import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.commands.CommandHandler;
 import lombok.Data;
 
 @AllArgsConstructor

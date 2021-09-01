@@ -1,6 +1,8 @@
 package com.yuhtin.lauren.commands;
 
 import lombok.Data;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,11 +14,12 @@ import java.util.Map;
 @Data
 public final class CommandMap {
 
+    private final JDA bot;
     private final String prefix;
 
-    private Map<String, com.yuhtin.supremo.ticketbot.command.Command> commands = new HashMap<>();
+    private Map<String, Command> commands = new HashMap<>();
 
-    public void register(String key, com.yuhtin.supremo.ticketbot.command.Command value, String... aliases) {
+    public void register(String key, Command value, String... aliases) {
         if (!key.startsWith(prefix)) key = prefix + key;
 
         commands.put(key, value);
@@ -27,6 +30,8 @@ public final class CommandMap {
             commands.put(alias, value);
 
         }
+
+        bot.upsertCommand(key, value.)
 
     }
 

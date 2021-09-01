@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.music.AudioInfo;
 import com.yuhtin.lauren.core.music.TrackManager;
-import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
 import com.yuhtin.lauren.utils.helper.Utilities;
 

@@ -2,7 +2,7 @@ package com.yuhtin.lauren.commands.impl.messages;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.SneakyThrows;
 import net.dv8tion.jda.api.Permission;

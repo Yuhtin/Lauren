@@ -6,7 +6,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.models.enums.Reward;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;

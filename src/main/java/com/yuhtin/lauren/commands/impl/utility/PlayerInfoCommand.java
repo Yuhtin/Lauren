@@ -7,7 +7,7 @@ import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.StatsController;
-import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.TimeUtils;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;

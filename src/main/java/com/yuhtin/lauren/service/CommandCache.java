@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.service;
 
-import com.yuhtin.lauren.models.objects.RawCommand;
-import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.commands.RawCommand;
+import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.startup.Startup;
 import lombok.Getter;
 import net.dv8tion.jda.api.EmbedBuilder;

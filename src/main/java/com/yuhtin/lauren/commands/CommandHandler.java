@@ -1,38 +1,36 @@
 package com.yuhtin.lauren.commands;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.val;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-/**
- * @author Yuhtin
- * Github: https://github.com/Yuhtin
- */
-@EqualsAndHashCode(callSuper = true)
-@Data
-public final class CommandHandler extends ListenerAdapter {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    private final com.yuhtin.supremo.ticketbot.command.CommandMap commandMap;
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface CommandHandler {
 
-    @Override
-    public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        val contentDisplay = event.getMessage().getContentDisplay();
+    String name();
 
-        val commands = commandMap.getCommands();
-        val args = contentDisplay.split(" ");
+    CommandType type();
 
-        val command = commands.getOrDefault(args[0], null);
-        if (command == null) return;
+    String description();
 
-        val stringBuilder = new StringBuilder();
-        for (int i = 1; i < args.length; i++) {
-            stringBuilder.append(args[i]);
-            if (i + 1 < args.length) stringBuilder.append(" ");
-        }
+    String[] alias();
 
-        command.execute(event.getMessage(), stringBuilder.toString());
+    @AllArgsConstructor
+    enum CommandType {
+        HELP("Ajuda"),
+        MUSIC("Música"),
+        UTILITY("Utilidade"),
+        SCRIM("Scrim"),
+        CONFIG("Configurações"),
+        CUSTOM_MESSAGES("Mensagens Customizadas"),
+        ADMIN("Admin"),
+        OTHER("Outros");
+
+        @Getter private final String name;
     }
-
 }

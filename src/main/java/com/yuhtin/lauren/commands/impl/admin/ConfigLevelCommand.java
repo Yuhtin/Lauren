@@ -7,7 +7,7 @@ import com.mysql.cj.exceptions.NumberOutOfRange;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.xp.Level;
 import com.yuhtin.lauren.core.xp.XpController;
-import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.sql.connection.SQLConnection;
 import com.yuhtin.lauren.utils.helper.Utilities;

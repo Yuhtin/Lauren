@@ -6,7 +6,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.StatsController;
-import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.helper.SystemStatsUtils;
 import com.yuhtin.lauren.utils.helper.TimeUtils;

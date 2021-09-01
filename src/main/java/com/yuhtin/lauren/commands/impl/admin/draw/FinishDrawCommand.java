@@ -3,7 +3,7 @@ package com.yuhtin.lauren.commands.impl.admin.draw;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.draw.controller.DrawController;
-import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import net.dv8tion.jda.api.Permission;
 

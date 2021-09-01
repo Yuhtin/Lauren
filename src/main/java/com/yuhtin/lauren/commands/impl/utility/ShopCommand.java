@@ -7,7 +7,7 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.models.embeds.ShopEmbed;
 import com.yuhtin.lauren.models.objects.ShopItem;
 import com.yuhtin.lauren.startup.Startup;

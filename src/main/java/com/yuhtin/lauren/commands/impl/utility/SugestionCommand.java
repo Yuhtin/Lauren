@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.yuhtin.lauren.Lauren;
-import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.models.enums.SugestionStage;
 import com.yuhtin.lauren.models.objects.Sugestion;
 import com.yuhtin.lauren.startup.Startup;

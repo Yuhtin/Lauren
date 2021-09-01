@@ -3,7 +3,7 @@ package com.yuhtin.lauren.commands.impl.utility;
 import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.models.annotations.CommandHandler;
+import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.tasks.TopXpUpdater;
 import net.dv8tion.jda.api.EmbedBuilder;
 
