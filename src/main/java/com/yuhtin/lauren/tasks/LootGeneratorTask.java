@@ -1,23 +1,23 @@
 package com.yuhtin.lauren.tasks;
 
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
+import com.yuhtin.lauren.utils.helper.EventWaiter;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.AllArgsConstructor;
+import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
-import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.awt.*;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -26,28 +26,28 @@ import java.util.concurrent.TimeUnit;
 public class LootGeneratorTask {
 
     private final PlayerController playerController;
-    private final ShardManager shardManager;
+    private final JDA jda;
     private final EventWaiter eventWaiter;
     private final Logger logger;
 
     public void startRunnable() {
-        this.logger.info("Registered LootGeneratorTask");
+        logger.info("Registered LootGeneratorTask");
 
-        final List<Long> allowedChannels = Arrays.asList(
+        val allowedChannels = Arrays.asList(
                 700673056414367825L,
                 704342124732350645L
         );
 
-        EmbedBuilder embed = new EmbedBuilder();
+        val embed = new EmbedBuilder();
         embed.setAuthor("Loot Radiante", null, "https://cdn.discordapp.com/emojis/724759930653114399.png?v=1");
 
-        Guild guild = shardManager.getShards().get(0).getGuilds().get(0);
+        val guild = jda.getGuilds().get(0);
         embed.setFooter("© ^Aincrad™ servidor de jogos", guild.getIconUrl());
 
         embed.setThumbnail("https://www.pcguia.pt/wp-content/uploads/2019/11/lootbox.jpg");
         embed.setColor(Color.ORANGE);
 
-        String arrow = "   <:seta:771540348157689886>";
+        val arrow = "   <:seta:771540348157689886>";
         embed.setDescription(
                 "Você encontrou uma **lootbox**, seja o primeiro a reajir\n" +
                         "no ícone abaixo para garantir prêmios aleatórios\n" +

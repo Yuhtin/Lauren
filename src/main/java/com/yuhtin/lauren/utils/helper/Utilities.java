@@ -1,7 +1,6 @@
 package com.yuhtin.lauren.utils.helper;
 
 import com.google.inject.Inject;
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.models.objects.Config;
 import net.dv8tion.jda.api.Permission;
@@ -27,7 +26,6 @@ public class Utilities {
 
     public static final Utilities INSTANCE = new Utilities();
 
-    @Inject private Logger logger;
     @Inject private Config config;
     @Inject private ShardManager shardManager;
 

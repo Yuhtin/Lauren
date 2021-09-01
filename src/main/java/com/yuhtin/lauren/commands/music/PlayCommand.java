@@ -5,13 +5,12 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.models.annotations.CommandHandler;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
-import lombok.SneakyThrows;
 
 @CommandHandler(
         name = "tocar",
         type = CommandHandler.CommandType.MUSIC,
         description = "Tocar algum somzinho ai",
-        alias = {"play"}
+        alias = {"play", "p"}
 )
 public class PlayCommand extends Command {
 
@@ -35,7 +34,7 @@ public class PlayCommand extends Command {
         String[] arguments = event.getArgs().split(" ");
         if (event.getArgs().equalsIgnoreCase("")) {
 
-            event.getChannel().sendMessage("<a:nao:704295026036834375> Utilize :clock9: `$tocar <link ou nome>`").queue();
+            event.getChannel().sendMessage("<a:nao:704295026036834375> Utilize :clock9: `-play <link ou nome>`").queue();
             return;
 
         }

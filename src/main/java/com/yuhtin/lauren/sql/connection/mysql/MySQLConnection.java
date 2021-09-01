@@ -13,7 +13,7 @@ public final class MySQLConnection implements SQLConnection {
     @Override
     public boolean configure(ConnectionInfo info) {
 
-        String url = "jdbc:mysql://" + info.getHost() + ":3306/" + info.getDatabase() + "?autoReconnect=true";
+        String url = "jdbc:mysql://" + info.getHost() + ":3306/" + info.getDatabase() + "?autoReconnect=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
         try {
 
             Class.forName("com.mysql.cj.jdbc.Driver");

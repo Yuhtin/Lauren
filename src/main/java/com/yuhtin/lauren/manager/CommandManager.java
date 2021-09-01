@@ -11,8 +11,9 @@ import com.yuhtin.lauren.models.objects.RawCommand;
 import com.yuhtin.lauren.service.CommandCache;
 import com.yuhtin.lauren.startup.Startup;
 import lombok.AllArgsConstructor;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -20,7 +21,7 @@ import java.lang.reflect.Field;
 @AllArgsConstructor
 public class CommandManager {
 
-    private final ShardManager bot;
+    private final JDA bot;
     private final Injector injector;
     private final Logger logger;
     private final String folder;
@@ -31,6 +32,7 @@ public class CommandManager {
         CommandClientBuilder clientBuilder = new CommandClientBuilder();
         clientBuilder.setOwnerId("702518526753243156");
         clientBuilder.setPrefix(Startup.getLauren().getConfig().getPrefix());
+        clientBuilder.setAlternativePrefix("%");
         clientBuilder.useHelpBuilder(false);
         clientBuilder.setActivity(Activity.watching("my project on github.com/Yuhtin/Lauren"));
 
@@ -61,6 +63,8 @@ public class CommandManager {
 
                 this.injector.injectMembers(command);
                 clientBuilder.addCommand(command);
+
+                bot.upsertCommand(new CommandData(rawCommand.getName(), rawCommand.getDescription())).queue();
                 CommandCache.insert(handler.type(), rawCommand);
 
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException exception) {

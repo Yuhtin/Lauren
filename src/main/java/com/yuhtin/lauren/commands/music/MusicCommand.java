@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
         name = "musica",
         type = CommandHandler.CommandType.MUSIC,
         description = "Ver as informações da música atual",
-        alias = {"music"}
+        alias = {"music", "tocando"}
 )
 public class MusicCommand extends Command {
 

@@ -1,23 +1,22 @@
 package com.yuhtin.lauren.tasks;
 
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
+import com.yuhtin.lauren.utils.helper.EventWaiter;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.AllArgsConstructor;
+import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
-import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.awt.*;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -26,22 +25,22 @@ import java.util.concurrent.TimeUnit;
 public class ShardLootTask {
 
     private final PlayerController playerController;
-    private final ShardManager shardManager;
+    private final JDA bot;
     private final EventWaiter eventWaiter;
     private final Logger logger;
 
     public void startRunnable() {
-        this.logger.info("Registered ShardLootTask");
+        logger.info("Registered ShardLootTask");
 
-        final List<Long> allowedChannels = Arrays.asList(
+        val allowedChannels = Arrays.asList(
                 704342124732350645L,
                 700673056414367825L
         );
 
-        EmbedBuilder embed = new EmbedBuilder();
+        val embed = new EmbedBuilder();
         embed.setAuthor("Shard Loot", null, "https://cdn.discordapp.com/emojis/772285522852839445.png?v=1");
 
-        Guild guild = shardManager.getShards().get(0).getGuilds().get(0);
+        val guild = bot.getGuilds().get(0);
         embed.setFooter("© ^Aincrad™ servidor de jogos", guild.getIconUrl());
 
         embed.setThumbnail("https://www.pcguia.pt/wp-content/uploads/2019/11/lootbox.jpg");

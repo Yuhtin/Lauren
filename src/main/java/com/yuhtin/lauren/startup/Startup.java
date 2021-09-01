@@ -17,7 +17,7 @@ public class Startup {
             lauren.getLogger().info("[1/3] High important systems enabled successfully");
 
             lauren.onEnable();
-            lauren.getLogger().info("[2/3] Registered Commands, Events, Timers and others");
+            lauren.getLogger().info("[3/3] Registered Commands, Events, Timers and others");
 
         } catch (Exception exception) {
 

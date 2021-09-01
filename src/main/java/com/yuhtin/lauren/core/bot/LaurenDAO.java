@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.core.bot;
 
 import com.google.inject.Injector;
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.exceptions.GuiceInjectorException;
@@ -11,8 +11,9 @@ import com.yuhtin.lauren.sql.connection.ConnectionInfo;
 import com.yuhtin.lauren.sql.connection.SQLConnection;
 import com.yuhtin.lauren.sql.connection.mysql.MySQLConnection;
 import com.yuhtin.lauren.startup.Startup;
+import com.yuhtin.lauren.utils.helper.EventWaiter;
 import lombok.Data;
-import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.JDA;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
@@ -26,7 +27,7 @@ public abstract class LaurenDAO implements Bot {
     private final SQLConnection sqlConnection = new MySQLConnection();
 
     private String botName;
-    private ShardManager bot;
+    private JDA bot;
     private Injector injector;
     private Config config;
 

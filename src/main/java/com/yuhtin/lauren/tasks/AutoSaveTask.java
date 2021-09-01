@@ -8,9 +8,9 @@ import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.sql.provider.document.Document;
 import com.yuhtin.lauren.utils.serialization.player.PlayerSerializer;
 import lombok.AllArgsConstructor;
-import net.dv8tion.jda.api.entities.Guild;
+import lombok.val;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.util.HashMap;
 import java.util.TimerTask;
@@ -21,34 +21,34 @@ public class AutoSaveTask extends TimerTask {
 
     private final StatsController statsController;
     private final PlayerController playerController;
-    private final ShardManager shardManager;
+    private final JDA bot;
     private final Logger logger;
 
     @Override
     public void run() {
 
-        this.statsController.getStats().values().forEach(statsController.getStatisticDAO()::updateStatistic);
-        this.playerController.savePlayers();
+        statsController.getStats().values().forEach(statsController.getStatisticDAO()::updateStatistic);
+        playerController.savePlayers();
 
-        String sql = "SELECT * FROM `lauren_players`";
+        val sql = "SELECT * FROM `lauren_players`";
 
-        Guild guild = shardManager.getShards().get(0).getGuilds().get(0);
-        Role muteRole = guild.getRoleById(760242509355024404L);
-        Role callRole = guild.getRoleById(771203970118975501L);
+        val guild = bot.getGuilds().get(0);
+        val muteRole = guild.getRoleById(760242509355024404L);
+        val callRole = guild.getRoleById(771203970118975501L);
 
         if (muteRole == null || callRole == null) {
-            this.logger.info("Can't execute PunishmentCheckerTask (roles cannot be null)");
+            logger.info("Can't execute PunishmentCheckerTask (roles cannot be null)");
             return;
         }
 
-        for (Document document : this.playerController.getPlayerDAO().queryMany(sql)) {
+        for (Document document : playerController.getPlayerDAO().queryMany(sql)) {
 
             Player data = PlayerSerializer.deserialize(document.getString("data"));
 
             // purge player's data after 7 days
             if (data.getLeaveTime() != 0 && data.getLeaveTime() + TimeUnit.DAYS.toMillis(7) < System.currentTimeMillis()) {
 
-                this.playerController.getPlayerDAO().deletePlayer(data.getUserID());
+                playerController.getPlayerDAO().deletePlayer(data.getUserID());
                 continue;
 
             }

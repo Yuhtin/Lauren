@@ -10,7 +10,7 @@ import com.yuhtin.lauren.utils.helper.Utilities;
         name = "sair",
         type = CommandHandler.CommandType.MUSIC,
         description = "Sair do canal de voz e parar o batidão",
-        alias = {"leave"}
+        alias = {"leave", "quit"}
 )
 public class LeaveCommand extends Command {
 

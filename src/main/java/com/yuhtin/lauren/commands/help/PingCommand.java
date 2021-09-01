@@ -8,6 +8,7 @@ import com.yuhtin.lauren.service.LocaleManager;
 import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.helper.SystemStatsUtils;
 import lombok.SneakyThrows;
+import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
@@ -41,9 +42,10 @@ public class PingCommand extends Command {
 
     private MessageEmbed createEmbed(long toEpochMilli, Member member, JDA jda) {
 
-        String shardMessage = Startup.getLauren().getBot().getShardsTotal()
+        val shardManager = Startup.getLauren().getBot().getShardManager();
+        String shardMessage = (shardManager == null ? "1" : shardManager.getShardsTotal())
                 + " shards, "
-                + Startup.getLauren().getBot().getShardsRunning()
+                + (shardManager == null ? "1" : shardManager.getShardsRunning())
                 + " rodando";
 
         EmbedBuilder builder = new EmbedBuilder()

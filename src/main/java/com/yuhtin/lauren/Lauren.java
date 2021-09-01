@@ -23,9 +23,10 @@ import com.yuhtin.lauren.tasks.*;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.Utilities;
 import lombok.Getter;
+import lombok.val;
+import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
@@ -39,7 +40,7 @@ import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipOutputStream;
 
-public class Lauren extends LaurenDAO {
+public final class Lauren extends LaurenDAO {
 
     // DAO's
     @Inject private PlayerDAO playerDAO;
@@ -62,24 +63,24 @@ public class Lauren extends LaurenDAO {
     @Getter private Guild guild;
 
     public Lauren(String botName) {
-        this.setBotName(botName);
+        setBotName(botName);
     }
 
     @Override
     public void onLoad() throws Exception {
 
-        this.setBotStartTime(System.currentTimeMillis());
-        this.setupConfig();
+        setBotStartTime(System.currentTimeMillis());
+        setupConfig();
 
-        this.configureConnection();
+        configureConnection();
 
-        this.findVersion();
-        this.connectDiscord();
+        findVersion();
+        connectDiscord();
 
-        this.setupGuice();
-        this.getInjector().injectMembers(this);
+        setupGuice();
+        getInjector().injectMembers(this);
 
-        this.loggerController.create();
+        loggerController.create();
 
     }
 
@@ -91,10 +92,10 @@ public class Lauren extends LaurenDAO {
         loadCommands();
         loadEvents();
 
-        this.timerManager.register("com.yuhtin.lauren.timers.impl");
-        this.localeManager.searchHost(this.getConfig().getGeoIpAccessKey());
+        timerManager.register("com.yuhtin.lauren.timers.impl");
+        localeManager.searchHost(getConfig().getGeoIpAccessKey());
 
-        this.shopEmbed.build();
+        shopEmbed.build();
 
     }
 
@@ -103,53 +104,52 @@ public class Lauren extends LaurenDAO {
 
         loadTasks();
 
-        this.guild = this.getBot().getGuildById(700673055982354472L);
-        this.getBot().addEventListener(this.getEventWaiter());
+        guild = getBot().getGuildById(700673055982354472L);
 
         Arrays.asList(
                 "",
-                this.getBotName() + " v" + this.getVersion(),
+                getBotName() + " v" + getVersion(),
                 "Author: Yuhtin#9147",
                 "",
                 "All systems has loaded",
-                this.getBotName() + " is now online"
+                getBotName() + " is now online"
         ).forEach(System.out::println);
 
-        this.getLogger().info("[3/3] Lauren is now ready");
+        getLogger().info("[2/3] Lauren is now online");
 
     }
 
     @Override
     public void onDisable() throws Exception {
 
-        if (!this.getSqlConnection().findConnection().isClosed()) {
+        if (!getSqlConnection().findConnection().isClosed()) {
 
-            this.playerController.savePlayers();
-            this.statsController.getStats().values().forEach(this.statisticDAO::updateStatistic);
+            playerController.savePlayers();
+            statsController.getStats().values().forEach(statisticDAO::updateStatistic);
 
-            this.getLogger().info("Saved player's and statistic's data");
+            getLogger().info("Saved player's and statistic's data");
 
         } else {
 
-            this.getLogger().warning("SQLConnection is closed, reconfiguring");
-            this.configureConnection();
+            getLogger().warning("SQLConnection is closed, reconfiguring");
+            configureConnection();
 
-            this.getLogger().info("Executing onDisable again");
+            getLogger().info("Executing onDisable again");
             onDisable();
             return;
 
         }
 
         TrackManager.getGuildTrackManagers().values().forEach(TrackManager::destroy);
-        this.getLogger().info("Destroyed all track managers");
+        getLogger().info("Destroyed all track managers");
 
-        this.getLogger().info(this.getBotName() + " disabled");
+        getLogger().info(getBotName() + " disabled");
 
         LocalDateTime now = LocalDateTime.now();
-        File file = this.loggerController.getFile();
+        File file = loggerController.getFile();
 
-        this.getLogger().log("Compressing the log '" + file.getName() + "' to a zip file", LogType.FINISH);
-        this.getLogger().log("Ending log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s", LogType.FINISH);
+        getLogger().log("Compressing the log '" + file.getName() + "' to a zip file", LogType.FINISH);
+        getLogger().log("Ending log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s", LogType.FINISH);
 
         FileOutputStream outputStream = new FileOutputStream(file.getPath().split("\\.")[0] + ".zip");
         ZipOutputStream zipFileOutput = new ZipOutputStream(outputStream);
@@ -160,31 +160,32 @@ public class Lauren extends LaurenDAO {
         zipFileOutput.close();
         outputStream.close();
 
-        this.getLogger().info("Zipped last log file successfully");
+        getLogger().info("Zipped last log file successfully");
 
     }
 
     @Override
     public void connectDiscord() throws LoginException {
 
-        this.setBot(DefaultShardManagerBuilder.createDefault(this.getConfig().getToken())
+        val jdaBuilder = JDABuilder.createDefault(getConfig().getToken())
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .setChunkingFilter(ChunkingFilter.ALL)
                 .enableIntents(Arrays.asList(GatewayIntent.values()))
                 .setAutoReconnect(true)
-                .addEventListeners(new BotReadyEvent(this))
-                .build()
-        );
+                .addEventListeners(new BotReadyEvent(this));
 
+        for (int i = 0; i < 10; i++) { jdaBuilder.useSharding(i, 10).build();}
+
+        setBot(jdaBuilder.build());
     }
 
     @Override
     public void loadCommands() throws IOException {
 
         CommandManager commandManager = new CommandManager(
-                this.getBot(),
-                this.getInjector(),
-                this.getLogger(),
+                getBot(),
+                getInjector(),
+                getLogger(),
                 "com.yuhtin.lauren.commands"
         );
 
@@ -195,9 +196,10 @@ public class Lauren extends LaurenDAO {
     @Override
     public void loadEvents() throws IOException {
 
-        EventsManager eventsManager = new EventsManager(this.getBot(),
-                this.getInjector(),
-                this.getLogger(),
+        EventsManager eventsManager = new EventsManager(
+                getBot(),
+                getInjector(),
+                getLogger(),
                 "com.yuhtin.lauren.events"
         );
 
@@ -210,9 +212,9 @@ public class Lauren extends LaurenDAO {
 
         try {
 
-            this.setInjector(Guice.createInjector(new LaurenModule(this)));
-            this.getInjector().injectMembers(this);
-            this.getInjector().injectMembers(Utilities.INSTANCE);
+            setInjector(Guice.createInjector(new LaurenModule(this)));
+            getInjector().injectMembers(this);
+            getInjector().injectMembers(Utilities.INSTANCE);
 
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -223,46 +225,46 @@ public class Lauren extends LaurenDAO {
 
     private void loadSQLTables() {
 
-        this.playerDAO.createTable();
-        this.xpController.load();
+        playerDAO.createTable();
+        xpController.load();
 
-        this.statisticDAO.createTable();
-        this.statisticDAO.findAllStats().forEach(this.statsController::insertStats);
+        statisticDAO.createTable();
+        statisticDAO.findAllStats().forEach(statsController::insertStats);
 
     }
 
     private void loadTasks() {
 
         AutoSaveTask autoSaveTask = new AutoSaveTask(
-                this.statsController,
-                this.playerController,
-                this.getBot(),
-                this.getLogger()
+                statsController,
+                playerController,
+                getBot(),
+                getLogger()
         );
 
         TimerCheckerTask timerCheckerTask = new TimerCheckerTask(
-                this.timerManager,
-                this.getLogger()
+                timerManager,
+                getLogger()
         );
 
         LootGeneratorTask lootGeneratorTask = new LootGeneratorTask(
-                this.playerController,
-                this.getBot(),
-                this.getEventWaiter(),
-                this.getLogger()
+                playerController,
+                getBot(),
+                getEventWaiter(),
+                getLogger()
         );
 
         ShardLootTask shardLootTask = new ShardLootTask(
-                this.playerController,
-                this.getBot(),
-                this.getEventWaiter(),
-                this.getLogger()
+                playerController,
+                getBot(),
+                getEventWaiter(),
+                getLogger()
         );
 
         TaskHelper.runTaskTimerAsync(autoSaveTask, 5, 5, TimeUnit.MINUTES);
         TaskHelper.runTaskTimerAsync(timerCheckerTask, 1, 1, TimeUnit.MINUTES);
 
-        this.topXpUpdater.startRunnable();
+        topXpUpdater.startRunnable();
         lootGeneratorTask.startRunnable();
         shardLootTask.startRunnable();
 

@@ -11,7 +11,7 @@ import com.yuhtin.lauren.utils.helper.Utilities;
         name = "misturar",
         type = CommandHandler.CommandType.MUSIC,
         description = "Misturar as minhas musiquinhas",
-        alias = {"misture"}
+        alias = {"misture", "shuffle"}
 )
 public class ShuffleCommand extends Command {
 
