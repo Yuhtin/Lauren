@@ -1,12 +1,12 @@
 package com.yuhtin.lauren.commands.impl.admin;
 
 import com.google.inject.Inject;
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.core.player.Player;
+import com.yuhtin.lauren.commands.CommandExecutor;
+import com.yuhtin.lauren.commands.CommandEvent;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.UserUtil;
+import lombok.val;
 import net.dv8tion.jda.api.Permission;
 
 @CommandHandler(
@@ -15,18 +15,20 @@ import net.dv8tion.jda.api.Permission;
         description = "Abusadamente",
         alias = {}
 )
-public class AbuseCommand extends Command {
+public class AbuseCommand implements CommandExecutor {
 
     @Inject private PlayerController playerController;
 
     @Override
-    protected void execute(CommandEvent event) {
-        if (!UserUtil.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true))
+    public void execute(CommandEvent event) {
+        if (!UserUtil.hasPermission(event.getMember(), event.getMessage(), Permission.ADMINISTRATOR, true))
             return;
 
-        Player player = this.playerController.get(event.getAuthor().getIdLong());
+        val player = playerController.get(event.getAuthor().getIdLong());
         player.setLootBoxes(player.getLootBoxes() + 1);
         player.setMoney(10000);
         player.setKeys(0);
+
+        event.getMessage().addReaction("").queue();
     }
 }

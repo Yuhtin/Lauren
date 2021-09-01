@@ -7,7 +7,7 @@ import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.models.enums.LogType;
-import com.yuhtin.lauren.commands.RawCommand;
+import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.service.CommandCache;
 import com.yuhtin.lauren.startup.Startup;
 import lombok.AllArgsConstructor;
@@ -48,7 +48,7 @@ public class CommandManager {
                 Command command = (Command) object;
                 CommandHandler handler = (CommandHandler) classByName.getAnnotation(CommandHandler.class);
 
-                RawCommand rawCommand = new RawCommand(handler.name(),
+                Command rawCommand = new Command(handler.name(),
                         handler.description(),
                         handler.type(),
                         handler.alias());

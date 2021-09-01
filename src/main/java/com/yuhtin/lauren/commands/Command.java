@@ -1,13 +1,16 @@
 package com.yuhtin.lauren.commands;
 
-import net.dv8tion.jda.api.entities.Message;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-/**
- * @author Yuhtin
- * Github: https://github.com/Yuhtin
- */
-public interface Command {
+@AllArgsConstructor
+@Data
+public class Command {
 
-    void execute(CommandEvent event);
+    private final String name;
+    private final String description;
+    private final CommandHandler.CommandType type;
+    private final String[] aliases;
+    private final CommandExecutor commandExecutor;
 
 }

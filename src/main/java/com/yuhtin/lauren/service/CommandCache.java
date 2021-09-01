@@ -1,6 +1,6 @@
 package com.yuhtin.lauren.service;
 
-import com.yuhtin.lauren.commands.RawCommand;
+import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.startup.Startup;
 import lombok.Getter;
@@ -12,7 +12,7 @@ public class CommandCache {
 
     private CommandCache() {}
 
-    protected static final Map<CommandHandler.CommandType, List<RawCommand>> commandsType = new EnumMap<> (CommandHandler.CommandType.class);
+    protected static final Map<CommandHandler.CommandType, List<Command>> commandsType = new EnumMap<> (CommandHandler.CommandType.class);
 
     @Getter private static final Map<String, EmbedBuilder> commands = new HashMap<>();
     @Getter private static final EmbedBuilder helpEmbed = new EmbedBuilder();
@@ -24,7 +24,7 @@ public class CommandCache {
         }
     }
 
-    public static void insert(CommandHandler.CommandType type, RawCommand rawCommand) {
+    public static void insert(CommandHandler.CommandType type, Command rawCommand) {
         aliases.add(rawCommand.getName());
         aliases.addAll(Arrays.asList(rawCommand.getAliases()));
 

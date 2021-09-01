@@ -5,6 +5,7 @@ import lombok.Data;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 
 /**
  * @author Yuhtin
@@ -14,8 +15,10 @@ import net.dv8tion.jda.api.entities.TextChannel;
 @Builder
 public class CommandEvent {
 
-    private final Message message;
-    private final Member member;
     private final TextChannel channel;
+    private final Message message;
+
+    private final Member member;
+    private final User author;
 
 }

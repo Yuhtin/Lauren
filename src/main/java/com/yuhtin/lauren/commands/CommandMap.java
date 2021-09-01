@@ -2,7 +2,6 @@ package com.yuhtin.lauren.commands;
 
 import lombok.Data;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,21 +16,21 @@ public final class CommandMap {
     private final JDA bot;
     private final String prefix;
 
-    private Map<String, RawCommand> commands = new HashMap<>();
+    private Map<String, Command> commands = new HashMap<>();
 
-    public void register(String key, RawCommand value, String... aliases) {
+    public void register(String key, Command value, String... aliases) {
         if (!key.startsWith(prefix)) key = prefix + key;
 
         commands.put(key, value);
+        bot.upsertCommand(key, value.getDescription()).queue();
 
         for (String alias : aliases) {
 
             if (!alias.startsWith(prefix)) alias = prefix + alias;
             commands.put(alias, value);
+            bot.upsertCommand(alias, value.getDescription()).queue();
 
         }
-
-        bot.upsertCommand(key, value.)
 
     }
 

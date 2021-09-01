@@ -22,14 +22,11 @@ public class UserUtil {
     @Inject private static Config config;
     @Inject private static JDA bot;
 
-    public static boolean isPermission(Member member, MessageChannel channel, Permission permission, boolean showMessage) {
+    public static boolean hasPermission(Member member, Message message, Permission permission, boolean showMessage) {
         if (!member.hasPermission(permission)) {
             if (!showMessage) return false;
 
-            channel.sendMessage("<a:nao:704295026036834375> Você não tem permissão para usar esta função")
-                    .delay(10, TimeUnit.SECONDS)
-                    .flatMap(Message::delete)
-                    .queue();
+            message.addReaction(":x:").queue();
             return false;
         }
 
