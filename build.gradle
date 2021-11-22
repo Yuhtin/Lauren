@@ -4,9 +4,9 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '6.0.0'
 }
 
-mainClassName = 'com.yuhtin.lauren.Lauren'
+mainClassName = 'com.yuhtin.lauren.Core'
 group 'com.yuhtin'
-version '1.0.0'
+version '0.0.1'
 
 tasks.build.dependsOn('shadowJar')
 
