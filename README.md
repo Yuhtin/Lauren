@@ -14,10 +14,8 @@ Lauren is a discord bot that contains moderation commands, draw, experience, sta
 ### Credits
 
   * [JDA](https://github.com/DV8FromTheWorld/JDA) for providing the client-side code and documentation to help with the discord api
-  * [JDA-Utilities](https://github.com/JDA-Applications/JDA-Utilities) for providing many utility codes for the JDA
   * [Elytra Readme](https://github.com/Elytra-Server/Elytra/blob/develop/README.md) i don't know how to create beautiful readme, so I based it on the readme of the Elytra project
   * [LavaPlayer](https://github.com/sedmelluq/lavaplayer) is an audio player library written in Java which can load audio tracks
-  * [Invidget](https://github.com/SwitchbladeBot/invidget) recreates the discord server invitation widget
 
 ## Discord Server
   Tests the Lauren bot on my discord server
@@ -25,18 +23,11 @@ Lauren is a discord bot that contains moderation commands, draw, experience, sta
 
 ## Contributors
 
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
 <table>
   <tr>
     <td align="center"><a href="https://github.com/Yuhtin"><img src="https://avatars1.githubusercontent.com/u/26367735?v=4" width="100px;" alt=""/><br /><sub><b>Yuhtin</b></sub></a><br /><a href="https://github.com/Yuhtin/Lauren/commits?author=Yuhtin" title="Code">💻</a>  <a href="https://github.com/Yuhtin/Lauren/commits?author=Yuhtin" title="Documentation">📖</a></td>   
   </tr>
 </table>
-
-<!-- markdownlint-enable -->
-<!-- prettier-ignore-end -->
-<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## Recommended
 <a href="https://www.hypehost.com.br" target="_blank"><img src="https://media.discordapp.net/attachments/613180160639893544/727702405449383986/cEaF9bm.png?width=435&height=136" title="My host (i was not paid to disclose)" style="height: 51px !important;width: 217px !important;" ></a>
