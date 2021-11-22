@@ -13,11 +13,17 @@ tasks.build.dependsOn('shadowJar')
 repositories {
     mavenCentral()
     maven { url = 'https://jitpack.io/' }
+    maven { url = 'https://m2.dv8tion.net/releases' }
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    implementation('net.dv8tion:JDA:4.3.0_346') {
+        exclude module: 'opus-java'
+    }
+
+    implementation 'com.sedmelluq:lavaplayer:1.3.77'
+    implementation 'org.mongodb:mongodb-driver-sync:4.4.0'
+    implementation 'com.github.alibaba:fastjson:1.2.76'
 
     def lombok = 'org.projectlombok:lombok:1.18.22'
     compileOnly lombok
