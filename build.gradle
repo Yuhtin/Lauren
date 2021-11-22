@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '6.0.0'
+}
+
+mainClassName = 'com.yuhtin.lauren.Lauren'
+group 'com.yuhtin'
+version '1.0.0'
+
+tasks.build.dependsOn('shadowJar')
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://jitpack.io/' }
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    def lombok = 'org.projectlombok:lombok:1.18.22'
+    compileOnly lombok
+    annotationProcessor lombok
+}
+
+shadowJar {
+    archiveName("${project.name}-${project.version}.jar")
+}
