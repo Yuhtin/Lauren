@@ -4,6 +4,7 @@ import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.helper.UserUtil;
+import lombok.val;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
@@ -19,10 +20,10 @@ public class RegisterCommand implements Command {
 
     @Override
     public void execute(CommandInteraction event, InteractionHook hook) {
-        if (!UserUtil.hasPermission(event.getMember(), hook, Permission.ADMINISTRATOR, true))
-            return;
+        if (event.getMember() == null
+                || !UserUtil.hasPermission(event.getMember(), hook, Permission.ADMINISTRATOR)) return;
 
-        MessageAction action = event.getChannel().sendMessage(":flag_br: - Portuguese\n" +
+        val action = event.getChannel().sendMessage(":flag_br: - Portuguese\n" +
                 "Olá jogadores, para realizar seu cadastro reaja abaixo desta mensagem qual o seu sexo respectivamente\n" +
                 "\n" +
                 "<:nao_pertubar:703089222185386056> Menino\n" +
@@ -35,10 +36,13 @@ public class RegisterCommand implements Command {
                 "<:live:704293077623504957> Girl\n" +
                 "\n" +
                 "@everyone");
+
         action.queue(message -> {
             message.addReaction(":nao_pertubar:703089222185386056").queue();
             message.addReaction(":live:704293077623504957").queue();
             Startup.getLauren().getConfig().setResgistrationId(message.getIdLong());
         });
+
+        hook.setEphemeral(true).sendMessage("👍 Fiz a mensagem pica ai").queue();
     }
 }
