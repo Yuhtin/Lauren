@@ -12,19 +12,18 @@ import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandData(
-        name = "points",
+        name = "shard",
         type = CommandData.CommandType.ADMIN,
-        description = "Adicionar pontos de ranked para um jogador",
+        description = "Alterar shards de um jogador",
         args = {
                 "<option>-Use add, remove ou set.",
                 "<@player>-Jogador que deseja fazer a alteração.",
-                "<!quantity>-Quantidade de pontos que deseja adicionar ou remover."
+                "<!quantity>-Quantidade de shards que deseja adicionar ou remover."
         }
 )
-public class PointsComamnd implements Command {
+public class ShardsCommand implements Command {
 
-    @Inject
-    private PlayerController playerController;
+    @Inject private PlayerController playerController;
 
     @Override
     public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
@@ -40,14 +39,13 @@ public class PointsComamnd implements Command {
         val data = playerController.get(player.getIdLong());
         if (!option.equalsIgnoreCase("set")) quantity += data.getRankedPoints();
 
-        data.setRankedPoints(quantity);
-        data.updateRank();
+        data.addMoney(quantity);
 
         if (quantity <= 0) quantity *= -1;
         val optionUsed = option.equalsIgnoreCase("set") ? "setou" : option.equalsIgnoreCase("remove") ? "removeu" : "adicionou";
 
         hook.sendMessage("<:felizpakas:742373250037710918> " +
-                        "Você " + optionUsed + " **" + quantity + "** pontos ao jogador " + player.getAsTag())
+                        "Você " + optionUsed + " **" + quantity + "** shards ao jogador " + player.getAsTag())
                 .queue();
     }
 }
