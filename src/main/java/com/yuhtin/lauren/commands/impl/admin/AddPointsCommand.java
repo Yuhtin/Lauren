@@ -1,8 +1,6 @@
 package com.yuhtin.lauren.commands.impl.admin;
 
 import com.google.inject.Inject;
-import com.yuhtin.lauren.commands.CommandExecutor;
-import com.yuhtin.lauren.commands.CommandEvent;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.UserUtil;

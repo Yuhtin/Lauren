@@ -23,32 +23,10 @@ public class ChatMessage extends ListenerAdapter {
                 || event.getAuthor().isBot())
             return;
 
-        if (event.getMessage().getContentRaw().startsWith("$")) {
-
-            String command = event.getMessage().getContentRaw().split(" ")[0].replace("$", "").toLowerCase();
-            if (!CommandCache.getAliases().contains(command)) {
-
-                for (String alias : CommandCache.getAliases()) {
-
-                    if (LevenshteinCalculator.eval(command, alias) < 4) {
-
-                        event.getChannel().sendMessage("<:chorano:726207542413230142> " +
-                                "Esse comandinho não existe porém encontrei um parecido: `$"
-                                + alias +
-                                "`").queue();
-                        break;
-
-                    }
-
-                }
-
-            }
-        }
-
         if (!isMusicCommand(event.getMessage().getContentRaw())
                 && event.getMessage().getContentRaw().contains("://")
                 && event.getChannel().getIdLong() != 753628118161424384L
-                && !UserUtil.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.MESSAGE_MANAGE, false)) {
+                && !UserUtil.hasPermission(event.getMember(), event.getMessage(), Permission.MESSAGE_MANAGE, false)) {
 
             event.getChannel()
                     .sendMessage("<:chorano:726207542413230142> Poxa, não divulga aqui amigo, temos nosso sistema de parceria, fale com o <@272879983326658570> no privado.")

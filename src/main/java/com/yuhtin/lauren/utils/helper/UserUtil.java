@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 
 import java.util.List;
 import java.util.Objects;
@@ -22,38 +23,33 @@ public class UserUtil {
     @Inject private static Config config;
     @Inject private static JDA bot;
 
-    public static boolean hasPermission(Member member, Message message, Permission permission, boolean showMessage) {
+    public static boolean hasPermission(Member member, InteractionHook hook, Permission permission) {
         if (!member.hasPermission(permission)) {
-            if (!showMessage) return false;
+            if (hook == null) return false;
 
-            message.addReaction(":x:").queue();
+            hook.sendMessage(":x: Sem permissão.").queue();
             return false;
         }
 
         return true;
     }
 
-    public static boolean isOwner(MessageChannel channel, User user, boolean showMessage) {
-
+    public static boolean isOwner(User user, InteractionHook hook) {
         if (config.getOwnerID() != user.getIdLong()) {
+            if (hook == null) return false;
 
-            if (!showMessage) return false;
-
-            channel.sendMessage("<a:nao:704295026036834375> Você não tem permissão para usar esta função")
+            hook.sendMessage("<a:nao:704295026036834375> Você não tem permissão para usar esta função")
                     .delay(10, TimeUnit.SECONDS)
                     .flatMap(Message::delete)
                     .queue();
 
             return false;
-
         }
 
         return true;
-
     }
 
     public static void updateNickByLevel(Player player, int level) {
-
         if (player.isHideLevelOnNickname()) return;
 
         val member = bot.getGuilds().get(0).getMemberById(player.getUserID());
@@ -67,8 +63,10 @@ public class UserUtil {
 
         if (nickname.length() > 32) nickname = nickname.substring(0, 32);
 
-        try { member.modifyNickname(nickname).queue(); } catch (HierarchyException ignored) { }
-
+        try {
+            member.modifyNickname(nickname).queue();
+        } catch (HierarchyException ignored) {
+        }
     }
 
     public static String rolesToString(List<Role> roles) {
@@ -81,11 +79,12 @@ public class UserUtil {
         return builder.toString();
     }
 
-    public static boolean isDJ(Member member, MessageChannel channel, boolean message) {
+    public static boolean isDJ(Member member, InteractionHook hook) {
         val isDJ = member.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("DJ \uD83C\uDFB6"));
+        if (!isDJ && hook != null) {
+            hook.sendMessage("Ahhh, que pena \uD83D\uDC94 você não pode realizar essa operação").queue();
+        }
 
-        if (!isDJ && message)
-            channel.sendMessage("Ahhh, que pena \uD83D\uDC94 você não pode realizar essa operação").queue();
         return isDJ;
     }
 

@@ -1,8 +1,6 @@
 package com.yuhtin.lauren.commands.impl.admin;
 
 import com.google.inject.Inject;
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.commands.CommandHandler;
@@ -17,13 +15,13 @@ import java.util.concurrent.TimeUnit;
         type = CommandHandler.CommandType.ADMIN,
         description = "Setar os pontos de ranked para um jogador",
         alias = {"setpoints"})
-public class SetPointsCommand extends Command {
+public class SetPointsCommand implements CommandExecutor {
 
     @Inject private PlayerController playerController;
 
     @Override
-    protected void execute(CommandEvent event) {
-        if (!UserUtil.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true))
+    public void execute(CommandEvent event) {
+        if (!UserUtil.hasPermission(event.getMember(), event.getMessage(), Permission.ADMINISTRATOR, true))
             return;
 
         if (event.getMessage().getMentionedMembers().isEmpty()) {

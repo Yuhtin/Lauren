@@ -2,8 +2,11 @@ package com.yuhtin.lauren.utils.helper;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.yuhtin.lauren.core.music.TrackManager;
+import lombok.val;
+import lombok.var;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 
 public class TrackUtils {
 
@@ -33,11 +36,11 @@ public class TrackUtils {
         return builder.toString();
     }
 
-    public boolean isInVoiceChannel(Member member) {
+    public boolean isInMusicChannel(Member member) {
         return member.getVoiceState() != null
                 && member.getVoiceState().getChannel() != null
                 && (member.getVoiceState().getChannel().getName().contains("Batidões")
-                || UserUtil.INSTANCE.isDJ(member, null, false));
+                || UserUtil.isDJ(member, null, false));
     }
 
     public boolean isMusicOwner(Member member) {
@@ -47,12 +50,10 @@ public class TrackUtils {
                 .equals(member);
     }
 
-    public boolean isIdle(TextChannel channel) {
-        if (TrackManager.of(channel.getGuild()).getPlayer().getPlayingTrack() == null) {
-
-            channel.sendMessage("\uD83D\uDCCC Eita, não tem nenhum batidão pra tocar, adiciona uns ai <3").queue();
+    public boolean isIdle(Guild guild, InteractionHook hook) {
+        if (TrackManager.of(guild).getPlayer().getPlayingTrack() == null) {
+            hook.sendMessage("\uD83D\uDCCC Eita, não tem nenhum batidão pra tocar, adiciona uns ai <3").queue();
             return true;
-
         }
 
         return false;
@@ -61,10 +62,12 @@ public class TrackUtils {
     //public void forceSkipTrack() { TrackManager.get().musicManager.scheduler.onTrackEnd(true); }
 
     public String getTimeStamp(long milis) {
-        long seconds = milis / 1000L;
-        final long hours = Math.floorDiv(seconds, 3600L);
+        var seconds = milis / 1000L;
+
+        val hours = Math.floorDiv(seconds, 3600L);
         seconds -= hours * 3600L;
-        final long mins = Math.floorDiv(seconds, 60L);
+
+        val mins = Math.floorDiv(seconds, 60L);
         seconds -= mins * 60L;
 
         return ((hours == 0L) ? "" : (hours + ":")) + String.format("%02d", mins) + ":" + String.format("%02d", seconds);

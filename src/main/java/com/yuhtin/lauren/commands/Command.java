@@ -1,16 +1,11 @@
 package com.yuhtin.lauren.commands;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
-@AllArgsConstructor
-@Data
-public class Command {
+public interface Command {
 
-    private final String name;
-    private final String description;
-    private final CommandHandler.CommandType type;
-    private final String[] aliases;
-    private final CommandExecutor commandExecutor;
+    void execute(CommandInteraction command, InteractionHook hook) throws Exception;
 
 }
+

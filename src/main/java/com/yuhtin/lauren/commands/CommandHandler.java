@@ -13,12 +13,22 @@ import java.lang.annotation.Target;
 public @interface CommandHandler {
 
     String name();
-
-    CommandType type();
-
     String description();
 
-    String[] alias();
+    /*
+        Type [<argtype>arg]-Arg description for a not required arg
+        Type <<argtype>arg>-Arg description for a required arg
+
+        Arg types:
+        # - Channel
+        % - Role
+        @ - Mention user
+        ! - Integer
+        Nothing - String
+     */
+
+    String[] args();
+    CommandType type();
 
     @AllArgsConstructor
     enum CommandType {

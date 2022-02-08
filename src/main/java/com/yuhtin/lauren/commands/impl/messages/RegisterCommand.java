@@ -1,24 +1,27 @@
 package com.yuhtin.lauren.commands.impl.messages;
 
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.helper.UserUtil;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 @CommandHandler(
         name = "createregister",
         type = CommandHandler.CommandType.CUSTOM_MESSAGES,
-        description = "Criar a mensagem de registro de cargos",
-        alias = {})
-public class RegisterCommand extends Command {
+        args = {},
+        description = "Criar a mensagem de registro de cargos"
+)
+public class RegisterCommand implements Command {
 
     @Override
-    protected void execute(CommandEvent event) {
-        event.getMessage().delete().queue();
-        if (!UserUtil.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true)) return;
+    public void execute(CommandInteraction event, InteractionHook hook) {
+        if (!UserUtil.hasPermission(event.getMember(), hook, Permission.ADMINISTRATOR, true))
+            return;
 
         MessageAction action = event.getChannel().sendMessage(":flag_br: - Portuguese\n" +
                 "Olá jogadores, para realizar seu cadastro reaja abaixo desta mensagem qual o seu sexo respectivamente\n" +

@@ -1,8 +1,6 @@
 package com.yuhtin.lauren.commands.impl.admin;
 
 import com.google.inject.Inject;
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.models.objects.Config;
@@ -19,14 +17,14 @@ import java.time.Instant;
         type = CommandHandler.CommandType.CONFIG,
         description = "Configurar algumas informações minha",
         alias = {"configurar", "cfg", "editar", "edit"})
-public class ConfigCommand extends Command {
+public class ConfigCommand implements CommandExecutor {
 
     @Inject private Logger logger;
 
     @SneakyThrows
     @Override
-    protected void execute(CommandEvent event) {
-        if (!UserUtil.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true))
+    public void execute(CommandEvent event) {
+        if (!UserUtil.hasPermission(event.getMember(), event.getMessage(), Permission.ADMINISTRATOR, true))
             return;
 
         String[] arguments = event.getMessage().getContentRaw().split(" ");
@@ -53,7 +51,8 @@ public class ConfigCommand extends Command {
                             "  Atual: " + config.getResgistrationId() + "\n" +
                             "  Troque o ID da mensagem de registro\n\n"
             );
-            event.getChannel().sendMessage(embed.build()).queue();
+
+            event.getChannel().sendMessageEmbeds(embed.build()).queue();
             return;
         }
 

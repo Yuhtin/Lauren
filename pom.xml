@@ -48,8 +48,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
 
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>8</source>
+                    <target>8</target>
                 </configuration>
 
             </plugin>
@@ -118,7 +118,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>4.3.0_314</version>
+            <version>5.0.0-alpha.4</version>
             <exclusions>
                 <exclusion>
                     <groupId>club.minnced</groupId>
@@ -127,6 +127,11 @@
             </exclusions>
         </dependency>
 
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20211205</version>
+        </dependency>
     </dependencies>
 
     <repositories>

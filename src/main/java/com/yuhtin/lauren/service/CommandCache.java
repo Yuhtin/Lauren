@@ -16,7 +16,6 @@ public class CommandCache {
 
     @Getter private static final Map<String, EmbedBuilder> commands = new HashMap<>();
     @Getter private static final EmbedBuilder helpEmbed = new EmbedBuilder();
-    @Getter private static final List<String> aliases = new ArrayList<>();
 
     public static void start() {
         for (CommandHandler.CommandType value : CommandHandler.CommandType.values()) {
@@ -25,19 +24,9 @@ public class CommandCache {
     }
 
     public static void insert(CommandHandler.CommandType type, Command rawCommand) {
-        aliases.add(rawCommand.getName());
-        aliases.addAll(Arrays.asList(rawCommand.getAliases()));
-
         commands.put(rawCommand.getName().toLowerCase(), new EmbedBuilder()
                 .setImage("https://pa1.narvii.com/7093/1d8551884cec1cb2dd99b88ff4c745436b21f1b4r1-500-500_hq.gif")
-                .setAuthor("Informações do comando " + rawCommand.getName(), null,
-                        Startup.getLauren()
-                                .getBot()
-                                .getShards()
-                                .get(0)
-                                .getSelfUser()
-                                .getAvatarUrl()
-                )
+                .setAuthor("Informações do comando " + rawCommand.getName(), null, Startup.getLauren().getBot().getSelfUser().getAvatarUrl())
 
                 .setDescription("Você está vendo as informações específicas do comando `" + rawCommand.getName() + "`," +
                         " para ver todos os comandos utilize `$ajuda <comando>`")
@@ -53,14 +42,7 @@ public class CommandCache {
     public static void construct() {
         helpEmbed.setImage("https://i.imgur.com/mQVFSrP.gif");
 
-        helpEmbed.setAuthor("Comandos atacaaaaar \uD83E\uDDF8", null,
-                Startup.getLauren()
-                        .getBot()
-                        .getShards()
-                        .get(0)
-                        .getSelfUser()
-                        .getAvatarUrl()
-        );
+        helpEmbed.setAuthor("Comandos atacaaaaar \uD83E\uDDF8", null, Startup.getLauren().getBot().getSelfUser().getAvatarUrl());
 
         helpEmbed.setDescription(
                 "Para mais informações sobre um comando, digite `$ajuda <comando>` que eu lhe informarei mais sobre ele " +

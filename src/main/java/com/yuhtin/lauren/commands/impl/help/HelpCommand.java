@@ -1,7 +1,5 @@
 package com.yuhtin.lauren.commands.impl.help;
 
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.service.CommandCache;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -14,10 +12,10 @@ import java.util.concurrent.TimeUnit;
         type = CommandHandler.CommandType.HELP,
         description = "Informações de comandos do bot",
         alias = {"help"})
-public class HelpCommand extends Command {
+public class HelpCommand implements CommandExecutor {
 
     @Override
-    protected void execute(CommandEvent event) {
+    public void execute(CommandEvent event) {
         String[] args = event.getMessage().getContentRaw().split(" ");
 
         if (args.length > 1) {
@@ -36,7 +34,7 @@ public class HelpCommand extends Command {
                     .setColor(event.getMember().getColor())
                     .setTimestamp(Instant.now());
 
-            event.getChannel().sendMessage(embed.build()).queue();
+            event.getChannel().sendMessageEmbeds(embed.build()).queue();
             return;
 
         }
@@ -47,7 +45,7 @@ public class HelpCommand extends Command {
                 .setColor(event.getMember().getColor())
                 .setTimestamp(Instant.now());
 
-        event.getChannel().sendMessage(helpEmbed.build()).queue();
+        event.getChannel().sendMessageEmbeds(helpEmbed.build()).queue();
 
     }
 

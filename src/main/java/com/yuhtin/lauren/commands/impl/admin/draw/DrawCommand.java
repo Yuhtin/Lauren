@@ -1,8 +1,6 @@
 package com.yuhtin.lauren.commands.impl.admin.draw;
 
 import com.google.inject.Inject;
-import com.yuhtin.lauren.commands.CommandEvent;
-import com.yuhtin.lauren.commands.CommandExecutor;
 import com.yuhtin.lauren.core.draw.controller.DrawController;
 import com.yuhtin.lauren.core.draw.controller.DrawEditting;
 import com.yuhtin.lauren.core.logger.Logger;

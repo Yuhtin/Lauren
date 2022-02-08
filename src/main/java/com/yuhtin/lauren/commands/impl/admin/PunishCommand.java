@@ -1,14 +1,10 @@
 package com.yuhtin.lauren.commands.impl.admin;
 
 import com.google.inject.Inject;
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.core.punish.PunishmentRule;
 import com.yuhtin.lauren.manager.PunishmentManager;
 import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.UserUtil;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Member;
 
 @CommandHandler(
         name = "punir",
@@ -16,16 +12,16 @@ import net.dv8tion.jda.api.entities.Member;
         description = "Lançar o machado do ban",
         alias = {}
 )
-public class PunishCommand extends Command {
+public class PunishCommand implements CommandExecutor {
 
     @Inject private PunishmentManager punishmentManager;
 
     @Override
-    protected void execute(CommandEvent event) {
-        if (!UserUtil.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.MESSAGE_MANAGE, true))
+    public void execute(CommandEvent event) {
+        if (!UserUtil.hasPermission(event.getMember(), event.getMessage(), Permission.MESSAGE_MANAGE, true))
             return;
 
-        String[] arguments = event.getArgs().split(" ");
+        /*String[] arguments = event.getArgs().split(" ");
 
         // for administrator does not need proof
         if (arguments.length < 2 || (arguments.length < 3 && !event.getMember().hasPermission(Permission.ADMINISTRATOR))) {
@@ -54,6 +50,6 @@ public class PunishCommand extends Command {
 
         }catch (IllegalStateException exception) {
             event.getChannel().sendMessage(":x: Esta regra não existe, tente novamente").queue();
-        }
+        }*/
     }
 }

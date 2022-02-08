@@ -1,8 +1,6 @@
 package com.yuhtin.lauren.commands.impl.admin;
 
 import com.google.inject.Inject;
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.commands.CommandHandler;
@@ -17,13 +15,13 @@ import java.util.concurrent.TimeUnit;
         type = CommandHandler.CommandType.CONFIG,
         description = "Abusar uns xpzinhos pros ademiros",
         alias = {"setxp"})
-public class SetExpCommand extends Command {
+public class SetExpCommand implements CommandExecutor {
 
     @Inject private PlayerController playerController;
 
     @Override
-    protected void execute(CommandEvent event) {
-        if (!UserUtil.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true))
+    public void execute(CommandEvent event) {
+        if (!UserUtil.hasPermission(event.getMember(), event.getMessage(), Permission.ADMINISTRATOR, true))
             return;
 
         if (event.getMessage().getMentionedMembers().isEmpty()) {

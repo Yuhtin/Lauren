@@ -1,8 +1,6 @@
 package com.yuhtin.lauren.commands.impl.help;
 
 import com.google.inject.Inject;
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.StatsController;
@@ -26,14 +24,14 @@ import java.util.Locale;
         description = "Veja um pouco mais sobre mim",
         alias = {"binfo"}
 )
-public class InfoCommand extends Command {
+public class InfoCommand implements CommandExecutor {
 
     @Inject private PlayerController playerController;
     @Inject private StatsController statsController;
 
     @SneakyThrows
     @Override
-    protected void execute(CommandEvent event) {
+    public void execute(CommandEvent event) {
         SelfUser bot = event.getJDA().getSelfUser();
         OffsetDateTime timeCreated = bot.getTimeCreated();
 
@@ -79,6 +77,6 @@ public class InfoCommand extends Command {
                 .setThumbnail(bot.getAvatarUrl())
                 .setTimestamp(Instant.now());
 
-        event.getChannel().sendMessage(builder.build()).queue();
+        event.getChannel().sendMessageEmbeds(builder.build()).queue();
     }
 }

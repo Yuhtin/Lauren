@@ -1,33 +1,30 @@
 package com.yuhtin.lauren.commands.impl.music;
 
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
 import com.yuhtin.lauren.utils.helper.UserUtil;
+import lombok.val;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandHandler(
         name = "bass",
         type = CommandHandler.CommandType.MUSIC,
         description = "Mudar os graves e agudos do meu batidão",
-        alias = {"bassboost"}
-
+        args = {"<boost>-Opções válidas low, high, boost ou normal"}
 )
-public class BassBoostCommand extends Command {
+public class BassBoostCommand implements Command {
 
     @Override
-    protected void execute(CommandEvent event) {
+    public void execute(CommandInteraction event, InteractionHook hook) {
         if (TrackUtils.get().isIdle(event.getTextChannel())) return;
-        if (!UserUtil.INSTANCE.isDJ(event.getMember(), event.getTextChannel(), true)) return;
+        if (!UserUtil.isDJ(event.getMember(), event.getTextChannel(), true)) return;
 
-        if (event.getArgs().isEmpty()) {
-            event.getChannel().sendMessage("<a:tchau:751941650728747140> Você precisa inserir a opção do boost: `low, high, boost ou normal`").queue();
-            return;
-        }
-
+        val boost = event.getOption("boost").getAsString();
         TrackManager trackManager = TrackManager.of(event.getGuild());
-        switch (event.getArgs().toLowerCase()) {
+        switch (boost) {
 
             case "low":
 

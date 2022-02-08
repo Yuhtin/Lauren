@@ -39,7 +39,6 @@ public class TrackManager extends AudioEventAdapter {
     private VoiceChannel audio;
 
     public static TrackManager of(Guild guild) {
-
         if (guildTrackManagers.containsKey(guild.getIdLong())) return guildTrackManagers.get(guild.getIdLong());
 
         TrackManager trackManager = new TrackManager();
@@ -60,7 +59,6 @@ public class TrackManager extends AudioEventAdapter {
         guildTrackManagers.put(guild.getIdLong(), trackManager);
 
         return trackManager;
-
     }
 
     public void destroy() {

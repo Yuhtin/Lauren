@@ -1,8 +1,6 @@
 package com.yuhtin.lauren.commands.impl.admin;
 
 import com.google.inject.Inject;
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.UserUtil;
@@ -19,14 +17,14 @@ import java.util.concurrent.TimeUnit;
         type = CommandHandler.CommandType.ADMIN,
         description = "Limpar algumas mensagens do canal atual",
         alias = {"clearchat", "cc"})
-public class ClearCommand extends Command {
+public class ClearCommand implements CommandExecutor {
 
     @Inject private Logger logger;
 
     @Override
-    protected void execute(CommandEvent event) {
+    public void execute(CommandEvent event) {
 
-        if (!UserUtil.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.MESSAGE_MANAGE, true)) return;
+        if (!UserUtil.hasPermission(event.getMember(), event.getMessage(), Permission.MESSAGE_MANAGE, true)) return;
 
         String[] args = event.getMessage().getContentRaw().split(" ");
         if (args.length < 2) {

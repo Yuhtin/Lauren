@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
 import com.yuhtin.lauren.models.enums.LogType;
+import com.yuhtin.lauren.utils.helper.LogUtils;
 import com.yuhtin.lauren.utils.helper.UserUtil;
 
 import java.time.LocalDateTime;
@@ -40,7 +41,7 @@ public class Logger {
     public void log(Object message, LogType logType) {
         if (message == null) message = "Generated a null content";
 
-        StackTraceElement[] stackTrace = UserUtil.INSTANCE.getStackTrace();
+        StackTraceElement[] stackTrace = LogUtils.getStackTrace();
         String className = stackTrace[stackTrace.length > 3 ? 3 : 2].getFileName().replace(".java", "");
 
         LocalDateTime now = LocalDateTime.now();

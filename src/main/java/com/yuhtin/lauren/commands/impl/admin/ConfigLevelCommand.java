@@ -1,20 +1,12 @@
 package com.yuhtin.lauren.commands.impl.admin;
 
 import com.google.inject.Inject;
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
-import com.mysql.cj.exceptions.NumberOutOfRange;
 import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.core.xp.Level;
 import com.yuhtin.lauren.core.xp.XpController;
 import com.yuhtin.lauren.commands.CommandHandler;
-import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.sql.connection.SQLConnection;
 import com.yuhtin.lauren.utils.helper.UserUtil;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Role;
-
-import java.sql.PreparedStatement;
 
 @CommandHandler(
         name = "configlevel",
@@ -22,18 +14,18 @@ import java.sql.PreparedStatement;
         alias = {},
         description = "Configurar os rewards de um level"
 )
-public class ConfigLevelCommand extends Command {
+public class ConfigLevelCommand implements CommandExecutor {
 
     @Inject private Logger logger;
     @Inject private XpController xpController;
     @Inject private SQLConnection sqlConnection;
 
     @Override
-    protected void execute(CommandEvent event) {
-        if (!UserUtil.INSTANCE.isPermission(event.getMember(), event.getChannel(), Permission.ADMINISTRATOR, true))
+    public void execute(CommandEvent event) {
+        if (!UserUtil.hasPermission(event.getMember(), event.getMessage(), Permission.ADMINISTRATOR, true))
             return;
 
-        int identifier;
+        /*int identifier;
         try {
             identifier = Integer.parseInt(event.getArgs().split(" ")[0]);
 
@@ -75,6 +67,6 @@ public class ConfigLevelCommand extends Command {
                 .sendMessage("<:felizpakas:742373250037710918>" +
                         " Você adicionou **" + event.getMessage().getMentionedRoles().size() + "**" +
                         " cargo(s) ao nível **" + identifier + "**")
-                .queue();
+                .queue();*/
     }
 }

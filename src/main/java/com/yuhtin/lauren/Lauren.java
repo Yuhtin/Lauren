@@ -2,9 +2,12 @@ package com.yuhtin.lauren;
 
 import com.google.inject.Guice;
 import com.google.inject.Inject;
+import com.yuhtin.lauren.commands.CommandCatcher;
+import com.yuhtin.lauren.commands.CommandMap;
 import com.yuhtin.lauren.core.bot.LaurenDAO;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
 import com.yuhtin.lauren.core.music.TrackManager;
+import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.core.xp.XpController;
@@ -20,6 +23,7 @@ import com.yuhtin.lauren.service.LocaleManager;
 import com.yuhtin.lauren.sql.dao.PlayerDAO;
 import com.yuhtin.lauren.sql.dao.StatisticDAO;
 import com.yuhtin.lauren.tasks.*;
+import com.yuhtin.lauren.utils.helper.FileUtil;
 import com.yuhtin.lauren.utils.helper.TaskHelper;
 import com.yuhtin.lauren.utils.helper.UserUtil;
 import lombok.Getter;
@@ -40,6 +44,7 @@ import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipOutputStream;
 
+@Getter
 public final class Lauren extends LaurenDAO {
 
     // DAO's
@@ -51,6 +56,7 @@ public final class Lauren extends LaurenDAO {
     @Inject private PlayerController playerController;
     @Inject private StatsController statsController;
     @Inject private LoggerController loggerController;
+    @Inject private CommandCatcher commandCatcher;
 
     // Managers
     @Inject private LocaleManager localeManager;
@@ -154,8 +160,8 @@ public final class Lauren extends LaurenDAO {
         FileOutputStream outputStream = new FileOutputStream(file.getPath().split("\\.")[0] + ".zip");
         ZipOutputStream zipFileOutput = new ZipOutputStream(outputStream);
 
-        UserUtil.INSTANCE.writeToZip(file, zipFileOutput);
-        UserUtil.INSTANCE.cleanUp(Paths.get(file.getPath()));
+        FileUtil.writeToZip(file, zipFileOutput);
+        FileUtil.cleanUp(Paths.get(file.getPath()));
 
         zipFileOutput.close();
         outputStream.close();
@@ -214,7 +220,7 @@ public final class Lauren extends LaurenDAO {
 
             setInjector(Guice.createInjector(new LaurenModule(this)));
             getInjector().injectMembers(this);
-            getInjector().injectMembers(UserUtil.INSTANCE);
+            getInjector().injectMembers(Player.class);
 
         } catch (Exception exception) {
             exception.printStackTrace();

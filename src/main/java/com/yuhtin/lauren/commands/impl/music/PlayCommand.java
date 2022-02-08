@@ -16,7 +16,7 @@ public class PlayCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        if (!TrackUtils.get().isInVoiceChannel(event.getMember())) {
+        if (!TrackUtils.get().isInMusicChannel(event.getMember())) {
             event.getChannel().sendMessage(
                     "\uD83C\uDFB6 Amiguinho, entre no canal `\uD83C\uDFB6┇Batidões` para poder usar comando de música"
             ).queue();

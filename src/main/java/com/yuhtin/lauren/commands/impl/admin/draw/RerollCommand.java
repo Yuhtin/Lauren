@@ -1,7 +1,5 @@
 package com.yuhtin.lauren.commands.impl.admin.draw;
 
-import com.yuhtin.lauren.commands.CommandEvent;
-import com.yuhtin.lauren.commands.CommandExecutor;
 import com.yuhtin.lauren.core.draw.controller.DrawController;
 import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.UserUtil;
