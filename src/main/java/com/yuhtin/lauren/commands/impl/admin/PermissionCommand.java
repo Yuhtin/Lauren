@@ -7,11 +7,8 @@ import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.utils.helper.UserUtil;
 import lombok.val;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
-
-import java.util.concurrent.TimeUnit;
 
 @CommandData(
         name = "permission",
@@ -23,7 +20,7 @@ import java.util.concurrent.TimeUnit;
                 "<permission>-Permissão que deseja adicionar ou remover."
         }
 )
-public class AddPermissionCommand implements Command {
+public class PermissionCommand implements Command {
 
     @Inject private PlayerController playerController;
 
