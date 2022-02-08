@@ -1,6 +1,7 @@
 package com.yuhtin.lauren.commands.impl.admin;
 
 import com.google.inject.Inject;
+import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.xp.XpController;
 import com.yuhtin.lauren.commands.CommandData;
@@ -14,7 +15,7 @@ import net.dv8tion.jda.api.Permission;
         alias = {},
         description = "Configurar os rewards de um level"
 )
-public class ConfigLevelCommand implements CommandExecutor {
+public class ConfigLevelCommand implements Command {
 
     @Inject private Logger logger;
     @Inject private XpController xpController;

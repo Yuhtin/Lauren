@@ -1,6 +1,7 @@
 package com.yuhtin.lauren.commands.impl.help;
 
 import com.google.inject.Inject;
+import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.StatsController;
@@ -24,7 +25,7 @@ import java.util.Locale;
         description = "Veja um pouco mais sobre mim",
         alias = {"binfo"}
 )
-public class InfoCommand implements CommandExecutor {
+public class InfoCommand implements Command {
 
     @Inject private PlayerController playerController;
     @Inject private StatsController statsController;

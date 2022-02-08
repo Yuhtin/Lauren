@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.commands.impl.help;
 
+import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.commands.InfoCacher;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -12,7 +13,7 @@ import java.util.concurrent.TimeUnit;
         type = CommandData.CommandType.HELP,
         description = "Informações de comandos do bot",
         alias = {"help"})
-public class HelpCommand implements CommandExecutor {
+public class HelpCommand implements Command {
 
     @Override
     public void execute(CommandEvent event) {

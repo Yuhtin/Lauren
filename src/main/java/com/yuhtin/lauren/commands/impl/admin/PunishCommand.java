@@ -1,6 +1,7 @@
 package com.yuhtin.lauren.commands.impl.admin;
 
 import com.google.inject.Inject;
+import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.manager.PunishmentManager;
 import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.utils.helper.UserUtil;
@@ -12,7 +13,7 @@ import net.dv8tion.jda.api.Permission;
         description = "Lançar o machado do ban",
         alias = {}
 )
-public class PunishCommand implements CommandExecutor {
+public class PunishCommand implements Command {
 
     @Inject private PunishmentManager punishmentManager;
 

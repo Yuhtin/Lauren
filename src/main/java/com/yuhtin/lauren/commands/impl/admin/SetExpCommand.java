@@ -1,6 +1,7 @@
 package com.yuhtin.lauren.commands.impl.admin;
 
 import com.google.inject.Inject;
+import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
@@ -15,7 +16,7 @@ import java.util.concurrent.TimeUnit;
         type = CommandData.CommandType.CONFIG,
         description = "Abusar uns xpzinhos pros ademiros",
         alias = {"setxp"})
-public class SetExpCommand implements CommandExecutor {
+public class SetExpCommand implements Command {
 
     @Inject private PlayerController playerController;
 

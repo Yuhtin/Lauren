@@ -1,6 +1,7 @@
 package com.yuhtin.lauren.commands.impl.admin;
 
 import com.google.inject.Inject;
+import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.utils.helper.UserUtil;
@@ -17,7 +18,7 @@ import java.util.concurrent.TimeUnit;
         type = CommandData.CommandType.ADMIN,
         description = "Limpar algumas mensagens do canal atual",
         alias = {"clearchat", "cc"})
-public class ClearCommand implements CommandExecutor {
+public class ClearCommand implements Command {
 
     @Inject private Logger logger;
 

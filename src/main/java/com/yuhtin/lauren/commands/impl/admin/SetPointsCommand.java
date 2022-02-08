@@ -1,6 +1,7 @@
 package com.yuhtin.lauren.commands.impl.admin;
 
 import com.google.inject.Inject;
+import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.commands.CommandData;
@@ -15,7 +16,7 @@ import java.util.concurrent.TimeUnit;
         type = CommandData.CommandType.ADMIN,
         description = "Setar os pontos de ranked para um jogador",
         alias = {"setpoints"})
-public class SetPointsCommand implements CommandExecutor {
+public class SetPointsCommand implements Command {
 
     @Inject private PlayerController playerController;
 
