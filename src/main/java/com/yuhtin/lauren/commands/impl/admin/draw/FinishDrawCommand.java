@@ -1,27 +1,31 @@
 package com.yuhtin.lauren.commands.impl.admin.draw;
 
+import com.yuhtin.lauren.commands.Command;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.core.draw.controller.DrawController;
-import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.UserUtil;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
-@CommandHandler(
+@CommandData(
         name = "finishdraw",
-        type = CommandHandler.CommandType.ADMIN,
-        description = "Finalizar um sorteio",
-        alias = {"finalizar"})
-public class FinishDrawCommand implements CommandExecutor {
-
+        type = CommandData.CommandType.ADMIN,
+        description = "Finalizar um sorteio"
+)
+public class FinishDrawCommand implements Command {
     @Override
-    public void execute(CommandEvent event) {
-        if (!UserUtil.hasPermission(event.getMember(), event.getMessage(), Permission.ADMINISTRATOR, true)) return;
+    public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
+        if (event.getMember() == null
+                || !UserUtil.hasPermission(event.getMember(), hook, Permission.ADMINISTRATOR)) return;
 
         if (DrawController.get() == null || !DrawController.get().finished) {
-            event.getMessage().delete().queue();
+            hook.setEphemeral(true).sendMessage(":x: Nenhum sorteio ativo no momento.").queue();
             return;
         }
 
-        event.getChannel().sendMessage("\uD83C\uDF89 Sorteio finalizado, parabéns aos vencedores ❤️").queue();
+        hook.sendMessage("\uD83C\uDF89 Sorteio finalizado, parabéns aos vencedores ❤️").queue();
         DrawController.delete();
     }
+
 }

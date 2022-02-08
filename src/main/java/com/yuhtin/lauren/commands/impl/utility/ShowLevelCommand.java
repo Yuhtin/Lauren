@@ -3,22 +3,23 @@ package com.yuhtin.lauren.commands.impl.utility;
 import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.commands.Command;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.UserUtil;
 
 /**
  * @author Yuhtin
  * Github: https://github.com/Yuhtin
  */
-@CommandHandler(
+@CommandData(
         name = "showlevel",
-        type = CommandHandler.CommandType.UTILITY,
+        type = CommandData.CommandType.UTILITY,
         description = "Mostrar o nível em seu nickname",
         alias = {"mostrarlevel", "mostrarnivel", "shownivel"}
 )
-public class ShowLevelCommand extends Command {
+public class ShowLevelCommand implements Command {
 
     @Inject private PlayerController playerController;
 

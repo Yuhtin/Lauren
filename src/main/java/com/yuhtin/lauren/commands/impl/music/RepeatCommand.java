@@ -2,19 +2,20 @@ package com.yuhtin.lauren.commands.impl.music;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.commands.Command;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.core.music.AudioInfo;
 import com.yuhtin.lauren.core.music.TrackManager;
-import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
 import com.yuhtin.lauren.utils.helper.UserUtil;
 
-@CommandHandler(
+@CommandData(
         name = "repetir",
-        type = CommandHandler.CommandType.MUSIC,
+        type = CommandData.CommandType.MUSIC,
         description = "Ao ativar, a música atual irá se repetir 1 vez",
         alias = {"repeat"}
 )
-public class RepeatCommand extends Command {
+public class RepeatCommand implements Command {
 
     @Override
     protected void execute(CommandEvent event) {

@@ -4,10 +4,11 @@ import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import com.yuhtin.lauren.commands.Command;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.models.embeds.ShopEmbed;
 import com.yuhtin.lauren.models.objects.ShopItem;
 import com.yuhtin.lauren.startup.Startup;
@@ -22,13 +23,13 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-@CommandHandler(
+@CommandData(
         name = "loja",
-        type = CommandHandler.CommandType.UTILITY,
+        type = CommandData.CommandType.UTILITY,
         description = "Ver algumas coisinhas que tou vendendo",
         alias = {"shop"}
 )
-public class ShopCommand extends Command {
+public class ShopCommand implements Command {
 
     @Inject private ShopEmbed shopEmbed;
     @Inject private PlayerController playerController;

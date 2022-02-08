@@ -1,26 +1,30 @@
 package com.yuhtin.lauren.commands.impl.music;
 
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.commands.Command;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.core.music.TrackManager;
-import com.yuhtin.lauren.commands.CommandHandler;
+import com.yuhtin.lauren.utils.helper.TrackUtils;
 import com.yuhtin.lauren.utils.helper.UserUtil;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
-@CommandHandler(
+@CommandData(
         name = "sair",
-        type = CommandHandler.CommandType.MUSIC,
-        description = "Sair do canal de voz e parar o batidão",
-        alias = {"leave", "quit"}
+        type = CommandData.CommandType.MUSIC,
+        description = "Sair do canal de voz e parar o batidão"
 )
-public class LeaveCommand extends Command {
+public class LeaveCommand implements Command {
 
     @Override
-    protected void execute(CommandEvent event) {
-        if (!UserUtil.INSTANCE.isDJ(event.getMember(), event.getTextChannel(), true)) return;
+    public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
+        if (event.getGuild() == null
+                || event.getMember() == null
+                || TrackUtils.get().isIdle(event.getGuild(), hook)
+                || !UserUtil.isDJ(event.getMember(), hook)) return;
 
         TrackManager.of(event.getGuild()).destroy();
-        event.getChannel()
-                .sendMessage("Que ⁉️ Pensei que estavam gostando do batidão \uD83D\uDC94 Prometo que da próxima será melhor")
-                .queue();
+        hook.sendMessage("Que ⁉️ Pensei que estavam gostando do batidão " +
+                "\uD83D\uDC94 Prometo que da próxima será melhor").queue();
     }
+
 }

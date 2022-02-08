@@ -2,19 +2,20 @@ package com.yuhtin.lauren.commands.impl.utility;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.commands.CommandHandler;
+import com.yuhtin.lauren.commands.Command;
+import com.yuhtin.lauren.commands.CommandData;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
-@CommandHandler(
+@CommandData(
         name = "avatar",
-        type = CommandHandler.CommandType.UTILITY,
+        type = CommandData.CommandType.UTILITY,
         description = "Espiar a imagem de outro usuário OjO",
         alias = {"image", "imagem"})
-public class AvatarCommand extends Command {
+public class AvatarCommand implements Command {
 
     @Override
     protected void execute(CommandEvent event) {

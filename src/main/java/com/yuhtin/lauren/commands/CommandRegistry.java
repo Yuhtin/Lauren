@@ -4,17 +4,15 @@ import com.google.common.reflect.ClassPath;
 import com.google.inject.Inject;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.startup.Startup;
-import lombok.Data;
 import lombok.val;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-@Data(staticConstructor = "of")
+@lombok.Data(staticConstructor = "of")
 public class CommandRegistry {
 
     @Inject private Logger logger;
@@ -30,28 +28,32 @@ public class CommandRegistry {
             return;
         }
 
-        val commands = new ArrayList<CommandData>();
+        val infoCacher = InfoCacher.getInstance();
+        val commands = new ArrayList<net.dv8tion.jda.api.interactions.commands.build.CommandData>();
         val commandMap = Startup.getLauren().getCommandCatcher().getCommandMap();
-        for (val info : classPath.getTopLevelClassesRecursive("com.yuhtin.commission.builderscommunity.command.impl")) {
+        for (val info : classPath.getTopLevelClassesRecursive("com.yuhtin.lauren.commands.impl")) {
             try {
                 val name = Class.forName(info.getName());
                 val object = name.newInstance();
 
-                if (name.isAnnotationPresent(CommandHandler.class)) {
+                if (name.isAnnotationPresent(CommandData.class)) {
                     val command = (Command) object;
-                    val handler = (CommandHandler) name.getAnnotation(CommandHandler.class);
+                    val data = (CommandData) name.getAnnotation(CommandData.class);
 
-                    commandMap.register(handler.name(), command);
+                    commandMap.register(data.name(), command);
 
-                    val commandData = new CommandData(handler.name(), handler.description());
-                    argsInterpreter(handler, commandData);
+                    val commandData = new net.dv8tion.jda.api.interactions.commands.build.CommandData(data.name(), data.description());
+                    argsInterpreter(data, commandData);
 
                     commands.add(commandData);
+                    infoCacher.insert(data);
                 } else throw new InstantiationException();
             } catch (Exception exception) {
                 exception.printStackTrace();
                 logger.severe("The " + info.getName() + " class could not be instantiated");
             }
+
+            infoCacher.construct();
         }
 
         client.retrieveCommands().queue(createdCommands -> {
@@ -74,7 +76,7 @@ public class CommandRegistry {
         logger.info("Registered " + commandMap.getCommands().size() + " commands successfully");
     }
 
-    private void argsInterpreter(CommandHandler handler, CommandData commandData) {
+    private void argsInterpreter(CommandData handler, net.dv8tion.jda.api.interactions.commands.build.CommandData commandData) {
         for (val option : handler.args()) {
             val split = option.split("-");
             val argName = split[0];

@@ -2,17 +2,17 @@ package com.yuhtin.lauren.commands.impl.music;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.commands.Command;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.core.music.TrackManager;
-import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
 
-@CommandHandler(
-        name = "tocar",
-        type = CommandHandler.CommandType.MUSIC,
-        description = "Tocar algum somzinho ai",
-        alias = {"play", "p"}
+@CommandData(
+        name = "play",
+        type = CommandData.CommandType.MUSIC,
+        description = "Tocar algum somzinho ai"
 )
-public class PlayCommand extends Command {
+public class PlayCommand implements Command {
 
     @Override
     protected void execute(CommandEvent event) {

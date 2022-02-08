@@ -3,11 +3,12 @@ package com.yuhtin.lauren.commands.impl.utility;
 import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.StatsController;
-import com.yuhtin.lauren.commands.CommandHandler;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.utils.helper.TimeUtils;
 import com.yuhtin.lauren.utils.helper.UserUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -18,12 +19,12 @@ import java.time.OffsetDateTime;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
-@CommandHandler(
+@CommandData(
         name = "perfil",
-        type = CommandHandler.CommandType.SCRIM,
+        type = CommandData.CommandType.SCRIM,
         description = "Visualizar o perfil de outro usuário",
         alias = {"pinfo", "jogador", "playerinfo", "player", "profile", "conta"})
-public class PlayerInfoCommand extends Command {
+public class PlayerInfoCommand implements Command {
 
     @Inject private Logger logger;
     @Inject private PlayerController playerController;

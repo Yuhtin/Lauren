@@ -2,17 +2,18 @@ package com.yuhtin.lauren.commands.impl.music;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.core.music.TrackManager;
-import com.yuhtin.lauren.commands.CommandHandler;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.utils.helper.UserUtil;
 
-@CommandHandler(
+@CommandData(
         name = "volume",
-        type = CommandHandler.CommandType.MUSIC,
+        type = CommandData.CommandType.MUSIC,
         description = "Definir um volume para meus batidões (não coloca menos de 30 se não deixa de ser batidão ;-;)",
         alias = {}
 )
-public class VolumeCommand extends Command {
+public class VolumeCommand implements Command {
 
     @Override
     protected void execute(CommandEvent event) {

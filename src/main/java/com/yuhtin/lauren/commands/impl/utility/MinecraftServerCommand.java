@@ -2,7 +2,8 @@ package com.yuhtin.lauren.commands.impl.utility;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.commands.CommandHandler;
+import com.yuhtin.lauren.commands.Command;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.service.GetConnectionFactory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,13 +12,13 @@ import org.json.JSONObject;
 
 import java.time.Instant;
 
-@CommandHandler(
+@CommandData(
         name = "mcserver",
-        type = CommandHandler.CommandType.UTILITY,
+        type = CommandData.CommandType.UTILITY,
         description = "Ver as informações de um servidor",
         alias = {}
 )
-public class MinecraftServerCommand extends Command {
+public class MinecraftServerCommand implements Command {
 
     @Override
     protected void execute(CommandEvent event) {

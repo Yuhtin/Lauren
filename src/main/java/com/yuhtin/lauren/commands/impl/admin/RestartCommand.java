@@ -1,27 +1,31 @@
 package com.yuhtin.lauren.commands.impl.admin;
 
 import com.google.inject.Inject;
+import com.yuhtin.lauren.commands.Command;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.helper.UserUtil;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
-@CommandHandler(
+@CommandData(
         name = "restart",
-        type = CommandHandler.CommandType.CONFIG,
-        description = "Reiniciar meus sistemas :d",
-        alias = {"reiniciar"})
-public class RestartCommand implements CommandExecutor {
+        type = CommandData.CommandType.CONFIG,
+        description = "Reiniciar meus sistemas :d"
+)
+public class RestartCommand implements Command {
 
     @Inject private Logger logger;
 
     @Override
-    public void execute(CommandEvent event) {
-        if (!UserUtil.isOwner(event.getChannel(), event.getMember().getUser(), true)) return;
+    public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
+        if (!UserUtil.isOwner(event.getUser(), hook)) return;
 
-        event.getChannel().sendMessage("Reiniciando meus sistemas :satisfied:").queue();
-        this.logger.info("The player " + event.getMember().getUser().getName() + " restarting my systems");
+        hook.sendMessage("Reiniciando meus sistemas :satisfied:").queue();
+        logger.info("The player " + event.getUser().getAsTag() + " restarting my systems");
 
         Startup.getLauren().shutdown();
     }
+
 }

@@ -3,18 +3,19 @@ package com.yuhtin.lauren.commands.impl.utility;
 import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.commands.Command;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.StatsController;
-import com.yuhtin.lauren.commands.CommandHandler;
 
-@CommandHandler(
+@CommandData(
         name = "daily",
-        type = CommandHandler.CommandType.UTILITY,
+        type = CommandData.CommandType.UTILITY,
         description = "Pegar uma pequena quantia de XP e dinheiro diariamente",
         alias = {"diario", "d", "dly", "diaria"}
 )
-public class DailyCommand extends Command {
+public class DailyCommand implements Command {
 
     @Inject private PlayerController playerController;
     @Inject private StatsController statsController;

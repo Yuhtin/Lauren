@@ -1,31 +1,33 @@
 package com.yuhtin.lauren.commands.impl.music;
 
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.core.music.TrackManager;
-import com.yuhtin.lauren.commands.CommandHandler;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
+import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
-@CommandHandler(
+@CommandData(
         name = "musica",
-        type = CommandHandler.CommandType.MUSIC,
-        description = "Ver as informações da música atual",
-        alias = {"music", "tocando"}
+        type = CommandData.CommandType.MUSIC,
+        description = "Ver as informações da música atual"
 )
-public class MusicCommand extends Command {
+public class MusicCommand implements Command {
 
     @Override
-    protected void execute(CommandEvent event) {
-        if (TrackUtils.get().isIdle(event.getTextChannel())) return;
+    public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
+        if (event.getGuild() == null
+                || event.getMember() == null
+                || TrackUtils.get().isIdle(event.getGuild(), hook)) return;
 
-        TrackManager trackManager = TrackManager.of(event.getGuild());
+        val trackManager = TrackManager.of(event.getGuild());
 
-        AudioTrack track = trackManager.getPlayer().getPlayingTrack();
-        String isRepeating = trackManager.getTrackInfo().isRepeat() ? "`Ativa`" : "`Desativada`";
+        val track = trackManager.getPlayer().getPlayingTrack();
+        val isRepeating = trackManager.getTrackInfo().isRepeat() ? "`Ativa`" : "`Desativada`";
 
-        EmbedBuilder embed = new EmbedBuilder();
+        val embed = new EmbedBuilder();
         embed.setTitle("\ud83d\udcbf Informações da música atual");
         embed.setDescription("\ud83d\udcc0 Nome: `" + track.getInfo().title + "`\n" +
                 "\uD83D\uDCB0 Autor: `" + track.getInfo().author + "`\n" +
@@ -36,6 +38,7 @@ public class MusicCommand extends Command {
                 "\n" +
                 "\uD83D\uDCCC Link: [Clique aqui](" + track.getInfo().uri + ")");
 
-        event.getChannel().sendMessage(embed.build()).queue();
+        hook.sendMessageEmbeds(embed.build()).queue();
     }
+
 }

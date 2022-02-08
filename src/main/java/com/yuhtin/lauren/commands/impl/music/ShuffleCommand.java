@@ -2,18 +2,19 @@ package com.yuhtin.lauren.commands.impl.music;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.commands.Command;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.core.music.TrackManager;
-import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
 import com.yuhtin.lauren.utils.helper.UserUtil;
 
-@CommandHandler(
+@CommandData(
         name = "misturar",
-        type = CommandHandler.CommandType.MUSIC,
+        type = CommandData.CommandType.MUSIC,
         description = "Misturar as minhas musiquinhas",
         alias = {"misture", "shuffle"}
 )
-public class ShuffleCommand extends Command {
+public class ShuffleCommand implements Command {
 
     @Override
     protected void execute(CommandEvent event) {

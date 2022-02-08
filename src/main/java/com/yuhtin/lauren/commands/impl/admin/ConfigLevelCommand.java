@@ -3,14 +3,14 @@ package com.yuhtin.lauren.commands.impl.admin;
 import com.google.inject.Inject;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.xp.XpController;
-import com.yuhtin.lauren.commands.CommandHandler;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.sql.connection.SQLConnection;
 import com.yuhtin.lauren.utils.helper.UserUtil;
 import net.dv8tion.jda.api.Permission;
 
-@CommandHandler(
+@CommandData(
         name = "configlevel",
-        type = CommandHandler.CommandType.ADMIN,
+        type = CommandData.CommandType.ADMIN,
         alias = {},
         description = "Configurar os rewards de um level"
 )

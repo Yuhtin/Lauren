@@ -3,9 +3,10 @@ package com.yuhtin.lauren.commands.impl.music;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.menu.Paginator;
+import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.core.music.AudioInfo;
 import com.yuhtin.lauren.core.music.TrackManager;
-import com.yuhtin.lauren.commands.CommandHandler;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
 import lombok.Getter;
@@ -13,13 +14,13 @@ import lombok.Getter;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-@CommandHandler(
+@CommandData(
         name = "playlist",
-        type = CommandHandler.CommandType.MUSIC,
+        type = CommandData.CommandType.MUSIC,
         description = "Ver as músicas que eu ainda vou tocar",
         alias = {"queue", "pl", "fila", "q"}
 )
-public class QueueCommand extends Command {
+public class QueueCommand implements Command {
 
     @Getter private static final Paginator.Builder builder = new Paginator.Builder()
             .setColumns(1)

@@ -3,17 +3,18 @@ package com.yuhtin.lauren.commands.impl.utility;
 import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.commands.Command;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.commands.CommandHandler;
 
-@CommandHandler(
+@CommandData(
         name = "apelido",
-        type = CommandHandler.CommandType.UTILITY,
+        type = CommandData.CommandType.UTILITY,
         description = "Comando para alterar seu apelido",
         alias = {"nick", "nickname"}
 )
-public class NicknameCommand extends Command {
+public class NicknameCommand implements Command {
 
     @Inject private PlayerController playerController;
 

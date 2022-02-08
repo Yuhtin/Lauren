@@ -40,7 +40,7 @@ public class TrackUtils {
         return member.getVoiceState() != null
                 && member.getVoiceState().getChannel() != null
                 && (member.getVoiceState().getChannel().getName().contains("Batidões")
-                || UserUtil.isDJ(member, null, false));
+                || UserUtil.isDJ(member, null));
     }
 
     public boolean isMusicOwner(Member member) {

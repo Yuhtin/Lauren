@@ -1,15 +1,15 @@
 package com.yuhtin.lauren.commands.impl.help;
 
-import com.yuhtin.lauren.commands.CommandHandler;
-import com.yuhtin.lauren.service.CommandCache;
+import com.yuhtin.lauren.commands.CommandData;
+import com.yuhtin.lauren.commands.InfoCacher;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
-@CommandHandler(
+@CommandData(
         name = "ajuda",
-        type = CommandHandler.CommandType.HELP,
+        type = CommandData.CommandType.HELP,
         description = "Informações de comandos do bot",
         alias = {"help"})
 public class HelpCommand implements CommandExecutor {
@@ -20,7 +20,7 @@ public class HelpCommand implements CommandExecutor {
 
         if (args.length > 1) {
 
-            if (!CommandCache.getCommands().containsKey(args[1].toLowerCase())) {
+            if (!InfoCacher.getCommands().containsKey(args[1].toLowerCase())) {
 
                 event.getMessage().delete().queue();
                 event.getChannel().sendMessage("Hmm, não encontrei o comando `" + args[1] + "` tente usar `$ajuda` para ver meus comandos.")
@@ -29,7 +29,7 @@ public class HelpCommand implements CommandExecutor {
 
             }
 
-            EmbedBuilder embed = CommandCache.getCommands().get(args[1].toLowerCase())
+            EmbedBuilder embed = InfoCacher.getCommands().get(args[1].toLowerCase())
                     .setFooter("Comando usado por " + event.getMember().getEffectiveName(), event.getMember().getUser().getAvatarUrl())
                     .setColor(event.getMember().getColor())
                     .setTimestamp(Instant.now());
@@ -39,7 +39,7 @@ public class HelpCommand implements CommandExecutor {
 
         }
 
-        EmbedBuilder helpEmbed = CommandCache.getHelpEmbed();
+        EmbedBuilder helpEmbed = InfoCacher.getHelpEmbed();
 
         helpEmbed.setFooter("Comando usado por " + event.getMember().getEffectiveName(), event.getMember().getUser().getAvatarUrl())
                 .setColor(event.getMember().getColor())

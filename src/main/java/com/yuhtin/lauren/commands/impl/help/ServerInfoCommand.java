@@ -2,7 +2,8 @@ package com.yuhtin.lauren.commands.impl.help;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.commands.CommandHandler;
+import com.yuhtin.lauren.commands.Command;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.utils.helper.TimeUtils;
 import com.yuhtin.lauren.utils.helper.UserUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -13,13 +14,13 @@ import java.time.OffsetDateTime;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
-@CommandHandler(
+@CommandData(
         name = "servidor",
-        type = CommandHandler.CommandType.HELP,
+        type = CommandData.CommandType.HELP,
         description = "Visualizar as informações deste servidor",
         alias = {"sinfo", "server"}
 )
-public class ServerInfoCommand extends Command {
+public class ServerInfoCommand implements Command {
 
     @Override
     protected void execute(CommandEvent event) {

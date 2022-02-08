@@ -3,7 +3,8 @@ package com.yuhtin.lauren.commands.impl.help;
 import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.commands.CommandHandler;
+import com.yuhtin.lauren.commands.Command;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.service.LocaleManager;
 import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.helper.SystemStatsUtils;
@@ -16,12 +17,12 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.time.Instant;
 
-@CommandHandler(
+@CommandData(
         name = "host",
-        type = CommandHandler.CommandType.HELP,
+        type = CommandData.CommandType.HELP,
         description = "Verificar as informações da minha hospedagem",
         alias = {"pong", "delay", "ping"})
-public class PingCommand extends Command {
+public class PingCommand implements Command {
 
     @Inject private LocaleManager localeManager;
 

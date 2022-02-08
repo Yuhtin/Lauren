@@ -4,7 +4,8 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.yuhtin.lauren.Lauren;
-import com.yuhtin.lauren.commands.CommandHandler;
+import com.yuhtin.lauren.commands.Command;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.models.enums.SugestionStage;
 import com.yuhtin.lauren.models.objects.Sugestion;
 import com.yuhtin.lauren.startup.Startup;
@@ -19,13 +20,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-@CommandHandler(
+@CommandData(
         name = "sugestao",
-        type = CommandHandler.CommandType.UTILITY,
+        type = CommandData.CommandType.UTILITY,
         description = "Sugerir alterações no servidor",
         alias = {"sugestão", "sugerir"}
 )
-public class SugestionCommand extends Command {
+public class SugestionCommand implements Command {
 
     @Setter private static EventWaiter waiter;
     private final Map<Long, Sugestion> sugestionMap = new HashMap<>();

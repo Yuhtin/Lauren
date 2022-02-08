@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.commands.impl.music;
 
 import com.yuhtin.lauren.commands.Command;
-import com.yuhtin.lauren.commands.CommandHandler;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.utils.helper.TimeUtils;
 import com.yuhtin.lauren.utils.helper.TrackUtils;
@@ -18,9 +18,9 @@ import java.util.concurrent.TimeUnit;
  * Github: https://github.com/Yuhtin
  */
 
-@CommandHandler(
+@CommandData(
         name = "skipto",
-        type = CommandHandler.CommandType.MUSIC,
+        type = CommandData.CommandType.MUSIC,
         description = "Pular para uma certa minutagem na música",
         args = {"<tempo>-Exemplo de tempos válidos: **35** ou **15:13**"}
 )

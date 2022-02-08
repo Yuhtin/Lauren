@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.StatsController;
-import com.yuhtin.lauren.commands.CommandHandler;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.helper.SystemStatsUtils;
 import com.yuhtin.lauren.utils.helper.TimeUtils;
@@ -18,9 +18,9 @@ import java.time.OffsetDateTime;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
-@CommandHandler(
+@CommandData(
         name = "info",
-        type = CommandHandler.CommandType.HELP,
+        type = CommandData.CommandType.HELP,
         description = "Veja um pouco mais sobre mim",
         alias = {"binfo"}
 )

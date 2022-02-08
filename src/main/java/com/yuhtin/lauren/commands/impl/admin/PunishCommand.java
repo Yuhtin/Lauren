@@ -2,13 +2,13 @@ package com.yuhtin.lauren.commands.impl.admin;
 
 import com.google.inject.Inject;
 import com.yuhtin.lauren.manager.PunishmentManager;
-import com.yuhtin.lauren.commands.CommandHandler;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.utils.helper.UserUtil;
 import net.dv8tion.jda.api.Permission;
 
-@CommandHandler(
+@CommandData(
         name = "punir",
-        type = CommandHandler.CommandType.ADMIN,
+        type = CommandData.CommandType.ADMIN,
         description = "Lançar o machado do ban",
         alias = {}
 )

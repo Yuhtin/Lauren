@@ -3,23 +3,24 @@ package com.yuhtin.lauren.commands.impl.utility;
 import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.statistics.StatsInfo;
 import com.yuhtin.lauren.core.statistics.StatsController;
-import com.yuhtin.lauren.commands.CommandHandler;
+import com.yuhtin.lauren.commands.CommandData;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 
-@CommandHandler(
+@CommandData(
         name = "stats",
-        type = CommandHandler.CommandType.UTILITY,
+        type = CommandData.CommandType.UTILITY,
         description = "Estatísticas de alguns sistemas meus",
         alias = {"estatisticas"}
 )
-public class StatsCommand extends Command {
+public class StatsCommand implements Command {
 
     @Inject private Logger logger;
     @Inject private StatsController statsController;

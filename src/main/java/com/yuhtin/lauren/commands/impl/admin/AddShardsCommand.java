@@ -1,8 +1,8 @@
 package com.yuhtin.lauren.commands.impl.admin;
 
 import com.google.inject.Inject;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.UserUtil;
 import lombok.val;
 import net.dv8tion.jda.api.Permission;
@@ -10,9 +10,9 @@ import net.dv8tion.jda.api.entities.Message;
 
 import java.util.concurrent.TimeUnit;
 
-@CommandHandler(
+@CommandData(
         name = "addshard",
-        type = CommandHandler.CommandType.ADMIN,
+        type = CommandData.CommandType.ADMIN,
         description = "Adicionar pontos de ranked para um jogador",
         alias = {}
 )

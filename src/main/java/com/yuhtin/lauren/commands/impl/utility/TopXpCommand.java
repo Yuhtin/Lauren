@@ -3,19 +3,20 @@ package com.yuhtin.lauren.commands.impl.utility;
 import com.google.inject.Inject;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.commands.CommandHandler;
+import com.yuhtin.lauren.commands.Command;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.tasks.TopXpUpdater;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.time.Instant;
 
-@CommandHandler(
+@CommandData(
         name = "topxp",
-        type = CommandHandler.CommandType.UTILITY,
+        type = CommandData.CommandType.UTILITY,
         description = "Ver os jogadores mais viciados no meu servidor",
         alias = {"xptop", "topplayers", "top"}
 )
-public class TopXpCommand extends Command {
+public class TopXpCommand implements Command {
 
     @Inject private TopXpUpdater topXpUpdater;
 

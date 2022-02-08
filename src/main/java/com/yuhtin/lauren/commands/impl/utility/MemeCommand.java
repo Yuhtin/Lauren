@@ -2,18 +2,19 @@ package com.yuhtin.lauren.commands.impl.utility;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.commands.CommandHandler;
+import com.yuhtin.lauren.commands.Command;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.service.GetConnectionFactory;
 import net.dv8tion.jda.api.EmbedBuilder;
 import org.json.JSONObject;
 
-@CommandHandler(
+@CommandData(
         name = "meme",
-        type = CommandHandler.CommandType.UTILITY,
+        type = CommandData.CommandType.UTILITY,
         description = "Memes legais",
         alias = {}
 )
-public class MemeCommand extends Command {
+public class MemeCommand implements Command {
 
     @Override
     protected void execute(CommandEvent event) {

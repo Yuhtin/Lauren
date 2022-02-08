@@ -1,16 +1,17 @@
 package com.yuhtin.lauren.commands.impl.admin.draw;
 
+import com.yuhtin.lauren.commands.Command;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.core.draw.controller.DrawController;
-import com.yuhtin.lauren.commands.CommandHandler;
 import com.yuhtin.lauren.utils.helper.UserUtil;
 import net.dv8tion.jda.api.Permission;
 
-@CommandHandler(
+@CommandData(
         name = "reroll",
-        type = CommandHandler.CommandType.ADMIN,
-        description = "Sortear um ganhador novamente",
-        alias = {"resortear", "redraw"})
-public class RerollCommand implements CommandExecutor {
+        type = CommandData.CommandType.ADMIN,
+        description = "Sortear um ganhador novamente"
+)
+public class RerollCommand implements Command {
 
     @Override
     public void execute(CommandEvent event) {

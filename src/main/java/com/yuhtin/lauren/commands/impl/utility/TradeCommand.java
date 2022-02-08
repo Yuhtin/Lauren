@@ -2,15 +2,16 @@ package com.yuhtin.lauren.commands.impl.utility;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.yuhtin.lauren.commands.CommandHandler;
+import com.yuhtin.lauren.commands.Command;
+import com.yuhtin.lauren.commands.CommandData;
 
-@CommandHandler(
+@CommandData(
         name = "trocar",
-        type = CommandHandler.CommandType.UTILITY,
+        type = CommandData.CommandType.UTILITY,
         description = "Trocar algumas coisas com outro jogador",
         alias = {"trade", "me"}
 )
-public class TradeCommand extends Command {
+public class TradeCommand implements Command {
 
     @Override
     protected void execute(CommandEvent event) {

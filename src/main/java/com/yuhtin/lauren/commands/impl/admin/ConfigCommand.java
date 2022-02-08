@@ -2,7 +2,7 @@ package com.yuhtin.lauren.commands.impl.admin;
 
 import com.google.inject.Inject;
 import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.commands.CommandHandler;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.models.objects.Config;
 import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.helper.UserUtil;
@@ -12,9 +12,9 @@ import net.dv8tion.jda.api.Permission;
 
 import java.time.Instant;
 
-@CommandHandler(
+@CommandData(
         name = "config",
-        type = CommandHandler.CommandType.CONFIG,
+        type = CommandData.CommandType.CONFIG,
         description = "Configurar algumas informações minha",
         alias = {"configurar", "cfg", "editar", "edit"})
 public class ConfigCommand implements CommandExecutor {
