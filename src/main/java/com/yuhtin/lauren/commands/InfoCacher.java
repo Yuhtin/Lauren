@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.commands;
 
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.lazy.LazyInstance;
+import com.yuhtin.lauren.utils.LazyInstance;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.val;
@@ -14,9 +14,9 @@ public class InfoCacher {
 
     private static final LazyInstance<InfoCacher> LAZY_INSTANCE = new LazyInstance<>();
 
-    private final Map<CommandData.CommandType, List<String>> commandByType = new EnumMap<> (CommandData.CommandType.class);
+    private final Map<CommandData.CommandType, List<String>> commandByType = new EnumMap<>(CommandData.CommandType.class);
+    @Getter private final Map<String, CommandData> commands = new HashMap<>();
 
-    @Getter private final Map<String, EmbedBuilder> commands = new HashMap<>();
     @Getter private final EmbedBuilder helpEmbed = new EmbedBuilder();
 
     public static InfoCacher getInstance() {
@@ -30,18 +30,7 @@ public class InfoCacher {
     }
 
     public void insert(CommandData commandData) {
-        commands.put(commandData.name(), new EmbedBuilder()
-                .setImage("https://pa1.narvii.com/7093/1d8551884cec1cb2dd99b88ff4c745436b21f1b4r1-500-500_hq.gif")
-                .setAuthor("Informações do comando " + commandData.name(), null, Startup.getLauren().getBot().getSelfUser().getAvatarUrl())
-
-                .setDescription("Você está vendo as informações específicas do comando `" + commandData.name() + "`," +
-                        " para ver todos os comandos utilize `$ajuda <comando>`")
-
-                .addField("__Informações do comando:__", "", false)
-                .addField("**Nome** ❓ - _Identificador principal do comando_", commandData.name(), false)
-                .addField("**Categoria** \uD83E\uDDE9 - _Categoria do comando_", commandData.type().getName(), false)
-                .addField("**Descrição** ⭐️ - _Pequena descrição do comando_", commandData.description(), false));
-
+        commands.put(commandData.name(), commandData);
         commandByType.get(commandData.type()).add(commandData.name());
     }
 

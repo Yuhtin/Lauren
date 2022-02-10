@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.utils.helper.UserUtil;
+import com.yuhtin.lauren.utils.UserUtil;
 import lombok.val;
 import lombok.var;
 import net.dv8tion.jda.api.Permission;

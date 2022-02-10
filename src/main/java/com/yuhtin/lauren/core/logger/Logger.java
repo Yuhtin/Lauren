@@ -4,8 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
 import com.yuhtin.lauren.models.enums.LogType;
-import com.yuhtin.lauren.utils.helper.LogUtils;
-import com.yuhtin.lauren.utils.helper.UserUtil;
+import com.yuhtin.lauren.utils.LogUtils;
 
 import java.time.LocalDateTime;
 

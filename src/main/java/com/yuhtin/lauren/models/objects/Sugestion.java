@@ -2,7 +2,7 @@ package com.yuhtin.lauren.models.objects;
 
 import com.yuhtin.lauren.models.enums.SugestionStage;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.helper.UserUtil;
+import com.yuhtin.lauren.utils.UserUtil;
 import lombok.Builder;
 import lombok.Data;
 import net.dv8tion.jda.api.EmbedBuilder;

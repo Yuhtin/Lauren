@@ -6,7 +6,7 @@ import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.core.draw.controller.DrawController;
 import com.yuhtin.lauren.core.draw.controller.DrawEditting;
 import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.utils.helper.UserUtil;
+import com.yuhtin.lauren.utils.UserUtil;
 import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;

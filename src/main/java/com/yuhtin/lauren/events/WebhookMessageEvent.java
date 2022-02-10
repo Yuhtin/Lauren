@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.vote.VoteResponse;
-import com.yuhtin.lauren.utils.serialization.Serializer;
+import com.yuhtin.lauren.utils.Serializer;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;

@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.utils.helper;
+package com.yuhtin.lauren.utils;
 
 import com.google.inject.Inject;
 import com.yuhtin.lauren.core.player.Player;

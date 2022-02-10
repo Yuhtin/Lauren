@@ -7,7 +7,7 @@ import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.helper.TimeUtils;
+import com.yuhtin.lauren.utils.TimeUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

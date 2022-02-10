@@ -7,7 +7,7 @@ import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.SimplePlayer;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.sql.connection.SQLConnection;
-import com.yuhtin.lauren.utils.helper.TaskHelper;
+import com.yuhtin.lauren.utils.TaskHelper;
 import com.yuhtin.lauren.utils.serialization.player.PlayerSerializer;
 import lombok.Getter;
 
@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 
 @Singleton
 public class TopXpUpdater {

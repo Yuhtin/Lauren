@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.utils.helper;
+package com.yuhtin.lauren.utils;
 
 import javax.management.Attribute;
 import javax.management.AttributeList;

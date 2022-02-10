@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.sql.provider.document;
 
 import com.yuhtin.lauren.sql.provider.document.parser.DocumentParser;
-import com.yuhtin.lauren.utils.helper.NumberUtils;
+import com.yuhtin.lauren.utils.NumberUtils;
 
 import java.util.HashMap;
 import java.util.Map;

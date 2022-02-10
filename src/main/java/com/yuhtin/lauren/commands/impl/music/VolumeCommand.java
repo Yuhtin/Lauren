@@ -5,7 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.commands.CommandData;
-import com.yuhtin.lauren.utils.helper.UserUtil;
+import com.yuhtin.lauren.utils.UserUtil;
 
 @CommandData(
         name = "volume",

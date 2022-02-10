@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.utils.lazy;
+package com.yuhtin.lauren.utils;
 
 import java.util.function.Supplier;
 

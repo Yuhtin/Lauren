@@ -1,53 +1,54 @@
 package com.yuhtin.lauren.commands.impl.music;
 
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.core.music.AudioInfo;
 import com.yuhtin.lauren.core.music.TrackManager;
-import com.yuhtin.lauren.utils.helper.TrackUtils;
-import com.yuhtin.lauren.utils.helper.UserUtil;
+import com.yuhtin.lauren.utils.TrackUtils;
+import com.yuhtin.lauren.utils.UserUtil;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandData(
-        name = "pular",
+        name = "skip",
         type = CommandData.CommandType.MUSIC,
-        description = "Iniciar uma votação para pular a música atual",
-        alias = {"skip"}
+        description = "Iniciar uma votação para pular a música atual"
 )
 public class SkipCommand implements Command {
 
     @Override
-    protected void execute(CommandEvent event) {
-        if (!TrackUtils.get().isInMusicChannel(event.getMember())) {
+    public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
+        if (event.getMember() == null || event.getGuild() == null) return;
+
+        if (!TrackUtils.isInMusicChannel(event.getMember())) {
             event.getChannel().sendMessage("\uD83C\uDFB6 Amiguinho, entre no canal `\uD83C\uDFB6┇Batidões` para poder usar comandos de música").queue();
             return;
         }
 
-        if (TrackUtils.get().isIdle(event.getTextChannel())) return;
+        if (TrackUtils.isIdle(event.getGuild(), hook)) return;
 
         TrackManager trackManager = TrackManager.of(event.getGuild());
-        if (TrackUtils.get().isMusicOwner(event.getMember())) {
+        if (TrackUtils.isMusicOwner(event.getMember())) {
             trackManager.getPlayer().stopTrack();
             event.getChannel().sendMessage("\u23e9 Pulei a música pra você <3").queue();
             return;
         }
 
         AudioInfo info = trackManager.getTrackInfo();
-        if (info.hasVoted(event.getAuthor())) {
+        if (info.hasVoted(event.getUser())) {
             event.getChannel().sendMessage("\uD83D\uDC6E\uD83C\uDFFD\u200D♀️ Ei você já votou pra pular essa música ;-;").queue();
             return;
         }
 
-        info.addSkip(event.getAuthor());
+        info.addSkip(event.getUser());
         if (info.getSkips() >= trackManager.getAudio().getMembers().size() - 2) {
-            trackManager.getPlayer().stopTrack();
+            trackManager.skipTrack();
             event.getChannel().sendMessage("\uD83E\uDDF6 Amo quando todos concordam entre si, pulando a música").queue();
             return;
         }
 
         String name = event.getMember().getNickname() == null
-                ? UserUtil.INSTANCE.getFullName(event.getAuthor())
+                ? event.getUser().getName()
                 : event.getMember().getNickname();
 
         String message = "\uD83E\uDDEC **"

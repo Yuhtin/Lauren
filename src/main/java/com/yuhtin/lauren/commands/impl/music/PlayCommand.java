@@ -1,45 +1,42 @@
 package com.yuhtin.lauren.commands.impl.music;
 
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.core.music.TrackManager;
-import com.yuhtin.lauren.utils.helper.TrackUtils;
+import com.yuhtin.lauren.utils.TrackUtils;
+import lombok.val;
+import lombok.var;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandData(
         name = "play",
         type = CommandData.CommandType.MUSIC,
-        description = "Tocar algum somzinho ai"
+        description = "Tocar algum somzinho ai",
+        args = {
+                "<musica>-Link ou nome de uma música ou vídeo"
+        }
 )
 public class PlayCommand implements Command {
 
     @Override
-    protected void execute(CommandEvent event) {
-        if (!TrackUtils.get().isInMusicChannel(event.getMember())) {
+    public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
+        if (event.getMember() == null || event.getGuild() == null) return;
+
+        if (!TrackUtils.isInMusicChannel(event.getMember())) {
             event.getChannel().sendMessage(
                     "\uD83C\uDFB6 Amiguinho, entre no canal `\uD83C\uDFB6┇Batidões` para poder usar comando de música"
             ).queue();
             return;
         }
 
-        TrackManager trackManager = TrackManager.of(event.getGuild());
+        val trackManager = TrackManager.of(event.getGuild());
         if (trackManager.getAudio() != null && !trackManager.getAudio().equals(event.getMember().getVoiceState().getChannel())) {
-
             event.getChannel().sendMessage("\uD83C\uDFB6 Você precisa estar no mesmo canal que eu para usar isto").queue();
             return;
-
         }
 
-        String[] arguments = event.getArgs().split(" ");
-        if (event.getArgs().equalsIgnoreCase("")) {
-
-            event.getChannel().sendMessage("<a:nao:704295026036834375> Utilize :clock9: `-play <link ou nome>`").queue();
-            return;
-
-        }
-
-        String input = String.join(" ", arguments);
+        var input = event.getOption("musica").getAsString();
         input = input.contains("http") ? input : "ytsearch: " + input;
 
         if (input.toLowerCase().contains("som de")
@@ -49,7 +46,8 @@ public class PlayCommand implements Command {
             return;
         }
 
-        trackManager.loadTrack(input, event.getMember(), event.getTextChannel(), TrackManager.SearchType.SIMPLE_SEARCH);
+        trackManager.loadTrack(input, event.getMember(), hook, TrackManager.SearchType.SIMPLE_SEARCH);
+        trackManager.setTextChannel(event.getTextChannel());
     }
 
 }

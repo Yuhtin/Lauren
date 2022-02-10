@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.models.objects;
 
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.serialization.Serializer;
+import com.yuhtin.lauren.utils.Serializer;
 import lombok.Data;
 
 import java.io.*;

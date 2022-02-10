@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.utils.helper;
+package com.yuhtin.lauren.utils;
 
 import java.util.Timer;
 import java.util.TimerTask;

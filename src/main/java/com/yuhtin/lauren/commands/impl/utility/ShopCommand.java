@@ -12,7 +12,7 @@ import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.embeds.ShopEmbed;
 import com.yuhtin.lauren.models.objects.ShopItem;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.helper.UserUtil;
+import com.yuhtin.lauren.utils.UserUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;

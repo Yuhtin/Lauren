@@ -3,9 +3,9 @@ package com.yuhtin.lauren.commands.impl.music;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.core.music.TrackManager;
-import com.yuhtin.lauren.utils.helper.TimeUtils;
-import com.yuhtin.lauren.utils.helper.TrackUtils;
-import com.yuhtin.lauren.utils.helper.UserUtil;
+import com.yuhtin.lauren.utils.TimeUtils;
+import com.yuhtin.lauren.utils.TrackUtils;
+import com.yuhtin.lauren.utils.UserUtil;
 import lombok.val;
 import lombok.var;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -30,7 +30,7 @@ public class JumpToTimeCommand implements Command {
     public void execute(CommandInteraction event, InteractionHook hook) {
         if (event.getGuild() == null
                 || event.getMember() == null
-                || TrackUtils.get().isIdle(event.getGuild(), hook)
+                || TrackUtils.isIdle(event.getGuild(), hook)
                 || !UserUtil.isDJ(event.getMember(), hook)) return;
 
         val args = event.getOption("tempo").getAsString();

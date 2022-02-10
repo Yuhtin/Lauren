@@ -1,13 +1,12 @@
 package com.yuhtin.lauren.commands.impl.help;
 
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandData;
-import com.yuhtin.lauren.utils.helper.TimeUtils;
-import com.yuhtin.lauren.utils.helper.UserUtil;
+import com.yuhtin.lauren.utils.TimeUtils;
+import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -17,71 +16,41 @@ import java.util.Locale;
 @CommandData(
         name = "servidor",
         type = CommandData.CommandType.HELP,
-        description = "Visualizar as informações deste servidor",
-        alias = {"sinfo", "server"}
+        description = "Visualizar as informações deste servidor"
 )
 public class ServerInfoCommand implements Command {
 
     @Override
-    protected void execute(CommandEvent event) {
-        String guildId = event.getGuild().getId();
-        String roleSize = event.getGuild().getRoles().size() + "";
-        String regionName = event.getGuild().getRegion().getName();
-        String creationDate = subtractTime(event.getGuild().getTimeCreated());
-        String userDate = event.getMessage().getMember() == null ? "Erro" : subtractTime(event.getMessage().getMember().getTimeJoined());
+    public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
+        val guildId = event.getGuild().getId();
+        val roleSize = event.getGuild().getRoles().size() + "";
+        val creationDate = subtractTime(event.getGuild().getTimeCreated());
+        val userDate = event.getMember() == null ? "Erro" : subtractTime(event.getMember().getTimeJoined());
 
-        Member owner = event.getGuild().getOwner();
-        String ownerName = (owner == null ? "Ningúem" : UserUtil.INSTANCE.getFullName(owner.getUser()));
-        String ownerId = (owner == null ? "0" : owner.getId());
+        val owner = event.getGuild().getOwner();
+        val ownerName = owner == null ? "Ningúem" : owner.getUser().getAsTag();
+        val ownerId = owner == null ? "0" : owner.getId();
 
-        int textChannels = event.getGuild().getTextChannels().size();
-        int voiceChannels = event.getGuild().getVoiceChannels().size();
-        int channelsSize = textChannels + voiceChannels;
+        val textChannels = event.getGuild().getTextChannels().size();
+        val voiceChannels = event.getGuild().getVoiceChannels().size();
+        val channelsSize = textChannels + voiceChannels;
 
-        int membersSize = event.getGuild().getMembers().size();
-        int onlineMembers = 0, awayMembers = 0, bots = 0, members = 0, offlineMembers = 0, busyMembers = 0;
-        for (Member member : event.getGuild().getMembers()) {
-            if (member.getUser().isBot()) ++bots;
-            else ++members;
-            switch (member.getOnlineStatus()) {
-                case ONLINE:
-                    ++onlineMembers;
-                    continue;
-                case INVISIBLE:
-                case UNKNOWN:
-                case OFFLINE:
-                    ++offlineMembers;
-                    continue;
-                case IDLE:
-                    ++awayMembers;
-                    continue;
-                case DO_NOT_DISTURB:
-                    ++busyMembers;
-            }
-        }
+        val embedBuilder = new EmbedBuilder()
+                .setColor(event.getMember().getColor())
+                .setAuthor(event.getGuild().getName(), "https://google.com", event.getGuild().getIconUrl())
+                .setThumbnail(event.getGuild().getIconUrl())
 
+                .addField("💻 ID", guildId, true)
+                .addField("🧶 Cargos", roleSize, true)
+                .addField("👑 Dono", "`" + ownerName + "`\n(" + ownerId + ")", true)
+                .addField("💬 Canais (" + channelsSize + ")", "📝 **Texto:** " + textChannels + "\n🗣 **Voz:** " + voiceChannels, true)
+                .addField("📆 Criado em", creationDate, true)
+                .addField("✨ Você entrou em", userDate, true)
 
-        EmbedBuilder embedBuilder = new EmbedBuilder();
-        embedBuilder.setColor(event.getMember().getColor());
-        embedBuilder.setAuthor(event.getGuild().getName(), "https://google.com", event.getGuild().getIconUrl());
-        embedBuilder.setThumbnail(event.getGuild().getIconUrl());
+                .setFooter("Comando usado as", event.getUser().getAvatarUrl())
+                .setTimestamp(Instant.now());
 
-        embedBuilder.addField("💻 ID", guildId, true);
-        embedBuilder.addField("🧶 Cargos", roleSize, true);
-        embedBuilder.addField("👑 Dono", "`" + ownerName + "`\n(" + ownerId + ")", true);
-        embedBuilder.addField("🌎 Região", regionName, true);
-        embedBuilder.addField("💬 Canais (" + channelsSize + ")", "📝 **Texto:** " + textChannels + "\n🗣 **Voz:** " + voiceChannels, true);
-        embedBuilder.addField("📆 Criado em", creationDate, true);
-        embedBuilder.addField("✨ Entrei aqui em", userDate, true);
-        embedBuilder.addField("🙍‍♂️ Membros (" + membersSize + ")",
-                "<:online:703089222021808170> **Online:** " + onlineMembers + " | <:ausente:703089221774344224> **Ausente:** " + awayMembers + " |\n"
-                        + "<:nao_pertubar:703089222185386056> **Ocupado:** " + busyMembers + " | <:offline:703089222243975218> **Offline:** " + offlineMembers + "\n"
-                        + "🙋 **Pessoas:** " + members + "\n🤖 **Bots:** " + bots, true);
-
-        embedBuilder.setFooter("Comando usado as", event.getAuthor().getAvatarUrl());
-        embedBuilder.setTimestamp(Instant.now());
-
-        event.getChannel().sendMessage(embedBuilder.build()).queue();
+        hook.setEphemeral(true).sendMessageEmbeds(embedBuilder.build()).queue();
     }
 
     private String subtractTime(OffsetDateTime before) {

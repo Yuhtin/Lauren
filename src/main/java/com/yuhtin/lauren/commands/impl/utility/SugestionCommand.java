@@ -9,7 +9,7 @@ import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.models.enums.SugestionStage;
 import com.yuhtin.lauren.models.objects.Sugestion;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.helper.UserUtil;
+import com.yuhtin.lauren.utils.UserUtil;
 import lombok.Setter;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.TextChannel;

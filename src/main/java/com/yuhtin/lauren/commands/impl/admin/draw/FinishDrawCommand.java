@@ -3,7 +3,7 @@ package com.yuhtin.lauren.commands.impl.admin.draw;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.core.draw.controller.DrawController;
-import com.yuhtin.lauren.utils.helper.UserUtil;
+import com.yuhtin.lauren.utils.UserUtil;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;

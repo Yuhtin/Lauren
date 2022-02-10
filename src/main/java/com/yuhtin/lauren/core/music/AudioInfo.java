@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.core.music;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.yuhtin.lauren.utils.helper.TrackUtils;
+import com.yuhtin.lauren.utils.TrackUtils;
 import lombok.Getter;
 import lombok.Setter;
 import net.dv8tion.jda.api.entities.Member;
@@ -37,7 +37,7 @@ public class AudioInfo {
     @Override
     public String toString() {
         return "`["
-                + TrackUtils.get().getTimeStamp(track.getDuration()) +
+                + TrackUtils.getTimeStamp(track.getDuration()) +
                 "]` **"
                 + track.getInfo().title +
                 "** - <@"

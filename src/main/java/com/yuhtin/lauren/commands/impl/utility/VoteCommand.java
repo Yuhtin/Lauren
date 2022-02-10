@@ -7,7 +7,7 @@ import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.utils.helper.TimeUtils;
+import com.yuhtin.lauren.utils.TimeUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.awt.*;

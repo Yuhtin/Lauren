@@ -1,11 +1,14 @@
 package com.yuhtin.lauren.core.music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import lombok.Getter;
 import net.dv8tion.jda.api.entities.Guild;
 
+@Getter
 public class GuildMusicManager {
-    public final AudioPlayer player;
-    public final TrackScheduler scheduler;
+
+    private final AudioPlayer player;
+    private final TrackScheduler scheduler;
 
     public GuildMusicManager(AudioPlayer player, Guild guild) {
         this.player = player;
@@ -15,7 +18,4 @@ public class GuildMusicManager {
         player.addListener(scheduler);
     }
 
-    public AudioPlayerSendHandler getSendHandler() {
-        return new AudioPlayerSendHandler(player);
-    }
 }

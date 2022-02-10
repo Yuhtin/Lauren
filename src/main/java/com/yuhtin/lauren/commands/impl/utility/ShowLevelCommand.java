@@ -7,7 +7,7 @@ import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.utils.helper.UserUtil;
+import com.yuhtin.lauren.utils.UserUtil;
 
 /**
  * @author Yuhtin

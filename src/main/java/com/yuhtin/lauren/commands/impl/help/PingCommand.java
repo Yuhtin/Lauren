@@ -1,55 +1,54 @@
 package com.yuhtin.lauren.commands.impl.help;
 
 import com.google.inject.Inject;
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.service.LocaleManager;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.helper.SystemStatsUtils;
-import lombok.SneakyThrows;
+import com.yuhtin.lauren.utils.SystemStatsUtils;
 import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 import java.time.Instant;
 
 @CommandData(
         name = "host",
         type = CommandData.CommandType.HELP,
-        description = "Verificar as informações da minha hospedagem",
-        alias = {"pong", "delay", "ping"})
+        description = "Verificar as informações da minha hospedagem"
+)
 public class PingCommand implements Command {
 
     @Inject private LocaleManager localeManager;
 
-    @SneakyThrows
     @Override
-    protected void execute(CommandEvent event) {
+    public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
+        if (event.getMember() == null) return;
+
         long actual = System.currentTimeMillis();
-        event.getChannel().sendMessage("Carregando...").queue(message -> {
+        hook.setEphemeral(true).sendMessage("Carregando...").queue(message -> {
             MessageEmbed embed = createEmbed(
                     message.getTimeCreated().toInstant().toEpochMilli() - actual,
                     event.getMember(),
                     event.getJDA()
             );
 
-            message.editMessage(embed).queue();
+            message.editMessageEmbeds(embed).queue();
         });
     }
 
     private MessageEmbed createEmbed(long toEpochMilli, Member member, JDA jda) {
-
         val shardManager = Startup.getLauren().getBot().getShardManager();
-        String shardMessage = (shardManager == null ? "1" : shardManager.getShardsTotal())
+        val shardMessage = (shardManager == null ? "1" : shardManager.getShardsTotal())
                 + " shards, "
                 + (shardManager == null ? "1" : shardManager.getShardsRunning())
                 + " rodando";
 
-        EmbedBuilder builder = new EmbedBuilder()
+        return new EmbedBuilder()
                 .setAuthor("Informações sobre minha hospedagem", null, jda.getSelfUser().getAvatarUrl())
                 .setColor(member.getColor())
                 .setTimestamp(Instant.now())
@@ -68,7 +67,7 @@ public class PingCommand implements Command {
                 .addField("🌏 Shards", "`" + shardMessage + "`", false)
                 .addField("<:discord:723587554422816889> Discord Ping", "`" + toEpochMilli + "ms`", false)
                 .addField("\uD83E\uDDEC Discord API", "`" + jda.getGatewayPing() + "ms`", false)
-                .setFooter("Ping médio: " + ((jda.getGatewayPing() + toEpochMilli) / 2) + "ms", member.getUser().getAvatarUrl());
-        return builder.build();
+                .setFooter("Ping médio: " + ((jda.getGatewayPing() + toEpochMilli) / 2) + "ms", member.getUser().getAvatarUrl())
+                .build();
     }
 }

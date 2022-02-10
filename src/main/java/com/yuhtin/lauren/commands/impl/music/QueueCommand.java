@@ -1,40 +1,43 @@
 package com.yuhtin.lauren.commands.impl.music;
 
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
-import com.jagrosh.jdautilities.menu.Paginator;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.core.music.AudioInfo;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.helper.TrackUtils;
+import com.yuhtin.lauren.utils.Paginator;
+import com.yuhtin.lauren.utils.TrackUtils;
 import lombok.Getter;
+import lombok.val;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @CommandData(
-        name = "playlist",
+        name = "queue",
         type = CommandData.CommandType.MUSIC,
         description = "Ver as músicas que eu ainda vou tocar",
-        alias = {"queue", "pl", "fila", "q"}
+        args = {
+                "[pagina]-Ver uma página específica da queue"
+        }
 )
 public class QueueCommand implements Command {
 
-    @Getter private static final Paginator.Builder builder = new Paginator.Builder()
+    @Getter private static final Paginator.Builder BUILDER = new Paginator.Builder()
             .setColumns(1)
             .setFinalAction(message -> message.clearReactions().queue())
             .setItemsPerPage(10)
             .setEventWaiter(Startup.getLauren().getEventWaiter())
-            .waitOnSinglePage(false)
             .useNumberedItems(true)
             .showPageNumbers(true)
             .wrapPageEnds(true)
             .setTimeout(1, TimeUnit.MINUTES);
 
     @Override
-    protected void execute(CommandEvent event) {
+    public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
+        if (event.getMember() == null || event.getGuild() == null) return;
 
         TrackManager trackManager = TrackManager.of(event.getGuild());
         if (trackManager.getQueuedTracks().isEmpty()) {
@@ -42,11 +45,8 @@ public class QueueCommand implements Command {
             return;
         }
 
-        int page = 1;
-        try {
-            page = Integer.parseInt(event.getArgs());
-        } catch (NumberFormatException ignore) {
-        }
+        val pageOption = event.getOption("pagina");
+        val page = pageOption == null ? 1: (int) pageOption.getAsDouble();
 
         Set<AudioInfo> queue = trackManager.getQueuedTracks();
         String[] songs = new String[queue.size()];
@@ -60,35 +60,36 @@ public class QueueCommand implements Command {
             ++i;
         }
 
-        String timeInLetter = TrackUtils.get().getTimeStamp(totalTime);
-        builder.setText((number, number2) -> {
-            StringBuilder stringBuilder = new StringBuilder();
-            if (trackManager.getPlayer().getPlayingTrack() != null) {
+        String timeInLetter = TrackUtils.getTimeStamp(totalTime);
+        BUILDER.setText((number, number2) -> {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    if (trackManager.getPlayer().getPlayingTrack() != null) {
 
-                stringBuilder.append(trackManager.getPlayer().isPaused() ? "\u23F8" : "\u25B6")
-                        .append(" **")
-                        .append(trackManager.getPlayer().getPlayingTrack().getInfo().title)
-                        .append("**")
-                        .append(" - ")
-                        .append("`")
-                        .append(TrackUtils.get().getTimeStamp(trackManager.getPlayer().getPlayingTrack().getPosition()))
-                        .append(" / ")
-                        .append(TrackUtils.get().getTimeStamp(trackManager.getPlayer().getPlayingTrack().getInfo().length))
-                        .append("`")
-                        .append("\n");
+                        stringBuilder.append(trackManager.getPlayer().isPaused() ? "\u23F8" : "\u25B6")
+                                .append(" **")
+                                .append(trackManager.getPlayer().getPlayingTrack().getInfo().title)
+                                .append("**")
+                                .append(" - ")
+                                .append("`")
+                                .append(TrackUtils.getTimeStamp(trackManager.getPlayer().getPlayingTrack().getPosition()))
+                                .append(" / ")
+                                .append(TrackUtils.getTimeStamp(trackManager.getPlayer().getPlayingTrack().getInfo().length))
+                                .append("`")
+                                .append("\n");
 
-            }
+                    }
 
-            return stringBuilder.append("\uD83D\uDCBF Informações da Fila | ")
-                    .append(queue.size())
-                    .append(" músicas | `")
-                    .append(timeInLetter)
-                    .append("`")
-                    .toString();
-        }).setItems(songs)
-                .setUsers(event.getAuthor())
-                .setColor(event.getSelfMember().getColor());
+                    return stringBuilder.append("\uD83D\uDCBF Informações da Fila | ")
+                            .append(queue.size())
+                            .append(" músicas | `")
+                            .append(timeInLetter)
+                            .append("`")
+                            .toString();
+                })
+                .setItems(songs)
+                .setUsers(event.getUser())
+                .setColor(event.getMember().getColor());
 
-        builder.build().paginate(event.getChannel(), page);
+        BUILDER.build().paginate(event.getChannel(), page);
     }
 }

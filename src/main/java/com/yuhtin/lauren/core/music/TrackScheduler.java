@@ -4,6 +4,8 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+import lombok.Getter;
+import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.VoiceChannel;
@@ -11,8 +13,10 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+@Getter
 public class TrackScheduler extends AudioEventAdapter {
-    public final BlockingQueue<AudioInfo> queue;
+
+    private final BlockingQueue<AudioInfo> queue;
     private final AudioPlayer player;
     private final Guild guild;
 
@@ -23,17 +27,15 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
     public void queue(AudioTrack track, Member author) {
-
         AudioInfo info = new AudioInfo(track, author);
         queue.add(info);
 
         if (this.player.getPlayingTrack() == null) this.player.playTrack(track);
-
     }
 
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
-        VoiceChannel voice = TrackManager.of(guild).getAudio();
+        AudioChannel voice = TrackManager.of(guild).getAudio();
         voice.getGuild().getAudioManager().openAudioConnection(voice);
     }
 

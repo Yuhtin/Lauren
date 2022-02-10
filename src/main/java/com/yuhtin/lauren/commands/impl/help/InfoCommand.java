@@ -2,59 +2,57 @@ package com.yuhtin.lauren.commands.impl.help;
 
 import com.google.inject.Inject;
 import com.yuhtin.lauren.commands.Command;
+import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.StatsController;
-import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.helper.SystemStatsUtils;
-import com.yuhtin.lauren.utils.helper.TimeUtils;
-import lombok.SneakyThrows;
+import com.yuhtin.lauren.utils.SystemStatsUtils;
+import com.yuhtin.lauren.utils.TimeUtils;
+import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.SelfUser;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 import java.time.Instant;
-import java.time.OffsetDateTime;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
 @CommandData(
-        name = "info",
+        name = "botinfo",
         type = CommandData.CommandType.HELP,
-        description = "Veja um pouco mais sobre mim",
-        alias = {"binfo"}
+        description = "Veja um pouco mais sobre mim"
 )
 public class InfoCommand implements Command {
 
     @Inject private PlayerController playerController;
     @Inject private StatsController statsController;
 
-    @SneakyThrows
     @Override
-    public void execute(CommandEvent event) {
-        SelfUser bot = event.getJDA().getSelfUser();
-        OffsetDateTime timeCreated = bot.getTimeCreated();
+    public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
+        val bot = event.getJDA().getSelfUser();
+        val timeCreated = bot.getTimeCreated();
 
-        User user = event.getJDA().getUserById(272879983326658570L);
-        String authorBot = user == null ? bot.getName() + "#" + bot.getDiscriminator() : user.getName() + "#" + user.getDiscriminator();
+        int musicsQueue = 0;
+        for (val trackManager : TrackManager.getGuildTrackManagers().values()) {
+           musicsQueue += trackManager.getQueuedTracks().size();
+        }
 
-        TrackManager trackManager = TrackManager.of(event.getGuild());
-        String cacheMessage = this.playerController.totalUsers()
+        val cacheMessage = playerController.totalUsers()
                 + " jogadores, "
-                + trackManager.getMusicManager().scheduler.queue.size()
+                + musicsQueue
                 + " músicas e "
-                + this.statsController.getStats().size()
+                + statsController.getStats().size()
                 + " estatísticas";
 
 
-        EmbedBuilder builder = new EmbedBuilder()
+        val builder = new EmbedBuilder()
                 .setAuthor("Informações sobre a bot mais linda do mundo", null, bot.getAvatarUrl())
 
                 .addField("📆 Criado em", "`" + timeCreated.getDayOfMonth() + " de " + timeCreated.getMonth().getDisplayName(TextStyle.SHORT, Locale.US) + ", "
                         + timeCreated.getYear() + " às " + timeCreated.getHour() + ":" + timeCreated.getMinute() + "`", true)
                 .addField("<a:feliz_2:726220815749611603> Versão atual", "`v" + Startup.getLauren().getVersion() + "`", true)
-                .addField("🙍‍♂️ Dono", "`" + authorBot + "`", true)
+                .addField("🙍‍♂️ Dono", "`Yuhtin#9147`", true)
 
                 .addField("<a:infinito:703187274912759899> Uptime",
                         "`" + TimeUtils.formatTime(System.currentTimeMillis() - Startup.getLauren().getBotStartTime()) + "`",
@@ -73,11 +71,12 @@ public class InfoCommand implements Command {
                         + SystemStatsUtils.usedMemory() + "/"
                         + SystemStatsUtils.totalMemory() + "`", true)
 
-                .setFooter("Mais informações em $ping", event.getAuthor().getAvatarUrl())
+                .setFooter("Mais informações em $ping", event.getUser().getAvatarUrl())
                 .setColor(event.getMember().getColor())
                 .setThumbnail(bot.getAvatarUrl())
                 .setTimestamp(Instant.now());
 
-        event.getChannel().sendMessageEmbeds(builder.build()).queue();
+        hook.sendMessageEmbeds(builder.build()).queue();
     }
+
 }
