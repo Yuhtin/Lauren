@@ -3,6 +3,7 @@ package com.yuhtin.lauren;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.yuhtin.lauren.commands.CommandCatcher;
+import com.yuhtin.lauren.commands.CommandRegistry;
 import com.yuhtin.lauren.core.bot.LaurenDAO;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
 import com.yuhtin.lauren.core.music.TrackManager;
@@ -32,7 +33,6 @@ import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
 import javax.security.auth.login.LoginException;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -71,20 +71,17 @@ public final class Lauren extends LaurenDAO {
 
     @Override
     public void onLoad() throws Exception {
-
         setBotStartTime(System.currentTimeMillis());
         setupConfig();
 
         configureConnection();
 
         findVersion();
+        setupGuice();
+
         connectDiscord();
 
-        setupGuice();
-        getInjector().injectMembers(this);
-
         loggerController.create();
-
     }
 
     @Override
@@ -123,77 +120,70 @@ public final class Lauren extends LaurenDAO {
     }
 
     @Override
-    public void onDisable() throws Exception {
+    public void onDisable() {
+        try {
+            val connection = getSqlConnection().findConnection();
+            if (connection != null) {
+                if (!connection.isClosed()) {
+                    playerController.savePlayers();
+                    statsController.getStats().values().forEach(statisticDAO::updateStatistic);
 
-        if (!getSqlConnection().findConnection().isClosed()) {
+                    getLogger().info("Saved player's and statistic's data");
+                } else {
+                    getLogger().warning("SQLConnection is closed, reconfiguring");
+                    configureConnection();
 
-            playerController.savePlayers();
-            statsController.getStats().values().forEach(statisticDAO::updateStatistic);
+                    getLogger().info("Executing onDisable again");
+                    onDisable();
+                    return;
+                }
+            }
 
-            getLogger().info("Saved player's and statistic's data");
+            TrackManager.getGuildTrackManagers().values().forEach(TrackManager::destroy);
+            getLogger().info("Destroyed all track managers");
 
-        } else {
+            getLogger().info(getBotName() + " disabled");
 
-            getLogger().warning("SQLConnection is closed, reconfiguring");
-            configureConnection();
+            val now = LocalDateTime.now();
+            if (loggerController != null) {
+                val file = loggerController.getFile();
 
-            getLogger().info("Executing onDisable again");
-            onDisable();
-            return;
+                getLogger().log("Compressing the log '" + file.getName() + "' to a zip file", LogType.FINISH);
+                getLogger().log("Ending log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s", LogType.FINISH);
 
+                val outputStream = new FileOutputStream(file.getPath().split("\\.")[0] + ".zip");
+                val zipFileOutput = new ZipOutputStream(outputStream);
+
+                FileUtil.writeToZip(file, zipFileOutput);
+                FileUtil.cleanUp(Paths.get(file.getPath()));
+
+                zipFileOutput.close();
+                outputStream.close();
+
+                getLogger().info("Zipped last log file successfully");
+            }
+        } catch (Exception ignored) {
         }
-
-        TrackManager.getGuildTrackManagers().values().forEach(TrackManager::destroy);
-        getLogger().info("Destroyed all track managers");
-
-        getLogger().info(getBotName() + " disabled");
-
-        LocalDateTime now = LocalDateTime.now();
-        File file = loggerController.getFile();
-
-        getLogger().log("Compressing the log '" + file.getName() + "' to a zip file", LogType.FINISH);
-        getLogger().log("Ending log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s", LogType.FINISH);
-
-        FileOutputStream outputStream = new FileOutputStream(file.getPath().split("\\.")[0] + ".zip");
-        ZipOutputStream zipFileOutput = new ZipOutputStream(outputStream);
-
-        FileUtil.writeToZip(file, zipFileOutput);
-        FileUtil.cleanUp(Paths.get(file.getPath()));
-
-        zipFileOutput.close();
-        outputStream.close();
-
-        getLogger().info("Zipped last log file successfully");
-
     }
 
     @Override
     public void connectDiscord() throws LoginException {
-
         val jdaBuilder = JDABuilder.createDefault(getConfig().getToken())
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .setChunkingFilter(ChunkingFilter.ALL)
                 .enableIntents(Arrays.asList(GatewayIntent.values()))
                 .setAutoReconnect(true)
-                .addEventListeners(new BotReadyEvent(this));
-
-        for (int i = 0; i < 10; i++) { jdaBuilder.useSharding(i, 10).build();}
+                .addEventListeners(new BotReadyEvent(this), commandCatcher);
 
         setBot(jdaBuilder.build());
     }
 
     @Override
-    public void loadCommands() throws IOException {
+    public void loadCommands() {
+        val commandRegistry = CommandRegistry.of(getBot());
+        getInjector().injectMembers(commandRegistry);
 
-        CommandManager commandManager = new CommandManager(
-                getBot(),
-                getInjector(),
-                getLogger(),
-                "com.yuhtin.lauren.commands"
-        );
-
-        commandManager.load();
-
+        commandRegistry.register();
     }
 
     @Override
@@ -212,18 +202,16 @@ public final class Lauren extends LaurenDAO {
 
     @Override
     public void setupGuice() throws GuiceInjectorException {
-
         try {
-
             setInjector(Guice.createInjector(new LaurenModule(this)));
             getInjector().injectMembers(this);
             getInjector().injectMembers(Player.class);
 
+            getLogger().info("Setuped Guice and injeted all classes");
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new GuiceInjectorException();
         }
-
     }
 
     private void loadSQLTables() {

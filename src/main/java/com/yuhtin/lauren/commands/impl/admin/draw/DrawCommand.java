@@ -2,7 +2,7 @@ package com.yuhtin.lauren.commands.impl.admin.draw;
 
 import com.google.inject.Inject;
 import com.yuhtin.lauren.commands.Command;
-import com.yuhtin.lauren.commands.CommandData;
+import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.core.draw.controller.DrawController;
 import com.yuhtin.lauren.core.draw.controller.DrawEditting;
 import com.yuhtin.lauren.core.logger.Logger;
@@ -18,9 +18,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-@CommandData(
+@CommandInfo(
         name = "sortear",
-        type = CommandData.CommandType.ADMIN,
+        type = CommandInfo.CommandType.ADMIN,
         description = "Iniciar um sorteio sobre algum conteúdo"
 )
 public class DrawCommand implements Command {

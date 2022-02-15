@@ -21,26 +21,19 @@ public class ChatMessage extends ListenerAdapter {
                 || event.getAuthor().isBot())
             return;
 
-        if (!isMusicCommand(event.getMessage().getContentRaw())
-                && event.getMessage().getContentRaw().contains("://")
+        if (event.getMessage().getContentRaw().contains("://")
                 && event.getChannel().getIdLong() != 753628118161424384L
-                && !UserUtil.hasPermission(event.getMember(), event.getMessage(), Permission.MESSAGE_MANAGE, false)) {
+                && !UserUtil.hasPermission(event.getMember(), null, Permission.MESSAGE_MANAGE)) {
 
             event.getChannel()
                     .sendMessage("<:chorano:726207542413230142> Poxa, não divulga aqui amigo, temos nosso sistema de parceria, fale com o <@272879983326658570> no privado.")
                     .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+
             event.getMessage().delete().queue();
             return;
         }
 
         this.playerController.get(event.getMember().getIdLong()).gainXP(3);
-    }
-
-    private boolean isMusicCommand(String contentRaw) {
-        return contentRaw.startsWith("$m ")
-                || contentRaw.startsWith("$music")
-                || contentRaw.startsWith("$play ")
-                || contentRaw.startsWith("$tocar ");
     }
 
 

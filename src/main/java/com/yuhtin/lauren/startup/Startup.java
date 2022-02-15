@@ -12,19 +12,15 @@ public class Startup {
     public static void main(String[] args) {
 
         try {
-
             lauren.onLoad();
             lauren.getLogger().info("[1/3] High important systems enabled successfully");
 
             lauren.onEnable();
             lauren.getLogger().info("[3/3] Registered Commands, Events, Timers and others");
-
         } catch (Exception exception) {
-
             exception.printStackTrace();
             lauren.shutdown();
             return;
-
         }
 
         Scanner scanner = new Scanner(System.in);

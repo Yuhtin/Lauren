@@ -2,7 +2,7 @@ package com.yuhtin.lauren.commands.impl.admin;
 
 import com.google.inject.Inject;
 import com.yuhtin.lauren.commands.Command;
-import com.yuhtin.lauren.commands.CommandData;
+import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.utils.UserUtil;
 import lombok.val;
@@ -11,9 +11,9 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
-@CommandData(
+@CommandInfo(
         name = "points",
-        type = CommandData.CommandType.ADMIN,
+        type = CommandInfo.CommandType.ADMIN,
         description = "Adicionar pontos de ranked para um jogador",
         args = {
                 "<option>-Use add, remove ou set.",
@@ -46,7 +46,7 @@ public class PointsComamnd implements Command {
         if (quantity <= 0) quantity *= -1;
         val optionUsed = option.equalsIgnoreCase("set") ? "setou" : option.equalsIgnoreCase("remove") ? "removeu" : "adicionou";
 
-        hook.sendMessage("<:felizpakas:742373250037710918> " +
+        hook.setEphemeral(true).sendMessage("<:felizpakas:742373250037710918> " +
                         "Você " + optionUsed + " **" + quantity + "** pontos ao jogador " + player.getAsTag())
                 .queue();
     }

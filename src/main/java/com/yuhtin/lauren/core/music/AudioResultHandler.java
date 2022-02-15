@@ -8,6 +8,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.models.enums.LogType;
+import com.yuhtin.lauren.utils.SimpleEmbed;
 import com.yuhtin.lauren.utils.TaskHelper;
 import com.yuhtin.lauren.utils.UserUtil;
 import lombok.Builder;
@@ -51,6 +52,7 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
 
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("💿 " + member.getUser().getAsTag() + " adicionou 1 música a fila")
+                .setColor(SimpleEmbed.getColor())
                 .setDescription(
                         "\ud83d\udcc0 Nome: `" + track.getInfo().title + "`\n" +
                                 "\uD83D\uDCB0 Autor: `" + track.getInfo().author + "`\n" +

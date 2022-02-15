@@ -3,10 +3,10 @@ package com.yuhtin.lauren.tasks;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
+import com.yuhtin.lauren.core.player.serializer.PlayerSerializer;
 import com.yuhtin.lauren.core.punish.PunishmentType;
 import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.sql.provider.document.Document;
-import com.yuhtin.lauren.utils.serialization.player.PlayerSerializer;
 import lombok.AllArgsConstructor;
 import lombok.val;
 import net.dv8tion.jda.api.JDA;
@@ -41,29 +41,24 @@ public class AutoSaveTask extends TimerTask {
             return;
         }
 
-        for (Document document : playerController.getPlayerDAO().queryMany(sql)) {
+        for (val document : playerController.getPlayerDAO().queryMany(sql)) {
 
-            Player data = PlayerSerializer.deserialize(document.getString("data"));
+            val data = PlayerSerializer.deserialize(document.getString("data"));
 
             // purge player's data after 7 days
             if (data.getLeaveTime() != 0 && data.getLeaveTime() + TimeUnit.DAYS.toMillis(7) < System.currentTimeMillis()) {
-
                 playerController.getPlayerDAO().deletePlayer(data.getUserID());
                 continue;
-
             }
 
             if (data.getPunishs() == null) data.setPunishs(new HashMap<>());
-            for (PunishmentType punishmentType : data.getPunishs().keySet()) {
-
+            for (val punishmentType : data.getPunishs().keySet()) {
                 // compare the punishment time and see if the player can be unpunished
                 if (data.getPunishs().get(punishmentType) < System.currentTimeMillis()) {
-
                     data.getPunishs().remove(punishmentType);
 
-                    Role role = punishmentType == PunishmentType.MUTE ? muteRole : callRole;
+                    val role = punishmentType == PunishmentType.MUTE ? muteRole : callRole;
                     guild.removeRoleFromMember(data.getUserID(), role).queue();
-
                 }
             }
 

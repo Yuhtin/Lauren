@@ -2,15 +2,15 @@ package com.yuhtin.lauren.commands.impl.music;
 
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.core.music.TrackManager;
-import com.yuhtin.lauren.commands.CommandData;
+import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.utils.TrackUtils;
 import lombok.val;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
-@CommandData(
-        name = "musica",
-        type = CommandData.CommandType.MUSIC,
+@CommandInfo(
+        name = "playing",
+        type = CommandInfo.CommandType.MUSIC,
         description = "Ver as informações da música atual"
 )
 public class MusicCommand implements Command {

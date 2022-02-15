@@ -3,7 +3,7 @@ package com.yuhtin.lauren.commands.impl.admin;
 import com.google.inject.Inject;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.commands.CommandData;
+import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.utils.UserUtil;
 import lombok.val;
 import net.dv8tion.jda.api.Permission;
@@ -14,9 +14,9 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 import java.util.List;
 
-@CommandData(
+@CommandInfo(
         name = "clearchat",
-        type = CommandData.CommandType.ADMIN,
+        type = CommandInfo.CommandType.ADMIN,
         description = "Limpar algumas mensagens do canal atual",
         args = {
                 "<!quantity>-Quantidade de mensagens para apagar",

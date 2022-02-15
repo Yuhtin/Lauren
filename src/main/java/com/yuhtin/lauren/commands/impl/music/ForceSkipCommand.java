@@ -1,16 +1,16 @@
 package com.yuhtin.lauren.commands.impl.music;
 
 import com.yuhtin.lauren.commands.Command;
-import com.yuhtin.lauren.commands.CommandData;
+import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.utils.TrackUtils;
 import com.yuhtin.lauren.utils.UserUtil;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
-@CommandData(
+@CommandInfo(
         name = "skip.force",
-        type = CommandData.CommandType.MUSIC,
+        type = CommandInfo.CommandType.MUSIC,
         description = "Forçar o pulo de uma música"
 )
 public class ForceSkipCommand implements Command {
@@ -23,6 +23,6 @@ public class ForceSkipCommand implements Command {
                 || !UserUtil.isDJ(event.getMember(), hook)) return;
 
         TrackManager.of(event.getGuild()).skipTrack();
-        event.getChannel().sendMessage("\u23e9 Pulei a música pra você <3").queue();
+        hook.sendMessage("\u23e9 Pulei a música pra você <3").queue();
     }
 }

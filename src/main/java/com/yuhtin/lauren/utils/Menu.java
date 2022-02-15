@@ -2,6 +2,7 @@ package com.yuhtin.lauren.utils;
 
 import com.yuhtin.lauren.models.objects.EventWaiter;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -50,21 +51,14 @@ public abstract class Menu {
     }
 
     /**
-     * Displays this Menu in a {@link net.dv8tion.jda.api.entities.MessageChannel MessageChannel}.
-     *
-     * @param channel The MessageChannel to display this Menu in
-     */
-    public abstract void display(MessageChannel channel);
-
-    /**
      * Displays this Menu as a designated {@link net.dv8tion.jda.api.entities.Message Message}.
      * <br>The Message provided must be one sent by the bot! Trying to provided a Message
      * authored by another {@link net.dv8tion.jda.api.entities.User User} will prevent the
      * Menu from being displayed!
      *
-     * @param message The Message to display this Menu as
+     * @param hook The Message to display this Menu as
      */
-    public abstract void display(Message message);
+    public abstract void display(InteractionHook hook);
 
     /**
      * Checks to see if the provided {@link net.dv8tion.jda.api.entities.User User}

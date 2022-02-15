@@ -1,16 +1,16 @@
 package com.yuhtin.lauren.commands.impl.music;
 
 import com.yuhtin.lauren.commands.Command;
-import com.yuhtin.lauren.commands.CommandData;
+import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.utils.TrackUtils;
 import com.yuhtin.lauren.utils.UserUtil;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
-@CommandData(
-        name = "sair",
-        type = CommandData.CommandType.MUSIC,
+@CommandInfo(
+        name = "quit",
+        type = CommandInfo.CommandType.MUSIC,
         description = "Sair do canal de voz e parar o batidão"
 )
 public class LeaveCommand implements Command {

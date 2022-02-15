@@ -8,6 +8,7 @@ import com.yuhtin.lauren.utils.TaskHelper;
 import com.yuhtin.lauren.utils.UserUtil;
 import lombok.AllArgsConstructor;
 import lombok.val;
+import lombok.var;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
@@ -66,10 +67,9 @@ public class LootGeneratorTask {
 
                 if (new Random().nextInt(100) > 10) return;
 
-                int value = new Random().nextInt(allowedChannels.size());
-                long channelID = allowedChannels.get(value);
-
-                TextChannel channel = guild.getTextChannelById(channelID);
+                val value = new Random().nextInt(allowedChannels.size());
+                val channelID = allowedChannels.get(value);
+                val channel = guild.getTextChannelById(channelID);
 
                 if (channel == null) {
                     logger.warning("Can't select a random channel to drop a loot");
@@ -78,7 +78,7 @@ public class LootGeneratorTask {
 
                 logger.info("Dropped loot on channel " + channel.getName());
 
-                Message message = channel.sendMessage(embed.build()).complete();
+                val message = channel.sendMessageEmbeds(embed.build()).complete();
                 message.addReaction(":radiante:771541052590915585").queue();
 
                 eventWaiter.waitForEvent(MessageReactionAddEvent.class, event -> !event.getMember().getUser().isBot()
@@ -86,35 +86,31 @@ public class LootGeneratorTask {
                         event -> {
                             message.clearReactions().queue();
 
-                            String nickname = event.getMember().getNickname();
+                            var nickname = event.getMember().getNickname();
                             if (nickname == null) nickname = event.getMember().getEffectiveName();
 
                             message.delete().queue();
 
-                            PrivateChannel privateChannel = event.getUser().openPrivateChannel().complete();
+                            val privateChannel = event.getUser().openPrivateChannel().complete();
                             if (privateChannel != null) {
-
                                 privateChannel.sendMessage("<:felizpakas:742373250037710918> " +
                                         "Parabéns **" + nickname + "**, você capturou uma lootbox, você pode abrir ela mais tarde " +
-                                        "usando `$openloot`")
+                                        "usando `/lootbox`")
                                         .queue();
 
                             }
 
-                            Player player = playerController.get(event.getUserIdLong());
+                            val player = playerController.get(event.getUserIdLong());
                             player.setLootBoxes(player.getLootBoxes() + 1);
 
-                            logger.info("The player " + UserUtil.INSTANCE.getFullName(event.getUser()) + " getted the drop");
-
+                            logger.info("The player " + event.getUser().getAsTag() + " getted the drop");
                         }, 90, TimeUnit.SECONDS,
 
                         () -> {
-
                             message.delete().queue();
                             channel.sendMessage("<a:tchau:751941650728747140> " +
                                     "Infelizmente acabou o tempo e ninguém coletou o loot.")
                                     .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-
                         });
             }
         }, 25, 60, TimeUnit.MINUTES);

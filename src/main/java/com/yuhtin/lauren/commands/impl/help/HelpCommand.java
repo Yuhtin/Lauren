@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.commands.impl.help;
 
 import com.yuhtin.lauren.commands.Command;
-import com.yuhtin.lauren.commands.CommandData;
+import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.commands.InfoCacher;
 import com.yuhtin.lauren.startup.Startup;
 import lombok.val;
@@ -11,9 +11,9 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 import java.time.Instant;
 
-@CommandData(
+@CommandInfo(
         name = "ajuda",
-        type = CommandData.CommandType.HELP,
+        type = CommandInfo.CommandType.HELP,
         description = "Informações de comandos do bot",
         args = {
                 "[comando]-Comando que deseja ver mais informações"
@@ -47,7 +47,7 @@ public class HelpCommand implements Command {
                     .setColor(event.getMember().getColor())
                     .setTimestamp(Instant.now()).build();
 
-            event.getChannel().sendMessageEmbeds(embed).queue();
+            hook.setEphemeral(true).sendMessageEmbeds(embed).queue();
             return;
 
         }
@@ -57,7 +57,7 @@ public class HelpCommand implements Command {
                 .setColor(event.getMember().getColor())
                 .setTimestamp(Instant.now());
 
-        event.getChannel().sendMessageEmbeds(helpEmbed.build()).queue();
+        hook.setEphemeral(true).sendMessageEmbeds(helpEmbed.build()).queue();
 
     }
 

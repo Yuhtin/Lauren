@@ -2,9 +2,9 @@ package com.yuhtin.lauren.sql.dao;
 
 import com.google.inject.Singleton;
 import com.yuhtin.lauren.core.player.Player;
+import com.yuhtin.lauren.core.player.serializer.PlayerSerializer;
 import com.yuhtin.lauren.sql.provider.DatabaseProvider;
 import com.yuhtin.lauren.sql.provider.document.parser.impl.PlayerDocumentParser;
-import com.yuhtin.lauren.utils.serialization.player.PlayerSerializer;
 
 import javax.annotation.Nullable;
 
@@ -46,20 +46,11 @@ public class PlayerDAO extends DatabaseProvider {
     }
 
     public void deletePlayer(long userID) {
-
-        update("delete from `lauren_players` where `id` = ?",
-                userID
-        );
-
+        update("delete from `lauren_players` where `id` = ?", userID);
     }
 
     public void updateAllDailys() {
-
-        update("update `lauren_players` set `abbleToDaily` = ?",
-                true
-        );
-
+        update("update `lauren_players` set `abbleToDaily` = ?", true);
     }
-
 
 }

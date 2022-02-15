@@ -61,6 +61,8 @@ public class LoggerController {
     }
 
     public void toFile(String log) {
+        if (bufferedWriter == null) return;
+
         try {
             bufferedWriter.write(log);
             bufferedWriter.newLine();

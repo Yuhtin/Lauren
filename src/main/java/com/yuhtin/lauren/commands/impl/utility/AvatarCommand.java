@@ -1,42 +1,43 @@
 package com.yuhtin.lauren.commands.impl.utility;
 
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.commands.Command;
-import com.yuhtin.lauren.commands.CommandData;
+import com.yuhtin.lauren.commands.CommandInfo;
+import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 import java.time.Instant;
-import java.util.concurrent.TimeUnit;
 
-@CommandData(
+@CommandInfo(
         name = "avatar",
-        type = CommandData.CommandType.UTILITY,
+        type = CommandInfo.CommandType.UTILITY,
         description = "Espiar a imagem de outro usuário OjO",
-        alias = {"image", "imagem"})
+        args = {
+                "[@user]-Usuário que você quer ver o avatar"
+        }
+)
 public class AvatarCommand implements Command {
 
     @Override
-    protected void execute(CommandEvent event) {
-        Member target = event.getMessage().getMentionedMembers().isEmpty()
-                ? event.getMember()
-                : event.getMessage().getMentionedMembers().get(0);
+    public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
+        val userOption = event.getOption("user");
+        val target = userOption == null ? event.getMember() : userOption.getAsMember();
 
-        String avatarUrl = target.getUser().getAvatarUrl();
+        val avatarUrl = target.getUser().getAvatarUrl();
         if (avatarUrl == null) {
-            event.getChannel().sendMessage("Ops, este jogador não possui imagem de perfil").queue((m) -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-            event.getMessage().delete().queueAfter(5, TimeUnit.SECONDS);
+            hook.setEphemeral(true).sendMessage("Ops, este jogador não possui imagem de perfil").queue();
             return;
         }
 
-        EmbedBuilder embed = new EmbedBuilder()
+        val embed = new EmbedBuilder()
                 .setAuthor("Avatar de " + target.getUser().getName(), "https://google.com", avatarUrl)
                 .setImage(target.getUser().getAvatarUrl())
                 .setColor(target.getColor())
-                .setFooter("Comando usado por " + event.getMember().getNickname(), event.getAuthor().getAvatarUrl())
+                .setFooter("Comando usado por " + event.getUser().getAsTag(), event.getUser().getAvatarUrl())
                 .setTimestamp(Instant.now());
 
-        event.getMessage().getChannel().sendMessage(embed.build()).queue();
+        hook.setEphemeral(true).sendMessageEmbeds(embed.build()).queue();
     }
+
 }

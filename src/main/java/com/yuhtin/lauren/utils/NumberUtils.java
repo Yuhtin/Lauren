@@ -21,6 +21,10 @@ public class NumberUtils {
         return DECIMAL_FORMAT.format(valor);
     }
 
+    public static boolean isInvalid(double value) {
+        return value < 0 || Double.isNaN(value) || Double.isInfinite(value);
+    }
+
     public static Number createNumber(String str) throws NumberFormatException {
 
         if (str == null) return null;

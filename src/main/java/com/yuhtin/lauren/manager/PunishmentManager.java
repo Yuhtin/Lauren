@@ -9,6 +9,7 @@ import com.yuhtin.lauren.core.punish.PunishmentRule;
 import com.yuhtin.lauren.core.punish.PunishmentType;
 import com.yuhtin.lauren.utils.TimeUtils;
 import com.yuhtin.lauren.utils.UserUtil;
+import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -20,16 +21,16 @@ public class PunishmentManager {
     @Inject private PlayerController playerController;
 
     public void applyPunish(User author, Member user, PunishmentRule rule, String proof) {
-        Player player = playerController.get(user.getIdLong());
-        PunishmentType type = rule.getType();
+        val player = playerController.get(user.getIdLong());
+        val type = rule.getType();
 
         if (type == PunishmentType.BAN) {
 
             this.logger.info(String.format(
                     "%s banned user %s in rule %s %s",
-                    UserUtil.INSTANCE.getFullName(author),
-                    UserUtil.INSTANCE.getFullName(user.getUser()),
-                    rule.toString(),
+                    author.getAsTag(),
+                    user.getUser().getAsTag(),
+                    rule,
                     (proof.equalsIgnoreCase("") ? "" : " with proof " + proof)
             ));
 
@@ -46,28 +47,25 @@ public class PunishmentManager {
             player.getPunishs().replace(type, player.getPunishs().get(type) + duration);
         else player.getPunishs().put(type, duration);
 
-        Role role = user.getGuild()
+        val role = user.getGuild()
                 .getRoleById(type == PunishmentType.MUTE
                         ? 760242509355024404L
                         : 771203970118975501L);
 
         if (role == null) this.logger.warning("Error on try to punish a user");
         else {
-
             user.getGuild().addRoleToMember(user, role).queue();
             sendPunishMessage(author, user, rule, proof);
-
         }
     }
 
     private void sendPunishMessage(User author, Member user, PunishmentRule rule, String proof) {
-
-        TextChannel announcementChannel = user.getGuild().getTextChannelById(771384145027792986L);
-        String ruleDescription = "Regra " + rule.toString() + ": " + rule.getMotive() + (proof.equalsIgnoreCase("") ? "" : ", " + proof);
+        val announcementChannel = user.getGuild().getTextChannelById(771384145027792986L);
+        val ruleDescription = "Regra " + rule.toString() + ": " + rule.getMotive() + (proof.equalsIgnoreCase("") ? "" : ", " + proof);
 
         if (announcementChannel != null) {
-            MessageBuilder announcementMessage = new MessageBuilder();
-            announcementMessage.setContent("**Usuário punido:** " + UserUtil.INSTANCE.getFullName(user.getUser()) + "\n" +
+            val announcementMessage = new MessageBuilder();
+            announcementMessage.setContent("**Usuário punido:** " + user.getUser().getAsTag() + "\n" +
                     "**Punido por:** <@" + author.getId() + ">\n" +
                     "**Motivo:** " + ruleDescription
             );
@@ -75,17 +73,17 @@ public class PunishmentManager {
             announcementChannel.sendMessage(announcementMessage.build()).queue();
         }
 
-        PrivateChannel privateChannel = user.getUser().openPrivateChannel().complete();
+        val privateChannel = user.getUser().openPrivateChannel().complete();
         if (privateChannel == null) return;
 
-        EmbedBuilder privateMessage = new EmbedBuilder();
-        privateMessage.setAuthor(UserUtil.INSTANCE.getFullName(author), null, author.getAvatarUrl());
+        val privateMessage = new EmbedBuilder();
+        privateMessage.setAuthor(author.getAsTag(), null, author.getAvatarUrl());
 
         privateMessage.addField("<:chorano:726207542413230142>" +
                         " Você foi " + rule.getType().getFormated() + " de " + user.getUser().getName(),
                 "", false);
 
-        privateMessage.addField("<:beacon:771543538252120094> Punido por", "`" + UserUtil.INSTANCE.getFullName(author) + "`", false);
+        privateMessage.addField("<:beacon:771543538252120094> Punido por", "`" +  author.getAsTag() + "`", false);
 
         privateMessage.addField("<:time:756767328498090044>" +
                 " Motivo", ruleDescription, false);
@@ -95,6 +93,6 @@ public class PunishmentManager {
 
         privateMessage.setFooter("© ^Aincrad™ servidor de jogos", user.getGuild().getIconUrl());
 
-        privateChannel.sendMessage(privateMessage.build()).queue();
+        privateChannel.sendMessageEmbeds(privateMessage.build()).queue();
     }
 }

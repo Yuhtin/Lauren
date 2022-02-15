@@ -1,147 +1,126 @@
 package com.yuhtin.lauren.commands.impl.utility;
 
 import com.google.inject.Inject;
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
-import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.yuhtin.lauren.commands.Command;
-import com.yuhtin.lauren.commands.CommandData;
+import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.embeds.ShopEmbed;
-import com.yuhtin.lauren.models.objects.ShopItem;
+import com.yuhtin.lauren.models.objects.EventWaiter;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.UserUtil;
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.Role;
+import lombok.val;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-@CommandData(
+@CommandInfo(
         name = "loja",
-        type = CommandData.CommandType.UTILITY,
-        description = "Ver algumas coisinhas que tou vendendo",
-        alias = {"shop"}
+        type = CommandInfo.CommandType.UTILITY,
+        description = "Ver algumas coisinhas que tou vendendo"
 )
 public class ShopCommand implements Command {
 
-    @Inject private ShopEmbed shopEmbed;
-    @Inject private PlayerController playerController;
-    @Inject private Logger logger;
-    @Inject private EventWaiter eventWaiter;
-
     private final Map<Long, Integer> events = new HashMap<>();
+    @Inject
+    private ShopEmbed shopEmbed;
+    @Inject
+    private PlayerController playerController;
+    @Inject
+    private Logger logger;
+    @Inject
+    private EventWaiter eventWaiter;
 
     @Override
-    protected void execute(CommandEvent event) {
-        EmbedBuilder embed = this.shopEmbed.getEmbed();
-        Map<String, ShopItem> shopItems = this.shopEmbed.getShopItems();
+    public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
+        val embed = shopEmbed.getEmbed();
+        val shopItems = this.shopEmbed.getShopItems();
 
         embed.setAuthor("Minha Lojinha v2000", null, event.getJDA().getSelfUser().getAvatarUrl());
         embed.setFooter("Bem-vindo(a) minha lojinha, eu abri ela às", event.getGuild().getIconUrl());
 
-        Message message = event.getChannel()
-                .sendMessage(embed.build())
-                .complete();
-
-        for (String emoji : shopItems.keySet()) {
+        val message = hook.setEphemeral(true).sendMessageEmbeds(embed.build()).complete();
+        for (val emoji : shopItems.keySet()) {
             message.addReaction(emoji).queue();
         }
 
-        int randomInt = new Random().nextInt(1500);
+        val randomInt = new Random().nextInt(1500);
 
-        if (events.containsKey(event.getAuthor().getIdLong())) events.replace(event.getAuthor().getIdLong(), randomInt);
-        else events.put(event.getAuthor().getIdLong(), randomInt);
+        val user = event.getUser();
+        val userId = user.getIdLong();
 
-        Player player = this.playerController.get(event.getAuthor().getIdLong());
-        this.eventWaiter.waitForEvent(MessageReactionAddEvent.class,
+        if (events.containsKey(userId)) events.replace(userId, randomInt);
+        else events.put(userId, randomInt);
 
+        val player = this.playerController.get(userId);
+        eventWaiter.waitForEvent(MessageReactionAddEvent.class,
                 reaction -> {
-                    if (reaction.getUserIdLong() == event.getAuthor().getIdLong()
-                            && events.get(event.getAuthor().getIdLong()) == randomInt) {
+                    if (reaction.getUserIdLong() != userId || events.get(userId) != randomInt) return false;
 
-                        ShopItem shopItem = shopItems.get(reaction.getReaction().getReactionEmote().getAsReactionCode());
-                        if (shopItem == null) return false;
+                    val shopItem = shopItems.get(reaction.getReaction().getReactionEmote().getAsReactionCode());
+                    if (shopItem == null) return false;
 
-                        if (shopItem.getPrice() > player.getMoney()) {
-
-                            event.getChannel()
-                                    .sendMessage("<:chorano:726207542413230142> " +
-                                            "Você não tem dinheiro pra realizar essa ação")
-                                    .queue();
-                            return false;
-
-                        }
-
-                        return true;
-
+                    if (shopItem.getPrice() > player.getMoney()) {
+                        event.getChannel().sendMessage("<:chorano:726207542413230142> Você não tem dinheiro pra realizar essa ação").queue();
+                        return false;
                     }
 
-                    return false;
+                    return true;
                 },
 
                 reaction -> {
-
-                    ShopItem shopItem = shopItems.get(reaction.getReaction().getReactionEmote().getAsReactionCode());
+                    val shopItem = shopItems.get(reaction.getReaction().getReactionEmote().getAsReactionCode());
                     player.removeMoney(shopItem.getPrice());
 
                     switch (shopItem.getType()) {
                         case KEY:
-
                             player.setKeys(player.getKeys() + 1);
                             break;
 
                         case RENAME_COMMAND:
-
                             player.addPermission("commands.nickname");
                             break;
 
                         case PRIME:
-
-                            Role role = Startup.getLauren().getGuild().getRoleById(722116789055782912L);
+                            val role = Startup.getLauren().getGuild().getRoleById(722116789055782912L);
                             if (role == null) {
+                                logger.warning("The player "
+                                        + user.getAsTag() +
+                                        " buyed Prime role, but i can't give"
+                                );
 
-                                this.logger.warning("The player "
-                                        + UserUtil.INSTANCE.getFullName(event.getAuthor()) +
-                                        " buyed Prime role, but i can't give");
                                 break;
-
                             }
-
 
                             Startup.getLauren()
                                     .getGuild()
-                                    .addRoleToMember(event.getAuthor().getIdLong(), role)
+                                    .addRoleToMember(userId, role)
                                     .queue();
                             break;
 
-                        default:
-                            break;
-
+                        default: break;
                     }
 
-                    event.getChannel()
-                            .sendMessage("<:feliz_pra_caralho:760202116504485948> " +
+                    message.editMessage("<:feliz_pra_caralho:760202116504485948> " +
                                     "Você comprou **"
                                     + shopItem.getType().getName() +
                                     "** por **"
                                     + "<:boost_emoji:772285522852839445> $" +
                                     shopItem.getPrice()
                                     + " shards**")
+                            .setEmbeds(new MessageEmbed[]{})
                             .queue();
 
-                    events.remove(event.getAuthor().getIdLong());
+                    events.remove(userId);
 
                 }, 1, TimeUnit.MINUTES, () -> {
-
-                    if (events.get(event.getAuthor().getIdLong()) == randomInt)
-                        events.remove(event.getAuthor().getIdLong());
+                    if (events.get(userId) == randomInt)
+                        events.remove(userId);
                     message.clearReactions().queue();
                 });
     }

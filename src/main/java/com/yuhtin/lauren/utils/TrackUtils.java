@@ -51,7 +51,7 @@ public class TrackUtils {
 
     public static boolean isIdle(Guild guild, InteractionHook hook) {
         if (TrackManager.of(guild).getPlayer().getPlayingTrack() == null) {
-            hook.sendMessage("\uD83D\uDCCC Eita, não tem nenhum batidão pra tocar, adiciona uns ai <3").queue();
+            hook.sendMessageEmbeds(SimpleEmbed.of("Eita não tem nenhum batidão tocando, adiciona uns ai <3")).queue();
             return true;
         }
 

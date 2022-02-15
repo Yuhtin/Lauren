@@ -8,6 +8,7 @@ import com.yuhtin.lauren.utils.TaskHelper;
 import com.yuhtin.lauren.utils.UserUtil;
 import lombok.AllArgsConstructor;
 import lombok.val;
+import lombok.var;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Message;
@@ -57,10 +58,9 @@ public class ShardLootTask {
 
                 if (new Random().nextInt(100) > 25) return;
 
-                int value = new Random().nextInt(allowedChannels.size());
-                long channelID = allowedChannels.get(value);
-
-                TextChannel channel = guild.getTextChannelById(channelID);
+                val value = new Random().nextInt(allowedChannels.size());
+                val channelID = allowedChannels.get(value);
+                val channel = guild.getTextChannelById(channelID);
 
                 if (channel == null) {
                     logger.warning("Can't select a random channel to drop a loot");
@@ -69,7 +69,7 @@ public class ShardLootTask {
 
                 logger.info("Dropped shardloot on channel " + channel.getName());
 
-                Message message = channel.sendMessage(embed.build()).complete();
+                val message = channel.sendMessageEmbeds(embed.build()).complete();
                 message.addReaction(":boost_emoji:772285522852839445").queue();
 
                 eventWaiter.waitForEvent(MessageReactionAddEvent.class, event -> !event.getMember().getUser().isBot()
@@ -77,29 +77,24 @@ public class ShardLootTask {
                         event -> {
                             message.delete().queue();
 
-                            Player player = playerController.get(event.getUserIdLong());
-                            int shard = 30 + new Random().nextInt(50);
+                            val player = playerController.get(event.getUserIdLong());
+                            val shard = 30 + new Random().nextInt(50);
 
                             player.addMoney(shard);
 
-                            PrivateChannel privateChannel = event.getUser().openPrivateChannel().complete();
+                            val privateChannel = event.getUser().openPrivateChannel().complete();
                             if (event.getUser().hasPrivateChannel()) {
-
-                                String nickname = event.getMember().getNickname();
+                                var nickname = event.getMember().getNickname();
                                 if (nickname == null) nickname = event.getMember().getEffectiveName();
 
                                 privateChannel.sendMessage("<:felizpakas:742373250037710918> " +
                                         "Parabéns **" + nickname + "**, você capturou um shardloot, " +
                                         "você recebeu <:boost_emoji:772285522852839445> **$" + shard + " shards**")
                                         .queue();
-
                             }
 
-                            logger.info("The player " + UserUtil.INSTANCE.getFullName(event.getUser()) + " getted the sharddrop");
-
-                        }, 25, TimeUnit.SECONDS,
-
-                        () -> message.delete().queue());
+                            logger.info("The player " + event.getUser().getAsTag() + " getted the sharddrop");
+                        }, 25, TimeUnit.SECONDS, () -> message.delete().queue());
             }
         }, 10, 55, TimeUnit.MINUTES);
 

@@ -18,13 +18,11 @@ public class Config {
     private long poolCasual;
     private long poolRanked;
 
-    private String prefix;
     private String token;
     private String formatNickname;
     private String pastebinDevKey;
     private String pastebinUserKey;
     private String geoIpAccessKey;
-    private String instagramApiKey;
 
     // Connection info
     private String username;
@@ -37,7 +35,10 @@ public class Config {
             File file = new File(path);
             if (!file.exists()) {
 
-                if (!file.createNewFile()) return null;
+                if (!file.createNewFile()) {
+                    Startup.getLauren().getLogger().warning("Can't create configuration file");
+                    return null;
+                }
 
                 Config config = new Config();
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(file.getAbsolutePath()))) {

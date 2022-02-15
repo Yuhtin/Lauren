@@ -1,23 +1,23 @@
 package com.yuhtin.lauren.commands.impl.music;
 
 import com.yuhtin.lauren.commands.Command;
-import com.yuhtin.lauren.core.music.AudioInfo;
+import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.core.music.TrackManager;
-import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.Paginator;
+import com.yuhtin.lauren.utils.SimpleEmbed;
 import com.yuhtin.lauren.utils.TrackUtils;
 import lombok.Getter;
 import lombok.val;
+import lombok.var;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-@CommandData(
+@CommandInfo(
         name = "queue",
-        type = CommandData.CommandType.MUSIC,
+        type = CommandInfo.CommandType.MUSIC,
         description = "Ver as músicas que eu ainda vou tocar",
         args = {
                 "[pagina]-Ver uma página específica da queue"
@@ -39,32 +39,31 @@ public class QueueCommand implements Command {
     public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
         if (event.getMember() == null || event.getGuild() == null) return;
 
-        TrackManager trackManager = TrackManager.of(event.getGuild());
+        val trackManager = TrackManager.of(event.getGuild());
         if (trackManager.getQueuedTracks().isEmpty()) {
-            event.getChannel().sendMessage("\uD83D\uDCCC Eita, não tem nenhum batidão pra tocar, adiciona uns ai <3").queue();
+            hook.sendMessageEmbeds(SimpleEmbed.of("Eita não tem nenhum batidão tocando, adiciona uns ai <3")).queue();
             return;
         }
 
         val pageOption = event.getOption("pagina");
         val page = pageOption == null ? 1: (int) pageOption.getAsDouble();
 
-        Set<AudioInfo> queue = trackManager.getQueuedTracks();
-        String[] songs = new String[queue.size()];
-        long totalTime = 0;
+        val queue = trackManager.getQueuedTracks();
+        val songs = new String[queue.size()];
+        var totalTime = 0L;
 
-        int i = 0;
-        for (AudioInfo audioInfo : queue) {
+        var i = 0;
+        for (val audioInfo : queue) {
             totalTime += audioInfo.getTrack().getInfo().length;
             songs[i] = audioInfo.toString();
 
             ++i;
         }
 
-        String timeInLetter = TrackUtils.getTimeStamp(totalTime);
+        val timeInLetter = TrackUtils.getTimeStamp(totalTime);
         BUILDER.setText((number, number2) -> {
-                    StringBuilder stringBuilder = new StringBuilder();
+                    val stringBuilder = new StringBuilder();
                     if (trackManager.getPlayer().getPlayingTrack() != null) {
-
                         stringBuilder.append(trackManager.getPlayer().isPaused() ? "\u23F8" : "\u25B6")
                                 .append(" **")
                                 .append(trackManager.getPlayer().getPlayingTrack().getInfo().title)
@@ -76,7 +75,6 @@ public class QueueCommand implements Command {
                                 .append(TrackUtils.getTimeStamp(trackManager.getPlayer().getPlayingTrack().getInfo().length))
                                 .append("`")
                                 .append("\n");
-
                     }
 
                     return stringBuilder.append("\uD83D\uDCBF Informações da Fila | ")
@@ -90,6 +88,6 @@ public class QueueCommand implements Command {
                 .setUsers(event.getUser())
                 .setColor(event.getMember().getColor());
 
-        BUILDER.build().paginate(event.getChannel(), page);
+        BUILDER.build().paginate(hook, page);
     }
 }

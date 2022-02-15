@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.exceptions.PermissionException;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.internal.utils.Checks;
 
@@ -90,29 +91,11 @@ public class Paginator extends Menu {
      * Begins pagination on page 1 as a new {@link net.dv8tion.jda.api.entities.Message Message}
      * in the provided {@link net.dv8tion.jda.api.entities.MessageChannel MessageChannel}.
      *
-     * <p>Starting on another page is available via {@link
-     * Paginator#paginate(MessageChannel, int)
-     * Paginator#paginate(MessageChannel, int)}.
-     *
-     * @param channel The MessageChannel to send the new Message to
+     * @param hook The InteractionHook to send the new Message to
      */
     @Override
-    public void display(MessageChannel channel) {
-        paginate(channel, 1);
-    }
-
-    /**
-     * Begins pagination on page 1 displaying this Pagination by editing the provided
-     * {@link net.dv8tion.jda.api.entities.Message Message}.
-     *
-     * <p>Starting on another page is available via
-     * {@link Paginator#paginate(Message, int) Paginator#paginate(Message, int)}.
-     *
-     * @param message The Message to display the Menu in
-     */
-    @Override
-    public void display(Message message) {
-        paginate(message, 1);
+    public void display(InteractionHook hook) {
+        paginate(hook, 1);
     }
 
     /**
@@ -120,16 +103,17 @@ public class Paginator extends Menu {
      * in the provided {@link net.dv8tion.jda.api.entities.MessageChannel MessageChannel}, starting
      * on whatever page number is provided.
      *
-     * @param channel The MessageChannel to send the new Message to
+     * @param hook The InteractionHook to send the new Message to
      * @param pageNum The page number to begin on
      */
-    public void paginate(MessageChannel channel, int pageNum) {
+    public void paginate(InteractionHook hook, int pageNum) {
         if (pageNum < 1)
             pageNum = 1;
         else if (pageNum > pages)
             pageNum = pages;
+
         Message msg = renderPage(pageNum);
-        initialize(channel.sendMessage(msg), pageNum);
+        initialize(hook.sendMessage(msg), pageNum);
     }
 
     /**

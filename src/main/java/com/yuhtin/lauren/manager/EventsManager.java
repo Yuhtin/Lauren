@@ -23,6 +23,8 @@ public class EventsManager {
 
         for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive(folder)) {
             try {
+                if (classInfo.getName().contains("BotReadyEvent")) continue;
+
                 Class event = Class.forName(classInfo.getName());
                 Object object = event.newInstance();
 

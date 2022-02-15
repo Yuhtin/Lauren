@@ -4,7 +4,9 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
 import com.yuhtin.lauren.models.enums.LogType;
+import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.LogUtils;
+import lombok.val;
 
 import java.time.LocalDateTime;
 
@@ -16,13 +18,9 @@ import java.time.LocalDateTime;
 @Singleton
 public class Logger {
 
-    @Inject private static LoggerController loggerController;
-
     public void log(LogType logType, String message, Exception exception) {
-
         log(message, logType);
         exception.printStackTrace();
-
     }
 
     public void info(String message) {
@@ -56,10 +54,12 @@ public class Logger {
 
         String time = "[" + hour + ":" + minute + ":" + second + "] ";
 
-        message = time + logType.toString() + "> " + "[" + className + "] " + message.toString();
+        message = time + logType.toString() + "> " + "[" + className + "] " + message;
 
-        System.out.println(message.toString());
-        loggerController.toFile(message.toString());
+        System.out.println(message);
+
+        val loggerController = Startup.getLauren().getLoggerController();
+        if (loggerController != null) loggerController.toFile(message.toString());
     }
 
     public void log(String... message) {

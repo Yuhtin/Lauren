@@ -1,39 +1,42 @@
 package com.yuhtin.lauren.commands.impl.utility;
 
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.commands.Command;
-import com.yuhtin.lauren.commands.CommandData;
+import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.service.GetConnectionFactory;
+import com.yuhtin.lauren.utils.SimpleEmbed;
+import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 import org.json.JSONObject;
 
-@CommandData(
+@CommandInfo(
         name = "meme",
-        type = CommandData.CommandType.UTILITY,
-        description = "Memes legais",
-        alias = {}
+        type = CommandInfo.CommandType.UTILITY,
+        description = "Memes legais"
 )
 public class MemeCommand implements Command {
 
     @Override
-    protected void execute(CommandEvent event) {
-        event.getChannel().sendTyping().queue();
+    public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
+        val connection = new GetConnectionFactory("https://apis.duncte123.me/meme");
+        val response = connection.buildConnection();
+        if (response == null) {
+            hook.sendMessageEmbeds(SimpleEmbed.of("Deu merda na api foi mal!")).queue();
+            return;
+        }
 
-        GetConnectionFactory connection = new GetConnectionFactory("https://apis.duncte123.me/meme");
-        String response = connection.buildConnection();
+        val object = new JSONObject(response);
+        val data = object.getJSONObject("data");
 
-        JSONObject object = new JSONObject(response);
-        JSONObject data = object.getJSONObject("data");
+        val title = data.getString("title");
+        val url = data.getString("url");
+        val image = data.getString("image");
 
-        String title = data.getString("title"),
-                url = data.getString("url"),
-                image = data.getString("image");
-
-        EmbedBuilder embed = new EmbedBuilder();
+        val embed = new EmbedBuilder();
         embed.setTitle(title, url);
         embed.setImage(image);
 
-        event.getChannel().sendMessage(embed.build()).queue();
+        hook.sendMessageEmbeds(embed.build()).queue();
     }
 }

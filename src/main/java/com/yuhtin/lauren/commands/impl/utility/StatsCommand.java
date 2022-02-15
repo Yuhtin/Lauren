@@ -1,55 +1,59 @@
 package com.yuhtin.lauren.commands.impl.utility;
 
 import com.google.inject.Inject;
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.commands.Command;
+import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.core.statistics.StatsInfo;
 import com.yuhtin.lauren.core.statistics.StatsController;
-import com.yuhtin.lauren.commands.CommandData;
+import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 
-@CommandData(
+@CommandInfo(
         name = "stats",
-        type = CommandData.CommandType.UTILITY,
+        type = CommandInfo.CommandType.UTILITY,
         description = "Estatísticas de alguns sistemas meus",
-        alias = {"estatisticas"}
+        args = {
+                "[stat]-Estatística que deseja ver"
+        }
 )
 public class StatsCommand implements Command {
 
-    @Inject private Logger logger;
-    @Inject private StatsController statsController;
+    @Inject
+    private Logger logger;
+    @Inject
+    private StatsController statsController;
 
     @Override
-    protected void execute(CommandEvent event) {
-        String args = event.getArgs();
-        if (args.equalsIgnoreCase("")) {
-            EmbedBuilder builder = new EmbedBuilder();
+    public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
+        val statOption = event.getOption("stat");
+        if (statOption == null) {
+            val builder = new EmbedBuilder();
             builder.setAuthor("| Todas as estatísticas da Lauren", null, event.getGuild().getIconUrl());
             builder.setDescription(
-                    "Para ver uma estatística completa, use `$stats <nome>`\n\n" +
+                    "Para ver uma estatística completa, use `/stats`\n\n" +
                             "Todas as estatísticas: " + this.statsController.getStats().keySet());
 
-            builder.setFooter("Comando usado as", event.getAuthor().getAvatarUrl());
+            builder.setFooter("Comando usado as", event.getUser().getAvatarUrl());
             builder.setTimestamp(Instant.now());
 
-            event.getChannel().sendMessage(builder.build()).queue();
+            hook.sendMessageEmbeds(builder.build()).queue();
             return;
         }
 
-        StatsInfo info = this.statsController.getStats().getOrDefault(args, null);
+        val info = this.statsController.getStats().getOrDefault(statOption.getAsString(), null);
         if (info == null) {
-            event.getChannel().sendMessage("⚡ Não encontrei nenhuma estatística relacionada").queue();
+            hook.sendMessage("⚡ Não encontrei nenhuma estatística relacionada").queue();
             return;
         }
 
-        Date date = new Date();
-        Calendar calendar = Calendar.getInstance();
+        val date = new Date();
+        val calendar = Calendar.getInstance();
         calendar.setTime(date);
 
         int month = calendar.get(Calendar.MONTH),
@@ -63,17 +67,18 @@ public class StatsCommand implements Command {
             --lastYear;
         }
 
-        EmbedBuilder builder = new EmbedBuilder();
+        val builder = new EmbedBuilder();
         builder.addField("🚓 Estatística", "`" + info.getName() + "`", false);
         builder.addField("🚀 Total", "`" + info.getTotalStats() + " usos`", false);
         builder.addField("🍕 Este mês", "`" + info.getStats(month + "/" + year) + " usos`", false);
         builder.addField("✈ Último mês", "`" + info.getStats(lastMonth + "/" + lastYear) + " usos`", false);
 
         builder.setAuthor("| Todas as estatísticas da Lauren", null, event.getGuild().getIconUrl());
-        builder.setFooter("Comando usado as", event.getAuthor().getAvatarUrl());
+        builder.setFooter("Comando usado as", event.getUser().getAvatarUrl());
         builder.setTimestamp(Instant.now());
 
-        event.getChannel().sendMessage(builder.build()).queue();
-        this.statsController.getStats("Análise de Estatísticas").suplyStats(1);
+        hook.sendMessageEmbeds(builder.build()).queue();
+        statsController.getStats("Análise de Estatísticas").suplyStats(1);
     }
+
 }

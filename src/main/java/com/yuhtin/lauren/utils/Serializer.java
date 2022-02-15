@@ -1,6 +1,7 @@
 package com.yuhtin.lauren.utils;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.yuhtin.lauren.core.statistics.StatsInfo;
 import com.yuhtin.lauren.core.vote.VoteResponse;
 import com.yuhtin.lauren.core.xp.Level;
@@ -11,7 +12,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class Serializer<T> {
 
-    public static final Gson GSON = new Gson();
+    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     @Getter private static final Serializer<Config> config = new Serializer<>(Config.class);
     @Getter private static final Serializer<StatsInfo> stats = new Serializer<>(StatsInfo.class);

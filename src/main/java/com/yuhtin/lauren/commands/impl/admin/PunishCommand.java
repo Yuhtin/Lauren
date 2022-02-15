@@ -2,55 +2,60 @@ package com.yuhtin.lauren.commands.impl.admin;
 
 import com.google.inject.Inject;
 import com.yuhtin.lauren.commands.Command;
+import com.yuhtin.lauren.commands.CommandInfo;
+import com.yuhtin.lauren.core.punish.PunishmentRule;
 import com.yuhtin.lauren.manager.PunishmentManager;
-import com.yuhtin.lauren.commands.CommandData;
 import com.yuhtin.lauren.utils.UserUtil;
+import lombok.val;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
-@CommandData(
+@CommandInfo(
         name = "punir",
-        type = CommandData.CommandType.ADMIN,
+        type = CommandInfo.CommandType.ADMIN,
         description = "Lançar o machado do ban",
-        alias = {}
+        args = {
+                "<@user>-Usuário a ser punido",
+                "<rule>-Regra que indica a infração que o jogador cometeu",
+                "[proof]-Prova de infração do jogador"
+        }
 )
 public class PunishCommand implements Command {
 
-    @Inject private PunishmentManager punishmentManager;
+    @Inject
+    private PunishmentManager punishmentManager;
 
     @Override
-    public void execute(CommandEvent event) {
-        if (!UserUtil.hasPermission(event.getMember(), event.getMessage(), Permission.MESSAGE_MANAGE, true))
-            return;
+    public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
+        if (!UserUtil.hasPermission(event.getMember(), hook, Permission.MESSAGE_MANAGE)) return;
 
-        /*String[] arguments = event.getArgs().split(" ");
+        val target = event.getOption("user").getAsMember();
+        val rule = event.getOption("rule").getAsString();
+        val proofOption = event.getOption("proof");
 
-        // for administrator does not need proof
-        if (arguments.length < 2 || (arguments.length < 3 && !event.getMember().hasPermission(Permission.ADMINISTRATOR))) {
-            event.getChannel().sendMessage("<a:nao:704295026036834375> Você precisa mencionar um jogador para banir, exemplo `$punir @Yuhtin <regra> [prova]`").queue();
+        if (proofOption == null && !event.getMember().hasPermission(Permission.ADMINISTRATOR)) {
+            hook.sendMessage("<a:nao:704295026036834375> Você precisa inserir uma prova de infração.`").queue();
             return;
         }
 
-        Member target = event.getMessage().getMentionedMembers().get(0);
-        String proof = arguments.length < 3 ? "" : arguments[2];
-
-        String rule = arguments[1];
+        val proof = proofOption.getAsString();
         if (!rule.contains(".")) {
-            event.getChannel().sendMessage(":x: Esta regra não é valida, exemplo de regra valida: `1.1`").queue();
+            hook.sendMessage(":x: Esta regra não é valida, exemplo de regra valida: `1.1`").queue();
             return;
         }
 
         try {
+            val punishmentRule = PunishmentRule.valueOf("P" + rule.replace(".", ""));
+            punishmentManager.applyPunish(event.getUser(), target, punishmentRule, proof);
 
-            PunishmentRule punishmentRule = PunishmentRule.valueOf("P" + rule.replace(".", ""));
-            this.punishmentManager.applyPunish(event.getAuthor(), target, punishmentRule, proof);
-
-            event.getChannel()
+            hook.setEphemeral(true)
                     .sendMessage("<:feliz_pra_caralho:760202116504485948> " +
-                            "Você puniu o jogador `" + UserUtil.INSTANCE.getFullName(target.getUser()) + "` com sucesso.")
+                            "Você puniu o jogador `" + target.getUser().getAsTag() + "` com sucesso.")
                     .queue();
 
-        }catch (IllegalStateException exception) {
-            event.getChannel().sendMessage(":x: Esta regra não existe, tente novamente").queue();
-        }*/
+        } catch (IllegalStateException exception) {
+            hook.sendMessage(":x: Esta regra não existe, tente novamente").queue();
+        }
     }
 }

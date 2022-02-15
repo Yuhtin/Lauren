@@ -3,9 +3,10 @@ package com.yuhtin.lauren.events;
 import com.yuhtin.lauren.utils.MathUtils;
 import com.yuhtin.lauren.core.draw.controller.DrawController;
 import com.yuhtin.lauren.models.enums.DrawEditingStatus;
-import com.yuhtin.lauren.core.draw.controller.DrawEditting;
+import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -16,14 +17,14 @@ import java.util.concurrent.TimeUnit;
 public class DrawEditingEvent extends ListenerAdapter {
 
     @Override
-    public void onPrivateMessageReceived(PrivateMessageReceivedEvent event) {
-        if (event.getAuthor().isBot()) return;
+    public void onMessageReceived(MessageReceivedEvent event) {
+        if (event.getChannelType() != ChannelType.PRIVATE || event.getAuthor().isBot()) return;
 
         if (DrawController.editing == null
                 || !DrawController.editing.userID.equals(event.getAuthor().getIdLong())) return;
 
-        DrawEditting editting = DrawController.editing;
-        String message = event.getMessage().getContentRaw();
+        val editting = DrawController.editing;
+        val message = event.getMessage().getContentRaw();
 
         switch (editting.status) {
             case PRIZE: {
@@ -31,7 +32,7 @@ public class DrawEditingEvent extends ListenerAdapter {
                     editting.prize = message;
                     editting.status = DrawEditingStatus.WINNERS;
 
-                    EmbedBuilder embed = new EmbedBuilder()
+                    val embed = new EmbedBuilder()
                             .setTitle("\uD83D\uDCB3 Criando um sorteio")
                             .setDescription("\uD83D\uDCC4 Informações do sorteio:\n\n" +
                                     " ✏️ Item a ser sorteado: `" + message + "`\n" +
@@ -39,7 +40,7 @@ public class DrawEditingEvent extends ListenerAdapter {
                             .setTimestamp(Instant.now())
                             .setFooter("Editando as informações do sorteio", event.getJDA().getSelfUser().getAvatarUrl());
 
-                    editting.message.editMessage(embed.build()).queue();
+                    editting.message.editMessageEmbeds(embed.build()).queue();
                     return;
                 } else break;
             }
@@ -57,7 +58,7 @@ public class DrawEditingEvent extends ListenerAdapter {
                 editting.winnersCount = winners;
                 editting.status = DrawEditingStatus.TIME;
 
-                EmbedBuilder embed = new EmbedBuilder()
+                val embed = new EmbedBuilder()
                         .setTitle("\uD83D\uDCB3 Criando um sorteio")
                         .setDescription("\uD83D\uDCC4 Informações do sorteio:\n\n" +
                                 " ✏️ Item a ser sorteado: `" + editting.prize + "`\n" +
@@ -66,7 +67,7 @@ public class DrawEditingEvent extends ListenerAdapter {
                         .setTimestamp(Instant.now())
                         .setFooter("Editando as informações do sorteio", event.getJDA().getSelfUser().getAvatarUrl());
 
-                editting.message.editMessage(embed.build()).queue();
+                editting.message.editMessageEmbeds(embed.build()).queue();
                 return;
             }
             case TIME: {
@@ -78,7 +79,7 @@ public class DrawEditingEvent extends ListenerAdapter {
                     editting.seconds = minutes * 60;
                     editting.status = DrawEditingStatus.CONFIRM;
 
-                    EmbedBuilder embed = new EmbedBuilder()
+                    val embed = new EmbedBuilder()
                             .setTitle("\uD83D\uDCB3 Criando um sorteio")
                             .setDescription("\uD83D\uDCC4 Informações do sorteio:\n\n" +
                                     " ✏️ Item a ser sorteado: `" + editting.prize + "`\n" +
@@ -88,7 +89,7 @@ public class DrawEditingEvent extends ListenerAdapter {
                             .setTimestamp(Instant.now())
                             .setFooter("Editando as informações do sorteio", event.getJDA().getSelfUser().getAvatarUrl());
 
-                    editting.message.editMessage(embed.build()).queue();
+                    editting.message.editMessageEmbeds(embed.build()).queue();
                     editting.message.addReaction("\uD83D\uDE06").queue();
                     return;
                 }

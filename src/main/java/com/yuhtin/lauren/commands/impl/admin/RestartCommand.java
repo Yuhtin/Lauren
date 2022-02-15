@@ -2,16 +2,16 @@ package com.yuhtin.lauren.commands.impl.admin;
 
 import com.google.inject.Inject;
 import com.yuhtin.lauren.commands.Command;
-import com.yuhtin.lauren.commands.CommandData;
+import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.UserUtil;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
-@CommandData(
+@CommandInfo(
         name = "restart",
-        type = CommandData.CommandType.CONFIG,
+        type = CommandInfo.CommandType.CONFIG,
         description = "Reiniciar meus sistemas :d"
 )
 public class RestartCommand implements Command {

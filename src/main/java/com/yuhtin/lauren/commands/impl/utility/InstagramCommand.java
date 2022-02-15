@@ -1,17 +1,16 @@
 package com.yuhtin.lauren.commands.impl.utility;
 
 import com.google.inject.Inject;
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.commands.Command;
+import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.core.statistics.StatsController;
-import com.yuhtin.lauren.commands.CommandData;
-import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.TimeUtils;
+import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -21,94 +20,87 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-@CommandData(
+@CommandInfo(
         name = "instagram",
-        type = CommandData.CommandType.UTILITY,
+        type = CommandInfo.CommandType.UTILITY,
         description = "Bisbilhotar o perfil dos outros",
-        alias = {"insta"}
+        args = {
+                "<account>-Conta do instagram que deseja ver"
+        }
 )
 public class InstagramCommand implements Command {
 
     private static final Map<Long, Long> DELAYS = new HashMap<>();
 
-    @Inject private StatsController statsController;
+    @Inject
+    private StatsController statsController;
 
     @Override
-    protected void execute(CommandEvent event) {
-
-        long delay = DELAYS.getOrDefault(event.getMember().getIdLong(), 0L);
+    public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
+        val delay = DELAYS.getOrDefault(event.getMember().getIdLong(), 0L);
         if (delay > System.currentTimeMillis()) {
-
-            event.getChannel().sendMessage("<:chorano:726207542413230142> Aguarde mais "
-                            + TimeUtils.formatTime(delay - System.currentTimeMillis())
-                            + " para usar este comando."
+            hook.sendMessage("<:chorano:726207542413230142> Aguarde mais "
+                    + TimeUtils.formatTime(delay - System.currentTimeMillis())
+                    + " para usar este comando."
             ).queue();
-            return;
 
-        }
-
-        String instagram;
-        if (event.getArgs().equalsIgnoreCase("")) {
-            event.getChannel().sendMessage("<:fodane:764085078187442176> Utiliza o comando direito amigo, assim ó `$instagram <perfil>`").queue();
             return;
         }
 
+        val instagram = event.getOption("account").getAsString().replace(" ", "_");
         DELAYS.put(event.getMember().getIdLong(), Instant.now().plusMillis(TimeUnit.MINUTES.toMillis(1)).toEpochMilli());
 
         event.getChannel().sendTyping().queue();
-        instagram = event.getArgs().replace(" ", "_");
 
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url("https://instagram-utils.p.rapidapi.com/v1/profile_info?profile=" + instagram)
+        val client = new OkHttpClient();
+        val request = new Request.Builder()
+                .url("https://instagram.com/" + instagram + "/?__a=1")
                 .get()
-                .addHeader("x-rapidapi-key", Startup.getLauren().getConfig().getInstagramApiKey())
-                .addHeader("x-rapidapi-host", "instagram-utils.p.rapidapi.com")
                 .build();
 
         statsController.getStats("Requests Externos").suplyStats(1);
 
         try {
 
-            Response response = client.newCall(request).execute();
+            val response = client.newCall(request).execute();
 
             String line;
-            StringBuilder content = new StringBuilder();
+            val content = new StringBuilder();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(response.body().byteStream()));
+            val reader = new BufferedReader(new InputStreamReader(response.body().byteStream()));
             while ((line = reader.readLine()) != null) content.append(line);
             reader.close();
 
-            JSONObject jsonObject = new JSONObject(content.toString()).getJSONObject("user_info");
+            val jsonObject = new JSONObject(content.toString()).getJSONObject("graphql").getJSONObject("user");
 
-            String username = jsonObject.getString("username");
-            String biography = jsonObject.getString("biography");
+            val username = jsonObject.getString("username");
+            val biography = jsonObject.getString("biography");
 
-            int following = jsonObject.getInt("following");
-            int followers = jsonObject.getInt("followed_by");
+            val following = jsonObject.getJSONObject("edge_follow").getInt("count");
+            val followers = jsonObject.getJSONObject("edge_followed_by").getInt("count");
 
-            int posts = jsonObject.getInt("timeline_media");
-            String fullName = jsonObject.getString("full_name");
-            String picture = jsonObject.getString("profile_pic_url_hd");
+            val fullName = jsonObject.getString("full_name");
+            val picture = jsonObject.getString("profile_pic_url_hd");
 
-            EmbedBuilder embed = new EmbedBuilder();
+            val timelineMedia = jsonObject.getJSONObject("edge_owner_to_timeline_media");
+            val posts = timelineMedia.getInt("count");
+
+
+            val embed = new EmbedBuilder();
             embed.setTitle("Instagram de " + fullName, "https://www.instagram.com/" + username);
             embed.setThumbnail(picture);
-            embed.setDescription("**Nome**: " + name + "\n" +
+            embed.setDescription("**Nome**: " + fullName + "\n" +
                     "**Bio**: " + biography + "\n" +
                     "**Seguidores**: " + followers + "\n" +
                     "**Seguindo**: " + following + "\n" +
                     "**Uploads**: " + posts);
 
-            event.getChannel().sendMessage(embed.build()).queue();
+            hook.sendMessageEmbeds(embed.build()).queue();
 
-        }catch (Exception exception) {
-
-            event.getChannel().sendMessage("<:eita:764084277226373120> Esse perfil ai não tem no meu livro não, tenta outro").queue();
-            return;
-
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            hook.sendMessage("<:eita:764084277226373120> Esse perfil ai não tem no meu livro não, tenta outro").queue();
         }
-
     }
 
 }

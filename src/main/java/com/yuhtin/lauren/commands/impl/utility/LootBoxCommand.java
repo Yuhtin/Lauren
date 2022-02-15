@@ -1,28 +1,26 @@
 package com.yuhtin.lauren.commands.impl.utility;
 
 import com.google.inject.Inject;
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.commands.Command;
-import com.yuhtin.lauren.commands.CommandData;
+import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.enums.Reward;
 import com.yuhtin.lauren.utils.TaskHelper;
-import com.yuhtin.lauren.utils.UserUtil;
 import lombok.Getter;
+import lombok.val;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-@CommandData(
+@CommandInfo(
         name = "lootbox",
-        type = CommandData.CommandType.UTILITY,
-        description = "Abrir uma lootbox",
-        alias = {"openloot", "abrircaixa", "caixa"}
+        type = CommandInfo.CommandType.UTILITY,
+        description = "Abrir uma lootbox"
 )
 public class LootBoxCommand implements Command {
 
@@ -32,21 +30,20 @@ public class LootBoxCommand implements Command {
     @Inject private PlayerController playerController;
 
     @Override
-    protected void execute(CommandEvent event) {
-
-        Player player = this.playerController.get(event.getAuthor().getIdLong());
+    public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
+        val player = this.playerController.get(event.getUser().getIdLong());
         if (player.getLootBoxes() == 0) {
-            event.getChannel().sendMessage("<:fodane:764085078187442176> Você não tem lootboxes para abrir").queue();
+            hook.sendMessage("<:fodane:764085078187442176> Você não tem lootboxes para abrir").queue();
             return;
         }
 
         if (player.getKeys() == 0) {
-            event.getChannel().sendMessage("<:fodane:764085078187442176> Você não tem chaves para abrir esta lootbox, use `$shop` e adquira uma").queue();
+            hook.sendMessage("<:fodane:764085078187442176> Você não tem chaves para abrir esta lootbox, use `/shop` e adquira uma").queue();
             return;
         }
 
         if (running) {
-            event.getChannel().sendMessage("<:fodane:764085078187442176> Ops, parece que já tem alguém usando a roleta, aguarde").queue();
+            hook.sendMessage("<:fodane:764085078187442176> Ops, parece que já tem alguém usando a roleta, aguarde").queue();
             return;
         }
 
@@ -60,11 +57,7 @@ public class LootBoxCommand implements Command {
         int delay = 0;
         for (int i = 0; i < 3; i++) {
 
-            LineRewardController line = new LineRewardController(
-                    event.getChannel()
-                            .sendMessage(":film_frames::film_frames::film_frames: :grey_question:")
-                            .complete());
-
+            val line = new LineRewardController(hook.sendMessage(":film_frames::film_frames::film_frames: :grey_question:").complete());
             rewards.add(line);
 
             TaskHelper.runTaskLater(new TimerTask() {
@@ -86,9 +79,8 @@ public class LootBoxCommand implements Command {
                 for (LineRewardController reward : rewards) {
                     if (reward.getReward() == null) continue;
 
-                    event.getChannel()
-                            .sendMessage(
-                                    "<@" + event.getAuthor().getId() + ">: <:lauren_loot:771536259062562846> " +
+                    event.getChannel().sendMessage(
+                                    "<@" + event.getUser().getId() + ">: <:lauren_loot:771536259062562846> " +
                                             "Você ganhou " + reward.getReward().getEmoji() + " **" + reward.getReward().getName() + "**")
                             .queue();
 
@@ -99,7 +91,7 @@ public class LootBoxCommand implements Command {
                             Role role = event.getGuild().getRoleById(771541080634032149L);
                             if (role == null) {
 
-                                logger.warning("The player " + UserUtil.INSTANCE.getFullName(event.getAuthor()) + " win the Lucky role but i can't give");
+                                logger.warning("The player " + event.getUser().getAsTag() + " win the Lucky role but i can't give");
                                 break;
 
                             }
@@ -134,8 +126,7 @@ public class LootBoxCommand implements Command {
                 }
 
                 if (!givedReward) {
-                    event.getChannel()
-                            .sendMessage("<:eita:764084277226373120> Você aparentemente não ganhou nada," +
+                    event.getChannel().sendMessage("<:eita:764084277226373120> Você aparentemente não ganhou nada," +
                                     " vou te dar 1000 <:xp:772285036174639124> de consolação")
                             .queue();
 

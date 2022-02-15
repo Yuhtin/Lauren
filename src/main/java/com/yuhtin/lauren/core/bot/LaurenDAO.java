@@ -1,18 +1,18 @@
 package com.yuhtin.lauren.core.bot;
 
 import com.google.inject.Injector;
-
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.exceptions.GuiceInjectorException;
 import com.yuhtin.lauren.models.exceptions.SQLConnectionException;
 import com.yuhtin.lauren.models.objects.Config;
+import com.yuhtin.lauren.models.objects.EventWaiter;
 import com.yuhtin.lauren.sql.connection.ConnectionInfo;
 import com.yuhtin.lauren.sql.connection.SQLConnection;
 import com.yuhtin.lauren.sql.connection.mysql.MySQLConnection;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.models.objects.EventWaiter;
 import lombok.Data;
+import lombok.val;
 import net.dv8tion.jda.api.JDA;
 
 import javax.security.auth.login.LoginException;
@@ -62,16 +62,14 @@ public abstract class LaurenDAO implements Bot {
 
     @Override
     public void shutdown() {
-
-        try { onDisable(); } catch (Exception exception) {
-
-            this.logger.log(LogType.SEVERE, "Can't run onDisable, shutdown cancelled", exception);
+        try {
+            onDisable();
+        } catch (Exception exception) {
+            logger.log(LogType.SEVERE, "Can't run onDisable, shutdown cancelled", exception);
             return;
-
         }
 
         System.exit(0);
-
     }
 
     @Override
@@ -81,10 +79,9 @@ public abstract class LaurenDAO implements Bot {
 
     @Override
     public void setupConfig() throws InstantiationException {
-
-        this.config = Config.loadConfig("config/config.json");
+        config = Config.loadConfig("config/config.json");
         if (config == null) throw new InstantiationException("Config created, configure token");
-
+        else getLogger().info("Config loaded successfully");
     }
 
     public void setupGuice() throws GuiceInjectorException {
@@ -93,25 +90,25 @@ public abstract class LaurenDAO implements Bot {
 
     @Override
     public void configureConnection() throws SQLConnectionException {
-
-        ConnectionInfo connectionInfo = ConnectionInfo.builder()
-                .database(this.config.getDatabase())
-                .password(this.config.getPassword())
-                .host(this.config.getHost())
-                .username(this.config.getUsername())
+        val connectionInfo = ConnectionInfo.builder()
+                .database(config.getDatabase())
+                .password(config.getPassword())
+                .host(config.getHost())
+                .username(config.getUsername())
                 .build();
 
-        if (!this.sqlConnection.configure(connectionInfo)) throw new SQLConnectionException();
+        if (!sqlConnection.configure(connectionInfo)) throw new SQLConnectionException();
 
+        getLogger().info("Database connected succcessfully.");
     }
 
     @Override
     public void findVersion() throws IOException {
-
-        Properties properties = new Properties();
+        val properties = new Properties();
 
         properties.load(Startup.class.getClassLoader().getResourceAsStream("project.properties"));
-        this.version = properties.getProperty("version");
+        version = properties.getProperty("version");
 
+        getLogger().info("Bot version setted to " + version);
     }
 }

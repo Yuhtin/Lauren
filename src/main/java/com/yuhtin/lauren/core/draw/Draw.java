@@ -61,7 +61,7 @@ public class Draw {
 
         if (prize != null) eb.setTitle("<a:sino:731450603619745792> " + prize);
 
-        mb.setEmbed(eb.build());
+        mb.setEmbeds(eb.build());
         mb.append(" @everyone");
 
         return mb.build();
@@ -92,7 +92,7 @@ public class Draw {
             rollWinners(mb, eb);
 
         } catch (Exception e) {
-            mb.setEmbed(eb.setDescription("Não foi possível determinar um vencedor\nSorteador: <@" + user + ">").build());
+            mb.setEmbeds(eb.setDescription("Não foi possível determinar um vencedor\nSorteador: <@" + user + ">").build());
 
             message.editMessage(mb.build()).queue();
             channel.sendMessage("\uD83E\uDD26\uD83C\uDFFD Oh Deus, desde quando tem pessoas que não querem ganhar sorteios DE GRAÇA, em que mundo estou \uD83D\uDE2D").queue();
@@ -121,7 +121,7 @@ public class Draw {
 
             toSend.append(", vocês ganharam o sorteio de `").append(prize).append("`");
         }
-        mb.setEmbed(eb.appendDescription("\nSorteador: <@" + user + ">").build());
+        mb.setEmbeds(eb.appendDescription("\nSorteador: <@" + user + ">").build());
 
         message.editMessage(mb.build()).queue();
         channel.sendMessage(toSend).queue();

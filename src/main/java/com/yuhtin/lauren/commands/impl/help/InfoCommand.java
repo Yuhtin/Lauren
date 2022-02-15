@@ -2,7 +2,7 @@ package com.yuhtin.lauren.commands.impl.help;
 
 import com.google.inject.Inject;
 import com.yuhtin.lauren.commands.Command;
-import com.yuhtin.lauren.commands.CommandData;
+import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.StatsController;
@@ -18,9 +18,9 @@ import java.time.Instant;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
-@CommandData(
+@CommandInfo(
         name = "botinfo",
-        type = CommandData.CommandType.HELP,
+        type = CommandInfo.CommandType.HELP,
         description = "Veja um pouco mais sobre mim"
 )
 public class InfoCommand implements Command {
@@ -66,17 +66,17 @@ public class InfoCommand implements Command {
                 .addField("<:discord:723587554422816889> Versão JDA", "`v4.2.0_186`", true)
 
                 .addField("⚙️ Núcleos", "`" + Runtime.getRuntime().availableProcessors() + " cores`", true)
-                .addField("\uD83D\uDEE2 Banco de Dados", "`MySQL`", true)
+                .addField("\uD83D\uDEE2 Banco de Dados", "`MongoDB`", true)
                 .addField("\uD83C\uDF9E RAM", "`"
                         + SystemStatsUtils.usedMemory() + "/"
                         + SystemStatsUtils.totalMemory() + "`", true)
 
-                .setFooter("Mais informações em $ping", event.getUser().getAvatarUrl())
+                .setFooter("Mais informações em /ping", event.getUser().getAvatarUrl())
                 .setColor(event.getMember().getColor())
                 .setThumbnail(bot.getAvatarUrl())
                 .setTimestamp(Instant.now());
 
-        hook.sendMessageEmbeds(builder.build()).queue();
+        hook.setEphemeral(true).sendMessageEmbeds(builder.build()).queue();
     }
 
 }

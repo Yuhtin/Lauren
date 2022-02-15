@@ -4,6 +4,7 @@ import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.manager.TimerManager;
 import com.yuhtin.lauren.timers.Timer;
 import com.yuhtin.lauren.utils.TaskHelper;
+import lombok.val;
 
 import java.time.ZoneId;
 import java.util.Calendar;
@@ -27,7 +28,6 @@ public class TimerCheckerTask extends TimerTask {
         this.logger = logger;
 
         CALENDAR.setTimeZone(TimeZone.getTimeZone(ZoneId.of("America/Sao_Paulo")));
-
     }
 
     private final String[] week = {"Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"};
@@ -37,20 +37,18 @@ public class TimerCheckerTask extends TimerTask {
 
         CALENDAR.setTimeInMillis(System.currentTimeMillis());
 
-        String weekDay = week[CALENDAR.get(Calendar.DAY_OF_WEEK) - 1].toLowerCase();
-        String time = CALENDAR.get(Calendar.HOUR_OF_DAY) + ":" + CALENDAR.get(Calendar.MINUTE);
+        val weekDay = week[CALENDAR.get(Calendar.DAY_OF_WEEK) - 1].toLowerCase();
+        val time = CALENDAR.get(Calendar.HOUR_OF_DAY) + ":" + CALENDAR.get(Calendar.MINUTE);
 
-        for (Timer timer : this.timerManager.getTimers()) {
-
-            String timerTime = timer.hour() + ":" + timer.minute();
+        for (val timer : this.timerManager.getTimers()) {
+            val timerTime = timer.hour() + ":" + timer.minute();
 
             if (!timer.day().equalsIgnoreCase("ALL")
                     && !timer.day().equalsIgnoreCase(weekDay)
                     || !time.equalsIgnoreCase(timerTime)) continue;
 
-            this.logger.info("Running " + timer.name());
+            logger.info("Running " + timer.name());
             TaskHelper.runAsync(timer::run);
-
         }
 
     }

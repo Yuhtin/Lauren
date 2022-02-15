@@ -2,7 +2,7 @@ package com.yuhtin.lauren.commands.impl.help;
 
 import com.google.inject.Inject;
 import com.yuhtin.lauren.commands.Command;
-import com.yuhtin.lauren.commands.CommandData;
+import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.service.LocaleManager;
 import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.SystemStatsUtils;
@@ -16,9 +16,9 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 import java.time.Instant;
 
-@CommandData(
+@CommandInfo(
         name = "host",
-        type = CommandData.CommandType.HELP,
+        type = CommandInfo.CommandType.HELP,
         description = "Verificar as informações da minha hospedagem"
 )
 public class PingCommand implements Command {

@@ -1,7 +1,10 @@
 package com.yuhtin.lauren.core.music;
 
 import com.sedmelluq.discord.lavaplayer.filter.equalizer.EqualizerFactory;
-import com.sedmelluq.discord.lavaplayer.player.*;
+import com.sedmelluq.discord.lavaplayer.player.AudioConfiguration;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
+import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.source.bandcamp.BandcampAudioSourceManager;
@@ -14,22 +17,26 @@ import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceMan
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.utils.TrackUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.val;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.AudioChannel;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 
 import java.util.*;
-import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class TrackManager extends AudioEventAdapter {
 
-    @Getter private static final Map<Long, TrackManager> guildTrackManagers = new HashMap<>();
+    @Getter
+    private static final Map<Long, TrackManager> guildTrackManagers = new HashMap<>();
 
     private static final float[] BASS_BOOST = {
             0.2f, 0.15f, 0.1f,
@@ -98,6 +105,7 @@ public class TrackManager extends AudioEventAdapter {
     }
 
     public void loadTrack(String trackUrl, Member member, InteractionHook hook, SearchType type) {
+        Startup.getLauren().getLogger().info("Loading track " + trackUrl + " [" + type + "] requested by " + member.getUser().getAsTag());
         val emoji = trackUrl.contains("spotify.com") ? "<:spotify:751049445592006707>" : "<:youtube:751031330057486366>";
         val handlerBuilder = AudioResultHandler.builder()
                 .trackManager(this)

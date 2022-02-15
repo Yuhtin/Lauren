@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.startup.Startup;
+import lombok.val;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateBoostTimeEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -15,9 +16,8 @@ public class MemberBoostEvent extends ListenerAdapter {
 
     @Override
     public void onGuildMemberUpdateBoostTime(@NotNull GuildMemberUpdateBoostTimeEvent event) {
-
-        Player player = this.playerController.get(event.getMember().getIdLong());
-        Role role = event.getMember()
+        val player = playerController.get(event.getMember().getIdLong());
+        val role = event.getMember()
                 .getRoles()
                 .stream()
                 .filter(memberRole -> memberRole.getIdLong() == 750365511430307931L)
@@ -26,8 +26,7 @@ public class MemberBoostEvent extends ListenerAdapter {
 
         if (role == null) player.removePermission("role.booster");
         else {
-
-            Role primeRole = Startup.getLauren()
+            val primeRole = Startup.getLauren()
                     .getGuild()
                     .getRoleById(722116789055782912L);
 

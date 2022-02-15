@@ -1,21 +1,19 @@
 package com.yuhtin.lauren.commands.impl.utility;
 
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.commands.Command;
-import com.yuhtin.lauren.commands.CommandData;
+import com.yuhtin.lauren.commands.CommandInfo;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
-@CommandData(
+@CommandInfo(
         name = "trocar",
-        type = CommandData.CommandType.UTILITY,
-        description = "Trocar algumas coisas com outro jogador",
-        alias = {"trade", "me"}
+        type = CommandInfo.CommandType.UTILITY,
+        description = "Trocar algumas coisas com outro jogador"
 )
 public class TradeCommand implements Command {
 
     @Override
-    protected void execute(CommandEvent event) {
-
+    public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
         /*Player player = PlayerController.INSTANCE.get(event.getAuthor().getIdLong());
         if (!player.hasPermission("commands.trade")) {
 
@@ -39,6 +37,6 @@ public class TradeCommand implements Command {
 
         event.getChannel().sendMessage("<@" + event.getAuthor().getId() + ">, escreva o que quer trocar").queue();*/
         // TODO
-
     }
+
 }

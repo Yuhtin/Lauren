@@ -1,14 +1,14 @@
 package com.yuhtin.lauren.commands.impl.utility;
 
 import com.google.inject.Inject;
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.yuhtin.lauren.commands.Command;
-import com.yuhtin.lauren.commands.CommandData;
-import com.yuhtin.lauren.core.player.Player;
+import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.utils.TimeUtils;
+import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 import java.awt.*;
 
@@ -17,27 +17,25 @@ import java.awt.*;
  * Github: https://github.com/Yuhtin
  */
 
-@CommandData(
-        name = "vote",
-        type = CommandData.CommandType.UTILITY,
-        description = "Ver as informações de seus votos",
-        alias = {"votar"}
+@CommandInfo(
+        name = "votar",
+        type = CommandInfo.CommandType.UTILITY,
+        description = "Ver as informações de seus votos"
 )
 public class VoteCommand implements Command {
 
     @Inject private PlayerController playerController;
 
     @Override
-    protected void execute(CommandEvent event) {
-
-        EmbedBuilder embedBuilder = new EmbedBuilder();
+    public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
+        val embedBuilder = new EmbedBuilder();
 
         embedBuilder.setAuthor("Informações de votos", null, event.getGuild().getIconUrl());
         embedBuilder.setFooter("| Todos os direitos reservados", event.getGuild().getIconUrl());
         embedBuilder.setColor(Color.GRAY);
 
-        Player player = this.playerController.get(event.getAuthor().getIdLong());
-        String voteStatus = System.currentTimeMillis() > player.getVoteDelay()
+        val player = playerController.get(event.getUser().getIdLong());
+        val voteStatus = System.currentTimeMillis() > player.getVoteDelay()
                 ? "<:online:703089222021808170> Você já pode votar novamente"
                 : "<:nao_pertubar:703089222185386056> Você precisa aguardar mais "
                 + TimeUtils.formatTime(player.getVoteDelay() - System.currentTimeMillis());
@@ -52,7 +50,7 @@ public class VoteCommand implements Command {
                 "<:version:756767328334512179> [Vote aqui](https://top.gg/servers/700673055982354472/vote)"
         );
 
-        event.getChannel().sendMessage(embedBuilder.build()).queue();
-
+        hook.sendMessageEmbeds(embedBuilder.build()).queue();
     }
+
 }
