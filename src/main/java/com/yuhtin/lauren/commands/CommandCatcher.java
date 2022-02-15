@@ -37,7 +37,7 @@ public final class CommandCatcher extends ListenerAdapter {
                 logger.info("Não encontrei o comando " + name);
                 return;
             }
-            
+
             try {
                 command.execute(event, hook);
             } catch (Exception exception) {

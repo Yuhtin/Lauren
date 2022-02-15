@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.core.statistics.StatsController;
+import com.yuhtin.lauren.utils.SimpleEmbed;
 import com.yuhtin.lauren.utils.TimeUtils;
 import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -84,17 +85,25 @@ public class InstagramCommand implements Command {
             val timelineMedia = jsonObject.getJSONObject("edge_owner_to_timeline_media");
             val posts = timelineMedia.getInt("count");
 
+            val edges = timelineMedia.getJSONArray("edges");
+            val lastPost = edges.isEmpty() ? "" : edges.getJSONObject(0).getJSONObject("node").getString("display_url");
 
             val embed = new EmbedBuilder();
+            embed.setColor(SimpleEmbed.getColor());
             embed.setTitle("Instagram de " + fullName, "https://www.instagram.com/" + username);
             embed.setThumbnail(picture);
-            embed.setDescription("**Nome**: " + fullName + "\n" +
-                    "**Bio**: " + biography + "\n" +
-                    "**Seguidores**: " + followers + "\n" +
-                    "**Seguindo**: " + following + "\n" +
-                    "**Uploads**: " + posts);
+            embed.setImage(lastPost);
+            embed.setDescription("**Nome**: `" + fullName + "`\n" +
+                    "**Bio**: \n`" + biography + "`\n\n" +
+                    "**Seguidores**: `" + followers + "`\n" +
+                    "**Seguindo**: `" + following + "`\n" +
+                    "**Uploads**: `" + posts + "`"
+            );
 
-            hook.sendMessageEmbeds(embed.build()).queue();
+            embed.setFooter("Comando usado as", event.getUser().getAvatarUrl());
+            embed.setTimestamp(Instant.now());
+
+            hook.sendMessageEmbeds(embed.build()).setEphemeral(true).queue();
 
         } catch (Exception exception) {
             exception.printStackTrace();
