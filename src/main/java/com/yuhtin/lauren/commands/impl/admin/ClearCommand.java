@@ -42,26 +42,27 @@ public class ClearCommand implements Command {
         }
 
         MessageHistory messageHistory = new MessageHistory(event.getChannel());
-        List<Message> messages;
 
-        messages = messageHistory.retrievePast(purge).complete();
-        int cleared = 0;
-        for (Message message : messages) {
-            if (message == null || (id != 0L && message.getAuthor().getIdLong() != id)) continue;
+        long finalId = id;
+        messageHistory.retrievePast(purge).queue(messages -> {
+            int cleared = 0;
+            for (Message message : messages) {
+                if (message == null || (finalId != 0L && message.getAuthor().getIdLong() != finalId)) continue;
 
-            logger.info(String.format("User %s (%s) cleared message from %s (%s): %s",
-                    event.getUser().getAsTag(),
-                    event.getUser().getId(),
-                    message.getAuthor().getAsTag(),
-                    message.getAuthor().getId(),
-                    message.getContentDisplay()
-            ));
+                logger.info(String.format("User %s (%s) cleared message from %s (%s): %s",
+                        event.getUser().getAsTag(),
+                        event.getUser().getId(),
+                        message.getAuthor().getAsTag(),
+                        message.getAuthor().getId(),
+                        message.getContentDisplay()
+                ));
 
-            message.delete().queue();
-            ++cleared;
-        }
+                message.delete().queue();
+                ++cleared;
+            }
 
-        hook.sendMessage("<:online:703089222021808170> Foram apagadas **" + cleared + "** mensagens deste canal.").queue();
+            hook.sendMessage("<:online:703089222021808170> Foram apagadas **" + cleared + "** mensagens deste canal.").queue();
+        });
     }
 
 }
