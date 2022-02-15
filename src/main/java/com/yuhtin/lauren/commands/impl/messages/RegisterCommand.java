@@ -22,7 +22,7 @@ public class RegisterCommand implements Command {
         if (event.getMember() == null
                 || !UserUtil.hasPermission(event.getMember(), hook, Permission.ADMINISTRATOR)) return;
 
-        val action = event.getChannel().sendMessage(":flag_br: - Portuguese\n" +
+        val action = event.getTextChannel().sendMessage(":flag_br: - Portuguese\n" +
                 "Olá jogadores, para realizar seu cadastro reaja abaixo desta mensagem qual o seu sexo respectivamente\n" +
                 "\n" +
                 "<:nao_pertubar:703089222185386056> Menino\n" +

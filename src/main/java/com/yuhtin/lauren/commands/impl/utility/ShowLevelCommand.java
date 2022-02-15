@@ -29,7 +29,7 @@ public class ShowLevelCommand implements Command {
 
         UserUtil.updateNickByLevel(player, player.getLevel());
 
-        event.getChannel().sendMessage("<:felizpakas:742373250037710918> Você habilitou o nível em seu nickname").queue();
+        hook.sendMessage("<:felizpakas:742373250037710918> Você habilitou o nível em seu nickname").queue();
     }
 
 }

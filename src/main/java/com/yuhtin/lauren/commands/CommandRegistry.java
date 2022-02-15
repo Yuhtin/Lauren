@@ -11,9 +11,9 @@ import lombok.var;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.interactions.commands.Command.Subcommand;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -39,7 +39,7 @@ public class CommandRegistry {
         val infoCacher = InfoCacher.getInstance();
         infoCacher.start();
 
-        val commands = new HashMap<String, CommandData>();
+        val commands = new HashMap<String, CommandDataImpl>();
         val commandMap = Startup.getLauren().getCommandCatcher().getCommandMap();
         for (val info : classPath.getTopLevelClassesRecursive("com.yuhtin.lauren.commands.impl")) {
             try {
@@ -62,7 +62,7 @@ public class CommandRegistry {
                         subCommand = split[1];
                     }
 
-                    val commandData = commands.getOrDefault(commandName, new CommandData(commandName, data.description()));
+                    val commandData = commands.getOrDefault(commandName, new CommandDataImpl(commandName, data.description()));
                     if (!subCommand.equalsIgnoreCase("")) {
                         val subcommandData = new SubcommandData(subCommand, data.description());
                         commandData.addSubcommands(subcommandData);
@@ -115,7 +115,7 @@ public class CommandRegistry {
         logger.info("Registered " + commandMap.getCommands().size() + " commands successfully");
     }
 
-    private void argsInterpreter(CommandInfo handler, CommandData commandData, SubcommandData subcommandData) {
+    private void argsInterpreter(CommandInfo handler, CommandDataImpl commandData, SubcommandData subcommandData) {
         for (val option : handler.args()) {
             val split = option.split("-");
             val argName = split[0];

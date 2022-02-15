@@ -66,7 +66,7 @@ public class ShopCommand implements Command {
                     if (shopItem == null) return false;
 
                     if (shopItem.getPrice() > player.getMoney()) {
-                        event.getChannel().sendMessage("<:chorano:726207542413230142> Você não tem dinheiro pra realizar essa ação").queue();
+                        event.getTextChannel().sendMessage("<:chorano:726207542413230142> Você não tem dinheiro pra realizar essa ação").queue();
                         return false;
                     }
 

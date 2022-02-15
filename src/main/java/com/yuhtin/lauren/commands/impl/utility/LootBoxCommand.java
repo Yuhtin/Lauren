@@ -6,6 +6,7 @@ import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.enums.Reward;
+import com.yuhtin.lauren.utils.SimpleEmbed;
 import com.yuhtin.lauren.utils.TaskHelper;
 import lombok.Getter;
 import lombok.val;
@@ -54,10 +55,12 @@ public class LootBoxCommand implements Command {
 
         List<LineRewardController> rewards = new ArrayList<>();
 
+        hook.sendMessageEmbeds(SimpleEmbed.of("Rodando lootbox!")).setEphemeral(true).queue();
+
         int delay = 0;
         for (int i = 0; i < 3; i++) {
 
-            val line = new LineRewardController(hook.sendMessage(":film_frames::film_frames::film_frames: :grey_question:").complete());
+            val line = new LineRewardController(event.getTextChannel().sendMessage(":film_frames::film_frames::film_frames: :grey_question:").complete());
             rewards.add(line);
 
             TaskHelper.runTaskLater(new TimerTask() {
@@ -79,7 +82,7 @@ public class LootBoxCommand implements Command {
                 for (LineRewardController reward : rewards) {
                     if (reward.getReward() == null) continue;
 
-                    event.getChannel().sendMessage(
+                    event.getTextChannel().sendMessage(
                                     "<@" + event.getUser().getId() + ">: <:lauren_loot:771536259062562846> " +
                                             "Você ganhou " + reward.getReward().getEmoji() + " **" + reward.getReward().getName() + "**")
                             .queue();
@@ -126,7 +129,7 @@ public class LootBoxCommand implements Command {
                 }
 
                 if (!givedReward) {
-                    event.getChannel().sendMessage("<:eita:764084277226373120> Você aparentemente não ganhou nada," +
+                    event.getTextChannel().sendMessage("<:eita:764084277226373120> Você aparentemente não ganhou nada," +
                                     " vou te dar 1000 <:xp:772285036174639124> de consolação")
                             .queue();
 

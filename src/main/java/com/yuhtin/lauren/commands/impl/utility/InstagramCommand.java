@@ -50,8 +50,6 @@ public class InstagramCommand implements Command {
         val instagram = event.getOption("account").getAsString().replace(" ", "_");
         DELAYS.put(event.getMember().getIdLong(), Instant.now().plusMillis(TimeUnit.MINUTES.toMillis(1)).toEpochMilli());
 
-        event.getChannel().sendTyping().queue();
-
         val client = new OkHttpClient();
         val request = new Request.Builder()
                 .url("https://instagram.com/" + instagram + "/?__a=1")

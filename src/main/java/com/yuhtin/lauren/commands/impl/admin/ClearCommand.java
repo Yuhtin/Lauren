@@ -41,7 +41,7 @@ public class ClearCommand implements Command {
             return;
         }
 
-        MessageHistory messageHistory = new MessageHistory(event.getChannel());
+        MessageHistory messageHistory = new MessageHistory(event.getTextChannel());
 
         long finalId = id;
         messageHistory.retrievePast(purge).queue(messages -> {
