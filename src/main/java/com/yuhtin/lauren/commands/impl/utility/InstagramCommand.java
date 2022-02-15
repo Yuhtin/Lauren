@@ -32,8 +32,7 @@ public class InstagramCommand implements Command {
 
     private static final Map<Long, Long> DELAYS = new HashMap<>();
 
-    @Inject
-    private StatsController statsController;
+    @Inject private StatsController statsController;
 
     @Override
     public void execute(CommandInteraction event, InteractionHook hook) throws Exception {

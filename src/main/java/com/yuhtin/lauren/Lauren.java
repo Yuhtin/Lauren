@@ -180,7 +180,7 @@ public final class Lauren extends LaurenDAO {
 
     @Override
     public void loadCommands() {
-        val commandRegistry = CommandRegistry.of(getBot());
+        val commandRegistry = CommandRegistry.of(getBot(), getInjector());
         getInjector().injectMembers(commandRegistry);
 
         commandRegistry.register();

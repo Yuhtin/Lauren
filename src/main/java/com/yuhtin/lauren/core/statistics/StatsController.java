@@ -16,19 +16,15 @@ public class StatsController {
     @Getter private final Map<String, StatsInfo> stats = new HashMap<>();
 
     public StatsInfo getStats(String name) {
-
         StatsInfo info = stats.getOrDefault(name, null);
         if (info == null) {
-
             info = new StatsInfo(name);
             stats.put(name, info);
 
-            this.statisticDAO.insertStatistic(info);
-
+            statisticDAO.insertStatistic(info);
         }
 
         return info;
-
     }
 
     public void insertStats(StatsInfo statsInfo) {
