@@ -2,6 +2,7 @@ package com.yuhtin.lauren.commands;
 
 import com.google.common.reflect.ClassPath;
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.startup.Startup;
@@ -22,8 +23,9 @@ import java.util.stream.Collectors;
 public class CommandRegistry {
 
     private final JDA client;
-    @Inject
-    private Logger logger;
+    private final Injector injector;
+
+    @Inject private Logger logger;
 
     public void register() {
         ClassPath classPath;
@@ -46,6 +48,8 @@ public class CommandRegistry {
 
                 if (name.isAnnotationPresent(CommandInfo.class)) {
                     val command = (Command) object;
+                    injector.injectMembers(command);
+
                     val data = (CommandInfo) name.getAnnotation(CommandInfo.class);
 
                     var commandName = data.name();
