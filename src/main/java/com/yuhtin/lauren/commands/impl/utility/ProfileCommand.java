@@ -24,7 +24,7 @@ import java.time.Instant;
                 "[@user]-Usuário que você deseja ver o perfil"
         }
 )
-public class PlayerInfoCommand implements Command {
+public class ProfileCommand implements Command {
 
     @Inject private Logger logger;
     @Inject private PlayerController playerController;
