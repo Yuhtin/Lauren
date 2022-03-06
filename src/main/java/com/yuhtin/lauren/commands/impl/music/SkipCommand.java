@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandInfo(
-        name = "skip",
+        name = "skip.music",
         type = CommandInfo.CommandType.MUSIC,
         description = "Iniciar uma votação para pular a música atual"
 )

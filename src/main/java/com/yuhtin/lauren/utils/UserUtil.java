@@ -38,11 +38,7 @@ public class UserUtil {
         if (config.getOwnerID() != user.getIdLong()) {
             if (hook == null) return false;
 
-            hook.sendMessage("<a:nao:704295026036834375> Você não tem permissão para usar esta função")
-                    .delay(10, TimeUnit.SECONDS)
-                    .flatMap(Message::delete)
-                    .queue();
-
+            hook.sendMessage("<a:nao:704295026036834375> Você não tem permissão para usar esta função").queue();
             return false;
         }
 
