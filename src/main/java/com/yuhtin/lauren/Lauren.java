@@ -101,22 +101,10 @@ public final class Lauren extends LaurenDAO {
 
     @Override
     public void onReady() {
-
         loadTasks();
-
         guild = getBot().getGuildById(700673055982354472L);
-
-        Arrays.asList(
-                "",
-                getBotName() + " v" + getVersion(),
-                "Author: Yuhtin#9147",
-                "",
-                "All systems has loaded",
-                getBotName() + " is now online"
-        ).forEach(System.out::println);
-
+        
         getLogger().info("[2/3] Lauren is now online");
-
     }
 
     @Override
