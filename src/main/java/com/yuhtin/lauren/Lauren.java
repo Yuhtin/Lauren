@@ -130,8 +130,6 @@ public final class Lauren extends LaurenDAO {
             TrackManager.getGuildTrackManagers().values().forEach(TrackManager::destroy);
             getLogger().info("Destroyed all track managers");
 
-            getLogger().info(getBotName() + " disabled");
-
             val now = LocalDateTime.now();
             if (loggerController != null) {
                 val file = loggerController.getFile();
@@ -150,6 +148,8 @@ public final class Lauren extends LaurenDAO {
 
                 getLogger().info("Zipped last log file successfully");
             }
+
+            getLogger().info(getBotName() + " disabled");
         } catch (Exception ignored) {
         }
     }
