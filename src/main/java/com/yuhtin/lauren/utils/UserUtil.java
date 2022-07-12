@@ -35,7 +35,7 @@ public class UserUtil {
     }
 
     public static boolean isOwner(User user, InteractionHook hook) {
-        if (config.getOwnerID() != user.getIdLong()) {
+        if (user == null || config.getOwnerID() != user.getIdLong()) {
             if (hook == null) return false;
 
             hook.sendMessage("<a:nao:704295026036834375> Você não tem permissão para usar esta função").queue();

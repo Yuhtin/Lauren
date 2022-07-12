@@ -17,10 +17,7 @@ public class LeaveCommand implements Command {
 
     @Override
     public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
-        if (event.getGuild() == null
-                || event.getMember() == null
-                || TrackUtils.isIdle(event.getGuild(), hook)
-                || !UserUtil.isDJ(event.getMember(), hook)) return;
+        if (event.getGuild() == null || event.getMember() == null || !UserUtil.isDJ(event.getMember(), hook)) return;
 
         TrackManager.of(event.getGuild()).destroy();
         hook.sendMessage("Que ⁉️ Pensei que estavam gostando do batidão " +
