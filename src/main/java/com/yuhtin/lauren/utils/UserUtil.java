@@ -3,6 +3,7 @@ package com.yuhtin.lauren.utils;
 import com.google.inject.Inject;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.models.objects.Config;
+import com.yuhtin.lauren.startup.Startup;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.val;
@@ -21,7 +22,6 @@ import java.util.concurrent.TimeUnit;
 public class UserUtil {
 
     @Inject private static Config config;
-    @Inject private static JDA bot;
 
     public static boolean hasPermission(Member member, InteractionHook hook, Permission permission) {
         if (!member.hasPermission(permission)) {
@@ -48,6 +48,7 @@ public class UserUtil {
     public static void updateNickByLevel(Player player, int level) {
         if (player.isHideLevelOnNickname()) return;
 
+        val bot = Startup.getLauren().getBot();
         val member = bot.getGuilds().get(0).getMemberById(player.getUserID());
         if (member == null) return;
 

@@ -12,6 +12,7 @@ import com.yuhtin.lauren.service.PostConnectionFactory;
 import com.yuhtin.lauren.sql.connection.SQLConnection;
 import com.yuhtin.lauren.utils.UserUtil;
 import lombok.AllArgsConstructor;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.sharding.ShardManager;
 
 /**
