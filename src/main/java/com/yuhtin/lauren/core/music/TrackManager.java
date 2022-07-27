@@ -46,6 +46,7 @@ public class TrackManager extends AudioEventAdapter {
             -0.1f, -0.1f, -0.1f
     };
 
+    private long guildId;
     private EqualizerFactory equalizer;
     private GuildMusicManager musicManager;
     private AudioPlayerManager audioManager;
@@ -92,16 +93,15 @@ public class TrackManager extends AudioEventAdapter {
     }
 
     public void destroy() {
+        guildTrackManagers.remove(guildId);
 
-        if (audio == null) return;
-
-        audio.getGuild().getAudioManager().closeAudioConnection();
+        if (audio != null) {
+            audio.getGuild().getAudioManager().closeAudioConnection();
+        }
 
         purgeQueue();
         player.stopTrack();
-
         musicManager.getPlayer().destroy();
-
     }
 
     public void loadTrack(String trackUrl, Member member, InteractionHook hook, SearchType type) {
