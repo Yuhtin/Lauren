@@ -59,7 +59,6 @@ public class TrackScheduler extends AudioEventAdapter {
 
         Guild guild = head.getAuthor().getGuild();
         if (queue.isEmpty()) {
-            guild.getAudioManager().closeAudioConnection();
             TrackManager.of(guild).setAudio(null);
             return;
         }

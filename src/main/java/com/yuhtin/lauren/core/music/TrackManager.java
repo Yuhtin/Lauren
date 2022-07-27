@@ -23,6 +23,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.val;
+import net.dv8tion.jda.api.audio.SpeakingMode;
 import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -59,7 +60,9 @@ public class TrackManager extends AudioEventAdapter {
     public static TrackManager of(Guild guild) {
         if (guildTrackManagers.containsKey(guild.getIdLong())) return guildTrackManagers.get(guild.getIdLong());
 
+
         TrackManager trackManager = new TrackManager();
+        trackManager.setGuildId(guild.getIdLong());
 
         val audioManager = new DefaultAudioPlayerManager();
         audioManager.setItemLoaderThreadPoolSize(128);
@@ -82,7 +85,12 @@ public class TrackManager extends AudioEventAdapter {
         AudioSourceManagers.registerLocalSource(trackManager.getAudioManager());
 
         trackManager.getPlayer().addListener(trackManager);
-        guild.getAudioManager().setSendingHandler(new AudioPlayerSendHandler(trackManager.getPlayer()));
+
+        val discordAudio = guild.getAudioManager();
+        discordAudio.setSendingHandler(new AudioPlayerSendHandler(trackManager.getPlayer()));
+        discordAudio.setSelfDeafened(true);
+        discordAudio.setAutoReconnect(true);
+        discordAudio.setSpeakingMode(SpeakingMode.PRIORITY);
 
         trackManager.setEqualizer(new EqualizerFactory());
         trackManager.getPlayer().setFilterFactory(trackManager.getEqualizer());
@@ -90,6 +98,15 @@ public class TrackManager extends AudioEventAdapter {
         guildTrackManagers.put(guild.getIdLong(), trackManager);
 
         return trackManager;
+    }
+
+    public void setAudio(AudioChannel audio) {
+        Guild guild = Startup.getLauren().getBot().getGuildById(guildId);
+        if (guild != null) guild.getAudioManager().closeAudioConnection();
+
+        this.audio = audio;
+
+        if (guild != null) guild.getAudioManager().openAudioConnection(this.audio);
     }
 
     public void destroy() {
