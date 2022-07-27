@@ -53,6 +53,8 @@ public class CommandRegistry {
                     val data = (CommandInfo) name.getAnnotation(CommandInfo.class);
 
                     var commandName = data.name();
+                    logger.log("Registering command: " + commandName, LogType.STARTUP);
+
                     commandMap.register(commandName, command);
 
                     var subCommand = "";
@@ -72,9 +74,7 @@ public class CommandRegistry {
                         argsInterpreter(data, commandData, null);
                     }
 
-                    if (commands.containsKey(commandName)) commands.replace(commandName, commandData);
-                    else commands.put(commandName, commandData);
-
+                    client.upsertCommand(commandData).queue();
                     infoCacher.insert(data);
                 } else throw new InstantiationException();
             } catch (Exception exception) {
@@ -84,34 +84,6 @@ public class CommandRegistry {
         }
 
         infoCacher.construct();
-
-        client.retrieveCommands().queue(createdCommands -> {
-            for (val command : commands.values()) {
-                boolean exists = false;
-                for (val createdCommand : createdCommands) {
-                    if (createdCommand.getName().equals(command.getName())) {
-                        exists = true;
-
-                        val createdSubcommands = createdCommand.getSubcommands().stream().map(Subcommand::getName).collect(Collectors.toList());
-                        for (val commandSubcommand : command.getSubcommands()) {
-                            if (!createdSubcommands.contains(commandSubcommand.getName())) {
-                                exists = false;
-                            }
-                        }
-
-                        if (!createdCommand.getDescription().equals(command.getDescription())) {
-                            exists = false;
-                        }
-                    }
-                }
-
-                if (!exists) {
-                    logger.info("Adding " + command.getName() + " because is a new command.");
-                    client.upsertCommand(command).queue();
-                }
-            }
-        });
-
         logger.info("Registered " + commandMap.getCommands().size() + " commands successfully");
     }
 

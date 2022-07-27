@@ -30,6 +30,13 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 @EqualsAndHashCode(callSuper = true)
@@ -88,7 +95,7 @@ public class TrackManager extends AudioEventAdapter {
 
         val discordAudio = guild.getAudioManager();
         discordAudio.setSendingHandler(new AudioPlayerSendHandler(trackManager.getPlayer()));
-        discordAudio.setSelfDeafened(true);
+        discordAudio.setReceivingHandler(new AudioBridge(trackManager.getPlayer()));
         discordAudio.setAutoReconnect(true);
         discordAudio.setSpeakingMode(SpeakingMode.PRIORITY);
 
@@ -102,7 +109,7 @@ public class TrackManager extends AudioEventAdapter {
 
     public void setAudio(AudioChannel audio) {
         Guild guild = Startup.getLauren().getBot().getGuildById(guildId);
-        if (guild != null) guild.getAudioManager().closeAudioConnection();
+        if (guild != null && this.audio != null) guild.getAudioManager().closeAudioConnection();
 
         this.audio = audio;
 
@@ -218,6 +225,48 @@ public class TrackManager extends AudioEventAdapter {
 
         textChannel.deleteMessageById(lastInfoMessageId).queue();
         lastInfoMessageId = 0;
+    }
+
+    public File downloadAudio() {
+        val guild = Startup.getLauren().getBot().getGuildById(guildId);
+        if (guild == null) return null;
+
+        val audio = guild.getAudioManager();
+        val receivingHandler = (AudioBridge) audio.getReceivingHandler();
+        if (receivingHandler == null) return null;
+
+        val tempFile = new File("./temp/", "temp.mp3");
+        if (tempFile.exists()) tempFile.delete();
+
+        tempFile.getParentFile().mkdirs();
+
+        try {
+            int size = 0;
+
+            List<byte[]> rescievedBytes = new ArrayList<>(receivingHandler.rescievedBytes);
+            for (byte[] bs : rescievedBytes) {
+                size += bs.length;
+            }
+
+            byte[] decodedData = new byte[size];
+            int i = 0;
+            for (byte[] bs : rescievedBytes) {
+                for (int j = 0; j < bs.length; j++) {
+                    decodedData[i++] = bs[j];
+                }
+            }
+
+            getWavFile(tempFile, decodedData);
+            return tempFile;
+        } catch (IOException | OutOfMemoryError throwable) {
+            throwable.printStackTrace();
+            return null;
+        }
+    }
+
+    private void getWavFile(File outFile, byte[] decodedData) throws IOException {
+        AudioFormat format = new AudioFormat(8000, 16, 1, true, false);
+        AudioSystem.write(new AudioInputStream(new ByteArrayInputStream(decodedData), format, decodedData.length), AudioFileFormat.Type.WAVE, outFile);
     }
 
     public enum SearchType {
