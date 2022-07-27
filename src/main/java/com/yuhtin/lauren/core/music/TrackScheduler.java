@@ -46,7 +46,7 @@ public class TrackScheduler extends AudioEventAdapter {
 
         // repeat music system
         if (endReason == AudioTrackEndReason.FINISHED && head.isRepeat()) {
-            head.setRepeat(false);
+            //head.setRepeat(false);
 
             AudioTrack audioTrack = head.getTrack().makeClone();
             head.setTrack(audioTrack);
