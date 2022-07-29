@@ -25,7 +25,8 @@ public class CommandRegistry {
     private final JDA client;
     private final Injector injector;
 
-    @Inject private Logger logger;
+    @Inject
+    private Logger logger;
 
     public void register() {
         ClassPath classPath;
@@ -74,7 +75,9 @@ public class CommandRegistry {
                         argsInterpreter(data, commandData, null);
                     }
 
-                    client.upsertCommand(commandData).queue();
+                    if (commands.containsKey(commandName)) commands.replace(commandName, commandData);
+                    else commands.put(commandName, commandData);
+
                     infoCacher.insert(data);
                 } else throw new InstantiationException();
             } catch (Exception exception) {
@@ -84,6 +87,32 @@ public class CommandRegistry {
         }
 
         infoCacher.construct();
+
+        client.retrieveCommands().queue(createdCommands -> {
+            for (val command : commands.values()) {
+                boolean exists = false;
+                for (val createdCommand : createdCommands) {
+                    if (createdCommand.getName().equals(command.getName())) {
+                        exists = true;
+                        val createdSubcommands = createdCommand.getSubcommands().stream().map(Subcommand::getName).collect(Collectors.toList());
+                        for (val commandSubcommand : command.getSubcommands()) {
+                            if (!createdSubcommands.contains(commandSubcommand.getName())) {
+                                exists = false;
+                            }
+                        }
+
+                        if (!createdCommand.getDescription().equals(command.getDescription())) {
+                            exists = false;
+                        }
+                    }
+                }
+                if (!exists) {
+                    logger.info("Adding " + command.getName() + " because is a new command.");
+                    client.upsertCommand(command).queue();
+                }
+            }
+        });
+
         logger.info("Registered " + commandMap.getCommands().size() + " commands successfully");
     }
 

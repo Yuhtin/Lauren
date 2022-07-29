@@ -95,8 +95,9 @@ public class TrackManager extends AudioEventAdapter {
 
         val discordAudio = guild.getAudioManager();
         discordAudio.setSendingHandler(new AudioPlayerSendHandler(trackManager.getPlayer()));
-        discordAudio.setReceivingHandler(new AudioBridge(trackManager.getPlayer()));
+        //discordAudio.setReceivingHandler(new AudioBridge(trackManager.getPlayer()));
         discordAudio.setAutoReconnect(true);
+        discordAudio.setSelfDeafened(true);
         discordAudio.setSpeakingMode(SpeakingMode.PRIORITY);
 
         trackManager.setEqualizer(new EqualizerFactory());
@@ -108,12 +109,12 @@ public class TrackManager extends AudioEventAdapter {
     }
 
     public void setAudio(AudioChannel audio) {
-        Guild guild = Startup.getLauren().getBot().getGuildById(guildId);
-        if (guild != null && this.audio != null) guild.getAudioManager().closeAudioConnection();
+        if (this.audio == audio) return;
 
         this.audio = audio;
 
-        if (guild != null) guild.getAudioManager().openAudioConnection(this.audio);
+        Guild guild = Startup.getLauren().getBot().getGuildById(guildId);
+        if (guild != null && this.audio != null) guild.getAudioManager().openAudioConnection(this.audio);
     }
 
     public void destroy() {
@@ -243,7 +244,7 @@ public class TrackManager extends AudioEventAdapter {
         try {
             int size = 0;
 
-            List<byte[]> rescievedBytes = new ArrayList<>(receivingHandler.rescievedBytes);
+            List<byte[]> rescievedBytes = new ArrayList<>(receivingHandler.bridgeQueue);
             for (byte[] bs : rescievedBytes) {
                 size += bs.length;
             }
@@ -251,8 +252,8 @@ public class TrackManager extends AudioEventAdapter {
             byte[] decodedData = new byte[size];
             int i = 0;
             for (byte[] bs : rescievedBytes) {
-                for (int j = 0; j < bs.length; j++) {
-                    decodedData[i++] = bs[j];
+                for (byte b : bs) {
+                    decodedData[i++] = b;
                 }
             }
 
