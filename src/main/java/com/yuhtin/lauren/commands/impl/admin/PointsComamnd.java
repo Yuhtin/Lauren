@@ -45,7 +45,7 @@ public class PointsComamnd implements Command {
         val optionUsed = option.equalsIgnoreCase("set") ? "setou" : option.equalsIgnoreCase("remove") ? "removeu" : "adicionou";
 
         hook.setEphemeral(true).sendMessage("<:felizpakas:742373250037710918> " +
-                        "Você " + optionUsed + " **" + quantity + "** pontos ao jogador " + player.getAsTag())
+                        "Você " + optionUsed + " **" + quantity + "** pontos ao jogador " + player.getName())
                 .queue();
     }
 }

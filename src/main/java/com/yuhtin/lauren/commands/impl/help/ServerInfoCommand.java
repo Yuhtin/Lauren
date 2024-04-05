@@ -22,7 +22,7 @@ public class ServerInfoCommand implements Command {
         val roleSize = event.getGuild().getRoles().size() + "";
 
         val owner = event.getGuild().getOwner();
-        val ownerName = owner == null ? "Ningúem" : owner.getUser().getAsTag();
+        val ownerName = owner == null ? "Ningúem" : owner.getUser().getName();
         val ownerId = owner == null ? "0" : owner.getId();
 
         val textChannels = event.getGuild().getTextChannels().size();

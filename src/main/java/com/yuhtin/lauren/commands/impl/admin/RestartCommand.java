@@ -22,7 +22,7 @@ public class RestartCommand implements Command {
         if (!UserUtil.isOwner(event.getUser(), hook)) return;
 
         hook.sendMessage("Reiniciando meus sistemas :satisfied:").queue();
-        logger.info("The player " + event.getUser().getAsTag() + " restarting my systems");
+        logger.info("The player " + event.getUser().getName() + " restarting my systems");
 
         Startup.getLauren().shutdown();
     }

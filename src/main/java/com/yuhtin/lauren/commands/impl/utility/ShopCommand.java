@@ -5,8 +5,7 @@ import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.models.embeds.ShopEmbed;
-import com.yuhtin.lauren.models.objects.EventWaiter;
+import com.yuhtin.lauren.module.impl.shop.ShopEmbed;
 import com.yuhtin.lauren.startup.Startup;
 import lombok.val;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -90,7 +89,7 @@ public class ShopCommand implements Command {
                             val role = Startup.getLauren().getGuild().getRoleById(722116789055782912L);
                             if (role == null) {
                                 logger.warning("The player "
-                                        + user.getAsTag() +
+                                        + user.getName() +
                                         " buyed Prime role, but i can't give"
                                 );
 

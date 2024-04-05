@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.module.impl.player;
+package com.yuhtin.lauren.module.impl.player.module;
 
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.config.YamlConfiguration;

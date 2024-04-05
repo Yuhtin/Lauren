@@ -2,7 +2,6 @@ package com.yuhtin.lauren.tasks;
 
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.models.objects.EventWaiter;
 import com.yuhtin.lauren.util.TaskHelper;
 import lombok.AllArgsConstructor;
 import lombok.val;
@@ -89,7 +88,7 @@ public class ShardLootTask {
                                         .queue();
                             }
 
-                            logger.info("The player " + event.getUser().getAsTag() + " getted the sharddrop");
+                            logger.info("The player " + event.getUser().getName() + " getted the sharddrop");
                         }, 25, TimeUnit.SECONDS, () -> message.delete().queue());
             }
         }, 10, 55, TimeUnit.MINUTES);

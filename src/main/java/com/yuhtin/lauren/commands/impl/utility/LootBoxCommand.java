@@ -5,7 +5,7 @@ import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.models.enums.Reward;
+import com.yuhtin.lauren.models.Reward;
 import com.yuhtin.lauren.util.EmbedUtil;
 import com.yuhtin.lauren.util.TaskHelper;
 import lombok.Getter;
@@ -94,7 +94,7 @@ public class LootBoxCommand implements Command {
                             Role role = event.getGuild().getRoleById(771541080634032149L);
                             if (role == null) {
 
-                                logger.warning("The player " + event.getUser().getAsTag() + " win the Lucky role but i can't give");
+                                logger.warning("The player " + event.getUser().getName() + " win the Lucky role but i can't give");
                                 break;
 
                             }

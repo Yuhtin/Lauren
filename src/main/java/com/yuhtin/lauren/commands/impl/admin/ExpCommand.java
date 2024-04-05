@@ -44,7 +44,7 @@ public class ExpCommand implements Command {
         val optionUsed = option.equalsIgnoreCase("set") ? "setou" : option.equalsIgnoreCase("remove") ? "removeu" : "adicionou";
 
         hook.sendMessage("<:felizpakas:742373250037710918> " +
-                        "Você " + optionUsed + " **" + quantity + "** exp ao jogador " + player.getAsTag())
+                        "Você " + optionUsed + " **" + quantity + "** exp ao jogador " + player.getName())
                 .queue();
     }
 

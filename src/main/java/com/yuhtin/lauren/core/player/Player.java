@@ -6,7 +6,7 @@ import com.yuhtin.lauren.core.player.impl.Entity;
 import com.yuhtin.lauren.core.punish.PunishmentType;
 import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.core.xp.XpController;
-import com.yuhtin.lauren.models.enums.Rank;
+import com.yuhtin.lauren.module.impl.player.Rank;
 import com.yuhtin.lauren.startup.Startup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -47,7 +47,7 @@ public class Player
     private transient int experience = 0;
     private transient boolean abbleToDaily = true;
 
-    private Rank rank = Rank.NOTHING;
+    private Rank rank = Rank.NONE;
 
     public Player(long userID) {
         this.userID = userID;

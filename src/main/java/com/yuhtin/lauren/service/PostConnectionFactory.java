@@ -3,7 +3,6 @@ package com.yuhtin.lauren.service;
 import com.google.inject.Inject;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.statistics.StatsController;
-import com.yuhtin.lauren.models.enums.LogType;
 import lombok.Data;
 
 import java.io.BufferedReader;
@@ -13,7 +12,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
-import java.util.logging.Level;
 
 @Data
 public class PostConnectionFactory {

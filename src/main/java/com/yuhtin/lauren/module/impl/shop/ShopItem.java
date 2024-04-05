@@ -1,6 +1,5 @@
-package com.yuhtin.lauren.models.objects;
+package com.yuhtin.lauren.module.impl.shop;
 
-import com.yuhtin.lauren.models.enums.ItemType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

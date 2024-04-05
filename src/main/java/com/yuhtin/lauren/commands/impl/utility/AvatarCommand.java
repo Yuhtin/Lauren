@@ -34,7 +34,7 @@ public class AvatarCommand implements Command {
                 .setAuthor("Avatar de " + target.getUser().getName(), "https://google.com", avatarUrl)
                 .setImage(target.getUser().getAvatarUrl())
                 .setColor(target.getColor())
-                .setFooter("Comando usado por " + event.getUser().getAsTag(), event.getUser().getAvatarUrl())
+                .setFooter("Comando usado por " + event.getUser().getName(), event.getUser().getAvatarUrl())
                 .setTimestamp(Instant.now());
 
         hook.setEphemeral(true).sendMessageEmbeds(embed.build()).queue();

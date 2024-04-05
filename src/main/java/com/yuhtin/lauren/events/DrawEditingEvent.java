@@ -1,7 +1,6 @@
 package com.yuhtin.lauren.events;
 
 import com.yuhtin.lauren.core.draw.controller.DrawController;
-import com.yuhtin.lauren.models.enums.DrawEditingStatus;
 import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.ChannelType;

@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.core.punish.PunishmentRule;
-import com.yuhtin.lauren.manager.PunishmentManager;
+import com.yuhtin.lauren.module.impl.misc.PunishmentModule;
 import lombok.val;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -23,7 +23,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 public class PunishCommand implements Command {
 
     @Inject
-    private PunishmentManager punishmentManager;
+    private PunishmentModule punishmentModule;
 
     @Override
     public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
@@ -46,11 +46,11 @@ public class PunishCommand implements Command {
 
         try {
             val punishmentRule = PunishmentRule.valueOf("P" + rule.replace(".", ""));
-            punishmentManager.applyPunish(event.getUser(), target, punishmentRule, proof);
+            punishmentModule.applyPunish(event.getUser(), target, punishmentRule, proof);
 
             hook.setEphemeral(true)
                     .sendMessage("<:feliz_pra_caralho:760202116504485948> " +
-                            "Você puniu o jogador `" + target.getUser().getAsTag() + "` com sucesso.")
+                            "Você puniu o jogador `" + target.getUser().getName() + "` com sucesso.")
                     .queue();
 
         } catch (IllegalStateException exception) {

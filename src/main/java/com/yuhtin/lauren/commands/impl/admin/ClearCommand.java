@@ -47,9 +47,9 @@ public class ClearCommand implements Command {
                 if (message == null || (finalId != 0L && message.getAuthor().getIdLong() != finalId)) continue;
 
                 logger.info(String.format("User %s (%s) cleared message from %s (%s): %s",
-                        event.getUser().getAsTag(),
+                        event.getUser().getName(),
                         event.getUser().getId(),
-                        message.getAuthor().getAsTag(),
+                        message.getAuthor().getName(),
                         message.getAuthor().getId(),
                         message.getContentDisplay()
                 ));

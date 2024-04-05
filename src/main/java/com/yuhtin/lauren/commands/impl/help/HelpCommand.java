@@ -53,7 +53,7 @@ public class HelpCommand implements Command {
         }
 
         val helpEmbed = InfoCacher.getInstance().getHelpEmbed();
-        helpEmbed.setFooter("Comando usado por " + event.getUser().getAsTag(), event.getUser().getAvatarUrl())
+        helpEmbed.setFooter("Comando usado por " + event.getUser().getName(), event.getUser().getAvatarUrl())
                 .setColor(event.getMember().getColor())
                 .setTimestamp(Instant.now());
 

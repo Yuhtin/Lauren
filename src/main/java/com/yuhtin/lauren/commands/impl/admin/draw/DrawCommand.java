@@ -75,13 +75,13 @@ public class DrawCommand implements Command {
 
                         DrawController.editing = null;
                     } catch (Exception exception) {
-                        this.logger.warning("Can't send a private message for user " + event.getUser().getAsTag());
+                        this.logger.warning("Can't send a private message for user " + event.getUser().getName());
                     }
                 }
             }, 2, TimeUnit.MINUTES);
 
         } catch (Exception exception) {
-            this.logger.warning("Can't send a private message for user " + event.getUser().getAsTag());
+            this.logger.warning("Can't send a private message for user " + event.getUser().getName());
         }
     }
 }

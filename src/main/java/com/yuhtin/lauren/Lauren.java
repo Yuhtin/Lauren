@@ -2,9 +2,6 @@ package com.yuhtin.lauren;
 
 import com.yuhtin.lauren.bot.DiscordBot;
 import com.yuhtin.lauren.commands.CommandRegistry;
-import com.yuhtin.lauren.core.player.Player;
-import com.yuhtin.lauren.guice.LaurenModule;
-import com.yuhtin.lauren.manager.EventsManager;
 import com.yuhtin.lauren.models.exceptions.GuiceInjectorException;
 import com.yuhtin.lauren.tasks.AutoSaveTask;
 import com.yuhtin.lauren.tasks.LootGeneratorTask;
@@ -14,7 +11,6 @@ import com.yuhtin.lauren.util.EnvWrapper;
 import com.yuhtin.lauren.util.LoggerUtil;
 import com.yuhtin.lauren.util.TaskHelper;
 import lombok.Data;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import net.dv8tion.jda.api.JDA;

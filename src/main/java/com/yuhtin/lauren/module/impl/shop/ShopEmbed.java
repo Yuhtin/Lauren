@@ -1,8 +1,5 @@
-package com.yuhtin.lauren.models.embeds;
+package com.yuhtin.lauren.module.impl.shop;
 
-import com.google.inject.Singleton;
-import com.yuhtin.lauren.models.enums.ItemType;
-import com.yuhtin.lauren.models.objects.ShopItem;
 import lombok.Getter;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -11,14 +8,13 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-@Singleton
+@Getter
 public class ShopEmbed {
 
-    @Getter private final EmbedBuilder embed = new EmbedBuilder();
-    @Getter private final Map<String, ShopItem> shopItems = new HashMap<>();
+    private final EmbedBuilder embed = new EmbedBuilder();
+    private final Map<String, ShopItem> shopItems = new HashMap<>();
 
     public void build() {
-        //shopItems.put("version:756767328334512179", new ShopItem(ItemType.TRADE_COMMAND, 3000));
         shopItems.put("rename_command:775348818555699210", new ShopItem(ItemType.RENAME_COMMAND, 1000));
         shopItems.put("bronzekey:775100121322356766", new ShopItem(ItemType.KEY, 1350));
         shopItems.put("prime:722115525232296056", new ShopItem(ItemType.PRIME, 4000));

@@ -38,7 +38,7 @@ public class PermissionCommand implements Command {
 
             hook.setEphemeral(true).sendMessage(
                     "<:felizpakas:742373250037710918> " +
-                    "Você adicionou a permissão **" + permission + "** para o jogador " + player.getAsTag()
+                    "Você adicionou a permissão **" + permission + "** para o jogador " + player.getName()
             ).queue();
             return;
         } else if (option.equalsIgnoreCase("remove")) {
@@ -46,7 +46,7 @@ public class PermissionCommand implements Command {
 
             hook.setEphemeral(true).sendMessage(
                     "<:felizpakas:742373250037710918> " +
-                            "Você removeu a permissão **" + permission + "** do jogador " + player.getAsTag()
+                            "Você removeu a permissão **" + permission + "** do jogador " + player.getName()
             ).queue();
             return;
         }
