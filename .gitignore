@@ -60,7 +60,8 @@ logs/
 temporary/
 gources/
 images/
-config/
+/config/
+!src/main/java/*
 
 # IntelliJ
 out/

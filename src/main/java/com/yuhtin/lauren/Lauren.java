@@ -53,7 +53,7 @@ import java.util.zip.ZipOutputStream;
 @RequiredArgsConstructor
 public class Lauren implements DiscordBot {
 
-    private final Logger logger = Logger.getLogger("JungleDiscordBot");
+    private final Logger logger = Logger.getLogger("Lauren");
     private final long startupTime = System.currentTimeMillis();
 
     private JDA jda;
