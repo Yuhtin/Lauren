@@ -1,6 +1,6 @@
 package com.yuhtin.lauren.config;
 
-import com.yuhtin.lauren.util.EnvWrapper;
+import com.yuhtin.lauren.util.LoggerUtil;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
@@ -26,12 +26,10 @@ public class YamlConfiguration extends FileConfiguration {
     public static YamlConfiguration load(String fileName) {
         Logger logger = Logger.getLogger("Lauren");
 
-        String branch = EnvWrapper.getBranch();
-
-        File file = new File("config/" + branch + "/" + fileName);
+        File file = new File("config/" + fileName);
         if (!file.exists()) {
             try {
-                InputStream resource = YamlConfiguration.class.getResourceAsStream("/config/" + branch + "/" + fileName);
+                InputStream resource = YamlConfiguration.class.getResourceAsStream("/config/" + fileName);
                 if (resource != null) {
                     Files.copy(resource, Paths.get(file.toURI()), StandardCopyOption.REPLACE_EXISTING);
                     logger.config("Created " + fileName);

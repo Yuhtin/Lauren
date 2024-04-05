@@ -39,7 +39,7 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
     public void trackLoaded(AudioTrack track) {
         statsController.getStats("Requests Externos").suplyStats(1);
 
-        if (!permitedTrack(track, UserUtil.isDJ(member, null))) {
+        if (!permitedTrack(track, UserUtil.isDJ(member))) {
             if (searchType == TrackManager.SearchType.SIMPLE_SEARCH)
                 message.reply("<:rindo_de_voce:751941649655136588>" +
                                 " Sua música foi bloqueada por ter mais de 12 minutos.")
@@ -75,7 +75,7 @@ public final class AudioResultHandler implements AudioLoadResultHandler {
         else if (playlist.isSearchResult()) trackLoaded(playlist.getTracks().get(0));
         else {
 
-            int limit = UserUtil.isPrime(member) || UserUtil.isDJ(member, null) ? 100 : 25;
+            int limit = UserUtil.isPrime(member) || UserUtil.isDJ(member) ? 100 : 25;
             int maxMusics = Math.min(playlist.getTracks().size(), limit);
 
             EmbedBuilder embed = new EmbedBuilder()

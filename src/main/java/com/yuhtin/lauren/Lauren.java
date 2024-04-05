@@ -53,7 +53,7 @@ public class Lauren implements DiscordBot {
     }
 
     @Override
-    public void onEnable() throws Exception {
+    public void onReady() {
         loadSQLTables();
 
         loadCommands();
@@ -66,14 +66,6 @@ public class Lauren implements DiscordBot {
     }
 
     @Override
-    public void onReady() {
-        loadTasks();
-        guild = getBot().getGuildById(700673055982354472L);
-        
-        getLogger().info("[2/3] Lauren is now online");
-    }
-
-    @Override
     public void onDisable() {
         logger.info("Stopping bot...");
 
@@ -83,7 +75,6 @@ public class Lauren implements DiscordBot {
         logger.info("Bot disabled!");
     }
 
-    @Override
     public void loadCommands() {
         val commandRegistry = CommandRegistry.of(getBot(), getInjector());
         getInjector().injectMembers(commandRegistry);
@@ -91,7 +82,6 @@ public class Lauren implements DiscordBot {
         commandRegistry.register();
     }
 
-    @Override
     public void loadEvents() throws IOException {
 
         EventsManager eventsManager = new EventsManager(
@@ -103,20 +93,6 @@ public class Lauren implements DiscordBot {
 
         eventsManager.load();
 
-    }
-
-    @Override
-    public void setupGuice() throws GuiceInjectorException {
-        try {
-            setInjector(Guice.createInjector(new LaurenModule(this)));
-            getInjector().injectMembers(this);
-            getInjector().injectMembers(Player.class);
-
-            getLogger().info("Setuped Guice and injeted all classes");
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            throw new GuiceInjectorException();
-        }
     }
 
     private void loadSQLTables() {

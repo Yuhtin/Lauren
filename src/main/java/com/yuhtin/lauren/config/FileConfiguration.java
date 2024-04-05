@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.config;
 
+import com.yuhtin.lauren.util.LoggerUtil;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

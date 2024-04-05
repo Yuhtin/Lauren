@@ -2,6 +2,9 @@ package com.yuhtin.lauren.util;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.yuhtin.lauren.core.music.TrackManager;
+import com.yuhtin.lauren.core.util.UserUtil;
+import com.yuhtin.lauren.module.Module;
+import com.yuhtin.lauren.module.impl.player.PlayerModule;
 import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -16,29 +19,15 @@ public class TrackUtils {
         double percent = (double) info.getPosition() / info.getInfo().length;
         int progressBars = (int) (10 * percent);
 
-        StringBuilder builder = new StringBuilder();
-        builder.append(getTimeStamp(info.getPosition())).append(" / ").append(getTimeStamp(info.getInfo().length)).append(" [");
-
-        for (int i = 0; i < progressBars; i++) {
-            builder.append("─");
-        }
-
-        builder.append("◯");
-
-        for (int i = progressBars + 1; i < 10; i++) {
-            builder.append("─");
-        }
-
-        builder.append("](").append(info.getInfo().uri).append(")");
-
-        return builder.toString();
+        return getTimeStamp(info.getPosition()) + " / " + getTimeStamp(info.getInfo().length) + " [" +
+                "─".repeat(Math.max(0, progressBars)) +
+                "◯" +
+                "─".repeat(Math.max(0, 10 - (progressBars + 1))) +
+                "](" + info.getInfo().uri + ")";
     }
 
     public static boolean isInMusicChannel(Member member) {
-        return member.getVoiceState() != null
-                && member.getVoiceState().getChannel() != null
-                && (member.getVoiceState().getChannel().getName().contains("Batidões")
-                || UserUtil.isDJ(member, null));
+        return member.getVoiceState() != null && member.getVoiceState().getChannel().getType() != null;
     }
 
     public static boolean isMusicOwner(Member member) {
