@@ -16,15 +16,15 @@ public class EmbedUtil {
 
     private static final Color DEFAULT_COLOR = new Color(57, 12, 147);
 
-    public static MessageEmbed of(String description) {
-        return create(description).build();
+    public static MessageEmbed create(String description) {
+        return of(description).build();
     }
 
-    public static EmbedBuilder create(String description) {
+    public static EmbedBuilder of(String description) {
         return new EmbedBuilder().setColor(getColor()).setDescription(description);
     }
 
-    public static EmbedBuilder create() {
+    public static EmbedBuilder empty() {
         return new EmbedBuilder().setColor(getColor());
     }
 

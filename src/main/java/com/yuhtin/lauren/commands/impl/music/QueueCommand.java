@@ -2,10 +2,9 @@ package com.yuhtin.lauren.commands.impl.music;
 
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
-import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.startup.Startup;
 import com.yuhtin.lauren.util.EmbedUtil;
-import com.yuhtin.lauren.util.TrackUtils;
+import com.yuhtin.lauren.util.MusicUtil;
 import lombok.Getter;
 import lombok.val;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -37,9 +36,9 @@ public class QueueCommand implements Command {
     public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
         if (event.getMember() == null || event.getGuild() == null) return;
 
-        val trackManager = TrackManager.of(event.getGuild());
+        val trackManager = TrackManager.getByGuild(event.getGuild());
         if (trackManager.getQueuedTracks().isEmpty()) {
-            hook.sendMessageEmbeds(EmbedUtil.of("Eita não tem nenhum batidão tocando, adiciona uns ai <3")).queue();
+            hook.sendMessageEmbeds(EmbedUtil.create("Eita não tem nenhum batidão tocando, adiciona uns ai <3")).queue();
             return;
         }
 
@@ -58,7 +57,7 @@ public class QueueCommand implements Command {
             ++i;
         }
 
-        val timeInLetter = TrackUtils.getTimeStamp(totalTime);
+        val timeInLetter = MusicUtil.getTimeStamp(totalTime);
         BUILDER.setText((number, number2) -> {
                     val stringBuilder = new StringBuilder();
                     if (trackManager.getPlayer().getPlayingTrack() != null) {
@@ -68,9 +67,9 @@ public class QueueCommand implements Command {
                                 .append("**")
                                 .append(" - ")
                                 .append("`")
-                                .append(TrackUtils.getTimeStamp(trackManager.getPlayer().getPlayingTrack().getPosition()))
+                                .append(MusicUtil.getTimeStamp(trackManager.getPlayer().getPlayingTrack().getPosition()))
                                 .append(" / ")
-                                .append(TrackUtils.getTimeStamp(trackManager.getPlayer().getPlayingTrack().getInfo().length))
+                                .append(MusicUtil.getTimeStamp(trackManager.getPlayer().getPlayingTrack().getInfo().length))
                                 .append("`")
                                 .append("\n");
                     }

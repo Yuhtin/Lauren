@@ -2,7 +2,6 @@ package com.yuhtin.lauren.commands.impl.music;
 
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
-import com.yuhtin.lauren.core.music.TrackManager;
 import lombok.val;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
@@ -22,7 +21,7 @@ public class BassBoostCommand implements Command {
                 || !UserUtil.isDJ(event.getMember(), hook)) return;
 
         val boost = event.getOption("boost").getAsString();
-        val trackManager = TrackManager.of(event.getGuild());
+        val trackManager = TrackManager.getByGuild(event.getGuild());
         switch (boost) {
 
             case "low":

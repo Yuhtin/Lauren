@@ -55,7 +55,7 @@ public class LootBoxCommand implements Command {
 
         List<LineRewardController> rewards = new ArrayList<>();
 
-        hook.sendMessageEmbeds(EmbedUtil.of("Rodando lootbox!")).setEphemeral(true).queue();
+        hook.sendMessageEmbeds(EmbedUtil.create("Rodando lootbox!")).setEphemeral(true).queue();
 
         int delay = 0;
         for (int i = 0; i < 3; i++) {

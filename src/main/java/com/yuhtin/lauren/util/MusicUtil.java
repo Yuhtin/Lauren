@@ -1,10 +1,8 @@
 package com.yuhtin.lauren.util;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.yuhtin.lauren.core.music.TrackManager;
-import com.yuhtin.lauren.core.util.UserUtil;
-import com.yuhtin.lauren.module.Module;
-import com.yuhtin.lauren.module.impl.player.PlayerModule;
+import com.yuhtin.lauren.module.impl.music.AudioInfo;
+import com.yuhtin.lauren.module.impl.music.GuildedMusicPlayer;
 import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -13,7 +11,7 @@ import net.dv8tion.jda.api.interactions.InteractionHook;
 
 import java.awt.*;
 
-public class TrackUtils {
+public class MusicUtil {
 
     public static String getProgressBar(AudioTrack info) {
         double percent = (double) info.getPosition() / info.getInfo().length;
@@ -26,28 +24,28 @@ public class TrackUtils {
                 "](" + info.getInfo().uri + ")";
     }
 
-    public static boolean isInMusicChannel(Member member) {
-        return member.getVoiceState() != null && member.getVoiceState().getChannel().getType() != null;
+    public static boolean isInVoiceChannel(Member member) {
+        return member.getVoiceState() != null && member.getVoiceState().getChannel() != null;
     }
 
     public static boolean isMusicOwner(Member member) {
-        return TrackManager.of(member.getGuild())
-                .getTrackInfo()
-                .getAuthor()
-                .equals(member);
+        AudioInfo trackInfo = TrackManager.getByGuild(member.getGuild()).getTrackInfo();
+        if (trackInfo == null) return false;
+
+        return trackInfo.getAuthorId() == member.getIdLong();
     }
 
     public static boolean isIdle(Guild guild, InteractionHook hook) {
-        if (TrackManager.of(guild).getPlayer().getPlayingTrack() == null) {
-            hook.sendMessageEmbeds(EmbedUtil.of("Eita não tem nenhum batidão tocando, adiciona uns ai <3")).queue();
+        if (TrackManager.getByGuild(guild).getPlayer().getPlayingTrack() == null) {
+            hook.sendMessageEmbeds(EmbedUtil.create("Eita não tem nenhuma música tocando, adiciona umas ai <3")).queue();
             return true;
         }
 
         return false;
     }
 
-    public static EmbedBuilder showTrackInfo(AudioTrack currentTrack, TrackManager trackManager) {
-        val isRepeating = trackManager.getTrackInfo().isRepeat() ? "`Ativa`" : "`Desativada`";
+    public static EmbedBuilder showTrackInfo(AudioTrack currentTrack, GuildedMusicPlayer player) {
+        val isRepeating = player.getTrackInfo().isRepeat() ? "`Ativa`" : "`Desativada`";
 
         return new EmbedBuilder()
                 .setColor(Color.GREEN)
@@ -58,7 +56,7 @@ public class TrackUtils {
                         "\uD83D\uDCE2 Tipo de vídeo: `" + (currentTrack.getInfo().isStream ? "Stream" : currentTrack.getInfo().title.contains("Podcast") ? "Podcast" : "Música") + "`\n" +
                         "<a:infinito:703187274912759899> Repetição: " + isRepeating + "\n" +
                         "\uD83E\uDDEC Membro que adicionou: <@" + trackManager.getTrackInfo().getAuthor().getIdLong() + ">\n" +
-                        "\uD83E\uDDEA Timeline: " + (trackManager.getPlayer().isPaused() ? "⏯️" : "⏸") + " ⏭ \uD83D\uDD0A " + TrackUtils.getProgressBar(currentTrack) + "\n" +
+                        "\uD83E\uDDEA Timeline: " + (trackManager.getPlayer().isPaused() ? "⏯️" : "⏸") + " ⏭ \uD83D\uDD0A " + MusicUtil.getProgressBar(currentTrack) + "\n" +
                         "\n" +
                         "\uD83D\uDCCC Link: [Clique aqui](" + currentTrack.getInfo().uri + ")");
     }

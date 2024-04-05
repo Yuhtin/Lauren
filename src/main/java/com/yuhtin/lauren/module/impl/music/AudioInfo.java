@@ -1,7 +1,8 @@
-package com.yuhtin.lauren.core.music;
+package com.yuhtin.lauren.module.impl.music;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.yuhtin.lauren.util.TrackUtils;
+import com.yuhtin.lauren.util.MusicUtil;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import net.dv8tion.jda.api.entities.Member;
@@ -10,16 +11,17 @@ import net.dv8tion.jda.api.entities.User;
 import java.util.HashSet;
 import java.util.Set;
 
+@Data
 public class AudioInfo {
 
     private final Set<String> skips = new HashSet<>();
-    @Getter @Setter private boolean repeat;
-    @Getter @Setter private AudioTrack track;
-    @Getter private final Member author;
+    private boolean repeat;
+    private AudioTrack track;
+    private final long authorId;
 
     public AudioInfo(AudioTrack track, Member author) {
         this.track = track;
-        this.author = author;
+        this.authorId = author.getIdLong();
     }
 
     public int getSkips() {
@@ -36,13 +38,7 @@ public class AudioInfo {
 
     @Override
     public String toString() {
-        return "`["
-                + TrackUtils.getTimeStamp(track.getDuration()) +
-                "]` **"
-                + track.getInfo().title +
-                "** - <@"
-                + author.getIdLong() +
-                ">";
+        return "`[" + MusicUtil.getTimeStamp(track.getDuration()) + "]` **" + track.getInfo().title + "** - <@" + authorId + ">";
     }
 
 }

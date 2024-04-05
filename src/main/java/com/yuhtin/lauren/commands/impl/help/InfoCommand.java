@@ -3,7 +3,6 @@ package com.yuhtin.lauren.commands.impl.help;
 import com.google.inject.Inject;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
-import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.startup.Startup;
@@ -34,7 +33,7 @@ public class InfoCommand implements Command {
         val timeCreated = bot.getTimeCreated();
 
         int musicsQueue = 0;
-        for (val trackManager : TrackManager.getGuildTrackManagers().values()) {
+        for (val trackManager : TrackManager.getCacheByGuildId().values()) {
            musicsQueue += trackManager.getQueuedTracks().size();
         }
 

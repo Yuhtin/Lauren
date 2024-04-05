@@ -22,7 +22,7 @@ public class MemeCommand implements Command {
         val connection = new GetConnectionFactory("https://apis.duncte123.me/meme");
         val response = connection.buildConnection();
         if (response == null) {
-            hook.sendMessageEmbeds(EmbedUtil.of("Deu merda na api foi mal!")).queue();
+            hook.sendMessageEmbeds(EmbedUtil.create("Deu merda na api foi mal!")).queue();
             return;
         }
 

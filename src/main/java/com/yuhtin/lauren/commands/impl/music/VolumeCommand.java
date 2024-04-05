@@ -2,7 +2,6 @@ package com.yuhtin.lauren.commands.impl.music;
 
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
-import com.yuhtin.lauren.core.music.TrackManager;
 import lombok.val;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
@@ -21,7 +20,7 @@ public class VolumeCommand implements Command {
     public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
         if (event.getMember() == null || event.getGuild() == null) return;
 
-        val trackManager = TrackManager.of(event.getGuild());
+        val trackManager = TrackManager.getByGuild(event.getGuild());
         if (!UserUtil.isDJ(event.getMember(), hook)) {
             hook.sendMessage("\uD83D\uDD0A Meu volume atual está em: `" + trackManager.getPlayer().getVolume() + "%`").queue();
             return;

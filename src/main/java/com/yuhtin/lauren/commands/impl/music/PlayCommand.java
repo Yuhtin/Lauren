@@ -2,7 +2,6 @@ package com.yuhtin.lauren.commands.impl.music;
 
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
-import com.yuhtin.lauren.core.music.TrackManager;
 import lombok.val;
 import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -23,7 +22,7 @@ public class PlayCommand implements Command {
         if (event.getMember() == null || event.getGuild() == null) return;
 
         val channel = event.getMember().getVoiceState().getChannel();
-        val trackManager = TrackManager.of(event.getGuild());
+        val trackManager = TrackManager.getByGuild(event.getGuild());
 
         if (trackManager.getAudio() != null && !trackManager.getAudio().equals(channel)) {
             var lauren = false;
@@ -43,7 +42,7 @@ public class PlayCommand implements Command {
         var input = event.getOption("musica").getAsString();
         input = input.contains("http") ? input : "ytsearch: " + input;
 
-        trackManager.loadTrack(input, event.getMember(), hook, TrackManager.SearchType.SIMPLE_SEARCH);
+        trackManager.loadTrack(input, event.getMember(), hook, MusicSearchType.SIMPLE_SEARCH);
         trackManager.setTextChannel(event.getTextChannel());
     }
 

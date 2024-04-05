@@ -3,7 +3,7 @@ package com.yuhtin.lauren.guice;
 import com.google.inject.AbstractModule;
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.core.music.AudioResultHandler;
+import com.yuhtin.lauren.module.impl.music.MusicSearchEngine;
 import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.models.objects.Config;
 import com.yuhtin.lauren.models.objects.EventWaiter;
@@ -31,7 +31,7 @@ public class LaurenModule extends AbstractModule {
         bind(Config.class).toInstance(lauren.getConfig());
 
         requestStaticInjection(GetConnectionFactory.class);
-        requestStaticInjection(AudioResultHandler.class);
+        requestStaticInjection(MusicSearchEngine.class);
         requestStaticInjection(Player.class);
         requestStaticInjection(PostConnectionFactory.class);
         requestStaticInjection(UserUtil.class);

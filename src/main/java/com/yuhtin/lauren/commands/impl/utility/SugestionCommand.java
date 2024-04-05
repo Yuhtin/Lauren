@@ -63,7 +63,7 @@ public class SugestionCommand implements Command {
                 .build();
 
         builder.getMessage().addReaction("a:nao:704295026036834375").complete();
-        hook.sendMessageEmbeds(EmbedUtil.of("<a:sim:704295025374265387> Continue a operação em sua DM")).queue();
+        hook.sendMessageEmbeds(EmbedUtil.create("<a:sim:704295025374265387> Continue a operação em sua DM")).queue();
 
         builder.setStage(SugestionStage.SUGESTION);
         sugestionMap.put(userID, builder);

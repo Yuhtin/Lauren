@@ -2,9 +2,8 @@ package com.yuhtin.lauren.commands.impl.music;
 
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
-import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.util.TimeUtils;
-import com.yuhtin.lauren.util.TrackUtils;
+import com.yuhtin.lauren.util.MusicUtil;
 import lombok.val;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
@@ -28,7 +27,7 @@ public class JumpToTimeCommand implements Command {
     public void execute(CommandInteraction event, InteractionHook hook) {
         if (event.getGuild() == null
                 || event.getMember() == null
-                || TrackUtils.isIdle(event.getGuild(), hook)
+                || MusicUtil.isIdle(event.getGuild(), hook)
                 || !UserUtil.isDJ(event.getMember(), hook)) return;
 
         val args = event.getOption("tempo").getAsString();
@@ -58,7 +57,7 @@ public class JumpToTimeCommand implements Command {
             millis = hoursInMillis + minutesInMillis + secondsInMillis;
         }
 
-        val track = TrackManager.of(event.getGuild()).getTrackInfo().getTrack();
+        val track = TrackManager.getByGuild(event.getGuild()).getTrackInfo().getTrack();
         long duration = track.getDuration();
         if (millis > duration) {
             hook.sendMessage("<:pensando:781761324547309594> A música é menor que o tempo inserido, se quiser skipar use `$skip`").queue();

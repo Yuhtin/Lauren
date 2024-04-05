@@ -24,7 +24,7 @@ public final class CommandCatcher extends ListenerAdapter {
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
         if (event.getChannel().getType() != ChannelType.TEXT) {
-            event.replyEmbeds(EmbedUtil.of("Você só pode usar meus comandos em servidores.")).queue();
+            event.replyEmbeds(EmbedUtil.create("Você só pode usar meus comandos em servidores.")).queue();
             return;
         }
 

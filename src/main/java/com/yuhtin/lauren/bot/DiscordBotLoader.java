@@ -1,6 +1,5 @@
 package com.yuhtin.lauren.bot;
 
-import com.yuhtin.lauren.core.music.AudioPlayerSendHandler;
 import com.yuhtin.lauren.util.EnvWrapper;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.hooks.AnnotatedEventManager;

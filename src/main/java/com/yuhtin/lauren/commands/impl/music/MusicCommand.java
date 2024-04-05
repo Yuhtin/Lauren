@@ -1,9 +1,8 @@
 package com.yuhtin.lauren.commands.impl.music;
 
 import com.yuhtin.lauren.commands.Command;
-import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.commands.CommandInfo;
-import com.yuhtin.lauren.util.TrackUtils;
+import com.yuhtin.lauren.util.MusicUtil;
 import lombok.val;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
@@ -19,14 +18,14 @@ public class MusicCommand implements Command {
     public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
         if (event.getGuild() == null
                 || event.getMember() == null
-                || TrackUtils.isIdle(event.getGuild(), hook)) return;
+                || MusicUtil.isIdle(event.getGuild(), hook)) return;
 
-        val trackManager = TrackManager.of(event.getGuild());
+        val trackManager = TrackManager.getByGuild(event.getGuild());
         val track = trackManager.getPlayer().getPlayingTrack();
 
         trackManager.tryDeleteLastMessage();
 
-        hook.sendMessageEmbeds(TrackUtils.showTrackInfo(track, trackManager).build()).queue(messsage -> {
+        hook.sendMessageEmbeds(MusicUtil.showTrackInfo(track, trackManager).build()).queue(messsage -> {
             trackManager.setTextChannel(messsage.getTextChannel());
             trackManager.setLastInfoMessageId(messsage.getIdLong());
         });
