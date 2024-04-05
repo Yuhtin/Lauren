@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.utils;
+package com.yuhtin.lauren.util;
 
 import javax.management.Attribute;
 import javax.management.AttributeList;
@@ -12,11 +12,11 @@ import java.text.StringCharacterIterator;
  * @author Yuhtin
  * Github: https://github.com/Yuhtin
  */
-public class SystemStatsUtils {
+public class SystemUtil {
 
     /**
-     * Get cpu load
-     * https://stackoverflow.com/a/21962037
+     * Get cpu load <p>
+     * <a href="https://stackoverflow.com/a/21962037">Source</a>
      *
      * @return cpu load in %
      */

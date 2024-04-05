@@ -3,7 +3,6 @@ package com.yuhtin.lauren.sql.provider.document.parser.impl;
 import com.yuhtin.lauren.core.statistics.StatsInfo;
 import com.yuhtin.lauren.sql.provider.document.Document;
 import com.yuhtin.lauren.sql.provider.document.parser.DocumentParser;
-import com.yuhtin.lauren.utils.Serializer;
 import lombok.Getter;
 
 /**

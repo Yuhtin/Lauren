@@ -4,7 +4,6 @@ import com.google.inject.Singleton;
 import com.yuhtin.lauren.core.statistics.StatsInfo;
 import com.yuhtin.lauren.sql.provider.DatabaseProvider;
 import com.yuhtin.lauren.sql.provider.document.parser.impl.StatisticDocumentParser;
-import com.yuhtin.lauren.utils.Serializer;
 
 import java.util.List;
 import java.util.stream.Collectors;

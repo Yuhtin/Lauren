@@ -4,12 +4,10 @@ import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.Paginator;
-import com.yuhtin.lauren.utils.SimpleEmbed;
-import com.yuhtin.lauren.utils.TrackUtils;
+import com.yuhtin.lauren.util.EmbedUtil;
+import com.yuhtin.lauren.util.TrackUtils;
 import lombok.Getter;
 import lombok.val;
-import lombok.var;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
@@ -41,7 +39,7 @@ public class QueueCommand implements Command {
 
         val trackManager = TrackManager.of(event.getGuild());
         if (trackManager.getQueuedTracks().isEmpty()) {
-            hook.sendMessageEmbeds(SimpleEmbed.of("Eita não tem nenhum batidão tocando, adiciona uns ai <3")).queue();
+            hook.sendMessageEmbeds(EmbedUtil.of("Eita não tem nenhum batidão tocando, adiciona uns ai <3")).queue();
             return;
         }
 

@@ -3,11 +3,9 @@ package com.yuhtin.lauren.commands.impl.music;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.core.music.TrackManager;
-import com.yuhtin.lauren.utils.TimeUtils;
-import com.yuhtin.lauren.utils.TrackUtils;
-import com.yuhtin.lauren.utils.UserUtil;
+import com.yuhtin.lauren.util.TimeUtils;
+import com.yuhtin.lauren.util.TrackUtils;
 import lombok.val;
-import lombok.var;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 

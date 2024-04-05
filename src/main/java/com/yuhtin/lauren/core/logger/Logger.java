@@ -2,10 +2,8 @@ package com.yuhtin.lauren.core.logger;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.yuhtin.lauren.core.logger.controller.LoggerController;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.LogUtils;
 import lombok.val;
 
 import java.time.LocalDateTime;

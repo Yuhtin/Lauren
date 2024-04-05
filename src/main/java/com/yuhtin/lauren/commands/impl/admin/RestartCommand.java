@@ -5,7 +5,6 @@ import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.UserUtil;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 

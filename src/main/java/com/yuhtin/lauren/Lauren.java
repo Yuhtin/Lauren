@@ -2,6 +2,7 @@ package com.yuhtin.lauren;
 
 import com.google.inject.Guice;
 import com.google.inject.Inject;
+import com.yuhtin.lauren.bot.DiscordBot;
 import com.yuhtin.lauren.commands.CommandCatcher;
 import com.yuhtin.lauren.commands.CommandRegistry;
 import com.yuhtin.lauren.core.bot.LaurenDAO;
@@ -22,8 +23,8 @@ import com.yuhtin.lauren.service.LocaleManager;
 import com.yuhtin.lauren.sql.dao.PlayerDAO;
 import com.yuhtin.lauren.sql.dao.StatisticDAO;
 import com.yuhtin.lauren.tasks.*;
-import com.yuhtin.lauren.utils.FileUtil;
-import com.yuhtin.lauren.utils.TaskHelper;
+import com.yuhtin.lauren.util.FileUtil;
+import com.yuhtin.lauren.util.TaskHelper;
 import lombok.Getter;
 import lombok.val;
 import net.dv8tion.jda.api.JDABuilder;
@@ -35,6 +36,7 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import javax.security.auth.login.LoginException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -42,7 +44,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipOutputStream;
 
 @Getter
-public final class Lauren extends LaurenDAO {
+public final class Lauren implements DiscordBot {
 
     // DAO's
     @Inject private PlayerDAO playerDAO;
@@ -64,10 +66,6 @@ public final class Lauren extends LaurenDAO {
     @Inject private ShopEmbed shopEmbed;
 
     @Getter private Guild guild;
-
-    public Lauren(String botName) {
-        setBotName(botName);
-    }
 
     @Override
     public void onLoad() throws Exception {
@@ -141,7 +139,7 @@ public final class Lauren extends LaurenDAO {
                 val zipFileOutput = new ZipOutputStream(outputStream);
 
                 FileUtil.writeToZip(file, zipFileOutput);
-                FileUtil.cleanUp(Paths.get(file.getPath()));
+                Files.delete(Paths.get(file.getPath()));
 
                 zipFileOutput.close();
                 outputStream.close();

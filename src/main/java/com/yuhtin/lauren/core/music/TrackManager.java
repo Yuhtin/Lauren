@@ -18,7 +18,7 @@ import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.TrackUtils;
+import com.yuhtin.lauren.util.TrackUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

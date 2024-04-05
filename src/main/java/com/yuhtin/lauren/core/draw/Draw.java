@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.core.draw;
 
 import com.yuhtin.lauren.core.draw.controller.DrawController;
-import com.yuhtin.lauren.utils.TimeUtils;
+import com.yuhtin.lauren.util.TimeUtils;
 import lombok.AllArgsConstructor;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;

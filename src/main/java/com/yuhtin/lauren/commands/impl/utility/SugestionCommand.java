@@ -7,11 +7,9 @@ import com.yuhtin.lauren.models.enums.SugestionStage;
 import com.yuhtin.lauren.models.objects.EventWaiter;
 import com.yuhtin.lauren.models.objects.Sugestion;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.SimpleEmbed;
-import com.yuhtin.lauren.utils.UserUtil;
+import com.yuhtin.lauren.util.EmbedUtil;
 import lombok.Setter;
 import lombok.val;
-import lombok.var;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -65,7 +63,7 @@ public class SugestionCommand implements Command {
                 .build();
 
         builder.getMessage().addReaction("a:nao:704295026036834375").complete();
-        hook.sendMessageEmbeds(SimpleEmbed.of("<a:sim:704295025374265387> Continue a operação em sua DM")).queue();
+        hook.sendMessageEmbeds(EmbedUtil.of("<a:sim:704295025374265387> Continue a operação em sua DM")).queue();
 
         builder.setStage(SugestionStage.SUGESTION);
         sugestionMap.put(userID, builder);

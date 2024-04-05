@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.utils;
+package com.yuhtin.lauren.util;
 
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;

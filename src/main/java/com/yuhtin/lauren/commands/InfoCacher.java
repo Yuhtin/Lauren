@@ -1,7 +1,6 @@
 package com.yuhtin.lauren.commands;
 
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.LazyInstance;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.val;

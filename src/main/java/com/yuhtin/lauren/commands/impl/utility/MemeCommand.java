@@ -3,7 +3,7 @@ package com.yuhtin.lauren.commands.impl.utility;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.service.GetConnectionFactory;
-import com.yuhtin.lauren.utils.SimpleEmbed;
+import com.yuhtin.lauren.util.EmbedUtil;
 import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -22,7 +22,7 @@ public class MemeCommand implements Command {
         val connection = new GetConnectionFactory("https://apis.duncte123.me/meme");
         val response = connection.buildConnection();
         if (response == null) {
-            hook.sendMessageEmbeds(SimpleEmbed.of("Deu merda na api foi mal!")).queue();
+            hook.sendMessageEmbeds(EmbedUtil.of("Deu merda na api foi mal!")).queue();
             return;
         }
 

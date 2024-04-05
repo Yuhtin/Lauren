@@ -7,7 +7,7 @@ import com.yuhtin.lauren.core.player.SimplePlayer;
 import com.yuhtin.lauren.core.player.serializer.PlayerSerializer;
 import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.sql.connection.SQLConnection;
-import com.yuhtin.lauren.utils.TaskHelper;
+import com.yuhtin.lauren.util.TaskHelper;
 import lombok.Getter;
 import lombok.val;
 

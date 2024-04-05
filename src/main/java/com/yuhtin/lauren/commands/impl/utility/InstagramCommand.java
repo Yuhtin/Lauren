@@ -4,8 +4,8 @@ import com.google.inject.Inject;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.core.statistics.StatsController;
-import com.yuhtin.lauren.utils.SimpleEmbed;
-import com.yuhtin.lauren.utils.TimeUtils;
+import com.yuhtin.lauren.util.EmbedUtil;
+import com.yuhtin.lauren.util.TimeUtils;
 import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -87,7 +87,7 @@ public class InstagramCommand implements Command {
             val lastPost = edges.isEmpty() ? "" : edges.getJSONObject(0).getJSONObject("node").getString("display_url");
 
             val embed = new EmbedBuilder();
-            embed.setColor(SimpleEmbed.getColor());
+            embed.setColor(EmbedUtil.getColor());
             embed.setTitle("Instagram de " + fullName, "https://www.instagram.com/" + username);
             embed.setThumbnail(picture);
             embed.setImage(lastPost);

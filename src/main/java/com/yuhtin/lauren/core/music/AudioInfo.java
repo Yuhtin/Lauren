@@ -1,7 +1,7 @@
 package com.yuhtin.lauren.core.music;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.yuhtin.lauren.utils.TrackUtils;
+import com.yuhtin.lauren.util.TrackUtils;
 import lombok.Getter;
 import lombok.Setter;
 import net.dv8tion.jda.api.entities.Member;

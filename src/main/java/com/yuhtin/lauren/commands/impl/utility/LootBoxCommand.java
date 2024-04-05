@@ -6,8 +6,8 @@ import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.enums.Reward;
-import com.yuhtin.lauren.utils.SimpleEmbed;
-import com.yuhtin.lauren.utils.TaskHelper;
+import com.yuhtin.lauren.util.EmbedUtil;
+import com.yuhtin.lauren.util.TaskHelper;
 import lombok.Getter;
 import lombok.val;
 import net.dv8tion.jda.api.entities.Message;
@@ -55,7 +55,7 @@ public class LootBoxCommand implements Command {
 
         List<LineRewardController> rewards = new ArrayList<>();
 
-        hook.sendMessageEmbeds(SimpleEmbed.of("Rodando lootbox!")).setEphemeral(true).queue();
+        hook.sendMessageEmbeds(EmbedUtil.of("Rodando lootbox!")).setEphemeral(true).queue();
 
         int delay = 0;
         for (int i = 0; i < 3; i++) {

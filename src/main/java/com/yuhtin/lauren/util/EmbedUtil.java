@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.utils;
+package com.yuhtin.lauren.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import java.awt.*;
  * Github: https://github.com/Yuhtin
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class SimpleEmbed {
+public class EmbedUtil {
 
     private static final Color DEFAULT_COLOR = new Color(57, 12, 147);
 

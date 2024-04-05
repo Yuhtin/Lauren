@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.utils;
+package com.yuhtin.lauren.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.zip.ZipOutputStream;
 public class FileUtil {
 
     public static void cleanUp(Path path) throws IOException {
-        Files.delete(path);
+
     }
 
     public static void writeToZip(File file, ZipOutputStream zipStream) throws IOException {

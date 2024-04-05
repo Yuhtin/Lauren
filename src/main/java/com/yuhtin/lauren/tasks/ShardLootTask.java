@@ -1,17 +1,13 @@
 package com.yuhtin.lauren.tasks;
 
 import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.models.objects.EventWaiter;
-import com.yuhtin.lauren.utils.TaskHelper;
-import com.yuhtin.lauren.utils.UserUtil;
+import com.yuhtin.lauren.util.TaskHelper;
 import lombok.AllArgsConstructor;
 import lombok.val;
-import lombok.var;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;

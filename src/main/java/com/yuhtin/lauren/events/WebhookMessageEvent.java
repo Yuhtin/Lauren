@@ -2,7 +2,6 @@ package com.yuhtin.lauren.events;
 
 import com.google.inject.Inject;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.utils.Serializer;
 import lombok.val;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;

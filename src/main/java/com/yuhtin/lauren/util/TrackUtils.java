@@ -1,9 +1,8 @@
-package com.yuhtin.lauren.utils;
+package com.yuhtin.lauren.util;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.yuhtin.lauren.core.music.TrackManager;
 import lombok.val;
-import lombok.var;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -51,7 +50,7 @@ public class TrackUtils {
 
     public static boolean isIdle(Guild guild, InteractionHook hook) {
         if (TrackManager.of(guild).getPlayer().getPlayingTrack() == null) {
-            hook.sendMessageEmbeds(SimpleEmbed.of("Eita não tem nenhum batidão tocando, adiciona uns ai <3")).queue();
+            hook.sendMessageEmbeds(EmbedUtil.of("Eita não tem nenhum batidão tocando, adiciona uns ai <3")).queue();
             return true;
         }
 

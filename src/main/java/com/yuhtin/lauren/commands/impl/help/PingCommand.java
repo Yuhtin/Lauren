@@ -5,7 +5,7 @@ import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.service.LocaleManager;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.SystemStatsUtils;
+import com.yuhtin.lauren.util.SystemUtil;
 import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -54,11 +54,11 @@ public class PingCommand implements Command {
                 .setTimestamp(Instant.now())
                 .addField("", "\uD83D\uDDA5 Informações do Host", false)
                 .addField("\uD83D\uDEE2 Núcleos disponíveis:", "`" + Runtime.getRuntime().availableProcessors() + " cores ("
-                        + SystemStatsUtils.getProcessCpuLoad() + "%)`", true)
+                        + SystemUtil.getProcessCpuLoad() + "%)`", true)
                 .addField("\uD83C\uDF9E Memória RAM", "`"
-                        + SystemStatsUtils.usedMemory() +
+                        + SystemUtil.usedMemory() +
                         "M/"
-                        + SystemStatsUtils.totalMemory() + "M`", true)
+                        + SystemUtil.totalMemory() + "M`", true)
                 .addField("\uD83D\uDD2E Sistema Operacional", "`" + System.getProperty("os.name") + "`", true)
                 .addField("\uD83D\uDED2 Empresa fornecedora:", "[HypeHost - Hospedagem Minecraft e VPS](https://hypehost.com.br)", true)
                 .addField("\uD83E\uDDEA Local do Host", "`" + this.localeManager.buildMessage() + "`", true)

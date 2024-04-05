@@ -2,7 +2,6 @@ package com.yuhtin.lauren.models.objects;
 
 import com.yuhtin.lauren.models.enums.SugestionStage;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.UserUtil;
 import lombok.Builder;
 import lombok.Data;
 import lombok.val;

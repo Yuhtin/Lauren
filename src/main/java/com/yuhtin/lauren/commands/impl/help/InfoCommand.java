@@ -7,8 +7,8 @@ import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.SystemStatsUtils;
-import com.yuhtin.lauren.utils.TimeUtils;
+import com.yuhtin.lauren.util.SystemUtil;
+import com.yuhtin.lauren.util.TimeUtils;
 import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -68,8 +68,8 @@ public class InfoCommand implements Command {
                 .addField("⚙️ Núcleos", "`" + Runtime.getRuntime().availableProcessors() + " cores`", true)
                 .addField("\uD83D\uDEE2 Banco de Dados", "`MongoDB`", true)
                 .addField("\uD83C\uDF9E RAM", "`"
-                        + SystemStatsUtils.usedMemory() + "/"
-                        + SystemStatsUtils.totalMemory() + "`", true)
+                        + SystemUtil.usedMemory() + "/"
+                        + SystemUtil.totalMemory() + "`", true)
 
                 .setFooter("Mais informações em /ping", event.getUser().getAvatarUrl())
                 .setColor(event.getMember().getColor())

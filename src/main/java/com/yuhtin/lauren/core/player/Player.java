@@ -8,11 +8,9 @@ import com.yuhtin.lauren.core.statistics.StatsController;
 import com.yuhtin.lauren.core.xp.XpController;
 import com.yuhtin.lauren.models.enums.Rank;
 import com.yuhtin.lauren.startup.Startup;
-import com.yuhtin.lauren.utils.UserUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.val;
-import lombok.var;
 
 import java.io.Serializable;
 import java.util.ArrayList;
