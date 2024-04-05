@@ -1,6 +1,8 @@
 package com.yuhtin.lauren.core.player;
 
 import com.google.inject.Inject;
+import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.Startup;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.impl.Entity;
 import com.yuhtin.lauren.core.punish.PunishmentType;
@@ -11,6 +13,7 @@ import com.yuhtin.lauren.startup.Startup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.val;
+import net.dv8tion.jda.api.entities.Guild;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,10 +27,6 @@ public class Player
         extends Entity
         implements Serializable {
 
-    @Inject private static Logger logger;
-    @Inject private static StatsController statsController;
-    @Inject private static XpController xpController;
-
     private Map<PunishmentType, Long> punishs = new HashMap<>();
 
     // Geral
@@ -38,9 +37,9 @@ public class Player
     private int level = 0;
     private int money = 100;
     private int lootBoxes = 0;
-    private int rankedPoints = 0;
     private int totalEvents = 0;
     private int keys = 0;
+    private int rankedPoints = 0;
 
     private boolean hideLevelOnNickname = false;
 
@@ -80,25 +79,24 @@ public class Player
 
         }
 
+        Lauren lauren = Startup.getLauren();
+        Guild guild = lauren.getGuild();
+
         if (rolesToGive != null && !rolesToGive.isEmpty()) {
-
             for (val roleID : rolesToGive) {
-
-                val role = Startup.getLauren().getGuild().getRoleById(roleID);
+                val role = guild.getRoleById(roleID);
                 if (role == null) {
-
                     logger.warning("Role is null");
                     continue;
-
                 }
 
-                Startup.getLauren().getGuild().addRoleToMember(userID, role).queue();
+                guild.addRoleToMember(userID, role).queue();
 
             }
 
             for (val roleID : rolesToRemove) {
 
-                val role = Startup.getLauren().getGuild().getRoleById(roleID);
+                val role = guild.getRoleById(roleID);
                 if (role == null) {
 
                     logger.warning("Role is null");
@@ -106,7 +104,7 @@ public class Player
 
                 }
 
-                Startup.getLauren().getGuild().removeRoleFromMember(userID, role).queue();
+                guild.removeRoleFromMember(userID, role).queue();
 
             }
         }
@@ -120,7 +118,7 @@ public class Player
 
         }
 
-        val channel = Startup.getLauren().getGuild().getTextChannelById(770393139516932158L);
+        val channel = guild.getTextChannelById(770393139516932158L);
         if (channel != null) {
 
             channel.sendMessage(message).queue();

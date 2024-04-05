@@ -9,10 +9,10 @@ import java.io.InputStreamReader;
 
 public class Startup {
 
-    @Getter private static String enviroment;
+    @Getter private static Lauren lauren;
 
     public static void main(String[] args) throws IOException {
-        Lauren lauren = new Lauren();
+        lauren = new Lauren();
         DiscordBotLoader.connect(lauren);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {

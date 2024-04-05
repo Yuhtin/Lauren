@@ -2,7 +2,6 @@ package com.yuhtin.lauren.core.xp;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.yuhtin.lauren.sql.dao.ExperienceDAO;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -10,12 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Singleton
 public class XpController {
 
     @Getter private final Map<Integer, Level> levelByXp = new HashMap<>();
-
-    @Inject private ExperienceDAO experienceDAO;
 
     public void load() {
 
@@ -37,13 +33,10 @@ public class XpController {
             acumulated = acumulated + (level - 1) * experiencePerLevel;
             int experience = experienceBase + acumulated;
 
-            Level levelBuild = Level.builder()
-                    .miniumExperience(experience)
-                    .build();
+            Level levelObject = new Level(level, experience);
 
-            levelBuild.getRolesToGive().addAll(levelRewards.getOrDefault(level, new ArrayList<>()));
-            levelByXp.put(level, levelBuild);
-
+            levelObject.getRolesToGive().addAll(levelRewards.getOrDefault(level, new ArrayList<>()));
+            levelByXp.put(level, levelObject);
         }
     }
 

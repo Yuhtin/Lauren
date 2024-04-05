@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.player.Player;
-import com.yuhtin.lauren.sql.dao.PlayerDAO;
 import com.yuhtin.lauren.util.TaskHelper;
 import lombok.Getter;
 import lombok.val;
