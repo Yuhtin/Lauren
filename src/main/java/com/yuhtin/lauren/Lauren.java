@@ -6,6 +6,7 @@ import com.yuhtin.lauren.bot.DiscordBot;
 import com.yuhtin.lauren.commands.CommandCatcher;
 import com.yuhtin.lauren.commands.CommandRegistry;
 import com.yuhtin.lauren.core.bot.LaurenDAO;
+import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.core.logger.controller.LoggerController;
 import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.core.player.Player;
@@ -23,10 +24,14 @@ import com.yuhtin.lauren.service.LocaleManager;
 import com.yuhtin.lauren.sql.dao.PlayerDAO;
 import com.yuhtin.lauren.sql.dao.StatisticDAO;
 import com.yuhtin.lauren.tasks.*;
+import com.yuhtin.lauren.util.EnvWrapper;
 import com.yuhtin.lauren.util.FileUtil;
+import com.yuhtin.lauren.util.LoggerUtil;
 import com.yuhtin.lauren.util.TaskHelper;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -41,35 +46,25 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 import java.util.zip.ZipOutputStream;
 
 @Getter
-public final class Lauren implements DiscordBot {
+@RequiredArgsConstructor
+public class Lauren implements DiscordBot {
 
-    // DAO's
-    @Inject private PlayerDAO playerDAO;
-    @Inject private StatisticDAO statisticDAO;
+    private final Logger logger = Logger.getLogger("JungleDiscordBot");
+    private final long startupTime = System.currentTimeMillis();
 
-    // Controllers
-    @Inject private XpController xpController;
-    @Inject private PlayerController playerController;
-    @Inject private StatsController statsController;
-    @Inject private LoggerController loggerController;
-    @Inject private CommandCatcher commandCatcher;
-
-    // Managers
-    @Inject private LocaleManager localeManager;
-    @Inject private TimerManager timerManager;
-
-    // Others
-    @Inject private TopXpUpdater topXpUpdater;
-    @Inject private ShopEmbed shopEmbed;
-
-    @Getter private Guild guild;
+    private JDA jda;
+    private Guild guild;
+    private boolean debugMode;
 
     @Override
-    public void onLoad() throws Exception {
-        setBotStartTime(System.currentTimeMillis());
+    public void onLoad() {
+        debugMode = EnvWrapper.isDebugMode();
+        LoggerUtil.formatLogger(debugMode);
+
         setupConfig();
 
         configureConnection();
@@ -84,7 +79,6 @@ public final class Lauren implements DiscordBot {
 
     @Override
     public void onEnable() throws Exception {
-
         loadSQLTables();
 
         loadCommands();
@@ -94,7 +88,6 @@ public final class Lauren implements DiscordBot {
         localeManager.searchHost(getConfig().getGeoIpAccessKey());
 
         shopEmbed.build();
-
     }
 
     @Override
@@ -107,61 +100,12 @@ public final class Lauren implements DiscordBot {
 
     @Override
     public void onDisable() {
-        try {
-            val connection = getSqlConnection().findConnection();
-            if (connection != null) {
-                if (!connection.isClosed()) {
-                    playerController.savePlayers();
-                    statsController.getStats().values().forEach(statisticDAO::updateStatistic);
+        logger.info("Stopping bot...");
 
-                    getLogger().info("Saved player's and statistic's data");
-                } else {
-                    getLogger().warning("SQLConnection is closed, reconfiguring");
-                    configureConnection();
+        ModuleManager.unloadAll();
 
-                    getLogger().info("Executing onDisable again");
-                    onDisable();
-                    return;
-                }
-            }
-
-            TrackManager.getGuildTrackManagers().values().forEach(TrackManager::destroy);
-            getLogger().info("Destroyed all track managers");
-
-            val now = LocalDateTime.now();
-            if (loggerController != null) {
-                val file = loggerController.getFile();
-
-                getLogger().log("Compressing the log '" + file.getName() + "' to a zip file", LogType.FINISH);
-                getLogger().log("Ending log at " + now.getHour() + "h " + now.getMinute() + "m " + now.getSecond() + "s", LogType.FINISH);
-
-                val outputStream = new FileOutputStream(file.getPath().split("\\.")[0] + ".zip");
-                val zipFileOutput = new ZipOutputStream(outputStream);
-
-                FileUtil.writeToZip(file, zipFileOutput);
-                Files.delete(Paths.get(file.getPath()));
-
-                zipFileOutput.close();
-                outputStream.close();
-
-                getLogger().info("Zipped last log file successfully");
-            }
-
-            getLogger().info(getBotName() + " disabled");
-        } catch (Exception ignored) {
-        }
-    }
-
-    @Override
-    public void connectDiscord() throws LoginException {
-        val jdaBuilder = JDABuilder.createDefault(getConfig().getToken())
-                .setMemberCachePolicy(MemberCachePolicy.ALL)
-                .setChunkingFilter(ChunkingFilter.ALL)
-                .enableIntents(Arrays.asList(GatewayIntent.values()))
-                .setAutoReconnect(true)
-                .addEventListeners(new BotReadyEvent(this), commandCatcher);
-
-        setBot(jdaBuilder.build());
+        logger.info("Goodbye, cruel world!");
+        logger.info("Bot disabled!");
     }
 
     @Override

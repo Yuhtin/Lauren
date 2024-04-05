@@ -31,6 +31,8 @@ dependencies {
     implementation("org.mongodb:mongodb-driver-sync:4.11.0")
     implementation("com.github.ben-manes.caffeine:caffeine:3.0.4")
 
+    implementation("dev.arbjerg:lavaplayer:2.1.1")
+
     implementation("com.google.code.gson:gson:2.10.1")
 
     implementation("org.projectlombok:lombok:1.18.22")
