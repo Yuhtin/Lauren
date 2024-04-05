@@ -1,55 +1,30 @@
 package com.yuhtin.lauren;
 
-import com.google.inject.Guice;
-import com.google.inject.Inject;
 import com.yuhtin.lauren.bot.DiscordBot;
-import com.yuhtin.lauren.commands.CommandCatcher;
 import com.yuhtin.lauren.commands.CommandRegistry;
-import com.yuhtin.lauren.core.bot.LaurenDAO;
-import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.core.logger.controller.LoggerController;
-import com.yuhtin.lauren.core.music.TrackManager;
 import com.yuhtin.lauren.core.player.Player;
-import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.core.statistics.StatsController;
-import com.yuhtin.lauren.core.xp.XpController;
-import com.yuhtin.lauren.events.BotReadyEvent;
 import com.yuhtin.lauren.guice.LaurenModule;
 import com.yuhtin.lauren.manager.EventsManager;
-import com.yuhtin.lauren.manager.TimerManager;
-import com.yuhtin.lauren.models.embeds.ShopEmbed;
-import com.yuhtin.lauren.models.enums.LogType;
 import com.yuhtin.lauren.models.exceptions.GuiceInjectorException;
-import com.yuhtin.lauren.service.LocaleManager;
-import com.yuhtin.lauren.sql.dao.PlayerDAO;
-import com.yuhtin.lauren.sql.dao.StatisticDAO;
-import com.yuhtin.lauren.tasks.*;
+import com.yuhtin.lauren.tasks.AutoSaveTask;
+import com.yuhtin.lauren.tasks.LootGeneratorTask;
+import com.yuhtin.lauren.tasks.ShardLootTask;
+import com.yuhtin.lauren.tasks.TimerCheckerTask;
 import com.yuhtin.lauren.util.EnvWrapper;
-import com.yuhtin.lauren.util.FileUtil;
 import com.yuhtin.lauren.util.LoggerUtil;
 import com.yuhtin.lauren.util.TaskHelper;
+import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.dv8tion.jda.api.utils.ChunkingFilter;
-import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
-import javax.security.auth.login.LoginException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
-import java.util.zip.ZipOutputStream;
 
-@Getter
+@Data
 @RequiredArgsConstructor
 public class Lauren implements DiscordBot {
 
