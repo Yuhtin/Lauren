@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandInfo(
         name = "exp",
-        type = CommandInfo.CommandType.CONFIG,
+        type = CommandType.CONFIG,
         description = "Alterar o exp de um jogador",
         args = {
                 "<option>-Use add, remove ou set.",

@@ -15,7 +15,7 @@ import java.time.Instant;
 
 @CommandInfo(
         name = "perfil",
-        type = CommandInfo.CommandType.SCRIM,
+        type = CommandType.SCRIM,
         description = "Visualizar o seu perfil ou de outro usuário",
         args = {
                 "[@user]-Usuário que você deseja ver o perfil"
@@ -51,7 +51,7 @@ public class ProfileCommand implements Command {
         embed.addField("🧶 Cargos", "`" + (roles.equalsIgnoreCase("") ? "Nenhum" : roles) + "`", false);
         embed.addField("✨ Entrou em", DateUtil.format(target.getTimeJoined().toEpochSecond()), false);
         embed.addField("\uD83D\uDC7E Eventos", "`" + player.getTotalEvents() + "`", false);
-        embed.addField("<:boost_emoji:772285522852839445> Shards", "`$" + NumberUtils.format(player.getMoney()) + " shards`", true);
+        embed.addField("<:boost_emoji:772285522852839445> Shards", "`" + NumberUtils.format(player.getMoney()) + " shards`", true);
         embed.addField("<:beacon:771543538252120094> Patente", "`" + player.getRank().getName() + "`", true);
         embed.addField("<:lootbox:771545027829563402> LootBoxes", "`" + player.getLootBoxes() + " caixas`", true);
         embed.addField("\uD83D\uDD11 Chaves", "`" + player.getKeys() + " keys`", true);

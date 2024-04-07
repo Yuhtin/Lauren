@@ -1,11 +1,9 @@
 package com.yuhtin.lauren.events;
 
 import com.google.inject.Inject;
-import com.yuhtin.lauren.core.player.Player;
 import com.yuhtin.lauren.core.player.controller.PlayerController;
 import com.yuhtin.lauren.startup.Startup;
 import lombok.val;
-import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateBoostTimeEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;

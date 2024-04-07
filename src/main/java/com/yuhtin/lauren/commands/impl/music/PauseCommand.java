@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandInfo(
         name = "pause",
-        type = CommandInfo.CommandType.MUSIC,
+        type = CommandType.MUSIC,
         description = "Pausar a música atual"
 )
 public class PauseCommand implements Command {

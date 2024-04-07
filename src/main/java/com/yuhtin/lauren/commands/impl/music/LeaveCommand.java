@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandInfo(
         name = "quit",
-        type = CommandInfo.CommandType.MUSIC,
+        type = CommandType.MUSIC,
         description = "Sair do canal de voz e parar o batidão"
 )
 public class LeaveCommand implements Command {

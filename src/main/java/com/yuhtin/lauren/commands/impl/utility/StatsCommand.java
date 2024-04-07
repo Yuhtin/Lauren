@@ -16,7 +16,7 @@ import java.util.Date;
 
 @CommandInfo(
         name = "stats",
-        type = CommandInfo.CommandType.UTILITY,
+        type = CommandType.UTILITY,
         description = "Estatísticas de alguns sistemas meus",
         args = {
                 "[stat]-Estatística que deseja ver"

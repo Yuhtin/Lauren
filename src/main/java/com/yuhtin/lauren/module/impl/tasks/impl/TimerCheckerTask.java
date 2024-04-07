@@ -1,6 +1,7 @@
 package com.yuhtin.lauren.module.impl.tasks.impl;
 
 import com.yuhtin.lauren.module.Module;
+import com.yuhtin.lauren.module.impl.tasks.TaskInfo;
 import com.yuhtin.lauren.module.impl.timer.Timer;
 import com.yuhtin.lauren.module.impl.timer.TimerModule;
 import com.yuhtin.lauren.util.TaskHelper;
@@ -9,12 +10,14 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Yuhtin
  * Github: https://github.com/Yuhtin
  */
 
+@TaskInfo(interval = 1, timeType = TimeUnit.MINUTES)
 public class TimerCheckerTask extends TimerTask {
 
     private static final Calendar CALENDAR = Calendar.getInstance();

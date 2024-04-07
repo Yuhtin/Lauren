@@ -11,7 +11,7 @@ import java.time.Instant;
 
 @CommandInfo(
         name = "avatar",
-        type = CommandInfo.CommandType.UTILITY,
+        type = CommandType.UTILITY,
         description = "Espiar a imagem de outro usuário OjO",
         args = {
                 "[@user]-Usuário que você quer ver o avatar"

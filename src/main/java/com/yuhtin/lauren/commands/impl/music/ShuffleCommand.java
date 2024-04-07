@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandInfo(
         name = "shuffle",
-        type = CommandInfo.CommandType.MUSIC,
+        type = CommandType.MUSIC,
         description = "Misturar as minhas musiquinhas"
 )
 public class ShuffleCommand implements Command {

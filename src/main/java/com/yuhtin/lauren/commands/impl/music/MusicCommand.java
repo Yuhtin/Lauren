@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandInfo(
         name = "playing",
-        type = CommandInfo.CommandType.MUSIC,
+        type = CommandType.MUSIC,
         description = "Ver as informações da música atual"
 )
 public class MusicCommand implements Command {

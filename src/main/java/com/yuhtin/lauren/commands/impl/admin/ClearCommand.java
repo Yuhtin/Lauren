@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandInfo(
         name = "clearchat",
-        type = CommandInfo.CommandType.ADMIN,
+        type = CommandType.ADMIN,
         description = "Limpar algumas mensagens do canal atual",
         args = {
                 "<!quantity>-Quantidade de mensagens para apagar",

@@ -11,7 +11,7 @@ import java.time.Instant;
 
 @CommandInfo(
         name = "servidor",
-        type = CommandInfo.CommandType.HELP,
+        type = CommandType.HELP,
         description = "Visualizar as informações deste servidor"
 )
 public class ServerInfoCommand implements Command {

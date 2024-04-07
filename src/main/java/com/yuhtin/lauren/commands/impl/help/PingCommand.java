@@ -1,10 +1,9 @@
 package com.yuhtin.lauren.commands.impl.help;
 
-import com.google.inject.Inject;
+import com.yuhtin.lauren.Startup;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
-import com.yuhtin.lauren.service.LocaleManager;
-import com.yuhtin.lauren.startup.Startup;
+import com.yuhtin.lauren.commands.CommandType;
 import com.yuhtin.lauren.util.SystemUtil;
 import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -18,12 +17,10 @@ import java.time.Instant;
 
 @CommandInfo(
         name = "host",
-        type = CommandInfo.CommandType.HELP,
+        type = CommandType.HELP,
         description = "Verificar as informações da minha hospedagem"
 )
 public class PingCommand implements Command {
-
-    @Inject private LocaleManager localeManager;
 
     @Override
     public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
@@ -42,7 +39,7 @@ public class PingCommand implements Command {
     }
 
     private MessageEmbed createEmbed(long toEpochMilli, Member member, JDA jda) {
-        val shardManager = Startup.getLauren().getBot().getShardManager();
+        val shardManager = Startup.getLauren().getJda().getShardManager();
         val shardMessage = (shardManager == null ? "1" : shardManager.getShardsTotal())
                 + " shards, "
                 + (shardManager == null ? "1" : shardManager.getShardsRunning())
@@ -60,9 +57,8 @@ public class PingCommand implements Command {
                         "M/"
                         + SystemUtil.totalMemory() + "M`", true)
                 .addField("\uD83D\uDD2E Sistema Operacional", "`" + System.getProperty("os.name") + "`", true)
-                .addField("\uD83D\uDED2 Empresa fornecedora:", "[HypeHost - Hospedagem Minecraft e VPS](https://hypehost.com.br)", true)
-                .addField("\uD83E\uDDEA Local do Host", "`" + this.localeManager.buildMessage() + "`", true)
-                .addField("<a:infinito:703187274912759899> Node", "`Gabriela`", true)
+                .addField("\uD83D\uDED2 Hospedado em:", "Meu Computador!", true)
+                .addField("<a:infinito:703187274912759899> Node", "`None`", true)
                 .addField("", "\uD83D\uDCE1 Informações de conexão", false)
                 .addField("🌏 Shards", "`" + shardMessage + "`", false)
                 .addField("<:discord:723587554422816889> Discord Ping", "`" + toEpochMilli + "ms`", false)

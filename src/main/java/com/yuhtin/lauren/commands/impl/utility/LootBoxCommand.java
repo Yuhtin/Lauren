@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 @CommandInfo(
         name = "lootbox",
-        type = CommandInfo.CommandType.UTILITY,
+        type = CommandType.UTILITY,
         description = "Abrir uma lootbox"
 )
 public class LootBoxCommand implements Command {

@@ -44,7 +44,7 @@ public class MongoModule implements Module {
             logger.severe("Can't connect with MongoDB!");
             logger.severe("Error: " + e.getMessage());
             client.close();
-            
+
             database = null;
         }
     }

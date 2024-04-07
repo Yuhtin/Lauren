@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 @CommandInfo(
         name = "sortear",
-        type = CommandInfo.CommandType.ADMIN,
+        type = CommandType.ADMIN,
         description = "Iniciar um sorteio sobre algum conteúdo"
 )
 public class DrawCommand implements Command {

@@ -2,7 +2,7 @@ package com.yuhtin.lauren.commands.impl.utility;
 
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
-import com.yuhtin.lauren.service.GetConnectionFactory;
+import com.yuhtin.lauren.util.HTTPRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.val;
@@ -15,7 +15,7 @@ import java.time.Instant;
 
 @CommandInfo(
         name = "minecraft.server",
-        type = CommandInfo.CommandType.UTILITY,
+        type = CommandType.UTILITY,
         description = "Ver as informações de um servidor",
         args = {
                 "<server_ip>-IP do servidor desejado"
@@ -26,7 +26,7 @@ public class MinecraftServerCommand implements Command {
     @Override
     public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
         val serverIP = event.getOption("server_ip").getAsString();
-        val connection = new GetConnectionFactory("https://api.mcsrvstat.us/ping/" + serverIP);
+        val connection = new HTTPRequest("https://api.mcsrvstat.us/ping/" + serverIP);
         val response = connection.buildConnection();
         if (response == null || response.equals("") || response.contains("getaddrinfo")) {
             hook.sendMessage("<:chorano:726207542413230142> Este servidor não foi encontrado ou a api está offline").queue();

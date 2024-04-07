@@ -2,7 +2,7 @@ package com.yuhtin.lauren.commands.impl.utility;
 
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
-import com.yuhtin.lauren.service.GetConnectionFactory;
+import com.yuhtin.lauren.util.HTTPRequest;
 import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -11,7 +11,7 @@ import org.json.JSONObject;
 
 @CommandInfo(
         name = "minecraft.player",
-        type = CommandInfo.CommandType.UTILITY,
+        type = CommandType.UTILITY,
         description = "Procurar um jogador original de minecraft",
         args = {
                 "<player_name>-Nome do jogador no Minecraft: Java Edition"
@@ -24,7 +24,7 @@ public class MinecraftSearchCommand implements Command {
         val playerName = event.getOption("player_name").getAsString();
 
         val searchUUID = "https://api.mojang.com/users/profiles/minecraft/" + playerName;
-        val connection = new GetConnectionFactory(searchUUID);
+        val connection = new HTTPRequest(searchUUID);
         val response = connection.buildConnection();
         if (response == null || response.equals("")) {
             hook.sendMessage("<:chorano:726207542413230142> Este jogador não é original ou a api está offline.").queue();

@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandInfo(
         name = "shard",
-        type = CommandInfo.CommandType.ADMIN,
+        type = CommandType.ADMIN,
         description = "Alterar shards de um jogador",
         args = {
                 "<option>-Use add, remove ou set.",

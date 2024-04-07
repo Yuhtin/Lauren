@@ -15,7 +15,7 @@ import java.util.Random;
 
 @CommandInfo(
         name = "apostar",
-        type = CommandInfo.CommandType.UTILITY,
+        type = CommandType.UTILITY,
         description = "Multiplique seus shards apostando",
         args = {
                 "[cor]-Cor que deseja apostar",
@@ -82,7 +82,7 @@ public class BetCommand implements Command {
 
         val user = event.getUser();
         if (money < 20) {
-            hook.sendMessage("<:chorano:726207542413230142> <@" + user.getId() + ">, você precisa apostar no mínimo `$20`").queue();
+            hook.sendMessage("<:chorano:726207542413230142> <@" + user.getId() + ">, você precisa apostar no mínimo `20 shards`").queue();
             return;
         }
 
@@ -94,13 +94,13 @@ public class BetCommand implements Command {
 
         if (RANDOM.nextInt(100) > chance) {
             data.removeMoney(money);
-            hook.sendMessage("<:chorano:726207542413230142> <@" + user.getId() + ">, você perdeu `$" + money + "` tentando apostar na cor " + color).queue();
+            hook.sendMessage("<:chorano:726207542413230142> <@" + user.getId() + ">, você perdeu `" + money + " shards` tentando apostar na cor " + color).queue();
             return;
         }
 
         int total = (int) (money * multiplier - (money));
         data.addMoney(total);
-        hook.sendMessage("<:felizpakas:742373250037710918> <@" + user.getId() + ">, você ganhou `+ $" + total + "` apostando na cor " + color).queue();
+        hook.sendMessage("<:felizpakas:742373250037710918> <@" + user.getId() + ">, você ganhou `+ " + total + " shards` apostando na cor " + color).queue();
     }
 
     private EmbedBuilder helpMessage(Color color, String iconUrl) {

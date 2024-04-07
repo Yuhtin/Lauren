@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandInfo(
         name = "finishdraw",
-        type = CommandInfo.CommandType.ADMIN,
+        type = CommandType.ADMIN,
         description = "Finalizar um sorteio"
 )
 public class FinishDrawCommand implements Command {

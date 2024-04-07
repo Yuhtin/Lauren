@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 @CommandInfo(
         name = "queue",
-        type = CommandInfo.CommandType.MUSIC,
+        type = CommandType.MUSIC,
         description = "Ver as músicas que eu ainda vou tocar",
         args = {
                 "[pagina]-Ver uma página específica da queue"

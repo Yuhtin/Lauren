@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandInfo(
         name = "createregister",
-        type = CommandInfo.CommandType.CUSTOM_MESSAGES,
+        type = CommandType.CUSTOM_MESSAGES,
         args = {},
         description = "Criar a mensagem de registro de cargos"
 )

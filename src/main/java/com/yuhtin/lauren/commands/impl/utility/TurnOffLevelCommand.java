@@ -18,7 +18,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandInfo(
         name = "level.hide",
-        type = CommandInfo.CommandType.UTILITY,
+        type = CommandType.UTILITY,
         description = "Não mostrar o nível em seu nickname"
 )
 public class TurnOffLevelCommand implements Command {

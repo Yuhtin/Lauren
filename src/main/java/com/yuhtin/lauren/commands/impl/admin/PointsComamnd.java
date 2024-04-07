@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandInfo(
         name = "points",
-        type = CommandInfo.CommandType.ADMIN,
+        type = CommandType.ADMIN,
         description = "Adicionar pontos de ranked para um jogador",
         args = {
                 "<option>-Use add, remove ou set.",

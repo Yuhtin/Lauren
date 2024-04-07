@@ -2,13 +2,14 @@ package com.yuhtin.lauren.module.impl.level;
 
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.config.YamlConfiguration;
-import com.yuhtin.lauren.core.xp.Level;
 import com.yuhtin.lauren.module.ConfigurableModule;
+import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
 
+@Getter
 public class LevelModule extends ConfigurableModule {
 
     private final HashMap<Integer, Level> levelByXp = new HashMap<>();
@@ -51,6 +52,10 @@ public class LevelModule extends ConfigurableModule {
     public boolean canUpgrade(int nextLevel, int experience) {
         if (!this.levelByXp.containsKey(nextLevel)) return false;
         return this.levelByXp.get(nextLevel).getMiniumExperience() <= experience;
+    }
+
+    public Level getLevel(int level) {
+        return levelByXp.get(level);
     }
 
     @Nullable

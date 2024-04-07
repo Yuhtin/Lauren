@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandInfo(
         name = "permission",
-        type = CommandInfo.CommandType.ADMIN,
+        type = CommandType.ADMIN,
         description = "Alterar uma permissão em um jogador.",
         args = {
                 "<option>-Use add para adicionar ou remove para remover.",

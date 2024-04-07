@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandInfo(
         name = "reroll",
-        type = CommandInfo.CommandType.ADMIN,
+        type = CommandType.ADMIN,
         description = "Sortear um ganhador novamente"
 )
 public class RerollCommand implements Command {

@@ -8,7 +8,7 @@ public class ShopModule implements Module {
     private final ShopEmbed shopEmbed = new ShopEmbed();
 
     @Override
-    public boolean setup(Lauren lauren) throws Exception {
+    public boolean setup(Lauren lauren) {
         shopEmbed.build();
         return true;
     }

@@ -1,6 +1,7 @@
 package com.yuhtin.lauren.module;
 
 import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.commands.CommandModule;
 import com.yuhtin.lauren.database.MongoModule;
 import com.yuhtin.lauren.util.LoggerUtil;
 import com.yuhtin.lauren.util.PathFinder;
@@ -18,6 +19,7 @@ public class ModuleManager {
 
     public static void load(Lauren lauren) {
         bind(lauren, new MongoModule());
+        bind(lauren, new CommandModule());
 
         for (val className : PathFinder.from("com.yuhtin.lauren.module.impl")) {
             try {

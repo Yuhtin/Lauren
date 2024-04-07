@@ -10,7 +10,7 @@ import java.io.File;
 
 @CommandInfo(
         name = "download",
-        type = CommandInfo.CommandType.MUSIC,
+        type = CommandType.MUSIC,
         description = "Fazer download de todo o áudio que eu ouvi"
 )
 public class DownloadAudioCommand implements Command {

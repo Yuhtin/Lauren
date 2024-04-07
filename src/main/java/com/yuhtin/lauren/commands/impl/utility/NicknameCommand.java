@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandInfo(
         name = "nickname",
-        type = CommandInfo.CommandType.UTILITY,
+        type = CommandType.UTILITY,
         description = "Comando para alterar seu apelido",
         args = {
                 "<nick>-Nick que deseja usar"

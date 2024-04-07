@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
  */
 @CommandInfo(
         name = "level.show",
-        type = CommandInfo.CommandType.UTILITY,
+        type = CommandType.UTILITY,
         description = "Mostrar o nível em seu nickname"
 )
 public class ShowLevelCommand implements Command {

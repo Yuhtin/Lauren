@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandInfo(
         name = "skip.force",
-        type = CommandInfo.CommandType.MUSIC,
+        type = CommandType.MUSIC,
         description = "Forçar o pulo de uma música"
 )
 public class ForceSkipCommand implements Command {

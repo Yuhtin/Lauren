@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandInfo(
         name = "bassboost",
-        type = CommandInfo.CommandType.MUSIC,
+        type = CommandType.MUSIC,
         description = "Mudar os graves e agudos do meu batidão",
         args = {"<boost>-Opções válidas low, high, boost ou normal"}
 )

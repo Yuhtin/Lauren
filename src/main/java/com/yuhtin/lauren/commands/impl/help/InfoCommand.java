@@ -19,7 +19,7 @@ import java.util.Locale;
 
 @CommandInfo(
         name = "botinfo",
-        type = CommandInfo.CommandType.HELP,
+        type = CommandType.HELP,
         description = "Veja um pouco mais sobre mim"
 )
 public class InfoCommand implements Command {
@@ -60,7 +60,7 @@ public class InfoCommand implements Command {
                 .addField("💥 Cache", "`" + cacheMessage + "`", true)
                 .addField("🏓 Ping da API", "`" + event.getJDA().getGatewayPing() + "ms`", true)
 
-                .addField("\uD83D\uDD8A Prefixo", "Padrão: `$`", true)
+                .addField("\uD83D\uDD8A Prefixo", "Padrão: `/`", true)
                 .addField("<:java:723609384428503071> Versão Java", "`v" + System.getProperty("java.version") + "`", true)
                 .addField("<:discord:723587554422816889> Versão JDA", "`v4.2.0_186`", true)
 

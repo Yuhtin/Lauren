@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandInfo(
         name = "skip.music",
-        type = CommandInfo.CommandType.MUSIC,
+        type = CommandType.MUSIC,
         description = "Iniciar uma votação para pular a música atual"
 )
 public class SkipCommand implements Command {
@@ -19,9 +19,11 @@ public class SkipCommand implements Command {
         if (event.getMember() == null || event.getGuild() == null) return;
 
         if (!MusicUtil.isInVoiceChannel(event.getMember())) {
-            hook.sendMessage("\uD83C\uDFB6 Amiguinho, entre no canal `\uD83C\uDFB6┇Batidões` para poder usar comandos de música").queue();
+            hook.sendMessage("\uD83C\uDFB6 Amiguinho, entre em algum canal de voz para poder usar comandos de música.").queue();
             return;
         }
+
+        if
 
         if (MusicUtil.isIdle(event.getGuild(), hook)) return;
 

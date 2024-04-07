@@ -1,5 +1,6 @@
 package com.yuhtin.lauren.commands.impl.help;
 
+import com.yuhtin.lauren.Startup;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.commands.InfoCacher;
@@ -13,7 +14,7 @@ import java.time.Instant;
 
 @CommandInfo(
         name = "ajuda",
-        type = CommandInfo.CommandType.HELP,
+        type = CommandType.HELP,
         description = "Informações de comandos do bot",
         args = {
                 "[comando]-Comando que deseja ver mais informações"
@@ -27,14 +28,14 @@ public class HelpCommand implements Command {
         val command = commandOption == null ? null : commandOption.getAsString();
         if (command != null) {
             if (!InfoCacher.getInstance().getCommands().containsKey(command)) {
-                hook.setEphemeral(true).sendMessage("Hmm, não encontrei o comando `" + command + "` tente usar `$ajuda` para ver meus comandos.").queue();
+                hook.setEphemeral(true).sendMessage("Hmm, não encontrei o comando `" + command + "` tente usar `/ajuda` para ver meus comandos.").queue();
                 return;
             }
 
             val commandData = InfoCacher.getInstance().getCommands().get(command);
             val embed = new EmbedBuilder()
                     .setImage("https://pa1.narvii.com/7093/1d8551884cec1cb2dd99b88ff4c745436b21f1b4r1-500-500_hq.gif")
-                    .setAuthor("Informações do comando " + commandData.name(), null, Startup.getLauren().getBot().getSelfUser().getAvatarUrl())
+                    .setAuthor("Informações do comando " + commandData.name(), null, Startup.getLauren().getJda().getSelfUser().getAvatarUrl())
 
                     .setDescription("Você está vendo as informações específicas do comando `" + commandData.name() + "`," +
                             " para ver todos os comandos utilize `/ajuda`")

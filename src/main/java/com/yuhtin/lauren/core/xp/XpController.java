@@ -2,6 +2,7 @@ package com.yuhtin.lauren.core.xp;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.yuhtin.lauren.module.impl.level.Level;
 import lombok.Getter;
 
 import java.util.ArrayList;

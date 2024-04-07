@@ -3,7 +3,6 @@ package com.yuhtin.lauren.commands.impl.utility;
 import com.google.inject.Inject;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
-import com.yuhtin.lauren.tasks.TopXpUpdater;
 import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -13,7 +12,7 @@ import java.time.Instant;
 
 @CommandInfo(
         name = "xp.top",
-        type = CommandInfo.CommandType.UTILITY,
+        type = CommandType.UTILITY,
         description = "Ver os jogadores mais viciados no meu servidor"
 )
 public class TopXpCommand implements Command {

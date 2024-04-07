@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
 import com.yuhtin.lauren.core.punish.PunishmentRule;
-import com.yuhtin.lauren.module.impl.misc.PunishmentModule;
 import lombok.val;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -12,7 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandInfo(
         name = "punir",
-        type = CommandInfo.CommandType.ADMIN,
+        type = CommandType.ADMIN,
         description = "Lançar o machado do ban",
         args = {
                 "<@user>-Usuário a ser punido",

@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandInfo(
         name = "daily",
-        type = CommandInfo.CommandType.UTILITY,
+        type = CommandType.UTILITY,
         description = "Pegar uma pequena quantia de XP e dinheiro diariamente"
 )
 public class DailyCommand implements Command {
@@ -30,7 +30,7 @@ public class DailyCommand implements Command {
         data.setAbbleToDaily(false).addMoney(75).gainXP(300);
         hook.sendMessage(
                 "🌟 Aaaaa, eu to muito feliz por ter lembrado de mim e pego seu daily " +
-                "💙 Veja suas informações atualizadas usando `$perfil`"
+                "💙 Veja suas informações atualizadas usando `/perfil`"
         ).queue();
 
         statsController.getStats("Daily Command").suplyStats(1);

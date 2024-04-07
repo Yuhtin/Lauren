@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandInfo(
         name = "volume",
-        type = CommandInfo.CommandType.MUSIC,
+        type = CommandType.MUSIC,
         description = "Definir um volume para meus batidões (não coloca menos de 30 se não deixa de ser batidão ;-;)",
         args = {
                 "[!volume]-Volume que deseja definir para a música"

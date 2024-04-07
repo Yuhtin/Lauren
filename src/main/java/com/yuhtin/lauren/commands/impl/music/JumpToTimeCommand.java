@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 @CommandInfo(
         name = "skip.to",
-        type = CommandInfo.CommandType.MUSIC,
+        type = CommandType.MUSIC,
         description = "Pular para uma certa minutagem na música",
         args = {"<tempo>-Exemplo de tempos válidos: **35** ou **15:13**"}
 )
@@ -60,7 +60,7 @@ public class JumpToTimeCommand implements Command {
         val track = TrackManager.getByGuild(event.getGuild()).getTrackInfo().getTrack();
         long duration = track.getDuration();
         if (millis > duration) {
-            hook.sendMessage("<:pensando:781761324547309594> A música é menor que o tempo inserido, se quiser skipar use `$skip`").queue();
+            hook.sendMessage("<:pensando:781761324547309594> A música é menor que o tempo inserido, se quiser skipar use `/skip`").queue();
             return;
         }
 

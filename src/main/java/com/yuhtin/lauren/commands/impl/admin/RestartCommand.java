@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
 @CommandInfo(
         name = "restart",
-        type = CommandInfo.CommandType.CONFIG,
+        type = CommandType.CONFIG,
         description = "Reiniciar meus sistemas :d"
 )
 public class RestartCommand implements Command {

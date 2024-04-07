@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 @CommandInfo(
         name = "loja",
-        type = CommandInfo.CommandType.UTILITY,
+        type = CommandType.UTILITY,
         description = "Ver algumas coisinhas que tou vendendo"
 )
 public class ShopCommand implements Command {

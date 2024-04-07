@@ -3,8 +3,11 @@ package com.yuhtin.lauren.module.impl.player;
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.Startup;
 import com.yuhtin.lauren.core.punish.PunishmentType;
+import com.yuhtin.lauren.module.impl.level.Level;
 import com.yuhtin.lauren.database.MongoOperation;
 import com.yuhtin.lauren.database.OperationFilter;
+import com.yuhtin.lauren.module.Module;
+import com.yuhtin.lauren.module.impl.level.LevelModule;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -14,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 @Data
 @RequiredArgsConstructor
@@ -41,30 +45,13 @@ public class Player {
     private final HashMap<PunishmentType, Long> punishs = new HashMap<>();
     private final List<String> permissions = new ArrayList<>();
 
-    public void updateLevel(int level) {
-        this.level = level;
+    public void updateLevel(int currentLevel) {
+        this.level = currentLevel;
 
-        List<Long> rolesToGive = xpController
-                .getLevelByXp()
-                .get(level)
-                .getRolesToGive();
+        LevelModule levelModule = Module.instance(LevelModule.class);
+        if (levelModule == null) return;
 
-        List<Long> rolesToRemove = new ArrayList<>();
-        for (val integer : xpController.getLevelByXp().keySet()) {
-            if (integer >= level) break;
-
-            val tempLevel = xpController.getLevelByXp().get(integer);
-            if (tempLevel.getRolesToGive().isEmpty()) continue;
-
-            for (val roleID : tempLevel.getRolesToGive()) {
-
-                if (roleID.equals(722957999949348935L)
-                        || roleID.equals(722116789055782912L)
-                        || roleID.equals(770371418177011713L)) continue;
-
-                rolesToRemove.add(roleID);
-            }
-        }
+        List<Long> rolesToGive = levelModule.getLevel(currentLevel).getRolesToGive();
 
         Lauren lauren = Startup.getLauren();
         Guild guild = lauren.getGuild();
@@ -94,9 +81,9 @@ public class Player {
             }
         }
 
-        var message = "Parabéns <@" + id + "> você alcançou o nível **__" + level + "__** <a:tutut:770408915300384798>";
+        var message = "Parabéns <@" + id + "> você alcançou o nível **__" + currentLevel + "__** <a:tutut:770408915300384798>";
 
-        if (level == 20) {
+        if (currentLevel == 20) {
             message += "\n<:prime:722115525232296056> O jogador <@" + id + "> tornou-se Prime";
             permissions.add("role.prime");
         }

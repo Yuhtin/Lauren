@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 @CommandInfo(
         name = "instagram",
-        type = CommandInfo.CommandType.UTILITY,
+        type = CommandType.UTILITY,
         description = "Bisbilhotar o perfil dos outros",
         args = {
                 "<account>-Conta do instagram que deseja ver"

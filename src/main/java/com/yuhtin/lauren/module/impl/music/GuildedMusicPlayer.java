@@ -82,6 +82,39 @@ public class GuildedMusicPlayer extends AudioEventAdapter {
         player.playTrack(playlist.element().getTrack());
     }
 
+    @Override
+    public void onTrackStart(AudioPlayer player, AudioTrack track) {
+        if (audioChannel == null || textChannelId == 0) return;
+
+        Guild guild = audioChannel.getGuild();
+        guild.getAudioManager().openAudioConnection(audioChannel);
+
+        deleteLastMessage();
+
+        TextChannel textChannel = guild.getTextChannelById(textChannelId);
+        if (textChannel == null) {
+            textChannelId = 0;
+            return;
+        }
+
+        EmbedBuilder embedBuilder = MusicUtil.showTrackInfo(track, this);
+        textChannel.sendMessageEmbeds(embedBuilder.build()).queue(message -> lastMusicMessageId = message.getIdLong());
+    }
+
+    public void deleteLastMessage() {
+        if (audioChannel == null || textChannelId == 0 || lastMusicMessageId == 0) return;
+
+        Guild guild = audioChannel.getGuild();
+        TextChannel textChannel = guild.getTextChannelById(textChannelId);
+        if (textChannel == null) {
+            textChannelId = 0;
+            return;
+        }
+
+        textChannel.deleteMessageById(lastMusicMessageId).queue();
+        lastMusicMessageId = 0;
+    }
+
     public void setAudioChannel(AudioChannel audio) {
         if (this.audioChannel == audio) return;
         else if (this.audioChannel != null) {
@@ -125,10 +158,6 @@ public class GuildedMusicPlayer extends AudioEventAdapter {
         playlist.addAll(tempQueue);
     }
 
-    public Set<AudioInfo> getPlaylist() {
-        return new LinkedHashSet<>(playlist);
-    }
-
     @Nullable
     public AudioInfo getTrackInfo() {
         return playlist.stream()
@@ -137,45 +166,20 @@ public class GuildedMusicPlayer extends AudioEventAdapter {
                 .orElse(null);
     }
 
+    public boolean isPaused() {
+        return player.isPaused();
+    }
+
+    public Set<AudioInfo> getPlaylist() {
+        return new LinkedHashSet<>(playlist);
+    }
+
     public void cleanPlaylist() {
         playlist.clear();
     }
 
     public void skipTrack() {
         player.stopTrack();
-    }
-
-    @Override
-    public void onTrackStart(AudioPlayer player, AudioTrack track) {
-        if (audioChannel == null || textChannelId == 0) return;
-
-        Guild guild = audioChannel.getGuild();
-        guild.getAudioManager().openAudioConnection(audioChannel);
-
-        deleteLastMessage();
-
-        TextChannel textChannel = guild.getTextChannelById(textChannelId);
-        if (textChannel == null) {
-            textChannelId = 0;
-            return;
-        }
-
-        EmbedBuilder embedBuilder = MusicUtil.showTrackInfo(track, this);
-        textChannel.sendMessageEmbeds(embedBuilder.build()).queue(message -> lastMusicMessageId = message.getIdLong());
-    }
-
-    public void deleteLastMessage() {
-        if (audioChannel == null || textChannelId == 0 || lastMusicMessageId == 0) return;
-
-        Guild guild = audioChannel.getGuild();
-        TextChannel textChannel = guild.getTextChannelById(textChannelId);
-        if (textChannel == null) {
-            textChannelId = 0;
-            return;
-        }
-
-        textChannel.deleteMessageById(lastMusicMessageId).queue();
-        lastMusicMessageId = 0;
     }
 
     public File downloadAudio() {

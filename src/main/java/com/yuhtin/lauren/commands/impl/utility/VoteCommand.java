@@ -19,7 +19,7 @@ import java.awt.*;
 
 @CommandInfo(
         name = "votar",
-        type = CommandInfo.CommandType.UTILITY,
+        type = CommandType.UTILITY,
         description = "Ver as informações de seus votos"
 )
 public class VoteCommand implements Command {
