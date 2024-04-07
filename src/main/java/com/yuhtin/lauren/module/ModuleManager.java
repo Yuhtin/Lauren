@@ -1,6 +1,7 @@
 package com.yuhtin.lauren.module;
 
 import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.database.MongoModule;
 import com.yuhtin.lauren.util.LoggerUtil;
 import com.yuhtin.lauren.util.PathFinder;
 import lombok.Getter;

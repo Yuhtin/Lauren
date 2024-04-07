@@ -25,15 +25,11 @@ public class MongoModule implements Module {
     private MongoDatabase database;
 
     @Override
-    public boolean setup(Lauren lauren) throws Exception {
+    public boolean setup(Lauren lauren) {
         this.logger = lauren.getLogger();
 
-        try {
-            connect(EnvWrapper.get("MONGO_URI"), EnvWrapper.get("MONGO_DATABASE"));
-            return true;
-        } catch (MongoException exception) {
-            throw new Exception("Error trying to start MongoClient -> " + exception.getMessage());
-        }
+        connect(EnvWrapper.get("MONGO_URI"), EnvWrapper.get("MONGO_DATABASE"));
+        return true;
     }
 
     public void connect(String mongoUri, String databaseName) throws MongoException {
@@ -47,8 +43,9 @@ public class MongoModule implements Module {
         } catch (MongoException e) {
             logger.severe("Can't connect with MongoDB!");
             logger.severe("Error: " + e.getMessage());
-            database = null;
             client.close();
+            
+            database = null;
         }
     }
 
