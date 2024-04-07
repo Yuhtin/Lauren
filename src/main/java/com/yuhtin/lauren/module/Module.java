@@ -13,9 +13,8 @@ public interface Module {
      *
      * @param lauren The Lauren instance to set up the module with.
      * @return true if the setup was successful, false otherwise.
-     * @throws Exception if an error occurs during setup.
      */
-    boolean setup(Lauren lauren) throws Exception;
+    boolean setup(Lauren lauren);
 
     /**
      * Closes the module. This is a default method and does nothing by default.

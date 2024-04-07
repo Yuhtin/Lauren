@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.ReplaceOptions;
 import com.yuhtin.lauren.util.LoggerUtil;
 import lombok.Data;
 import lombok.Getter;
@@ -26,8 +27,11 @@ public class MongoRepository<T> {
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool(128);
     private static final Gson GSON;
 
+    private static final ReplaceOptions REPLACE_OPTIONS = new ReplaceOptions().upsert(true);
+
     private final Class<T> clazz;
-    @Getter private MongoCollection<Document> collection;
+    @Getter
+    private MongoCollection<Document> collection;
 
     static {
         GSON = new GsonBuilder()
@@ -53,12 +57,7 @@ public class MongoRepository<T> {
     @NotNull
     public CompletableFuture<Boolean> insert(Bson filters, T object) {
         return CompletableFuture.supplyAsync(() -> {
-            if (collection.find(filters).first() != null) {
-                collection.replaceOne(filters, Document.parse(GSON.toJson(object)));
-            } else {
-                collection.insertOne(Document.parse(GSON.toJson(object)));
-            }
-
+            collection.replaceOne(filters, Document.parse(GSON.toJson(object)), REPLACE_OPTIONS);
             return true;
         });
     }

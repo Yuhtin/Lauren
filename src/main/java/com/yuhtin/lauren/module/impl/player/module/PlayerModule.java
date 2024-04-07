@@ -4,6 +4,7 @@ import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.RemovalCause;
 import com.yuhtin.lauren.Lauren;
+import com.yuhtin.lauren.cache.ModularCache;
 import com.yuhtin.lauren.config.YamlConfiguration;
 import com.yuhtin.lauren.database.MongoModule;
 import com.yuhtin.lauren.database.MongoOperation;
@@ -15,19 +16,20 @@ import com.yuhtin.lauren.util.FutureBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 
+import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
 public class PlayerModule extends ConfigurableModule {
 
-    private final AsyncLoadingCache<Long, Player> cache = Caffeine.newBuilder()
+    private final ModularCache<Long, Player> cache = ModularCache.create(Caffeine.newBuilder()
             .expireAfterAccess(3, TimeUnit.MINUTES)
             .removalListener(this::saveOnRemoval)
-            .buildAsync(this::asyncLoad);
+            .buildAsync(this::asyncLoad));
 
     @Override
-    public boolean setup(Lauren lauren) throws Exception {
+    public boolean setup(Lauren lauren) {
         setConfig(YamlConfiguration.load("features/player.yml"));
 
         MongoModule mongoModule = Module.instance(MongoModule.class);
@@ -79,4 +81,14 @@ public class PlayerModule extends ConfigurableModule {
         return false;
     }
 
+    public FutureBuilder<Void> saveAll() {
+        Collection<CompletableFuture<Player>> cacheValues = cache.values();
+
+        CompletableFuture<Void> task = CompletableFuture.allOf(cacheValues.stream()
+                .map(future -> future.thenAcceptAsync(Player::save))
+                .toArray(CompletableFuture[]::new)
+        );
+
+        return FutureBuilder.of(task.thenAccept(unused -> cache.invalidateAll()));
+    }
 }

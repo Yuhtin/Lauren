@@ -3,6 +3,8 @@ package com.yuhtin.lauren.module.impl.player;
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.Startup;
 import com.yuhtin.lauren.core.punish.PunishmentType;
+import com.yuhtin.lauren.database.MongoOperation;
+import com.yuhtin.lauren.database.OperationFilter;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -152,4 +154,10 @@ public class Player {
 
     }
 
+    public void save() {
+        MongoOperation.bind(Player.class)
+                .filter(OperationFilter.EQUALS, "id", id)
+                .insert(this)
+                .queue();
+    }
 }
