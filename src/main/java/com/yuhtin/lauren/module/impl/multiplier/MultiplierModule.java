@@ -24,6 +24,17 @@ public class MultiplierModule extends ConfigurableModule {
 
         multipliers.clear();
 
-        
+        getConfig().getStringList("multipliers").forEach(multiplier -> {
+            String[] split = multiplier.split(":");
+            if (split.length != 2) return;
+
+            String name = split[0];
+            double value = Double.parseDouble(split[1]);
+
+            multipliers.put(name, value);
+        });
     }
+
+
+
 }
