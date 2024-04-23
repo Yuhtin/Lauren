@@ -1,9 +1,10 @@
 package com.yuhtin.lauren.commands.impl.admin;
 
-import com.google.inject.Inject;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
-import com.yuhtin.lauren.core.player.controller.PlayerController;
+import com.yuhtin.lauren.commands.CommandType;
+import com.yuhtin.lauren.module.Module;
+import com.yuhtin.lauren.module.impl.player.module.PlayerModule;
 import lombok.val;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -17,35 +18,36 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
                 "<option>-Use add, remove ou set.",
                 "<@player>-Jogador que deseja fazer a alteração.",
                 "<!quantity>-Quantidade de pontos que deseja adicionar ou remover."
-        }
+        },
+        permissions = {Permission.ADMINISTRATOR}
 )
 public class PointsComamnd implements Command {
 
-    @Inject
-    private PlayerController playerController;
-
     @Override
     public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
-        if (event.getMember() == null
-                || !UserUtil.hasPermission(event.getMember(), hook, Permission.ADMINISTRATOR))
-            return;
+        if (event.getMember() == null) return;
 
         val option = event.getOption("option").getAsString();
-        val player = event.getOption("player").getAsUser();
-        var quantity = (int) event.getOption("quantity").getAsDouble();
-        if (option.equalsIgnoreCase("remove")) quantity *= -1;
+        val user = event.getOption("player").getAsUser();
 
-        val data = playerController.get(player.getIdLong());
-        if (!option.equalsIgnoreCase("set")) quantity += data.getRankedPoints();
+        PlayerModule playerModule = Module.instance(PlayerModule.class);
+        if (playerModule == null) {
+            hook.setEphemeral(true).sendMessage("Módulo de jogador não carregado!").queue();
+            return;
+        }
 
-        data.setRankedPoints(quantity);
-        data.updateRank();
+        playerModule.retrieve(user.getIdLong()).thenAccept(player -> {
+            var quantity = (int) event.getOption("quantity").getAsDouble();
+            if (option.equalsIgnoreCase("remove")) quantity *= -1;
+            if (!option.equalsIgnoreCase("set")) quantity += player.getRankedPoints();
 
-        if (quantity <= 0) quantity *= -1;
-        val optionUsed = option.equalsIgnoreCase("set") ? "setou" : option.equalsIgnoreCase("remove") ? "removeu" : "adicionou";
+            player.setRankedPoints(quantity);
+            player.updateRank();
 
-        hook.setEphemeral(true).sendMessage("<:felizpakas:742373250037710918> " +
-                        "Você " + optionUsed + " **" + quantity + "** pontos ao jogador " + player.getName())
-                .queue();
+            if (quantity <= 0) quantity *= -1;
+            val optionUsed = option.equalsIgnoreCase("set") ? "setou" : option.equalsIgnoreCase("remove") ? "removeu" : "adicionou";
+
+            hook.setEphemeral(true).sendMessage("<:felizpakas:742373250037710918> Você " + optionUsed + " **" + quantity + "** pontos ao jogador " + user.getName()).queue();
+        });
     }
 }

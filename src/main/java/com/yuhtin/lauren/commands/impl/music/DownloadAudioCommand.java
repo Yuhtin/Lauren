@@ -2,29 +2,43 @@ package com.yuhtin.lauren.commands.impl.music;
 
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
+import com.yuhtin.lauren.commands.CommandType;
+import com.yuhtin.lauren.module.Module;
+import com.yuhtin.lauren.module.impl.music.MusicModule;
+import com.yuhtin.lauren.module.impl.player.module.PlayerModule;
+import com.yuhtin.lauren.util.LoggerUtil;
 import com.yuhtin.lauren.util.MusicUtil;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
+import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.io.File;
 
 @CommandInfo(
         name = "download",
         type = CommandType.MUSIC,
-        description = "Fazer download de todo o áudio que eu ouvi"
+        description = "Fazer download de todo o áudio que eu ouvi",
+        permissions = { Permission.ADMINISTRATOR }
 )
 public class DownloadAudioCommand implements Command {
 
     @Override
     public void execute(CommandInteraction event, InteractionHook hook) {
-        if (event.getGuild() == null
-                || event.getMember() == null
-                || MusicUtil.isIdle(event.getGuild(), hook)
-                || !UserUtil.isDJ(event.getMember(), hook)) return;
+        if (event.getGuild() == null || event.getMember() == null) return;
 
-        File file = TrackManager.getByGuild(event.getGuild()).downloadAudio();
-        hook.sendMessage("\u23e9 Fiz o download do áudio pra você <3")
-                .addFile(file)
-                .queue(message -> file.delete());
+        LoggerUtil.getLogger().info("Downloading audio from guild " + event.getGuild().getName() + " requested by " + event.getMember().getUser().getName());
+
+        PlayerModule playerModule = Module.instance(PlayerModule.class);
+        if (playerModule == null) return;
+
+        MusicModule musicModule = Module.instance(MusicModule.class);
+        if (musicModule == null) return;
+
+        musicModule.getByGuildId(event.getGuild()).queue(trackManager -> trackManager.downloadAudio()
+                .queue(file -> hook.sendMessage("\u23e9 Fiz o download do áudio pra você <3")
+                .addFiles(FileUpload.fromData(file))
+                .queue(message -> file.delete())));
+
     }
 }

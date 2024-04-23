@@ -1,12 +1,13 @@
 package com.yuhtin.lauren.commands.impl.utility;
 
-import com.google.inject.Inject;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
-import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.core.player.controller.PlayerController;
+import com.yuhtin.lauren.commands.CommandType;
 import com.yuhtin.lauren.models.Reward;
+import com.yuhtin.lauren.module.Module;
+import com.yuhtin.lauren.module.impl.player.module.PlayerModule;
 import com.yuhtin.lauren.util.EmbedUtil;
+import com.yuhtin.lauren.util.LoggerUtil;
 import com.yuhtin.lauren.util.TaskHelper;
 import lombok.Getter;
 import lombok.val;
@@ -15,7 +16,10 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 @CommandInfo(
@@ -27,117 +31,117 @@ public class LootBoxCommand implements Command {
 
     boolean running = false;
 
-    @Inject private Logger logger;
-    @Inject private PlayerController playerController;
-
-    @Override
     public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
-        val player = this.playerController.get(event.getUser().getIdLong());
-        if (player.getLootBoxes() == 0) {
-            hook.sendMessage("<:fodane:764085078187442176> Você não tem lootboxes para abrir").queue();
+        PlayerModule playerModule = Module.instance(PlayerModule.class);
+        if (playerModule == null) {
+            hook.sendMessage("<:fodane:764085078187442176> O módulo de jogadores não está carregado").queue();
             return;
         }
 
-        if (player.getKeys() == 0) {
-            hook.sendMessage("<:fodane:764085078187442176> Você não tem chaves para abrir esta lootbox, use `/shop` e adquira uma").queue();
-            return;
-        }
+        playerModule.retrieve(event.getUser().getIdLong()).thenAccept(player -> {
+            if (player.getLootBoxes() == 0) {
+                hook.sendMessage("<:fodane:764085078187442176> Você não tem lootboxes para abrir").queue();
+                return;
+            }
 
-        if (running) {
-            hook.sendMessage("<:fodane:764085078187442176> Ops, parece que já tem alguém usando a roleta, aguarde").queue();
-            return;
-        }
+            if (player.getKeys() == 0) {
+                hook.sendMessage("<:fodane:764085078187442176> Você não tem chaves para abrir esta lootbox, use `/shop` e adquira uma").queue();
+                return;
+            }
 
-        player.setLootBoxes(player.getLootBoxes() - 1);
-        player.setKeys(player.getKeys() - 1);
+            if (running) {
+                hook.sendMessage("<:fodane:764085078187442176> Ops, parece que já tem alguém usando a roleta, aguarde").queue();
+                return;
+            }
 
-        running = true;
+            player.setLootBoxes(player.getLootBoxes() - 1);
+            player.setKeys(player.getKeys() - 1);
 
-        List<LineRewardController> rewards = new ArrayList<>();
+            running = true;
 
-        hook.sendMessageEmbeds(EmbedUtil.create("Rodando lootbox!")).setEphemeral(true).queue();
+            List<LineRewardController> rewards = new ArrayList<>();
 
-        int delay = 0;
-        for (int i = 0; i < 3; i++) {
+            hook.sendMessageEmbeds(EmbedUtil.create("Rodando lootbox!")).setEphemeral(true).queue();
 
-            val line = new LineRewardController(event.getTextChannel().sendMessage(":film_frames::film_frames::film_frames: :grey_question:").complete());
-            rewards.add(line);
+            int delay = 0;
+            for (int i = 0; i < 3; i++) {
+
+                val line = new LineRewardController(event.getMessageChannel().sendMessage(":film_frames::film_frames::film_frames: :grey_question:").complete());
+                rewards.add(line);
+
+                TaskHelper.runTaskLater(new TimerTask() {
+                    @Override
+                    public void run() {
+                        TaskHelper.runTaskTimerAsync(line, 0, 1250, TimeUnit.MILLISECONDS);
+                    }
+                }, delay, TimeUnit.MILLISECONDS);
+
+                delay += 5300;
+            }
 
             TaskHelper.runTaskLater(new TimerTask() {
                 @Override
                 public void run() {
-                    TaskHelper.runTaskTimerAsync(line, 0, 1250, TimeUnit.MILLISECONDS);
-                }
-            }, delay, TimeUnit.MILLISECONDS);
+                    running = false;
 
-            delay += 5300;
-        }
+                    boolean givedReward = false;
+                    for (LineRewardController reward : rewards) {
+                        if (reward.getReward() == null) continue;
 
-        TaskHelper.runTaskLater(new TimerTask() {
-            @Override
-            public void run() {
-                running = false;
+                        event.getMessageChannel().sendMessage(
+                                        "<@" + event.getUser().getId() + ">: <:lauren_loot:771536259062562846> " +
+                                                "Você ganhou " + reward.getReward().getEmoji() + " **" + reward.getReward().getName() + "**")
+                                .queue();
 
-                boolean givedReward = false;
-                for (LineRewardController reward : rewards) {
-                    if (reward.getReward() == null) continue;
+                        Reward gainReward = reward.getReward();
+                        switch (gainReward) {
+                            case ROLE:
+                                Role role = event.getGuild().getRoleById(771541080634032149L);
+                                if (role == null) {
+                                    LoggerUtil.getLogger().warning("The player " + event.getUser().getName() + " win the Lucky role but i can't give");
+                                    break;
+                                }
 
-                    event.getTextChannel().sendMessage(
-                                    "<@" + event.getUser().getId() + ">: <:lauren_loot:771536259062562846> " +
-                                            "Você ganhou " + reward.getReward().getEmoji() + " **" + reward.getReward().getName() + "**")
-                            .queue();
-
-                    Reward gainReward = reward.getReward();
-                    switch (gainReward) {
-                        case ROLE:
-
-                            Role role = event.getGuild().getRoleById(771541080634032149L);
-                            if (role == null) {
-
-                                logger.warning("The player " + event.getUser().getName() + " win the Lucky role but i can't give");
+                                event.getGuild().addRoleToMember(event.getMember(), role).queue();
                                 break;
 
-                            }
+                            case MONEY:
 
-                            event.getGuild().addRoleToMember(event.getMember(), role).queue();
-                            break;
+                                player.addMoney(1500);
+                                break;
 
-                        case MONEY:
+                            case EXPERIENCE:
 
-                            player.addMoney(1500);
-                            break;
+                                player.gainXP(3000);
+                                break;
 
-                        case EXPERIENCE:
+                            case RANKED_POINTS:
 
-                            player.gainXP(3000);
-                            break;
+                                player.setRankedPoints(player.getRankedPoints() + 40);
+                                player.updateRank();
+                                break;
 
-                        case RANKED_POINTS:
+                            case BOOST:
 
-                            player.setRankedPoints(player.getRankedPoints() + 40);
-                            player.updateRank();
-                            break;
+                                player.addPermission("earnigns.boost");
+                                break;
 
-                        case BOOST:
+                        }
 
-                            player.addPermission("earnigns.boost");
-                            break;
-
+                        givedReward = true;
                     }
 
-                    givedReward = true;
+                    if (!givedReward) {
+                        event.getMessageChannel().sendMessage("<:eita:764084277226373120> Você aparentemente não ganhou nada," +
+                                        " vou te dar 1000 <:xp:772285036174639124> de consolação")
+                                .queue();
+
+                        player.gainXP(1000);
+                    }
+
                 }
-
-                if (!givedReward) {
-                    event.getTextChannel().sendMessage("<:eita:764084277226373120> Você aparentemente não ganhou nada," +
-                                    " vou te dar 1000 <:xp:772285036174639124> de consolação")
-                            .queue();
-
-                    player.gainXP(1000);
-                }
-
-            }
-        }, 15, TimeUnit.SECONDS);
+            }, 15, TimeUnit.SECONDS);
+        });
     }
 
     public static class LineRewardController extends TimerTask {

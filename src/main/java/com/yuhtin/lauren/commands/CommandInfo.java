@@ -1,7 +1,6 @@
 package com.yuhtin.lauren.commands;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import net.dv8tion.jda.api.Permission;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -30,5 +29,7 @@ public @interface CommandInfo {
     String[] args() default {};
 
     CommandType type();
+
+    Permission[] permissions() default {};
 
 }

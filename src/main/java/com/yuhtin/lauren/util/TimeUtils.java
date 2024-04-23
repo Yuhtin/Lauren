@@ -36,6 +36,10 @@ public enum TimeUtils {
         return formats;
     }
 
+    public static String formatToDiscord(long time) {
+        return "<t:" + time + ":R>";
+    }
+
     public static String format(long time) {
         if (time == 0) return "0s";
 

@@ -1,6 +1,5 @@
 package com.yuhtin.lauren.module.impl.level;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 

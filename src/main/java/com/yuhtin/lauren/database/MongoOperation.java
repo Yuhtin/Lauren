@@ -3,7 +3,6 @@ package com.yuhtin.lauren.database;
 import com.mongodb.assertions.Assertions;
 import com.mongodb.client.model.Filters;
 import com.yuhtin.lauren.module.Module;
-import com.yuhtin.lauren.module.ModuleManager;
 import com.yuhtin.lauren.util.FutureBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

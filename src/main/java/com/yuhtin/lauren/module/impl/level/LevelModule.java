@@ -38,7 +38,7 @@ public class LevelModule extends ConfigurableModule {
 
             Level levelObject = new Level(level, experience);
 
-            List<String> rewards = getConfig().getStringList("levels." + level + ".rewards");
+            List<String> rewards = getConfig().getStringList("levels." + level);
             if (rewards != null) {
                 rewards.forEach(role -> levelObject.getRolesToGive().add(Long.parseLong(role)));
             }

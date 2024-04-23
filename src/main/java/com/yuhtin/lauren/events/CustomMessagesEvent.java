@@ -20,14 +20,13 @@ public class CustomMessagesEvent extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-
         if (!event.getChannelType().isGuild()
                 || event.getMember() == null
                 || event.getAuthor().isBot())
             return;
         
-        if (event.getMessage().getMentionedMembers().isEmpty()
-                || !event.getMessage().getMentionedMembers().contains(event.getGuild().getMember(event.getJDA().getSelfUser()))) return;
+        if (event.getMessage().getMentions().getMembers().isEmpty()
+                || !event.getMessage().getMentions().getMembers().contains(event.getGuild().getMember(event.getJDA().getSelfUser()))) return;
 
         if (delay.containsKey(event.getAuthor().getIdLong())
                 && delay.get(event.getAuthor().getIdLong()) > System.currentTimeMillis()) {

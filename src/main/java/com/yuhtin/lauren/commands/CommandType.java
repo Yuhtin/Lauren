@@ -9,7 +9,7 @@ public enum CommandType {
     HELP("Ajuda", "Este módulo tem comandos para te ajudar na utilização do bot e do servidor.", "❓"),
     MUSIC("Música", "Comandos relacionados ao meu sistema de tocar batidões.", "\uD83C\uDFB6"),
     UTILITY("Utilidade", "Este módulo possui coisas úteis pro eu dia a dia.", "\uD83D\uDEE0"),
-    SCRIM("Scrim", "Aqui você pode encontrar comandos relacionados ao meu sistema de partidas.", "\uD83D\uDC7E"),
+    PLAYER("Player", "Aqui você pode encontrar comandos relacionados ao meu sistema de players.", "\uD83D\uDC7E"),
     OTHER("Outros", "Aqui você pode encontrar comandos sem categoria.", "\uD83D\uDC7E"),
 
     CONFIG("Configurações", "Em configurações você define preferências de como agirei em seu servidor.", "⚙"),

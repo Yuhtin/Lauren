@@ -8,17 +8,19 @@ import com.yuhtin.lauren.module.Module;
 import com.yuhtin.lauren.module.impl.player.Player;
 import com.yuhtin.lauren.util.LoggerUtil;
 import com.yuhtin.lauren.util.TaskHelper;
+import lombok.Getter;
 import org.bson.Document;
 
 import java.util.concurrent.TimeUnit;
 
+@Getter
 public class ExperiencieLeaderboardModule implements Module {
 
     private String leaderboard = "";
 
     @Override
     public boolean setup(Lauren lauren) {
-        TaskHelper.runTaskTimerAsync(this::updateLeaderboard, 0, 30, TimeUnit.MINUTES);
+        TaskHelper.runTaskTimerAsync(this::updateLeaderboard, 10, 30, TimeUnit.MINUTES);
         return true;
     }
 

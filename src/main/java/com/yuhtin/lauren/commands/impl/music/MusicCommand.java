@@ -2,6 +2,10 @@ package com.yuhtin.lauren.commands.impl.music;
 
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
+import com.yuhtin.lauren.commands.CommandType;
+import com.yuhtin.lauren.module.Module;
+import com.yuhtin.lauren.module.impl.music.MusicModule;
+import com.yuhtin.lauren.module.impl.player.module.PlayerModule;
 import com.yuhtin.lauren.util.MusicUtil;
 import lombok.val;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -16,18 +20,19 @@ public class MusicCommand implements Command {
 
     @Override
     public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
-        if (event.getGuild() == null
-                || event.getMember() == null
-                || MusicUtil.isIdle(event.getGuild(), hook)) return;
+        if (event.getGuild() == null || event.getMember() == null) return;
 
-        val trackManager = TrackManager.getByGuild(event.getGuild());
-        val track = trackManager.getPlayer().getPlayingTrack();
+        PlayerModule playerModule = Module.instance(PlayerModule.class);
+        if (playerModule == null) return;
 
-        trackManager.tryDeleteLastMessage();
+        MusicModule musicModule = Module.instance(MusicModule.class);
+        if (musicModule == null) return;
 
-        hook.sendMessageEmbeds(MusicUtil.showTrackInfo(track, trackManager).build()).queue(messsage -> {
-            trackManager.setTextChannel(messsage.getTextChannel());
-            trackManager.setLastInfoMessageId(messsage.getIdLong());
+        musicModule.getByGuildId(event.getGuild()).queue(trackManager -> {
+            if (MusicUtil.isIdle(trackManager, hook)) return;
+
+            val track = trackManager.getPlayer().getPlayingTrack();
+            trackManager.sendPlayingMessage(track, hook);
         });
     }
 

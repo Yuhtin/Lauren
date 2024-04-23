@@ -2,8 +2,12 @@ package com.yuhtin.lauren.commands.impl.music;
 
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
+import com.yuhtin.lauren.commands.CommandType;
+import com.yuhtin.lauren.module.Module;
+import com.yuhtin.lauren.module.impl.music.MusicModule;
+import com.yuhtin.lauren.module.impl.music.MusicSearchType;
+import com.yuhtin.lauren.module.impl.player.module.PlayerModule;
 import lombok.val;
-import net.dv8tion.jda.api.entities.AudioChannel;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
@@ -21,29 +25,35 @@ public class PlayCommand implements Command {
     public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
         if (event.getMember() == null || event.getGuild() == null) return;
 
-        val channel = event.getMember().getVoiceState().getChannel();
-        val trackManager = TrackManager.getByGuild(event.getGuild());
+        PlayerModule playerModule = Module.instance(PlayerModule.class);
+        if (playerModule == null) return;
 
-        if (trackManager.getAudio() != null && !trackManager.getAudio().equals(channel)) {
-            var lauren = false;
-            for (val member : trackManager.getAudio().getMembers()) {
-                if (member.getUser().getId().equals(event.getJDA().getSelfUser().getId())) {
-                    lauren = true;
-                    break;
+        MusicModule musicModule = Module.instance(MusicModule.class);
+        if (musicModule == null) return;
+
+        musicModule.getByGuildId(event.getGuild()).queue(trackManager -> {
+            val channel = event.getMember().getVoiceState().getChannel();
+
+            if (trackManager.getAudioChannel() != null && !trackManager.getAudioChannel().equals(channel)) {
+                var lauren = false;
+                for (val member : trackManager.getAudioChannel().getMembers()) {
+                    if (member.getUser().getId().equals(event.getJDA().getSelfUser().getId())) {
+                        lauren = true;
+                        break;
+                    }
+                }
+
+                if (lauren && !playerModule.isDJ(event.getMember())) {
+                    hook.sendMessage("\uD83C\uDFB6 Você precisa estar no mesmo canal que eu para usar isto").queue();
+                    return;
                 }
             }
 
-            if (lauren && !UserUtil.isDJ(event.getMember(), null)) {
-                hook.sendMessage("\uD83C\uDFB6 Você precisa estar no mesmo canal que eu para usar isto").queue();
-                return;
-            }
-        }
+            var input = event.getOption("musica").getAsString();
+            input = input.contains("http") ? input : "ytsearch: " + input;
 
-        var input = event.getOption("musica").getAsString();
-        input = input.contains("http") ? input : "ytsearch: " + input;
-
-        trackManager.loadTrack(input, event.getMember(), hook, MusicSearchType.SIMPLE_SEARCH);
-        trackManager.setTextChannel(event.getTextChannel());
+            musicModule.loadTrack(input, event.getMember(), hook, MusicSearchType.SIMPLE_SEARCH);
+        });
     }
 
 }

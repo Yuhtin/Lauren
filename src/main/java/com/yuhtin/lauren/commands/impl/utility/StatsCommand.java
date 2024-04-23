@@ -1,18 +1,10 @@
 package com.yuhtin.lauren.commands.impl.utility;
 
-import com.google.inject.Inject;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
-import com.yuhtin.lauren.core.logger.Logger;
-import com.yuhtin.lauren.core.statistics.StatsController;
-import lombok.val;
-import net.dv8tion.jda.api.EmbedBuilder;
+import com.yuhtin.lauren.commands.CommandType;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
-
-import java.time.Instant;
-import java.util.Calendar;
-import java.util.Date;
 
 @CommandInfo(
         name = "stats",
@@ -24,14 +16,10 @@ import java.util.Date;
 )
 public class StatsCommand implements Command {
 
-    @Inject
-    private Logger logger;
-    @Inject
-    private StatsController statsController;
-
     @Override
     public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
-        val statOption = event.getOption("stat");
+        // TODO
+        /*val statOption = event.getOption("stat");
         if (statOption == null) {
             val builder = new EmbedBuilder();
             builder.setAuthor("| Todas as estatísticas da Lauren", null, event.getGuild().getIconUrl());
@@ -78,7 +66,7 @@ public class StatsCommand implements Command {
         builder.setTimestamp(Instant.now());
 
         hook.sendMessageEmbeds(builder.build()).queue();
-        statsController.getStats("Análise de Estatísticas").suplyStats(1);
+        statsController.getStats("Análise de Estatísticas").suplyStats(1);*/
     }
 
 }

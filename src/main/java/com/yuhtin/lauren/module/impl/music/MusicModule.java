@@ -36,22 +36,35 @@ public class MusicModule implements Module {
         return true;
     }
 
+    public int getMusicsInQueue() {
+        return playerByGuild.values()
+                .stream()
+                .mapToInt(player -> player.getPlaylist().size())
+                .sum();
+    }
+
     public FutureBuilder<GuildedMusicPlayer> getByGuildId(Guild guild) {
         return FutureBuilder.of(() -> {
-            long guildId = guild.getIdLong();
-            if (playerByGuild.containsKey(guildId)) {
-                return playerByGuild.get(guildId);
+            try {
+                long guildId = guild.getIdLong();
+                if (playerByGuild.containsKey(guildId)) {
+                    return playerByGuild.get(guildId);
+                }
+
+                GuildedMusicPlayer guildedMusicPlayer = new GuildedMusicPlayer(guildId, audioManager.createPlayer());
+
+                AudioManager discordAudio = guild.getAudioManager();
+
+                discordAudio.setSendingHandler(new AudioBridge(guildedMusicPlayer.getPlayer()));
+                discordAudio.setSpeakingMode(SpeakingMode.PRIORITY);
+
+                playerByGuild.put(guildId, guildedMusicPlayer);
+                return guildedMusicPlayer;
+            } catch (Exception e) {
+                LoggerUtil.getLogger().severe("Error while getting music player by guild id");
+                LoggerUtil.printException(e);
+                return null;
             }
-
-            GuildedMusicPlayer guildedMusicPlayer = new GuildedMusicPlayer(guildId, audioManager.createPlayer());
-
-            AudioManager discordAudio = guild.getAudioManager();
-
-            discordAudio.setSendingHandler(new AudioBridge(guildedMusicPlayer.getPlayer()));
-            discordAudio.setSpeakingMode(SpeakingMode.PRIORITY);
-
-            playerByGuild.put(guildId, guildedMusicPlayer);
-            return guildedMusicPlayer;
         });
     }
 
@@ -65,6 +78,10 @@ public class MusicModule implements Module {
                     .trackUrl(trackUrl)
                     .member(member)
                     .searchType(type);
+
+            if (hook != null) {
+                player.setTextChannelId(hook.getInteraction().getChannelIdLong());
+            }
 
             if (type == MusicSearchType.SIMPLE_SEARCH && hook != null) {
                 hook.sendMessage(trackEmoji + " **Procurando** 🔎 `" + trackUrl.replace("ytsearch: ", "") + "`").queue(message -> {

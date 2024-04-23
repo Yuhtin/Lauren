@@ -2,12 +2,13 @@ package com.yuhtin.lauren.commands.impl.utility;
 
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
+import com.yuhtin.lauren.commands.CommandType;
 import com.yuhtin.lauren.util.HTTPRequest;
 import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
-import org.json.JSONObject;
+import org.bson.json.JsonObject;
 
 @CommandInfo(
         name = "minecraft.player",
@@ -31,9 +32,9 @@ public class MinecraftSearchCommand implements Command {
             return;
         }
 
-        val object = new JSONObject(response);
-        val nick = object.getString("name");
-        val uuid = object.getString("id");
+        val object = new JsonObject(response).toBsonDocument();
+        val nick = object.getString("name").getValue();
+        val uuid = object.getString("id").getValue();
         val head = "https://visage.surgeplay.com/head/" + uuid;
         val body = "https://visage.surgeplay.com/full/" + uuid;
         val skin = "https://visage.surgeplay.com/skin/" + uuid;

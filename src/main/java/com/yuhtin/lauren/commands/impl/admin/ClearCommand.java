@@ -1,15 +1,15 @@
 package com.yuhtin.lauren.commands.impl.admin;
 
-import com.google.inject.Inject;
 import com.yuhtin.lauren.commands.Command;
-import com.yuhtin.lauren.core.logger.Logger;
 import com.yuhtin.lauren.commands.CommandInfo;
-import lombok.val;
+import com.yuhtin.lauren.commands.CommandType;
+import com.yuhtin.lauren.util.LoggerUtil;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageHistory;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 
 @CommandInfo(
         name = "clearchat",
@@ -18,27 +18,26 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
         args = {
                 "<!quantity>-Quantidade de mensagens para apagar",
                 "[@user]-Mencione um usuário para apagar as mensagens só dele"
-        }
+        },
+        permissions = { Permission.MESSAGE_MANAGE }
 )
 public class ClearCommand implements Command {
 
-    @Inject private Logger logger;
-
     @Override
     public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
-        if (event.getMember() == null || !UserUtil.hasPermission(event.getMember(), hook, Permission.MESSAGE_MANAGE)) return;
+        if (event.getMember() == null) return;
 
         long id = 0L;
-        val userOption = event.getOption("user");
+        OptionMapping userOption = event.getOption("user");
         if (userOption != null) id = userOption.getAsMember().getIdLong();
 
-        val purge = (int) event.getOption("quantity").getAsDouble();
+        int purge = event.getOption("quantity").getAsInt();
         if (purge > 100) {
             hook.sendMessage("❌ O limite é de 100 mensagens por vez.").queue();
             return;
         }
 
-        MessageHistory messageHistory = new MessageHistory(event.getTextChannel());
+        MessageHistory messageHistory = new MessageHistory(event.getMessageChannel());
 
         long finalId = id;
         messageHistory.retrievePast(purge).queue(messages -> {
@@ -46,7 +45,7 @@ public class ClearCommand implements Command {
             for (Message message : messages) {
                 if (message == null || (finalId != 0L && message.getAuthor().getIdLong() != finalId)) continue;
 
-                logger.info(String.format("User %s (%s) cleared message from %s (%s): %s",
+                LoggerUtil.getLogger().info(String.format("User %s (%s) cleared message from %s (%s): %s",
                         event.getUser().getName(),
                         event.getUser().getId(),
                         message.getAuthor().getName(),

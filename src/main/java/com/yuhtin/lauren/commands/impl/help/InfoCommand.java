@@ -1,11 +1,12 @@
 package com.yuhtin.lauren.commands.impl.help;
 
-import com.google.inject.Inject;
+import com.yuhtin.lauren.Startup;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
-import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.core.statistics.StatsController;
-import com.yuhtin.lauren.startup.Startup;
+import com.yuhtin.lauren.commands.CommandType;
+import com.yuhtin.lauren.module.Module;
+import com.yuhtin.lauren.module.impl.music.MusicModule;
+import com.yuhtin.lauren.module.impl.player.module.PlayerModule;
 import com.yuhtin.lauren.util.SystemUtil;
 import com.yuhtin.lauren.util.TimeUtils;
 import lombok.val;
@@ -24,25 +25,18 @@ import java.util.Locale;
 )
 public class InfoCommand implements Command {
 
-    @Inject private PlayerController playerController;
-    @Inject private StatsController statsController;
-
     @Override
     public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
         val bot = event.getJDA().getSelfUser();
         val timeCreated = bot.getTimeCreated();
 
-        int musicsQueue = 0;
-        for (val trackManager : TrackManager.getCacheByGuildId().values()) {
-           musicsQueue += trackManager.getQueuedTracks().size();
-        }
+        MusicModule musicModule = Module.instance(MusicModule.class);
+        PlayerModule playerModule = Module.instance(PlayerModule.class);
 
-        val cacheMessage = playerController.totalUsers()
+        val cacheMessage = playerModule.getCacheSize()
                 + " jogadores, "
-                + musicsQueue
-                + " músicas e "
-                + statsController.getStats().size()
-                + " estatísticas";
+                + musicModule.getMusicsInQueue()
+                + " músicas";
 
 
         val builder = new EmbedBuilder()
@@ -54,7 +48,7 @@ public class InfoCommand implements Command {
                 .addField("🙍‍♂️ Dono", "`Yuhtin#9147`", true)
 
                 .addField("<a:infinito:703187274912759899> Uptime",
-                        "`" + TimeUtils.formatTime(System.currentTimeMillis() - Startup.getLauren().getBotStartTime()) + "`",
+                        "`" + TimeUtils.formatTime(System.currentTimeMillis() - Startup.getLauren().getStartupTime()) + "`",
                         true)
 
                 .addField("💥 Cache", "`" + cacheMessage + "`", true)

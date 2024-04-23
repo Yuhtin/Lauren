@@ -10,6 +10,10 @@ public class NumberUtil {
 
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#0");
 
+    public static boolean isInvalid(double number) {
+        return Double.isNaN(number) || Double.isInfinite(number);
+    }
+
     public static String format(double number) {
         return DECIMAL_FORMAT.format(number);
     }

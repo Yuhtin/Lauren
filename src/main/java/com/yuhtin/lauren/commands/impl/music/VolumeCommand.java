@@ -2,6 +2,11 @@ package com.yuhtin.lauren.commands.impl.music;
 
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
+import com.yuhtin.lauren.commands.CommandType;
+import com.yuhtin.lauren.module.Module;
+import com.yuhtin.lauren.module.impl.music.MusicModule;
+import com.yuhtin.lauren.module.impl.player.module.PlayerModule;
+import com.yuhtin.lauren.util.MusicUtil;
 import lombok.val;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
@@ -20,24 +25,34 @@ public class VolumeCommand implements Command {
     public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
         if (event.getMember() == null || event.getGuild() == null) return;
 
-        val trackManager = TrackManager.getByGuild(event.getGuild());
-        if (!UserUtil.isDJ(event.getMember(), hook)) {
-            hook.sendMessage("\uD83D\uDD0A Meu volume atual está em: `" + trackManager.getPlayer().getVolume() + "%`").queue();
-            return;
-        }
+        PlayerModule playerModule = Module.instance(PlayerModule.class);
+        if (playerModule == null) return;
 
-        val option = event.getOption("volume");
-        if (option == null) {
-            hook.sendMessage("\uD83D\uDD0A Meu volume atual está em: `" + trackManager.getPlayer().getVolume() + "%`").queue();
-            hook.sendMessage("\uD83D\uDCA2 Eita calma ai, se quiser mudar o volume, insira um valor de `1 a 100` (Padrão: 25)").queue();
-            return;
-        }
+        MusicModule musicModule = Module.instance(MusicModule.class);
+        if (musicModule == null) return;
 
-        var volume = (int) option.getAsDouble();
-        if (volume < 1 || (volume > 100 && !UserUtil.isOwner(event.getUser(), null))) volume = 25;
+        musicModule.getByGuildId(event.getGuild()).queue(trackManager -> {
+            if (MusicUtil.isIdle(trackManager, hook)) return;
 
-        trackManager.getPlayer().setVolume(volume);
-        hook.sendMessage("♻️ Opaaaa, você setou o volume dos meus batidões para `" + volume + "%`").queue();
+            if (!playerModule.isDJ(event.getMember())) {
+                hook.sendMessage("\uD83D\uDD0A Meu volume atual está em: `" + trackManager.getPlayer().getVolume() + "%`").queue();
+                return;
+            }
+
+            val option = event.getOption("volume");
+            if (option == null) {
+                hook.sendMessage("\uD83D\uDD0A Meu volume atual está em: `" + trackManager.getPlayer().getVolume() + "%`").queue();
+                hook.sendMessage("\uD83D\uDCA2 Eita calma ai, se quiser mudar o volume, insira um valor de `1 a 100` (Padrão: 25)").queue();
+                return;
+            }
+
+            var volume = (int) option.getAsDouble();
+            if (volume < 1 || (volume > 100 && !MusicUtil.isMusicOwner(event.getMember(), trackManager))) volume = 25;
+
+            trackManager.getPlayer().setVolume(volume);
+            hook.sendMessage("♻️ Opaaaa, você setou o volume dos meus batidões para `" + volume + "%`").queue();
+        });
+
     }
 
 }

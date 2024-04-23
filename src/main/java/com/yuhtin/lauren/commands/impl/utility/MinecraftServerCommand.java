@@ -2,6 +2,7 @@ package com.yuhtin.lauren.commands.impl.utility;
 
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
+import com.yuhtin.lauren.commands.CommandType;
 import com.yuhtin.lauren.util.HTTPRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
-import org.json.JSONObject;
+import org.bson.json.JsonObject;
 
 import java.time.Instant;
 
@@ -49,12 +50,12 @@ public class MinecraftServerCommand implements Command {
 
 
     private ServerInfo parse(String response) {
-        val object = new JSONObject(response);
+        val object = new JsonObject(response).toBsonDocument();
 
-        val version = object.getJSONObject("version");
-        val players = object.getJSONObject("players");
+        val version = object.get("version").asDocument();
+        val players = object.get("players").asDocument();
 
-        return new ServerInfo(version.getString("name"), players.getInt("max"), players.getInt("online"));
+        return new ServerInfo(version.getString("name").getValue(), players.getInt32("max").getValue(), players.getInt32("online").getValue());
     }
 
     @Getter

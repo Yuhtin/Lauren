@@ -25,13 +25,11 @@ public class ModuleManager {
             try {
                 if (modules.containsKey(className.getSimpleName())) continue;
 
-                Object object = className.newInstance();
-
                 if (Module.class.isAssignableFrom(className)) {
+                    Object object = className.newInstance();
+
                     Module module = (Module) object;
                     loadedModules.put(className.getSimpleName(), module);
-                } else {
-                    throw new InstantiationException();
                 }
             } catch (Exception exception) {
                 LoggerUtil.printException(exception);

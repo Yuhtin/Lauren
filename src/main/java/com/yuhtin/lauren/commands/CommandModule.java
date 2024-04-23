@@ -6,18 +6,19 @@ import com.yuhtin.lauren.util.EmbedUtil;
 import com.yuhtin.lauren.util.LoggerUtil;
 import com.yuhtin.lauren.util.PathFinder;
 import lombok.val;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.internal.interactions.CommandDataImpl;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class CommandModule implements Module {
@@ -61,13 +62,17 @@ public class CommandModule implements Module {
 
                         populateOptions(data, null, subcommandData);
                     } else {
+                        List<Permission> permissions = new ArrayList<>();
+                        Collections.addAll(permissions, data.permissions());
+
+                        if (!permissions.isEmpty()) {
+                            currentData.setDefaultPermissions(DefaultMemberPermissions.enabledFor(data.permissions()));
+                        }
+
                         populateOptions(data, currentData, null);
                     }
 
-                    for (Guild guild : lauren.getJda().getGuilds()) {
-                        guild.upsertCommand(currentData).queue();
-                    }
-
+                    hashMap.put(commandName, currentData);
                     infoCacher.insert(data);
                 } else {
                     throw new InstantiationException();
@@ -79,6 +84,10 @@ public class CommandModule implements Module {
         }
 
         infoCacher.construct();
+
+        for (Guild guild : lauren.getJda().getGuilds()) {
+            guild.updateCommands().addCommands(hashMap.values()).queue();
+        }
 
         logger.info("Registered " + hashMap.size() + " commands successfully");
         return true;
@@ -121,7 +130,7 @@ public class CommandModule implements Module {
     private void populateOptions(CommandInfo handler, CommandDataImpl commandData, SubcommandData subcommandData) {
         for (String option : handler.args()) {
             String[] split = option.split("-");
-            String  argName = split[0];
+            String argName = split[0];
             OptionType optionType;
 
             if (argName.contains("@")) optionType = OptionType.USER;

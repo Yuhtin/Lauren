@@ -1,4 +1,4 @@
-package com.yuhtin.lauren.core.vote;
+package com.yuhtin.lauren.module.impl.vote;
 
 import lombok.Builder;
 import lombok.Data;

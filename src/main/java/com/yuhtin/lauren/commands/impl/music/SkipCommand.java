@@ -2,7 +2,11 @@ package com.yuhtin.lauren.commands.impl.music;
 
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
+import com.yuhtin.lauren.commands.CommandType;
+import com.yuhtin.lauren.module.Module;
 import com.yuhtin.lauren.module.impl.music.AudioInfo;
+import com.yuhtin.lauren.module.impl.music.MusicModule;
+import com.yuhtin.lauren.module.impl.player.module.PlayerModule;
 import com.yuhtin.lauren.util.MusicUtil;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
@@ -23,40 +27,47 @@ public class SkipCommand implements Command {
             return;
         }
 
-        if
+        PlayerModule playerModule = Module.instance(PlayerModule.class);
+        if (playerModule == null) return;
 
-        if (MusicUtil.isIdle(event.getGuild(), hook)) return;
+        MusicModule musicModule = Module.instance(MusicModule.class);
+        if (musicModule == null) return;
 
-        TrackManager trackManager = TrackManager.getByGuild(event.getGuild());
-        if (MusicUtil.isMusicOwner(event.getMember())) {
-            trackManager.getPlayer().stopTrack();
-            hook.sendMessage("\u23e9 Pulei a música pra você <3").queue();
-            return;
-        }
+        musicModule.getByGuildId(event.getGuild()).queue(trackManager -> {
+            if (MusicUtil.isIdle(trackManager, hook)) return;
 
-        AudioInfo info = trackManager.getTrackInfo();
-        if (info.hasVoted(event.getUser())) {
-            hook.sendMessage("\uD83D\uDC6E\uD83C\uDFFD\u200D♀️ Ei você já votou pra pular essa música ;-;").queue();
-            return;
-        }
+            if (MusicUtil.isMusicOwner(event.getMember(), trackManager)) {
+                trackManager.getPlayer().stopTrack();
+                hook.sendMessage("\u23e9 Pulei a música pra você <3").queue();
+                return;
+            }
 
-        info.addSkip(event.getUser());
-        if (info.getSkips() >= trackManager.getAudio().getMembers().size() - 2) {
-            trackManager.skipTrack();
-            hook.sendMessage("\uD83E\uDDF6 Amo quando todos concordam entre si, pulando a música").queue();
-            return;
-        }
+            AudioInfo info = trackManager.getTrackInfo();
+            if (info.hasVoted(event.getUser())) {
+                hook.sendMessage("\uD83D\uDC6E\uD83C\uDFFD\u200D♀️ Ei você já votou pra pular essa música ;-;")
+                        .setEphemeral(true)
+                        .queue();
+                return;
+            }
 
-        String name = event.getMember().getNickname() == null
-                ? event.getUser().getName()
-                : event.getMember().getNickname();
+            info.addSkip(event.getUser());
+            if (info.getSkips() >= trackManager.getAudioChannel().getMembers().size() - 2) {
+                trackManager.skipTrack();
+                hook.sendMessage("\uD83E\uDDF6 Amo quando todos concordam entre si, pulando a música").queue();
+                return;
+            }
 
-        String message = "\uD83E\uDDEC **"
-                + name +
-                "** votou para pular a música **("
-                + info.getSkips() + "/" + (trackManager.getAudio().getMembers().size() - 2)
-                + ")**";
+            String name = event.getMember().getNickname() == null
+                    ? event.getUser().getName()
+                    : event.getMember().getNickname();
 
-        hook.sendMessage(message).queue();
+            String message = "\uD83E\uDDEC **"
+                    + name +
+                    "** votou para pular a música **("
+                    + info.getSkips() + "/" + (trackManager.getAudioChannel().getMembers().size() - 2)
+                    + ")**";
+
+            hook.sendMessage(message).queue();
+        });
     }
 }

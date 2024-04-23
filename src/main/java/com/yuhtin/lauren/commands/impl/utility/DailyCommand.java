@@ -1,11 +1,10 @@
 package com.yuhtin.lauren.commands.impl.utility;
 
-import com.google.inject.Inject;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
-import com.yuhtin.lauren.core.player.controller.PlayerController;
-import com.yuhtin.lauren.core.statistics.StatsController;
-import lombok.val;
+import com.yuhtin.lauren.commands.CommandType;
+import com.yuhtin.lauren.module.Module;
+import com.yuhtin.lauren.module.impl.player.module.PlayerModule;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 
@@ -16,23 +15,30 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
 )
 public class DailyCommand implements Command {
 
-    @Inject private PlayerController playerController;
-    @Inject private StatsController statsController;
-
     @Override
     public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
-        val data = playerController.get(event.getMember().getIdLong());
-        if (!data.isAbbleToDaily()) {
-            hook.sendMessage("Poxa 😥 Você precisa aguardar até 12:00 para usar este comando novamente").queue();
+        PlayerModule playerModule = Module.instance(PlayerModule.class);
+        if (playerModule == null) {
+            hook.sendMessage("Ops, ocorreu um erro ao tentar realizar esta ação").queue();
             return;
         }
 
-        data.setAbbleToDaily(false).addMoney(75).gainXP(300);
-        hook.sendMessage(
-                "🌟 Aaaaa, eu to muito feliz por ter lembrado de mim e pego seu daily " +
-                "💙 Veja suas informações atualizadas usando `/perfil`"
-        ).queue();
+        playerModule.retrieve(event.getMember().getIdLong()).thenAccept(player -> {
+            if (!player.isAbbleToDaily()) {
+                hook.sendMessage("Poxa 😥 Você precisa aguardar até 12:00 para usar este comando novamente").queue();
+                return;
+            }
 
-        statsController.getStats("Daily Command").suplyStats(1);
+            player.setAbbleToDaily(false);
+            player.addMoney(75);
+            player.gainXP(300);
+
+            hook.sendMessage(
+                    "🌟 Aaaaa, eu to muito feliz por ter lembrado de mim e pego seu daily " +
+                            "💙 Veja suas informações atualizadas usando `/perfil`"
+            ).queue();
+
+            // TODO: statsController.getStats("Daily Command").suplyStats(1);
+        });
     }
 }

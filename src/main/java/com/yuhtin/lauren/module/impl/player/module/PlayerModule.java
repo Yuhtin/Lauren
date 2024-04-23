@@ -1,6 +1,5 @@
 package com.yuhtin.lauren.module.impl.player.module;
 
-import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.RemovalCause;
 import com.yuhtin.lauren.Lauren;
@@ -30,7 +29,7 @@ public class PlayerModule extends ConfigurableModule {
 
     @Override
     public boolean setup(Lauren lauren) {
-        setConfig(YamlConfiguration.load("features/player.yml"));
+        setConfig(YamlConfiguration.load("player.yml"));
 
         MongoModule mongoModule = Module.instance(MongoModule.class);
         if (mongoModule == null) {
@@ -41,8 +40,8 @@ public class PlayerModule extends ConfigurableModule {
         return true;
     }
 
-    public FutureBuilder<Player> retrieve(long userId) {
-        return FutureBuilder.of(cache.get(userId));
+    public CompletableFuture<Player> retrieve(long userId) {
+        return cache.get(userId);
     }
 
     private void saveOnRemoval(Long userId, Player player, RemovalCause removalCause) {
@@ -90,5 +89,9 @@ public class PlayerModule extends ConfigurableModule {
         );
 
         return FutureBuilder.of(task.thenAccept(unused -> cache.invalidateAll()));
+    }
+
+    public int getCacheSize() {
+        return cache.size();
     }
 }

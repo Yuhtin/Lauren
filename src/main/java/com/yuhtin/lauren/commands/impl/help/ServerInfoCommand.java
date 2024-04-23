@@ -2,6 +2,8 @@ package com.yuhtin.lauren.commands.impl.help;
 
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
+import com.yuhtin.lauren.commands.CommandType;
+import com.yuhtin.lauren.util.TimeUtils;
 import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -38,8 +40,8 @@ public class ServerInfoCommand implements Command {
                 .addField("🧶 Cargos", roleSize, true)
                 .addField("👑 Dono", "`" + ownerName + "`\n(" + ownerId + ")", true)
                 .addField("💬 Canais (" + channelsSize + ")", "📝 **Texto:** " + textChannels + "\n🗣 **Voz:** " + voiceChannels, true)
-                .addField("📆 Criado em", DateUtil.format(event.getGuild().getTimeCreated().toEpochSecond()), true)
-                .addField("✨ Você entrou em", DateUtil.format(event.getMember().getTimeJoined().toEpochSecond()), true)
+                .addField("📆 Criado em", TimeUtils.formatToDiscord(event.getGuild().getTimeCreated().toEpochSecond()), true)
+                .addField("✨ Você entrou em", TimeUtils.formatToDiscord(event.getMember().getTimeJoined().toEpochSecond()), true)
 
                 .setFooter("Comando usado as", event.getUser().getAvatarUrl())
                 .setTimestamp(Instant.now());

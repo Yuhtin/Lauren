@@ -3,11 +3,13 @@ package com.yuhtin.lauren.module.impl.multiplier;
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.config.YamlConfiguration;
 import com.yuhtin.lauren.module.ConfigurableModule;
+import lombok.Getter;
 
 import java.util.HashMap;
 
 public class MultiplierModule extends ConfigurableModule {
 
+    @Getter
     private final HashMap<String, Double> multipliers = new HashMap<>();
 
     @Override

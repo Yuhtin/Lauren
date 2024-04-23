@@ -108,7 +108,7 @@ public class LootGeneratorModule extends ConfigurableModule {
             }
 
             User user = event.getUser();
-            playerModule.retrieve(user.getIdLong()).queue(player -> {
+            playerModule.retrieve(user.getIdLong()).thenAccept(player -> {
                 if (player == null) return;
 
                 player.setLootBoxes(player.getLootBoxes() + 1);

@@ -3,8 +3,6 @@ package com.yuhtin.lauren.module.impl.music;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.yuhtin.lauren.util.MusicUtil;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 

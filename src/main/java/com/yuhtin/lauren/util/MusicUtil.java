@@ -3,7 +3,6 @@ package com.yuhtin.lauren.util;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
-import com.yuhtin.lauren.module.Module;
 import com.yuhtin.lauren.module.impl.music.AudioInfo;
 import com.yuhtin.lauren.module.impl.music.GuildedMusicPlayer;
 import lombok.val;
@@ -80,7 +79,6 @@ public class MusicUtil {
         return new EmbedBuilder()
                 .setColor(Color.GREEN)
                 .setTitle("\ud83d\udcbf Informações da música atual")
-                .setThumbnail(audioInfo.artworkUrl)
                 .setDescription("\ud83d\udcc0 Nome: `" + audioInfo.title + "`\n" +
                         "\uD83D\uDCB0 Autor: `" + audioInfo.author + "`\n" +
                         "\uD83D\uDCE2 Tipo de vídeo: `" + contentType + "`\n" +

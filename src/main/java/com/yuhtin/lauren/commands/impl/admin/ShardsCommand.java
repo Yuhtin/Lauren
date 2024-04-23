@@ -1,9 +1,10 @@
 package com.yuhtin.lauren.commands.impl.admin;
 
-import com.google.inject.Inject;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
-import com.yuhtin.lauren.core.player.controller.PlayerController;
+import com.yuhtin.lauren.commands.CommandType;
+import com.yuhtin.lauren.module.Module;
+import com.yuhtin.lauren.module.impl.player.module.PlayerModule;
 import lombok.val;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -17,33 +18,44 @@ import net.dv8tion.jda.api.interactions.commands.CommandInteraction;
                 "<option>-Use add, remove ou set.",
                 "<@player>-Jogador que deseja fazer a alteração.",
                 "<!quantity>-Quantidade de shards que deseja adicionar ou remover."
-        }
+        },
+        permissions = {Permission.ADMINISTRATOR}
 )
 public class ShardsCommand implements Command {
 
-    @Inject private PlayerController playerController;
-
     @Override
     public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
-        if (event.getMember() == null
-                || !UserUtil.hasPermission(event.getMember(), hook, Permission.ADMINISTRATOR))
-            return;
+        if (event.getMember() == null) return;
 
         val option = event.getOption("option").getAsString();
-        val player = event.getOption("player").getAsUser();
-        var quantity = (int) event.getOption("quantity").getAsDouble();
-        if (option.equalsIgnoreCase("remove")) quantity *= -1;
+        val user = event.getOption("player").getAsUser();
 
-        val data = playerController.get(player.getIdLong());
-        if (!option.equalsIgnoreCase("set")) quantity += data.getRankedPoints();
 
-        data.addMoney(quantity);
+        PlayerModule playerModule = Module.instance(PlayerModule.class);
+        if (playerModule == null) {
+            hook.sendMessage("Módulo de jogador não carregado!").queue();
+            return;
+        }
 
-        if (quantity <= 0) quantity *= -1;
-        val optionUsed = option.equalsIgnoreCase("set") ? "setou" : option.equalsIgnoreCase("remove") ? "removeu" : "adicionou";
+        playerModule.retrieve(user.getIdLong())
+                .thenAccept(player -> {
+                    var quantity = (int) event.getOption("quantity").getAsDouble();
+                    if (option.equalsIgnoreCase("remove")) quantity *= -1;
 
-        hook.sendMessage("<:felizpakas:742373250037710918> " +
-                        "Você " + optionUsed + " **" + quantity + "** shards ao jogador " + player.getName())
-                .queue();
+                    if (option.equalsIgnoreCase("set")) {
+                        player.setMoney(quantity);
+                    } else {
+                        player.addMoney(quantity);
+                    }
+
+                    if (quantity <= 0) quantity *= -1;
+                    val optionUsed = option.equalsIgnoreCase("set") ? "setou" : option.equalsIgnoreCase("remove") ? "removeu" : "adicionou";
+
+                    hook.sendMessage("<:felizpakas:742373250037710918> " +
+                                    "Você " + optionUsed + " **" + quantity + "** shards ao jogador " + user.getName())
+                            .queue();
+                });
+
+
     }
 }

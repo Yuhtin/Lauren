@@ -14,8 +14,6 @@ public class MusicCustomEqualizer extends EqualizerFactory {
     };
 
     public void equalize(AudioPlayer player, EqualizerPreset preset, float diff) {
-        player.setFilterFactory(this);
-
         switch (preset) {
             case HIGH:
                 for (int i = 0; i < BASS_BOOST.length; i++) {
@@ -25,11 +23,7 @@ public class MusicCustomEqualizer extends EqualizerFactory {
                 break;
             case BASS_BOOST:
                 for (int i = 0; i < BASS_BOOST.length; i++) {
-                    setGain(i, BASS_BOOST[i] + 0.12f);
-                }
-
-                for (int i = 0; i < BASS_BOOST.length; i++) {
-                    setGain(i, -BASS_BOOST[i] + 0.013f);
+                    setGain(i, (BASS_BOOST[i] + 0.12f) + (-BASS_BOOST[i] + 0.013f));
                 }
 
                 break;
@@ -39,12 +33,16 @@ public class MusicCustomEqualizer extends EqualizerFactory {
                 }
 
                 break;
+            case RECOMMENDED:
+                for (int i = 0; i < BASS_BOOST.length; i++) {
+                    setGain(i, BASS_BOOST[i]);
+                }
             default:
-
-                break;
+                player.setFilterFactory(new MusicCustomEqualizer());
+                return;
         }
 
-
+        player.setFilterFactory(this);
     }
 
 }

@@ -1,9 +1,11 @@
 package com.yuhtin.lauren.commands.impl.utility;
 
-import com.google.inject.Inject;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
-import com.yuhtin.lauren.core.player.controller.PlayerController;
+import com.yuhtin.lauren.commands.CommandType;
+import com.yuhtin.lauren.module.Module;
+import com.yuhtin.lauren.module.impl.player.module.PlayerModule;
+import com.yuhtin.lauren.util.NumberUtil;
 import lombok.val;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -26,9 +28,6 @@ public class BetCommand implements Command {
 
     private static final Random RANDOM = new Random();
 
-    @Inject
-    private PlayerController playerController;
-
     @Override
     public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
         val colorOption = event.getOption("cor");
@@ -39,6 +38,13 @@ public class BetCommand implements Command {
             hook.sendMessageEmbeds(helpMessage(member.getColor(), event.getGuild().getIconUrl()).build()).queue();
             return;
         }
+
+        PlayerModule playerModule = Module.instance(PlayerModule.class);
+        if (playerModule == null) {
+            hook.sendMessage("Ops, ocorreu um erro ao tentar realizar esta ação").queue();
+            return;
+        }
+
 
         String color;
         double multiplier;
@@ -71,7 +77,7 @@ public class BetCommand implements Command {
 
         try {
             money = (int) quantityOption.getAsDouble();
-            if (NumberUtils.isInvalid(money)) {
+            if (NumberUtil.isInvalid(money)) {
                 hook.sendMessageEmbeds(helpMessage(member.getColor(), event.getGuild().getIconUrl()).build()).queue();
                 return;
             }
@@ -86,21 +92,22 @@ public class BetCommand implements Command {
             return;
         }
 
-        val data = playerController.get(user.getIdLong());
-        if (data.getMoney() < money) {
-            hook.sendMessage("<:chorano:726207542413230142> <@" + user.getId() + ">, você não tem dinheiro suficiente para realizar esta aposta.").queue();
-            return;
-        }
+        playerModule.retrieve(user.getIdLong()).thenAccept(player -> {
+            if (player.getMoney() < money) {
+                hook.sendMessage("<:chorano:726207542413230142> <@" + user.getId() + ">, você não tem dinheiro suficiente para realizar esta aposta.").queue();
+                return;
+            }
 
-        if (RANDOM.nextInt(100) > chance) {
-            data.removeMoney(money);
-            hook.sendMessage("<:chorano:726207542413230142> <@" + user.getId() + ">, você perdeu `" + money + " shards` tentando apostar na cor " + color).queue();
-            return;
-        }
+            if (RANDOM.nextInt(100) > chance) {
+                player.removeMoney(money);
+                hook.sendMessage("<:chorano:726207542413230142> <@" + user.getId() + ">, você perdeu `" + money + " shards` tentando apostar na cor " + color).queue();
+                return;
+            }
 
-        int total = (int) (money * multiplier - (money));
-        data.addMoney(total);
-        hook.sendMessage("<:felizpakas:742373250037710918> <@" + user.getId() + ">, você ganhou `+ " + total + " shards` apostando na cor " + color).queue();
+            int total = (int) (money * multiplier - (money));
+            player.addMoney(total);
+            hook.sendMessage("<:felizpakas:742373250037710918> <@" + user.getId() + ">, você ganhou `+ " + total + " shards` apostando na cor " + color).queue();
+        });
     }
 
     private EmbedBuilder helpMessage(Color color, String iconUrl) {

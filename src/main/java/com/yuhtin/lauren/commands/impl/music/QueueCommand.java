@@ -1,10 +1,15 @@
 package com.yuhtin.lauren.commands.impl.music;
 
+import com.yuhtin.lauren.Startup;
 import com.yuhtin.lauren.commands.Command;
 import com.yuhtin.lauren.commands.CommandInfo;
-import com.yuhtin.lauren.startup.Startup;
+import com.yuhtin.lauren.commands.CommandType;
+import com.yuhtin.lauren.module.Module;
+import com.yuhtin.lauren.module.impl.music.MusicModule;
+import com.yuhtin.lauren.module.impl.player.module.PlayerModule;
 import com.yuhtin.lauren.util.EmbedUtil;
 import com.yuhtin.lauren.util.MusicUtil;
+import com.yuhtin.lauren.util.Paginator;
 import lombok.Getter;
 import lombok.val;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -36,55 +41,63 @@ public class QueueCommand implements Command {
     public void execute(CommandInteraction event, InteractionHook hook) throws Exception {
         if (event.getMember() == null || event.getGuild() == null) return;
 
-        val trackManager = TrackManager.getByGuild(event.getGuild());
-        if (trackManager.getQueuedTracks().isEmpty()) {
-            hook.sendMessageEmbeds(EmbedUtil.create("Eita não tem nenhum batidão tocando, adiciona uns ai <3")).queue();
-            return;
-        }
+        PlayerModule playerModule = Module.instance(PlayerModule.class);
+        if (playerModule == null) return;
 
-        val pageOption = event.getOption("pagina");
-        val page = pageOption == null ? 1: (int) pageOption.getAsDouble();
+        MusicModule musicModule = Module.instance(MusicModule.class);
+        if (musicModule == null) return;
 
-        val queue = trackManager.getQueuedTracks();
-        val songs = new String[queue.size()];
-        var totalTime = 0L;
+        musicModule.getByGuildId(event.getGuild()).queue(trackManager -> {
+            if (MusicUtil.isIdle(trackManager, hook)) return;
+            if (trackManager.getPlaylist().isEmpty()) {
+                hook.sendMessageEmbeds(EmbedUtil.create("Eita não tem nenhum batidão tocando, adiciona uns ai <3")).queue();
+                return;
+            }
 
-        var i = 0;
-        for (val audioInfo : queue) {
-            totalTime += audioInfo.getTrack().getInfo().length;
-            songs[i] = audioInfo.toString();
+            val pageOption = event.getOption("pagina");
+            val page = pageOption == null ? 1: (int) pageOption.getAsDouble();
 
-            ++i;
-        }
+            val queue = trackManager.getPlaylist();
+            val songs = new String[queue.size()];
+            var totalTime = 0L;
 
-        val timeInLetter = MusicUtil.getTimeStamp(totalTime);
-        BUILDER.setText((number, number2) -> {
-                    val stringBuilder = new StringBuilder();
-                    if (trackManager.getPlayer().getPlayingTrack() != null) {
-                        stringBuilder.append(trackManager.getPlayer().isPaused() ? "\u23F8" : "\u25B6")
-                                .append(" **")
-                                .append(trackManager.getPlayer().getPlayingTrack().getInfo().title)
-                                .append("**")
-                                .append(" - ")
+            var i = 0;
+            for (val audioInfo : queue) {
+                totalTime += audioInfo.getTrack().getInfo().length;
+                songs[i] = audioInfo.toString();
+
+                ++i;
+            }
+
+            val timeInLetter = MusicUtil.getTimeStamp(totalTime);
+            BUILDER.setText((number, number2) -> {
+                        val stringBuilder = new StringBuilder();
+                        if (trackManager.getPlayer().getPlayingTrack() != null) {
+                            stringBuilder.append(trackManager.getPlayer().isPaused() ? "\u23F8" : "\u25B6")
+                                    .append(" **")
+                                    .append(trackManager.getPlayer().getPlayingTrack().getInfo().title)
+                                    .append("**")
+                                    .append(" - ")
+                                    .append("`")
+                                    .append(MusicUtil.getTimeStamp(trackManager.getPlayer().getPlayingTrack().getPosition()))
+                                    .append(" / ")
+                                    .append(MusicUtil.getTimeStamp(trackManager.getPlayer().getPlayingTrack().getInfo().length))
+                                    .append("`")
+                                    .append("\n");
+                        }
+
+                        return stringBuilder.append("\uD83D\uDCBF Informações da Fila | ")
+                                .append(queue.size())
+                                .append(" músicas | `")
+                                .append(timeInLetter)
                                 .append("`")
-                                .append(MusicUtil.getTimeStamp(trackManager.getPlayer().getPlayingTrack().getPosition()))
-                                .append(" / ")
-                                .append(MusicUtil.getTimeStamp(trackManager.getPlayer().getPlayingTrack().getInfo().length))
-                                .append("`")
-                                .append("\n");
-                    }
+                                .toString();
+                    })
+                    .setItems(songs)
+                    .setUsers(event.getUser())
+                    .setColor(event.getMember().getColor());
 
-                    return stringBuilder.append("\uD83D\uDCBF Informações da Fila | ")
-                            .append(queue.size())
-                            .append(" músicas | `")
-                            .append(timeInLetter)
-                            .append("`")
-                            .toString();
-                })
-                .setItems(songs)
-                .setUsers(event.getUser())
-                .setColor(event.getMember().getColor());
-
-        BUILDER.build().paginate(hook, page);
+            BUILDER.build().paginate(hook, page);
+        });
     }
 }

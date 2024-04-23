@@ -16,11 +16,11 @@ application {
 repositories {
     mavenCentral()
     maven("https://jitpack.io")
+    maven("https://maven.lavalink.dev/snapshots")
 }
 
 dependencies {
     implementation("net.dv8tion:JDA:5.0.0-beta.20") {
-        exclude(module = "opus-java")
         exclude(group = "org.apache.logging.log4j")
     }
 
@@ -31,7 +31,7 @@ dependencies {
     implementation("org.mongodb:mongodb-driver-sync:4.11.0")
     implementation("com.github.ben-manes.caffeine:caffeine:3.0.4")
 
-    implementation("dev.arbjerg:lavaplayer:2.1.1")
+    implementation("dev.arbjerg:lavaplayer:0eaeee195f0315b2617587aa3537fa202df07ddc-SNAPSHOT")
 
     implementation("com.google.code.gson:gson:2.10.1")
 

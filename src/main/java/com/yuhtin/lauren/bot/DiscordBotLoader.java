@@ -28,20 +28,13 @@ public class DiscordBotLoader {
                 GatewayIntent.GUILD_MESSAGE_REACTIONS
         );
 
-        List<CacheFlag> disabledCacheFlags = new ArrayList<>(Arrays.asList(CacheFlag.values()));
-        List<CacheFlag> enabledCacheFlags = Arrays.asList(
-                CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.ONLINE_STATUS
-        );
-
-        disabledCacheFlags.removeAll(enabledCacheFlags);
-
         JDABuilder.create(token, enabledIntents)
                 .setAutoReconnect(true)
                 .setEventManager(new AnnotatedEventManager())
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .setChunkingFilter(ChunkingFilter.ALL)
-                .enableCache(enabledCacheFlags)
-                .disableCache(disabledCacheFlags)
+                .enableIntents(Arrays.asList(GatewayIntent.values()))
+                .enableCache(Arrays.asList(CacheFlag.values()))
                 .setLargeThreshold(100)
                 .addEventListeners(new BotConnectionListener(bot))
                 .build();
