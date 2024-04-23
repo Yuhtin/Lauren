@@ -27,8 +27,6 @@ public class DownloadAudioCommand implements Command {
     public void execute(CommandInteraction event, InteractionHook hook) {
         if (event.getGuild() == null || event.getMember() == null) return;
 
-        LoggerUtil.getLogger().info("Downloading audio from guild " + event.getGuild().getName() + " requested by " + event.getMember().getUser().getName());
-
         PlayerModule playerModule = Module.instance(PlayerModule.class);
         if (playerModule == null) return;
 
@@ -36,9 +34,16 @@ public class DownloadAudioCommand implements Command {
         if (musicModule == null) return;
 
         musicModule.getByGuildId(event.getGuild()).queue(trackManager -> trackManager.downloadAudio()
-                .queue(file -> hook.sendMessage("\u23e9 Fiz o download do áudio pra você <3")
-                .addFiles(FileUpload.fromData(file))
-                .queue(message -> file.delete())));
+                .queue(file -> {
+                    if (file == null) {
+                        hook.sendMessage("\u26a0 Não encontrei nenhum áudio para baixar").queue();
+                        return;
+                    }
+
+                    hook.sendMessage("\u23e9 Fiz o download do áudio pra você <3")
+                            .addFiles(FileUpload.fromData(file))
+                            .queue(message -> file.delete());
+                }));
 
     }
 }

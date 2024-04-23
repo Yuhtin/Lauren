@@ -55,7 +55,9 @@ public class MusicModule implements Module {
 
                 AudioManager discordAudio = guild.getAudioManager();
 
-                discordAudio.setSendingHandler(new AudioBridge(guildedMusicPlayer.getPlayer()));
+                AudioBridge audioBridge = new AudioBridge(guildedMusicPlayer.getPlayer());
+                discordAudio.setSendingHandler(audioBridge);
+                discordAudio.setReceivingHandler(audioBridge);
                 discordAudio.setSpeakingMode(SpeakingMode.PRIORITY);
 
                 playerByGuild.put(guildId, guildedMusicPlayer);

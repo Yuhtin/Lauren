@@ -12,6 +12,7 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class AudioBridge implements AudioReceiveHandler, AudioSendHandler {
+
     double volume = 1.0;
     ConcurrentLinkedQueue<byte[]> receivedAudioDataQueue = new ConcurrentLinkedQueue<>();
     private final AudioPlayer audioPlayer;
@@ -24,12 +25,12 @@ public class AudioBridge implements AudioReceiveHandler, AudioSendHandler {
 
     @Override
     public boolean canReceiveCombined() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean canReceiveUser() {
-        return true;
+        return false;
     }
 
     @Override
@@ -39,7 +40,6 @@ public class AudioBridge implements AudioReceiveHandler, AudioSendHandler {
 
     @Override
     public void handleUserAudio(@NotNull UserAudio userAudio) {
-        receivedAudioDataQueue.add(userAudio.getAudioData(volume));
     }
 
     @Override
@@ -56,5 +56,9 @@ public class AudioBridge implements AudioReceiveHandler, AudioSendHandler {
     @Override
     public boolean isOpus() {
         return true;
+    }
+
+    public void clearReceivedData() {
+        receivedAudioDataQueue.clear();
     }
 }

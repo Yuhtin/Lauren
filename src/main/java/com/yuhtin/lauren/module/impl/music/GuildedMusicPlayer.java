@@ -18,6 +18,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.managers.AudioManager;
 import org.jetbrains.annotations.Nullable;
 
 import javax.sound.sampled.AudioFileFormat;
@@ -27,6 +28,7 @@ import javax.sound.sampled.AudioSystem;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -181,62 +183,40 @@ public class GuildedMusicPlayer extends AudioEventAdapter {
     }
 
     public FutureBuilder<File> downloadAudio() {
-        LoggerUtil.getLogger().info("T1");
         if (audioChannel == null) return null;
 
-        LoggerUtil.getLogger().info("T2");
-
-        LoggerUtil.getLogger().info("Downloading audio from " + audioChannel.getGuild().getName());
         Guild guild = audioChannel.getGuild();
+        AudioManager audio = guild.getAudioManager();
 
-        LoggerUtil.getLogger().info("T3");
+        AudioBridge receivingHandler = (AudioBridge) audio.getReceivingHandler();
+        if (receivingHandler == null) return null;
 
-        File tempFile;
-        AudioBridge receivingHandler;
-        val audio = guild.getAudioManager();
+        File tempFile = new File("./temp/", "temp.mp3");
+        if (tempFile.exists()) tempFile.delete();
 
-        LoggerUtil.getLogger().info("T4");
-        try {
-            LoggerUtil.getLogger().info("T5");
-            receivingHandler = (AudioBridge) audio.getReceivingHandler();
-            if (receivingHandler == null) {
-                LoggerUtil.getLogger().info("T6 null receiving handler");
-                return null;
-            }
+        tempFile.getParentFile().mkdirs();
 
-            tempFile = new File("./temp/", "temp.mp3");
-            if (tempFile.exists()) tempFile.delete();
-
-            tempFile.getParentFile().mkdirs();
-
-            LoggerUtil.getLogger().info("T7");
-        } catch (Exception exception) {
-            LoggerUtil.printException(exception);
-            return null;
-        }
 
         return FutureBuilder.of(() -> {
             try {
-                LoggerUtil.getLogger().info("T8");
-                int size = 0;
 
                 List<byte[]> receivedBytes = new ArrayList<>(receivingHandler.receivedAudioDataQueue);
+                receivingHandler.clearReceivedData();
 
+                int size = 0;
                 for (byte[] bs : receivedBytes) {
                     size += bs.length;
                 }
 
-                LoggerUtil.getLogger().info("Received " + receivedBytes.size() + " bytes with " + size + " bytes in total");
-
                 byte[] decodedData = new byte[size];
+
                 int i = 0;
                 for (byte[] bs : receivedBytes) {
-                    for (byte b : bs) {
-                        decodedData[i++] = b;
+                    for (int j = 0; j < bs.length; j++) {
+                        decodedData[i++] = bs[j];
                     }
                 }
 
-                LoggerUtil.getLogger().info("T9");
                 getWavFile(tempFile, decodedData);
                 return tempFile;
             } catch (Exception exception) {
@@ -247,10 +227,8 @@ public class GuildedMusicPlayer extends AudioEventAdapter {
     }
 
     private void getWavFile(File outFile, byte[] decodedData) throws IOException {
-        AudioFormat format = new AudioFormat(8000, 16, 1, true, false);
-        AudioSystem.write(new AudioInputStream(new ByteArrayInputStream(decodedData), format, decodedData.length), AudioFileFormat.Type.WAVE, outFile);
-
-        LoggerUtil.getLogger().info("T10");
+        AudioFormat outputFormat = new AudioFormat(48000.0f, 16, 2, true, true);
+        AudioSystem.write(new AudioInputStream(new ByteArrayInputStream(decodedData), outputFormat, decodedData.length), AudioFileFormat.Type.WAVE, outFile);
     }
 
     public void sendPlayingMessage(AudioTrack track, InteractionHook hook) {
