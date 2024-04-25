@@ -27,16 +27,7 @@ public class ShuffleCommand implements Command {
         MusicModule musicModule = Module.instance(MusicModule.class);
         if (musicModule == null) return;
 
-        musicModule.getByGuildId(event.getGuild()).queue(trackManager -> {
-            if (MusicUtil.isIdle(trackManager, hook)) return;
-            if (!playerModule.isDJ(event.getMember())) {
-                hook.sendMessage("Você não é DJ para parar o batidão \uD83D\uDE14").setEphemeral(true).queue();
-                return;
-            }
-
-            trackManager.shuffleQueue();
-            hook.sendMessage("<a:infinito:703187274912759899> Misturando a lista de músicas").queue();
-        });
+        musicModule.shuffleMannually(event.getGuild(), event.getMember(), hook);
     }
 
 }

@@ -28,21 +28,7 @@ public class PauseCommand implements Command {
         MusicModule musicModule = Module.instance(MusicModule.class);
         if (musicModule == null) return;
 
-        musicModule.getByGuildId(event.getGuild()).queue(trackManager -> {
-            if (MusicUtil.isIdle(trackManager, hook)) return;
-            if (!playerModule.isDJ(event.getMember())) {
-                hook.sendMessage("Você não é DJ para parar o batidão \uD83D\uDE14").setEphemeral(true).queue();
-                return;
-            }
-
-            trackManager.getPlayer().setPaused(!trackManager.getPlayer().isPaused());
-
-            val message = trackManager.getPlayer().isPaused() ?
-                    "\uD83E\uDD7A Taxaram meu batidão, espero que me liberem logo"
-                    : "\uD83E\uDD73 Liberaram meu batidão uhhuuuu";
-
-            hook.sendMessage(message).queue();
-        });
+        musicModule.pauseMannually(event.getGuild(), event.getMember(), hook);
     }
 
 }

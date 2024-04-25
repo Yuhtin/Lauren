@@ -4,6 +4,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.message.GenericMessageEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -115,6 +117,24 @@ public class Paginator extends Menu {
 
         MessageCreateData msg = renderPage(pageNum);
         initialize(hook.sendMessage(msg), pageNum);
+    }
+
+    /**
+     * Begins pagination as a new {@link net.dv8tion.jda.api.entities.Message Message}
+     * in the provided {@link net.dv8tion.jda.api.entities.channel.middleman.MessageChannel MessageChannel}, starting
+     * on whatever page number is provided.
+     *
+     * @param channel The InteractionHook to send the new Message to
+     * @param pageNum The page number to begin on
+     */
+    public void paginate(MessageChannel channel, int pageNum) {
+        if (pageNum < 1)
+            pageNum = 1;
+        else if (pageNum > pages)
+            pageNum = pages;
+
+        MessageCreateData msg = renderPage(pageNum);
+        initialize(channel.sendMessage(msg), pageNum);
     }
 
     /**
@@ -573,10 +593,10 @@ public class Paginator extends Menu {
         /**
          * Sets the {@link Paginator Paginator} to traverse
          * left or right when a provided text input is sent in the form of a Message to
-         * the {@link net.dv8tion.jda.api.entities.GuildChannel GuildChannel} the menu is displayed in.
+         * the {@link net.dv8tion.jda.api.entities.channel.middleman.GuildChannel GuildChannel} the menu is displayed in.
          *
          * <p>If one or both these parameters are provided {@code null} this resets
-         * both of them and they will no longer be available when the Paginator is built.
+         * both of them, and they will no longer be available when the Paginator is built.
          *
          * @param left  The left text input, causes the Paginator to traverse one page left
          * @param right The right text input, causes the Paginator to traverse one page right

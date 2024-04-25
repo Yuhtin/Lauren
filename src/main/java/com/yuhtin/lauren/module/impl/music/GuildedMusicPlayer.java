@@ -10,15 +10,16 @@ import com.yuhtin.lauren.util.LoggerUtil;
 import com.yuhtin.lauren.util.MusicUtil;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.java.Log;
-import lombok.val;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.managers.AudioManager;
+import net.dv8tion.jda.api.utils.messages.MessageEditData;
 import org.jetbrains.annotations.Nullable;
 
 import javax.sound.sampled.AudioFileFormat;
@@ -28,7 +29,6 @@ import javax.sound.sampled.AudioSystem;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -90,7 +90,10 @@ public class GuildedMusicPlayer extends AudioEventAdapter {
         // remove head
         playlist.remove();
 
-        if (playlist.isEmpty()) return;
+        if (playlist.isEmpty()) {
+            deleteLastMessage();
+            return;
+        }
 
         // play next track (actual head)
         player.playTrack(playlist.element().getTrack());
@@ -128,6 +131,8 @@ public class GuildedMusicPlayer extends AudioEventAdapter {
     }
 
     public void destroy() {
+        deleteLastMessage();
+
         player.stopTrack();
         player.destroy();
 
@@ -199,7 +204,6 @@ public class GuildedMusicPlayer extends AudioEventAdapter {
 
         return FutureBuilder.of(() -> {
             try {
-
                 List<byte[]> receivedBytes = new ArrayList<>(receivingHandler.receivedAudioDataQueue);
                 receivingHandler.clearReceivedData();
 
@@ -212,8 +216,8 @@ public class GuildedMusicPlayer extends AudioEventAdapter {
 
                 int i = 0;
                 for (byte[] bs : receivedBytes) {
-                    for (int j = 0; j < bs.length; j++) {
-                        decodedData[i++] = bs[j];
+                    for (byte b : bs) {
+                        decodedData[i++] = b;
                     }
                 }
 
@@ -232,9 +236,21 @@ public class GuildedMusicPlayer extends AudioEventAdapter {
     }
 
     public void sendPlayingMessage(AudioTrack track, InteractionHook hook) {
-        deleteLastMessage();
-
         MessageEmbed musicInfo = MusicUtil.showTrackInfo(track, this).build();
+
+        Button pauseButton = Button.success("pause", Emoji.fromUnicode("⏸"));
+        Button skipButton = Button.primary("skip", Emoji.fromUnicode("⏭"));
+        Button shuffleButton = Button.primary("shuffle", Emoji.fromUnicode("🔀"));
+        Button repeatButton = Button.danger("repeat", Emoji.fromUnicode("🔁"));
+
+        if (player.isPaused()) {
+            pauseButton = Button.danger("pause", Emoji.fromUnicode("▶"));
+        }
+
+        if (getTrackInfo() != null && getTrackInfo().isRepeat()) {
+            repeatButton = Button.success("repeat", Emoji.fromUnicode("🔂"));
+        }
+
         if (hook == null) {
             Guild guild = audioChannel.getGuild();
             TextChannel textChannel = guild.getTextChannelById(textChannelId);
@@ -243,13 +259,40 @@ public class GuildedMusicPlayer extends AudioEventAdapter {
                 return;
             }
 
-            textChannel.sendMessageEmbeds(musicInfo)
-                    .queue(messsage -> setLastMusicMessageId(messsage.getIdLong()));
+            if (lastMusicMessageId != 0) {
+                MessageEditData data = MessageEditData.fromEmbeds(musicInfo);
+
+                Button finalPauseButton = pauseButton;
+                Button finalRepeatButton = repeatButton;
+
+                textChannel.editMessageById(lastMusicMessageId, data)
+                        .setActionRow(pauseButton, skipButton, shuffleButton, repeatButton)
+                        .queue(s -> {}, m -> {
+                            textChannel.sendMessageEmbeds(musicInfo)
+                                    .addActionRow(finalPauseButton, skipButton, shuffleButton, finalRepeatButton)
+                                    .queue(messsage -> setLastMusicMessageId(messsage.getIdLong()));
+                        });
+            } else {
+                textChannel.sendMessageEmbeds(musicInfo)
+                        .addActionRow(pauseButton, skipButton, shuffleButton, repeatButton)
+                        .queue(messsage -> setLastMusicMessageId(messsage.getIdLong()));
+            }
         } else {
-            hook.sendMessageEmbeds(musicInfo).queue(messsage -> {
-                setTextChannelId(messsage.getChannelIdLong());
-                setLastMusicMessageId(messsage.getIdLong());
-            });
+            deleteLastMessage();
+
+            hook.sendMessageEmbeds(musicInfo)
+                    .addActionRow(pauseButton, skipButton, shuffleButton, repeatButton)
+                    .queue(messsage -> {
+                        setTextChannelId(messsage.getChannelIdLong());
+                        setLastMusicMessageId(messsage.getIdLong());
+                    });
         }
+    }
+
+    public void sendPlayingMessage() {
+        AudioTrack track = player.getPlayingTrack();
+        if (track == null) return;
+
+        sendPlayingMessage(track, null);
     }
 }
