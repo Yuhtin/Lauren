@@ -25,7 +25,7 @@ public class DiscordBotLoader {
         List<GatewayIntent> enabledIntents = Arrays.asList(
                 GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES,
                 GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_PRESENCES,
-                GatewayIntent.GUILD_MESSAGE_REACTIONS
+                GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_VOICE_STATES
         );
 
         JDABuilder.create(token, enabledIntents)

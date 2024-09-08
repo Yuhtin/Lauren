@@ -5,6 +5,9 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+import com.yuhtin.lauren.module.Module;
+import com.yuhtin.lauren.module.impl.music.customplaylist.CustomPlaylist;
+import com.yuhtin.lauren.module.impl.music.customplaylist.PlaylistTrackInfo;
 import com.yuhtin.lauren.util.FutureBuilder;
 import com.yuhtin.lauren.util.LoggerUtil;
 import com.yuhtin.lauren.util.MusicUtil;
@@ -15,11 +18,8 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
-import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.interactions.InteractionHook;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.managers.AudioManager;
-import net.dv8tion.jda.api.utils.messages.MessageEditData;
 import org.jetbrains.annotations.Nullable;
 
 import javax.sound.sampled.AudioFileFormat;
@@ -56,10 +56,19 @@ public class GuildedMusicPlayer extends AudioEventAdapter {
     public GuildedMusicPlayer(long guildId, AudioPlayer player) {
         this.guildId = guildId;
         this.player = player;
-        this.player.setVolume(25);
+        this.player.setVolume(20);
 
         player.addListener(this);
         player.setFilterFactory(equalizer);
+    }
+
+    public void play(AudioTrack track, Member member) {
+        AudioInfo info = new AudioInfo(track, member);
+        playlist.add(info);
+
+        if (player.getPlayingTrack() == null) {
+            player.playTrack(track);
+        }
     }
 
     @Override
@@ -75,15 +84,8 @@ public class GuildedMusicPlayer extends AudioEventAdapter {
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         AudioInfo head = playlist.peek();
-        if (head == null) return;
-
-        // repeat music system
-        if (endReason == AudioTrackEndReason.FINISHED && head.isRepeat()) {
-            head.setRepeat(false);
-
-            AudioTrack audioTrack = head.getTrack().makeClone();
-            head.setTrack(audioTrack);
-            player.playTrack(audioTrack);
+        if (head == null) {
+            loadFromCustomPlaylist();
             return;
         }
 
@@ -91,7 +93,7 @@ public class GuildedMusicPlayer extends AudioEventAdapter {
         playlist.remove();
 
         if (playlist.isEmpty()) {
-            deleteLastMessage();
+            loadFromCustomPlaylist();
             return;
         }
 
@@ -102,6 +104,36 @@ public class GuildedMusicPlayer extends AudioEventAdapter {
     @Override
     public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
         LoggerUtil.printException(exception);
+    }
+
+    private void loadFromCustomPlaylist() {
+        MusicModule musicModule = Module.instance(MusicModule.class);
+        if (musicModule == null) {
+            destroy();
+            return;
+        }
+
+        CustomPlaylist customPlaylist = musicModule.getCustomPlaylist(guildId);
+
+        PlaylistTrackInfo playNext = customPlaylist.playNext();
+        if (playNext == null) {
+            destroy();
+            return;
+        }
+
+        if (audioChannel == null) {
+            destroy();
+            return;
+        }
+
+        deleteLastMessage();
+
+        musicModule.loadTrack(
+                MusicSearchType.SIMPLE_SEARCH,
+                playNext.trackUrl(),
+                audioChannel.getGuild().getSelfMember(),
+                null, null
+        );
     }
 
     public void deleteLastMessage() {
@@ -143,13 +175,6 @@ public class GuildedMusicPlayer extends AudioEventAdapter {
         cleanPlaylist();
     }
 
-    public void play(AudioTrack track, Member member) {
-        AudioInfo info = new AudioInfo(track, member);
-        playlist.add(info);
-
-        if (this.player.getPlayingTrack() == null) this.player.playTrack(track);
-    }
-
     public void shuffleQueue() {
         List<AudioInfo> tempQueue = new ArrayList<>(this.getPlaylist());
 
@@ -163,12 +188,66 @@ public class GuildedMusicPlayer extends AudioEventAdapter {
         playlist.addAll(tempQueue);
     }
 
+    public void sendPlayingMessage(AudioTrack track, InteractionHook hook) {
+        MessageEmbed musicInfo = MusicUtil.buildTrackInfo(track, this).build();
+
+        /*
+        Button pauseButton = Button.success("pause", Emoji.fromUnicode("⏸"));
+        Button skipButton = Button.primary("skip", Emoji.fromUnicode("⏭"));
+        Button shuffleButton = Button.primary("shuffle", Emoji.fromUnicode("🔀"));
+        Button repeatButton = Button.danger("repeat", Emoji.fromUnicode("🔁"));
+
+        if (player.isPaused()) {
+            pauseButton = Button.danger("pause", Emoji.fromUnicode("▶"));
+        }
+
+        if (getTrackInfo() != null && getTrackInfo().isRepeat()) {
+            repeatButton = Button.success("repeat", Emoji.fromUnicode("🔂"));
+        }*/
+
+        if (hook == null) {
+            if (audioChannel == null || textChannelId == 0) return;
+
+            deleteLastMessage();
+
+            Guild guild = audioChannel.getGuild();
+            TextChannel textChannel = guild.getTextChannelById(textChannelId);
+            if (textChannel == null) {
+                textChannelId = 0;
+                return;
+            }
+
+            textChannel.sendMessageEmbeds(musicInfo)
+                    .queue(messsage -> lastMusicMessageId = messsage.getIdLong());
+        } else {
+            hook.sendMessageEmbeds(musicInfo)
+                    .queue(message -> lastMusicMessageId = message.getIdLong());
+        }
+    }
+
+    public void updatePlayingMessage() {
+        if (audioChannel == null) return;
+
+        TextChannel textChannel = audioChannel.getGuild().getTextChannelById(textChannelId);
+        if (textChannel == null) {
+            textChannelId = 0;
+            return;
+        }
+
+        MessageEmbed musicInfo = MusicUtil.buildTrackInfo(player.getPlayingTrack(), this).build();
+        textChannel.editMessageEmbedsById(lastMusicMessageId, musicInfo).queue();
+    }
+
     @Nullable
     public AudioInfo getTrackInfo() {
         return playlist.stream()
                 .filter(audioInfo -> audioInfo.getTrack().equals(player.getPlayingTrack()))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public boolean isPlaying() {
+        return player.getPlayingTrack() != null;
     }
 
     public boolean isPaused() {
@@ -201,7 +280,6 @@ public class GuildedMusicPlayer extends AudioEventAdapter {
 
         tempFile.getParentFile().mkdirs();
 
-
         return FutureBuilder.of(() -> {
             try {
                 List<byte[]> receivedBytes = new ArrayList<>(receivingHandler.receivedAudioDataQueue);
@@ -233,60 +311,6 @@ public class GuildedMusicPlayer extends AudioEventAdapter {
     private void getWavFile(File outFile, byte[] decodedData) throws IOException {
         AudioFormat outputFormat = new AudioFormat(48000.0f, 16, 2, true, true);
         AudioSystem.write(new AudioInputStream(new ByteArrayInputStream(decodedData), outputFormat, decodedData.length), AudioFileFormat.Type.WAVE, outFile);
-    }
-
-    public void sendPlayingMessage(AudioTrack track, InteractionHook hook) {
-        MessageEmbed musicInfo = MusicUtil.showTrackInfo(track, this).build();
-
-        Button pauseButton = Button.success("pause", Emoji.fromUnicode("⏸"));
-        Button skipButton = Button.primary("skip", Emoji.fromUnicode("⏭"));
-        Button shuffleButton = Button.primary("shuffle", Emoji.fromUnicode("🔀"));
-        Button repeatButton = Button.danger("repeat", Emoji.fromUnicode("🔁"));
-
-        if (player.isPaused()) {
-            pauseButton = Button.danger("pause", Emoji.fromUnicode("▶"));
-        }
-
-        if (getTrackInfo() != null && getTrackInfo().isRepeat()) {
-            repeatButton = Button.success("repeat", Emoji.fromUnicode("🔂"));
-        }
-
-        if (hook == null) {
-            Guild guild = audioChannel.getGuild();
-            TextChannel textChannel = guild.getTextChannelById(textChannelId);
-            if (textChannel == null) {
-                textChannelId = 0;
-                return;
-            }
-
-            if (lastMusicMessageId != 0) {
-                MessageEditData data = MessageEditData.fromEmbeds(musicInfo);
-
-                Button finalPauseButton = pauseButton;
-                Button finalRepeatButton = repeatButton;
-
-                textChannel.editMessageById(lastMusicMessageId, data)
-                        .setActionRow(pauseButton, skipButton, shuffleButton, repeatButton)
-                        .queue(s -> {}, m -> {
-                            textChannel.sendMessageEmbeds(musicInfo)
-                                    .addActionRow(finalPauseButton, skipButton, shuffleButton, finalRepeatButton)
-                                    .queue(messsage -> setLastMusicMessageId(messsage.getIdLong()));
-                        });
-            } else {
-                textChannel.sendMessageEmbeds(musicInfo)
-                        .addActionRow(pauseButton, skipButton, shuffleButton, repeatButton)
-                        .queue(messsage -> setLastMusicMessageId(messsage.getIdLong()));
-            }
-        } else {
-            deleteLastMessage();
-
-            hook.sendMessageEmbeds(musicInfo)
-                    .addActionRow(pauseButton, skipButton, shuffleButton, repeatButton)
-                    .queue(messsage -> {
-                        setTextChannelId(messsage.getChannelIdLong());
-                        setLastMusicMessageId(messsage.getIdLong());
-                    });
-        }
     }
 
     public void sendPlayingMessage() {

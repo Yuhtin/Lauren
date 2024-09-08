@@ -41,7 +41,7 @@ public class FileUtil {
         File file = new File("temporary/" + attachment.getFileName());
         try {
             if (!file.createNewFile()) return null;
-            return attachment.downloadToFile(file).get();
+            return attachment.getProxy().downloadToFile(file).get();
         } catch (Exception exception) {
             return null;
         }

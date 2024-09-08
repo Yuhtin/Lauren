@@ -17,10 +17,12 @@ repositories {
     mavenCentral()
     maven("https://jitpack.io")
     maven("https://maven.lavalink.dev/snapshots")
+    maven("https://maven.lavalink.dev/releases")
+    maven("https://maven.topi.wtf/releases")
 }
 
 dependencies {
-    implementation("net.dv8tion:JDA:5.0.0-beta.20") {
+    implementation("net.dv8tion:JDA:5.1.0") {
         exclude(group = "org.apache.logging.log4j")
     }
 
@@ -31,7 +33,9 @@ dependencies {
     implementation("org.mongodb:mongodb-driver-sync:4.11.0")
     implementation("com.github.ben-manes.caffeine:caffeine:3.0.4")
 
+    implementation("dev.lavalink.youtube:v2:1.7.2")
     implementation("dev.arbjerg:lavaplayer:0eaeee195f0315b2617587aa3537fa202df07ddc-SNAPSHOT")
+    implementation("com.github.TopiSenpai.LavaSrc:lavasrc:3.2.10")
 
     implementation("com.google.code.gson:gson:2.10.1")
 

@@ -62,31 +62,22 @@ public class MusicUtil {
         return false;
     }
 
-    public static EmbedBuilder showTrackInfo(AudioTrack currentTrack, GuildedMusicPlayer player) {
+    public static EmbedBuilder buildTrackInfo(AudioTrack currentTrack, GuildedMusicPlayer player) {
         AudioInfo trackInfo = player.getTrackInfo();
-        if (trackInfo == null) return EmbedUtil.of("Eita, não consegui encontrar as informações da música atual!");
+        if (trackInfo == null) return EmbedUtil.createDefaultEmbed("Nenhuma música tocando!");
 
-        String isRepeating = trackInfo.isRepeat() ? "`Ativa`" : "`Desativada`";
         AudioTrackInfo audioInfo = currentTrack.getInfo();
 
-        String contentType = audioInfo.isStream ? "Live" :
-                audioInfo.title.contains("Podcast") ? "Podcast" : "Música";
-
-        String statusIcon = player.isPaused() ? "⏯️" : "⏸";
+        String pausedInfo = player.isPaused() ? "⏸️ Musica pausada!" : "";
 
         String progressBar = MusicUtil.getProgressBar(currentTrack);
 
-        return new EmbedBuilder()
+        return EmbedUtil.createDefaultEmbed(pausedInfo +
+                        "👤 Autor: `" + audioInfo.author + "`\n" +
+                        "⏳ Timeline: \uD83D\uDD0A " + progressBar)
                 .setColor(Color.GREEN)
-                .setTitle("\ud83d\udcbf Informações da música atual")
-                .setDescription("\ud83d\udcc0 Nome: `" + audioInfo.title + "`\n" +
-                        "\uD83D\uDCB0 Autor: `" + audioInfo.author + "`\n" +
-                        "\uD83D\uDCE2 Tipo de vídeo: `" + contentType + "`\n" +
-                        "<a:infinito:703187274912759899> Repetição: " + isRepeating + "\n" +
-                        "\uD83E\uDDEC Membro que adicionou: <@" + trackInfo.getAuthorId() + ">\n" +
-                        "\uD83E\uDDEA Timeline: " + statusIcon + " ⏭ \uD83D\uDD0A " + progressBar + "\n" +
-                        "\n" +
-                        "\uD83D\uDCCC Link: [Clique aqui](" + audioInfo.uri + ")");
+                .setTitle("🎵 " + audioInfo.title, audioInfo.uri)
+                .setFooter("Adicionador por " + trackInfo.getAuthorName());
     }
 
     public void forceSkipTrack(GuildedMusicPlayer player) {

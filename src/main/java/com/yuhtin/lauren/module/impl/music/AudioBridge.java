@@ -35,7 +35,7 @@ public class AudioBridge implements AudioReceiveHandler, AudioSendHandler {
 
     @Override
     public void handleCombinedAudio(CombinedAudio combinedAudio) {
-        receivedAudioDataQueue.add(combinedAudio.getAudioData(volume));
+        //receivedAudioDataQueue.add(combinedAudio.getAudioData(volume));
     }
 
     @Override

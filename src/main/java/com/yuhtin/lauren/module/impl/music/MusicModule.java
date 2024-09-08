@@ -1,29 +1,55 @@
 package com.yuhtin.lauren.module.impl.music;
 
+import com.github.topisenpai.lavasrc.spotify.SpotifySourceManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioConfiguration;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.yuhtin.lauren.Lauren;
 import com.yuhtin.lauren.Startup;
+import com.yuhtin.lauren.database.MongoModule;
+import com.yuhtin.lauren.database.MongoOperation;
+import com.yuhtin.lauren.database.OperationFilter;
 import com.yuhtin.lauren.module.Module;
+import com.yuhtin.lauren.module.impl.music.customplaylist.CustomPlaylist;
+import com.yuhtin.lauren.module.impl.music.customplaylist.PlaylistTrackInfo;
 import com.yuhtin.lauren.module.impl.player.module.PlayerModule;
 import com.yuhtin.lauren.util.*;
+import dev.lavalink.youtube.YoutubeAudioSourceManager;
+import dev.lavalink.youtube.clients.*;
+import lombok.NonNull;
 import lombok.val;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.audio.SpeakingMode;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
+import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MusicModule implements Module {
 
@@ -38,7 +64,11 @@ public class MusicModule implements Module {
             .wrapPageEnds(true)
             .setTimeout(1, TimeUnit.MINUTES);
 
+    private static final String[] EMOJIS = new String[]{"1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"};
+
     private final HashMap<Long, GuildedMusicPlayer> playerByGuild = new HashMap<>();
+    private final HashMap<Long, CustomPlaylist> customPlaylistByGuildId = new HashMap<>();
+    private final HashMap<String, List<AudioTrack>> searchCache = new HashMap<>();
 
     private AudioPlayerManager audioManager;
     private PlayerModule playerModule;
@@ -51,17 +81,216 @@ public class MusicModule implements Module {
         audioManager.setItemLoaderThreadPoolSize(128);
         audioManager.getConfiguration().setResamplingQuality(AudioConfiguration.ResamplingQuality.HIGH);
 
-        AudioSourceManagers.registerRemoteSources(audioManager);
+        // dev.lavalink.youtube.http.YoutubeOauth2Handler log to info
+        Logger.getLogger("dev.lavalink.youtube.http.YoutubeOauth2Handler").setLevel(Level.INFO);
+
+        YoutubeAudioSourceManager ytSourceManager = new YoutubeAudioSourceManager(true, new Music(), new Web(), new TvHtml5Embedded(), new WebEmbedded(), new AndroidMusic(), new Android());
+        ytSourceManager.useOauth2(null, false);
+
+        audioManager.registerSourceManager(ytSourceManager);
+        audioManager.registerSourceManager(new SpotifySourceManager(new String[]{"ytmsearch:\"%ISRC%\"", "ytmsearch:%QUERY%"}, "655bbcedce534fb2b85f236f879c3007", "541f921a61cd4f098caa3f99adba23b3", null, audioManager));
+
         AudioSourceManagers.registerLocalSource(audioManager);
 
         lauren.getJda().addEventListener(this);
 
-        TaskHelper.runTaskTimerAsync(
+        MongoModule mongoModule = Module.instance(MongoModule.class);
+        mongoModule.registerBinding("customplaylists", CustomPlaylist.class);
+
+        MongoOperation.bind(CustomPlaylist.class)
+                .filter(OperationFilter.NOT_EQUALS, "guildId", -1)
+                .findMany()
+                .queue(data -> {
+                    for (CustomPlaylist playlist : data) {
+                        customPlaylistByGuildId.put(playlist.getPrimaryKey(), playlist);
+                    }
+                });
+
+        /*TaskHelper.runTaskTimerAsync(
                 () -> playerByGuild.values().forEach(GuildedMusicPlayer::sendPlayingMessage),
-                5, 2, TimeUnit.SECONDS
-        );
+                5, 1, TimeUnit.SECONDS
+        );*/
+
+        TaskHelper.runTaskTimer(() -> {
+            for (GuildedMusicPlayer musicPlayer : playerByGuild.values()) {
+                if (musicPlayer.getLastMusicMessageId() == 0) continue;
+                if (musicPlayer.getAudioChannel() == null) continue;
+                if (!musicPlayer.isPlaying() || musicPlayer.isPaused()) continue;
+
+                musicPlayer.updatePlayingMessage();
+            }
+        }, 2, 2, TimeUnit.SECONDS);
+
+        lauren.getGuild().upsertCommand("customplaylist", "Configure custom playlist")
+                .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.VOICE_MUTE_OTHERS))
+                .addSubcommands(
+                        new SubcommandData("list", "List songs in the custom playlist"),
+                        new SubcommandData("add", "Add a song to the custom playlist")
+                                .addOption(OptionType.STRING, "music", "Link or name of the music", true),
+                        new SubcommandData("remove", "Remove a song from the custom playlist")
+                                .addOption(OptionType.INTEGER, "index", "Index of the song", true),
+                        new SubcommandData("clear", "Clear the custom playlist"),
+                        new SubcommandData("autoplay", "Enable/Disable autoplay of the custom playlist"),
+                        new SubcommandData("shuffle", "Shuffle the custom playlist")
+                ).queue();
 
         return true;
+    }
+
+    @SubscribeEvent
+    public void onPlaylistCommand(SlashCommandInteractionEvent event) {
+        if (event.getMember() == null || event.getGuild() == null) return;
+        if (!event.getName().equalsIgnoreCase("customplaylist")) return;
+
+        event.deferReply(true).queue(hook -> {
+            CustomPlaylist playlist = getCustomPlaylist(event.getGuild().getIdLong());
+            String subcommandName = event.getSubcommandName();
+            if (subcommandName == null) {
+                hook.sendMessage("No subcommand specified").queue();
+                return;
+            }
+
+            if (subcommandName.equalsIgnoreCase("list")) {
+                StringBuilder sb = new StringBuilder();
+
+                int index = 1;
+                for (PlaylistTrackInfo track : playlist.getTracks()) {
+                    sb.append(index).append(". ").append(track).append("\n");
+                    index++;
+                }
+
+                if (!sb.isEmpty()) {
+                    sb.setLength(sb.length() - 1);
+                } else {
+                    sb.append("No songs in the playlist");
+                }
+
+                hook.sendMessageEmbeds(EmbedUtil.createDefaultEmbed(sb.toString()).build()).queue();
+                return;
+            }
+
+            if (subcommandName.equalsIgnoreCase("add")) {
+                OptionMapping musicOption = event.getOption("music");
+                if (musicOption == null) {
+                    hook.sendMessage("No music specified").queue();
+                    return;
+                }
+
+                String music = musicOption.getAsString();
+                music = music.contains("http") ? music : "spsearch: " + music;
+
+                Consumer<AudioTrack> consumer = track -> {
+                    if (track == null) {
+                        hook.sendMessage("No music found").queue();
+                        return;
+                    }
+
+                    PlaylistTrackInfo trackInfo = new PlaylistTrackInfo(
+                            event.getUser().getName(),
+                            event.getUser().getIdLong(),
+                            track.getInfo().title,
+                            track.getInfo().uri,
+                            track.getDuration()
+                    );
+
+                    playlist.add(trackInfo);
+                    playlist.save();
+
+                    EmbedBuilder embed = new EmbedBuilder()
+                            .setTitle("💿 " + event.getUser().getName() + " added to playlist")
+                            .setColor(EmbedUtil.getColor())
+                            .setDescription(
+                                    "\ud83d\udcc0 Name: `" + track.getInfo().title + "`\n" +
+                                            "\uD83D\uDCB0 Author: `" + track.getInfo().author + "`\n" +
+                                            "\uD83D\uDCCC Link: [Click here](" + track.getInfo().uri + ")"
+                            );
+
+
+                    hook.sendMessageEmbeds(embed.build()).queue();
+                };
+
+                loadTrack(MusicSearchType.ADDING_TO_PLAYLIST, music, event.getMember(), hook, consumer);
+
+                return;
+            }
+
+            if (subcommandName.equalsIgnoreCase("remove")) {
+                OptionMapping indexOption = event.getOption("index");
+                if (indexOption == null) {
+                    hook.sendMessage("No index specified").queue();
+                    return;
+                }
+
+                int index = (int) indexOption.getAsLong();
+
+                PlaylistTrackInfo trackInfo = playlist.remove(index);
+                if (trackInfo == null) {
+                    hook.sendMessage("No song found at index " + index).queue();
+                    return;
+                }
+
+                playlist.save();
+
+                hook.sendMessage("Removed song " + trackInfo.trackName() + "!").queue();
+                return;
+            }
+
+            if (subcommandName.equalsIgnoreCase("clear")) {
+                playlist.clear();
+                playlist.save();
+
+                hook.sendMessage("Cleared the playlist!").queue();
+                return;
+            }
+
+            if (subcommandName.equalsIgnoreCase("autoplay")) {
+                playlist.setAutoPlay(!playlist.isAutoPlay());
+                playlist.save();
+
+                hook.sendMessage("Autoplay is now " + (playlist.isAutoPlay() ? "enabled" : "disabled") + "!").queue();
+                return;
+            }
+
+            if (subcommandName.equalsIgnoreCase("shuffle")) {
+                playlist.shuffle();
+                playlist.setCurrentIndex(0);
+
+                playlist.save();
+
+                StringBuilder sb = new StringBuilder();
+
+                int index = 1;
+                for (PlaylistTrackInfo track : playlist.getTracks()) {
+                    sb.append(index).append(". ").append(track).append("\n");
+                    index++;
+                }
+
+                if (!sb.isEmpty()) {
+                    sb.setLength(sb.length() - 1);
+                } else {
+                    sb.append("No songs in the playlist");
+                }
+
+                EmbedBuilder embed = EmbedUtil.createDefaultEmbed(sb.toString())
+                        .setTitle("Shuffled the playlist!");
+
+                hook.sendMessageEmbeds(embed.build()).queue();
+                return;
+            }
+
+            hook.sendMessage("Unknown subcommand").queue();
+        });
+    }
+
+    @NonNull
+    public CustomPlaylist getCustomPlaylist(long guildId) {
+        CustomPlaylist customPlaylist = customPlaylistByGuildId.get(guildId);
+        if (customPlaylist == null) {
+            customPlaylist = new CustomPlaylist(guildId);
+            customPlaylistByGuildId.put(guildId, customPlaylist);
+        }
+
+        return customPlaylist;
     }
 
     @SubscribeEvent
@@ -76,10 +305,6 @@ public class MusicModule implements Module {
                     skipMannually(event.getGuild(), event.getMember(), hook);
                 }
 
-                if (event.getComponentId().equals("repeat")) {
-                    repeatMannually(event.getGuild(), event.getMember(), hook);
-                }
-
                 if (event.getComponentId().equals("pause")) {
                     pauseMannually(event.getGuild(), event.getMember(), hook);
                 }
@@ -87,6 +312,40 @@ public class MusicModule implements Module {
                 if (event.getComponentId().equals("shuffle")) {
                     shuffleMannually(event.getGuild(), event.getMember(), hook);
                 }
+            });
+        });
+    }
+
+    @SubscribeEvent
+    public void onMenuSelection(StringSelectInteractionEvent event) {
+        if (event.getGuild() == null || event.getMember() == null) return;
+        if (!event.getComponentId().startsWith("music-select-")) return;
+
+        String id = event.getComponentId().replace("music-select-", "");
+
+        event.deferEdit().queue(hook -> {
+            getByGuildId(event.getGuild()).queue(player -> {
+                SelectOption selectOption = event.getSelectedOptions().get(0);
+                int index = Integer.parseInt(selectOption.getValue()) - 1;
+
+                List<AudioTrack> tracks = searchCache.remove(id);
+                if (tracks == null) {
+                    hook.editOriginal("❌ `The search result has been expired, try again`")
+                            .setComponents()
+                            .setEmbeds()
+                            .queue();
+                    return;
+                }
+
+                AudioTrack track = tracks.get(index);
+
+                MusicSearchEngine.builder()
+                        .hook(hook)
+                        .member(event.getMember())
+                        .player(player)
+                        .searchType(MusicSearchType.SIMPLE_SEARCH)
+                        .build()
+                        .trackLoaded(track);
             });
         });
     }
@@ -148,36 +407,32 @@ public class MusicModule implements Module {
         });
     }
 
-    public void loadTrack(String trackUrl, Member member, @Nullable InteractionHook hook, MusicSearchType type) {
-        LoggerUtil.getLogger().info("Loading track " + trackUrl + " [" + type + "] requested by " + member.getUser().getName());
+    public void loadTrack(MusicSearchType searchType, String input, Member member, @Nullable InteractionHook hook, Consumer<AudioTrack> trackFoundConsumer) {
+        LoggerUtil.getLogger().info("Loading track " + input + " [" + searchType + "] requested by " + member.getUser().getName());
 
         getByGuildId(member.getGuild()).queue(player -> {
-            String trackEmoji = trackUrl.contains("spotify.com") ? "<:spotify:751049445592006707>" : "<:youtube:751031330057486366>";
             val handlerBuilder = MusicSearchEngine.builder()
                     .player(player)
-                    .trackUrl(trackUrl)
+                    .trackUrl(input)
                     .member(member)
-                    .searchType(type);
+                    .searchType(searchType);
 
             if (hook != null) {
                 player.setTextChannelId(hook.getInteraction().getChannelIdLong());
             }
 
-            if (type == MusicSearchType.SIMPLE_SEARCH && hook != null) {
-                hook.sendMessage(trackEmoji + " **Procurando** 🔎 `" + trackUrl.replace("ytsearch: ", "") + "`").queue(message -> {
-                    handlerBuilder.message(message);
-                    audioManager.loadItemOrdered(player, trackUrl, handlerBuilder.build());
-                });
+            if (searchType == MusicSearchType.ADDING_TO_PLAYLIST) {
+                handlerBuilder.trackFoundConsumer(trackFoundConsumer);
+            }
+
+            if (searchType != MusicSearchType.LOOKING_PLAYLIST && hook != null) {
+                handlerBuilder.hook(hook);
+                audioManager.loadItemOrdered(player, input, handlerBuilder.build());
                 return;
             }
 
-            audioManager.loadItemOrdered(player, trackUrl, handlerBuilder.build());
+            audioManager.loadItemOrdered(player, input, handlerBuilder.build());
         });
-    }
-
-    public void destroy(long guildId) {
-        GuildedMusicPlayer guildedMusicPlayer = playerByGuild.remove(guildId);
-        guildedMusicPlayer.destroy();
     }
 
     public void skipMannually(Guild guild, Member member, InteractionHook hook) {
@@ -221,29 +476,6 @@ public class MusicModule implements Module {
                     + ")**";
 
             hook.sendMessage(message).queue();
-        });
-    }
-
-    public void repeatMannually(Guild guild, Member member, InteractionHook hook) {
-        getByGuildId(guild).queue(trackManager -> {
-            if (MusicUtil.isIdle(trackManager, hook)) return;
-            if (!playerModule.isDJ(member)) {
-                hook.sendMessage("Você não é DJ para parar o batidão \uD83D\uDE14").setEphemeral(true).queue();
-                return;
-            }
-
-            AudioInfo audioInfo = trackManager.getTrackInfo();
-            if (audioInfo == null) return;
-
-            audioInfo.setRepeat(!audioInfo.isRepeat());
-
-            val message = audioInfo.isRepeat()
-                    ? "<:felizpakas:742373250037710918> Parece que gosta dessa música né, vou tocar ela denovo quando acabar"
-                    : "<a:tchau:751941650728747140> Deixa pra lá, vou repetir a música mais não";
-
-            hook.sendMessage(message).queue();
-
-            trackManager.sendPlayingMessage();
         });
     }
 
@@ -312,7 +544,7 @@ public class MusicModule implements Module {
             BUILDER.setText((number, number2) -> {
                         val stringBuilder = new StringBuilder();
                         if (trackManager.getPlayer().getPlayingTrack() != null) {
-                            stringBuilder.append(trackManager.getPlayer().isPaused() ? "\u23F8" : "\u25B6")
+                            stringBuilder.append(trackManager.getPlayer().isPaused() ? "⏸" : "▶")
                                     .append(" **")
                                     .append(trackManager.getPlayer().getPlayingTrack().getInfo().title)
                                     .append("**")
@@ -342,5 +574,62 @@ public class MusicModule implements Module {
                 BUILDER.build().paginate(hook, page);
             }
         });
+    }
+
+    public void sendSearchResult(String trackUrl, List<AudioTrack> tracks, InteractionHook hook) {
+        try {
+            List<AudioTrack> audioTracks = tracks.subList(0, 10);
+
+
+        EmbedBuilder embed = EmbedUtil.createDefaultEmbed("");
+
+        StringBuilder musics = new StringBuilder();
+        musics.append("### 🔍 Procurando por `")
+                .append(trackUrl.replace("spsearch: ", ""))
+                .append("`");
+
+        for (int i = 0; i < audioTracks.size(); i++) {
+            AudioTrack track = audioTracks.get(i);
+            musics.append("\n**")
+                    .append(i + 1)
+                    .append(".** [`")
+                    .append(MusicUtil.getTimeStamp(track.getDuration()))
+                    .append("`] ")
+                    .append(track.getInfo().title)
+                    .append(" de ")
+                    .append(track.getInfo().author);
+        }
+
+        embed.setDescription(musics.toString());
+
+        String id = UUID.randomUUID().toString().substring(0, 5);
+
+        StringSelectMenu.Builder builder = StringSelectMenu.create("music-select-" + id)
+                .setPlaceholder("Selecione a música que deseja adicionar")
+                .setMinValues(1)
+                .setMaxValues(1);
+
+        for (int i = 0; i < audioTracks.size(); i++) {
+            AudioTrack track = audioTracks.get(i);
+
+            String data = "[" + MusicUtil.getTimeStamp(track.getDuration()) + "] "
+                    + track.getInfo().title
+                    + " de "
+                    + track.getInfo().author;
+
+            int position = i + 1;
+            builder.addOption(data, String.valueOf(position), Emoji.fromUnicode(EMOJIS[i]));
+        }
+
+        searchCache.put(id, audioTracks);
+
+        hook.sendMessageEmbeds(embed.build())
+                .addActionRow(builder.build())
+                .queue();
+        } catch (Exception e) {
+            LoggerUtil.getLogger().severe("Error while trying to send search result");
+            LoggerUtil.printException(e);
+            return;
+        }
     }
 }

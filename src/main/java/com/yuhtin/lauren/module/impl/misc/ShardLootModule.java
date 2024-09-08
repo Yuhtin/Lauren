@@ -39,6 +39,7 @@ public class ShardLootModule extends ConfigurableModule {
     @Override
     public boolean setup(Lauren lauren) {
         this.lauren = lauren;
+
         setConfig(YamlConfiguration.load("config.yml"));
         reload();
 
@@ -72,6 +73,8 @@ public class ShardLootModule extends ConfigurableModule {
     }
 
     private void dropShardLoot(Lauren lauren, EmbedBuilder embed) {
+        if (allowedChannels.isEmpty()) return;
+
         Logger logger = LoggerUtil.getLogger();
         logger.info("Running ShardLootTask");
 

@@ -32,4 +32,12 @@ public class EmbedUtil {
         return DEFAULT_COLOR;
     }
 
+    public static EmbedBuilder createDefaultEmbed(String description) {
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+
+        embedBuilder.setColor(DEFAULT_COLOR);
+        embedBuilder.setDescription(description);
+
+        return embedBuilder;
+    }
 }

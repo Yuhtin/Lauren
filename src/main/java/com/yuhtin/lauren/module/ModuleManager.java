@@ -62,6 +62,8 @@ public class ModuleManager {
 
             lauren.getJda().addEventListener(module);
             modules.put(module.getClass().getSimpleName(), module);
+
+            LoggerUtil.getLogger().info("Module " + module.getClass().getSimpleName() + " loaded successfully");
         } catch (Exception exception) {
             LoggerUtil.printException(exception);
             lauren.getLogger().severe("Error loading module " + module.getClass().getSimpleName() + ": " + exception.getMessage());

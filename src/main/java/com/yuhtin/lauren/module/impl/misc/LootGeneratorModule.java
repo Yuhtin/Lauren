@@ -78,6 +78,7 @@ public class LootGeneratorModule extends ConfigurableModule {
     }
 
     private void dropLoot(Lauren lauren, EmbedBuilder embed) {
+        if (allowedChannels.isEmpty()) return;
         if (new Random().nextInt(100) > 10) return;
 
         int randomValue = new Random().nextInt(allowedChannels.size());
@@ -124,11 +125,10 @@ public class LootGeneratorModule extends ConfigurableModule {
                     }
                 });
 
-                event.editMessage("O jogador <@" + user.getId() + "> resgatou um lootbox!").queue();
+                hook.editOriginal("O jogador <@" + user.getId() + "> resgatou um lootbox!").queue();
             });
         });
     }
-
 
     @Override
     public void reload() {
