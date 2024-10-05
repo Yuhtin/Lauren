@@ -104,20 +104,20 @@ public class CommandModule implements Module {
             return;
         }
 
+        String name = event.getName();
+        String subcommandName = event.getSubcommandName();
+        if (subcommandName != null) {
+            name += "." + subcommandName;
+        }
+
+        Logger logger = LoggerUtil.getLogger();
+        Command command = commands.getOrDefault(name, null);
+        if (command == null) {
+            logger.info("Não encontrei o comando " + name);
+            return;
+        }
+
         event.deferReply().queue(hook -> {
-            String name = event.getName();
-            String subcommandName = event.getSubcommandName();
-            if (subcommandName != null) {
-                name += "." + subcommandName;
-            }
-
-            Logger logger = LoggerUtil.getLogger();
-            Command command = commands.getOrDefault(name, null);
-            if (command == null) {
-                logger.info("Não encontrei o comando " + name);
-                return;
-            }
-
             try {
                 command.execute(event, hook);
             } catch (Exception exception) {

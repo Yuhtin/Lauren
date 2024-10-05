@@ -75,7 +75,7 @@ public class MusicSearchEngine implements AudioLoadResultHandler {
         }
 
         LoggerUtil.getLogger().info("The player " + member.getUser().getName() + " added a playlist with " + playlist.getTracks().size() + " musics");
-        if (hook != null && playlist.getTracks().size() > 1) {
+        if (hook != null && playlist.getTracks().size() > 1 && playlist.isSearchResult()) {
             MusicModule musicModule = Module.instance(MusicModule.class);
             if (musicModule != null) {
                 musicModule.sendSearchResult(trackUrl, playlist.getTracks(), hook);
